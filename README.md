@@ -8,7 +8,7 @@
 [![Twitter](https://img.shields.io/badge/twitter-@expo_io-4039E2.svg?maxAge=2592000)](http://twitter.com/expo_io)
 
 
-### iOS
+### Preview
 
 <div style="text-align:center">
   
