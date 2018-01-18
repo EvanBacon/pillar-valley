@@ -9,7 +9,7 @@
 
 ### Installation
 
-Add the Secret.js secret:
+Add then create the **Secret.js** which will contain your firebase config.
 
 ```bash
 touch ./ExpoParty/Secret.js
