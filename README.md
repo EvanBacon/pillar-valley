@@ -20,5 +20,20 @@
 
 </div>
 
+### Download on iOS
+
+All you lovely iOS users can download on the [App Store](https://t.co/6m9QxZADXq)
+
+### Download on Android
+
+Everyone else can go to the [Play Store](https://play.google.com/store/apps/details?id=com.evanbacon.pillarvalley). 😝
+
+### Stack
+
+- [Expo](http://expo.io)
+- [THREE.js](https://threejs.org/)
+- [GSAP](https://greensock.com/)
+
+----
 
 
