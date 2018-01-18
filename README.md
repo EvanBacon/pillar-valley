@@ -54,11 +54,11 @@ yarn && exp start
 
 ### Download on iOS
 
-All you lovely iOS users can download on the [App Store](https://t.co/6m9QxZADXq)
+The lovely iOS version can be found here 👉 [App Store](https://t.co/6m9QxZADXq)
 
 ### Download on Android
 
-Everyone else can go to the [Play Store](https://play.google.com/store/apps/details?id=com.evanbacon.pillarvalley). 😝
+The beautiful Android version can be found here 👉 [Play Store](https://play.google.com/store/apps/details?id=com.evanbacon.pillarvalley).
 
 ### Stack
 
