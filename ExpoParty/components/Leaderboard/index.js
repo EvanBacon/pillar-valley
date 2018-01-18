@@ -100,9 +100,10 @@ class App extends Component {
 
   getCurrentIndex = () => Math.round(this._scrollValue / itemSize);
 
-  renderItem = ({ item }) => (
+  renderItem = ({ item, index }) => (
     <Item
-      title={item.title}
+      index={index + 1}
+      title={item.uid === Fire.shared.uid ? 'Me' : item.title}
       gutter={gutter}
       subtitle={item.score}
       backgroundColor={item.uid === Fire.shared.uid ? '#F4E1DB' : '#ffffff'}

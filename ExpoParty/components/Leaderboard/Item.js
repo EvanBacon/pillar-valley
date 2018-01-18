@@ -11,7 +11,14 @@ import {
 const { height } = Dimensions.get('window');
 class ListItem extends React.Component {
   render() {
-    const { title, subtitle, backgroundColor, gutter, itemHeight } = this.props;
+    const {
+      index,
+      title,
+      subtitle,
+      backgroundColor,
+      gutter,
+      itemHeight,
+    } = this.props;
 
     return (
       <View
@@ -25,8 +32,17 @@ class ListItem extends React.Component {
         }}
       >
         <View style={[styles.container, { backgroundColor, flex: 1 }]}>
-          <Text style={[styles.title, { fontWeight: 'bold' }]}>{title}</Text>
-          <Text style={[styles.title]}>{subtitle}</Text>
+          <View style={{ flexDirection: 'row' }}>
+            {index && (
+              <Text
+                style={[styles.title, { fontWeight: 'bold', marginRight: 12 }]}
+              >
+                #{index}
+              </Text>
+            )}
+            <Text style={[styles.title, { fontWeight: 'bold' }]}>{title}</Text>
+          </View>
+          <Text style={styles.title}>{subtitle} Points</Text>
         </View>
       </View>
     );

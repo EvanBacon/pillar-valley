@@ -19,11 +19,12 @@ class LeaderboardScreen extends React.Component {
 
         <Item
           gutter={2}
-          title={Constants.deviceName}
+          title={'Me'}
           subtitle={score}
           itemHeight={64}
           backgroundColor={'#fff'}
         />
+
         <Leaderboard />
 
         <Button.Cancel style={styles.button} onPress={this.onCancelPress} />

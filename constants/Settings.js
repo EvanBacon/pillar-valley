@@ -1,5 +1,5 @@
 export default {
-  debug: false,
+  debug: true,
   ballDistance: 60,
   rotationSpeed: 4,
   epsilon: 15,
