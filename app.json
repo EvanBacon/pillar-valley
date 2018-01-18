@@ -17,7 +17,8 @@
       "assetExts": ["ttf", "mp4", "otf", "xml", "mp3"]
     },
     "ios": {
-      "appStoreUrl": "https://itunes.apple.com/us/app/sunset-cyberspace/id1332439319?ls=1&mt=8",
+      "appStoreUrl":
+        "https://itunes.apple.com/us/app/pillar-valley/id1336398804?ls=1&mt=8",
       "icon": "./assets/icons/ios.png",
       "supportsTablet": true,
       "bundleIdentifier": "com.evanbacon.pillarvalley",
