@@ -54,7 +54,7 @@ yarn && exp start
 
 ### Download on iOS
 
-The lovely iOS version can be found here 👉 [App Store](https://t.co/6m9QxZADXq)
+The lovely iOS version can be found here 👉 [App Store](https://itunes.apple.com/us/app/pillar-valley/id1336398804?ls=1&mt=8)
 
 ### Download on Android
 
