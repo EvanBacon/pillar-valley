@@ -12,7 +12,7 @@
 Add then create the **Secret.js** which will contain your firebase config.
 
 ```bash
-touch ./ExpoParty/Secret.js
+touch ExpoParty/Secret.js
 ```
 
 Then go to the [Firebase Console](https://console.firebase.google.com) and create a **Web App**.
