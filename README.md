@@ -4,6 +4,8 @@
 
 **Demo: https://expo.io/@bacon/pillar-valley**
 
+**Read about my process: https://blog.expo.io/building-a-connected-game-with-expo-f09295c512a9?source=linkShare-16b715de038f-1516680763**
+
 [![Twitter](https://img.shields.io/badge/twitter-@baconbrix-55acee.svg?maxAge=2592000)](http://twitter.com/baconbrix)
 [![Twitter](https://img.shields.io/badge/twitter-@expo_io-4039E2.svg?maxAge=2592000)](http://twitter.com/expo_io)
 
