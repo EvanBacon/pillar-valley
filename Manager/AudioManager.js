@@ -4,7 +4,6 @@ import Assets from '../Assets';
 import arrayFromObject from '../utils/arrayFromObject';
 import cacheAssetsAsync from '../utils/cacheAssetsAsync';
 import Manager from './Manager';
-import { dispatch } from '@rematch/core';
 
 class AudioManager extends Manager {
   sounds = {};
