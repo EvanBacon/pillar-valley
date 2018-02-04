@@ -6,7 +6,6 @@ import Machine from '../Game';
 import Footer from './Footer';
 import ScoreMeta from './ScoreMeta';
 import TouchableView from './TouchableView';
-import { dispatch } from '@rematch/core';
 
 class Game extends React.Component {
   componentWillMount() {
