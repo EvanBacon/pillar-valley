@@ -5,6 +5,9 @@
   "author": null,
   "private": true,
   "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "metadata": "fastlane deliver --skip_binary_upload"
+  },
   "dependencies": {
     "@expo/vector-icons": "6.2.2",
     "@rematch/core": "^0.2.0",
