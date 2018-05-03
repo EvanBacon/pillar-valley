@@ -11,7 +11,8 @@
     "icon": "./assets/icons/expo.png",
     "splash": {
       "image": "./assets/icons/splash.png",
-      "backgroundColor": "#FFC266"
+      "backgroundColor": "#FFC266",
+      "resizeMode": "cover"
     },
     "packagerOpts": {
       "assetExts": ["ttf", "mp4", "otf", "xml", "mp3"]
