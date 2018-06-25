@@ -7,9 +7,11 @@ class GameObject extends THREE.Object3D {
   objects = [];
 
   get size() {
-    const { x: width, y: height, z: depth } = new THREE.Box3()
-      .setFromObject(this)
-      .getSize();
+    const box = new THREE.Box3().setFromObject(this);
+
+    let size = new THREE.Vector3();
+    box.getSize(size);
+    const { x: width, y: height, z: depth } = size
     this._size = { width, height, depth };
     return this._size;
   }
@@ -202,7 +204,10 @@ class GameObject extends THREE.Object3D {
     return this.box.min;
   }
   get size() {
-    return this.box.getSize();
+    const box = new THREE.Box3().setFromObject(this);
+    let size = new THREE.Vector3();
+    box.getSize(size);
+    return size;
   }
   get width() {
     return this.size.x;

@@ -6,7 +6,8 @@
   "private": true,
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "metadata": "fastlane deliver --skip_binary_upload"
+    "metadata": "fastlane deliver --skip_binary_upload",
+    "fix": "rm -rf node_modules/gl-matrix/.babelrc"
   },
   "dependencies": {
     "@expo/browser-polyfill": "^0.0.0-alpha.8",

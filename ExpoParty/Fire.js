@@ -12,6 +12,7 @@ const collectionName = getSlug();
 class Fire {
   constructor() {
     this.init();
+    firebase.firestore().settings({ timestampsInSnapshots: true });
     this.observeAuth();
   }
 

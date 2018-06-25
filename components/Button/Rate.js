@@ -1,6 +1,6 @@
 import { Constants, StoreReview } from 'expo';
 import React from 'react';
-import { Alert, Linking, Linking } from 'react-native';
+import { Alert, Linking } from 'react-native';
 
 import Icon from './Icon';
 
