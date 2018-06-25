@@ -1,8 +1,7 @@
 import { store } from '../rematch/Gate';
 import Expo from 'expo';
 import Assets from '../Assets';
-import arrayFromObject from '../utils/arrayFromObject';
-import cacheAssetsAsync from '../utils/cacheAssetsAsync';
+import AssetUtils from 'expo-asset-utils';
 import Manager from './Manager';
 
 class AudioManager extends Manager {
@@ -90,8 +89,8 @@ class AudioManager extends Manager {
   };
 
   downloadAsync = async () =>
-    cacheAssetsAsync({
-      files: [...arrayFromObject(this.assets)],
+    AssetUtils.cacheAssetsAsync({
+      files: [...AssetUtils.arrayFromObject(this.assets)],
     });
 
   async setupAsync() {
