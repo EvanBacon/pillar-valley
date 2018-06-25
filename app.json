@@ -4,11 +4,12 @@
     "description": "Immerse yourself in a suave world of zen",
     "slug": "pillar-valley",
     "privacy": "public",
-    "sdkVersion": "24.0.0",
-    "version": "1.0.0",
+    "sdkVersion": "28.0.0",
+    "version": "2.0.0",
     "orientation": "portrait",
     "primaryColor": "#FFC266",
     "icon": "./assets/icons/expo.png",
+    "githubUrl": "https://github.com/evanbacon/expo-pillar-valley",
     "splash": {
       "image": "./assets/icons/splash.png",
       "backgroundColor": "#FFC266",
@@ -17,20 +18,21 @@
     "packagerOpts": {
       "assetExts": ["ttf", "mp4", "otf", "xml", "mp3"]
     },
+    "assetBundlePatterns": ["assets/**/*"],
     "ios": {
       "appStoreUrl":
         "https://itunes.apple.com/us/app/pillar-valley/id1336398804?ls=1&mt=8",
       "icon": "./assets/icons/ios.png",
       "supportsTablet": true,
       "bundleIdentifier": "com.evanbacon.pillarvalley",
-      "buildNumber": "0.0.0"
+      "buildNumber": "2"
     },
     "android": {
       "playStoreUrl":
         "https://play.google.com/store/apps/details?id=com.evanbacon.pillarvalley",
       "icon": "./assets/icons/expo.png",
       "package": "com.evanbacon.pillarvalley",
-      "versionCode": 1
+      "versionCode": 2
     }
   }
 }
