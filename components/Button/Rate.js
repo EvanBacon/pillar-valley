@@ -1,22 +1,34 @@
+import { Constants, StoreReview } from 'expo';
 import React from 'react';
-import { Linking } from 'react-native';
+import { Alert, Linking, Linking } from 'react-native';
 
-import storeUrl from '../../utils/storeUrl';
 import Icon from './Icon';
 
 class Rate extends React.Component {
   onPress = () => {
-    const url = storeUrl();
-    if (url) {
-      Linking.openURL(url);
+    if (StoreReview.isSupported()) {
+      StoreReview.requestReview();
+    } else {
+      const { name } = Constants.manifest;
+      Alert.alert(
+        `Do you like ${name}?`,
+        `Would you like to rate this app in the app store? It help's others discover ${name} too!`,
+        [
+          {
+            text: 'OK',
+            onPress: () => Linking.openURL(StoreReview.storeUrl()),
+          },
+          { text: 'Cancel', onPress: () => {}, style: 'cancel' },
+        ],
+        { cancelable: true },
+      );
     }
-
     this.props.onPress && this.props.onPress();
   };
   render() {
     const { onPress, name, ...props } = this.props;
 
-    if (!storeUrl()) {
+    if (!StoreReview.hasAction()) {
       return null;
     }
     return <Icon onPress={this.onPress} name="star-o" {...props} />;
