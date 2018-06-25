@@ -3,3 +3,7 @@ node_modules/**/*
 ExpoParty/Secret.js
 release/builds
 .vscode
+
+*.ipa
+*.apk
+*.sketch
