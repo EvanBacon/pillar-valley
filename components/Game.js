@@ -1,4 +1,4 @@
-import ExpoGraphics from 'expo-graphics';
+import { View as GraphicsView } from 'expo-graphics';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
@@ -15,8 +15,8 @@ class Game extends React.Component {
     this.machine = null;
   }
 
-  onContextCreate = async context => {
-    await this.machine.onContextCreateAsync(context);
+  onContextCreate = async props => {
+    await this.machine.onContextCreateAsync(props);
 
     this.props.onLoad();
   };
@@ -31,7 +31,7 @@ class Game extends React.Component {
           style={styles.touchable}
           onTouchesBegan={this.machine.onTouchesBegan}
         >
-          <ExpoGraphics.View
+          <GraphicsView
             ref={ref => (global.gameRef = this.ref = ref)}
             key="game"
             onContextCreate={this.onContextCreate}

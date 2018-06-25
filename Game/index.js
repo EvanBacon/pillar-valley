@@ -6,12 +6,12 @@ import Game from './Game';
 class Machine {
   time = 0;
 
-  onContextCreateAsync = async gl => {
-    const { drawingBufferWidth: width, drawingBufferHeight: height } = gl;
-    this.renderer = ExpoTHREE.createRenderer({
+  onContextCreateAsync = async ({ gl, width, height, scale: pixelRatio }) => {
+    this.renderer = new ExpoTHREE.Renderer({
       gl,
+      width: width * pixelRatio,
+      height: height * pixelRatio,
     });
-    this.renderer.setSize(width, height);
 
     this.game = new Game(width, height, this.renderer);
     await this.game.loadAsync();
