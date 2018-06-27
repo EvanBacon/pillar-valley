@@ -41,6 +41,9 @@ class App extends Component {
       refreshing: false,
     };
   }
+  componentDidMount() {
+    this.makeRemoteRequest();
+  }
 
   addChild = item => {
     this.setState(previousState => ({

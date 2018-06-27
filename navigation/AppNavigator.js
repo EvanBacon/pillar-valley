@@ -1,8 +1,8 @@
 import GameScreen from '../screens/GameScreen';
 import LeaderboardScreen from '../screens/LeaderboardScreen';
-import { StackNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation';
 
-const ModalStack = StackNavigator(
+const ModalStack = createStackNavigator(
   {
     Game: {
       screen: GameScreen,

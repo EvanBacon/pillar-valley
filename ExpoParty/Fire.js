@@ -32,7 +32,6 @@ class Fire {
       await this.getUser();
       this.saveUser();
       this.compareDaily();
-      global.debugMockTextures && global.debugMockTextures();
     }
   };
 
@@ -150,8 +149,6 @@ class Fire {
   };
 
   getPagedScore = async ({ size, start }) => {
-    // const slug = getSlug();
-
     let ref = this.collection.orderBy('score', 'desc').limit(size);
     try {
       if (start) {
@@ -161,8 +158,16 @@ class Fire {
       const querySnapshot = await ref.get();
       const data = [];
       querySnapshot.forEach(function(doc) {
-        const _data = doc.data();
-        data.push({ key: doc.id, ..._data, title: _data.deviceName });
+        if (!doc.exists) {
+          console.log("Fire.getPagedScore(): Error: data doesn't exist", {
+            size,
+            start,
+            collectionName,
+          });
+        } else {
+          const _data = doc.data();
+          data.push({ key: doc.id, ..._data, title: _data.deviceName });
+        }
       });
       const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
 
