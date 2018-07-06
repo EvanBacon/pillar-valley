@@ -9,8 +9,13 @@ import { dispatch } from '@rematch/core';
 
 const collectionName = getSlug();
 
+import Settings from '../constants/Settings';
 class Fire {
   constructor() {
+    if (!Settings.isFirebaseEnabled) {
+      return;
+    }
+
     this.init();
     firebase.firestore().settings({ timestampsInSnapshots: true });
     this.observeAuth();

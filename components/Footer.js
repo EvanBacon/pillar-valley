@@ -4,19 +4,20 @@ import { connect } from 'react-redux';
 import * as Button from './Button';
 import * as Animatable from 'react-native-animatable';
 import Settings from '../constants/Settings';
+import GameStates from '../Game/GameStates';
 
 class Footer extends React.Component {
   render() {
     const { style, game, onLeaderboardPress, ...props } = this.props;
-    const animation = game === 'menu' ? 'zoomIn' : 'zoomOut';
+    const animation = game === GameStates.Menu ? 'zoomIn' : 'zoomOut';
     const delay = 100;
     const initialDelay = 100;
     const duration = 500;
     const easing = 'ease-out';
 
     const views = [
-      <Button.Leaderboard onPress={onLeaderboardPress} />,
       <Button.Rate />,
+      <Button.Leaderboard onPress={onLeaderboardPress} />,
       <Button.Sound />,
       <Button.Share />,
     ];

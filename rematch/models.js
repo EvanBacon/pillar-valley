@@ -32,11 +32,12 @@ export const score = {
   effects: {},
 };
 
+import GameStates from '../Game/GameStates';
 export const game = {
-  state: 'menu',
+  state: GameStates.Menu,
   reducers: {
-    play: () => 'game',
-    menu: () => 'menu',
+    play: () => GameStates.Playing,
+    menu: () => GameStates.Menu,
   },
   effects: {},
 };

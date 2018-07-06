@@ -1,8 +1,10 @@
 import Settings from '../constants/Settings';
 import { DangerZone, Haptic } from 'expo';
+const { DeviceMotion } = DangerZone;
 import ExpoTHREE, { THREE } from 'expo-three';
 import { Back, Expo as ExpoEase, Cubic, TweenMax } from 'gsap';
 
+import GameStates from './GameStates';
 import GameObject from './engine/core/GameObject';
 import Group from './engine/core/Group';
 import Lighting from './engine/entities/Lighting';
@@ -22,7 +24,7 @@ function distance(p1, p2) {
 }
 
 class Game extends GameObject {
-  state = 'menu';
+  state = GameStates.Menu;
 
   balls = [];
   targets = [];
@@ -36,16 +38,24 @@ class Game extends GameObject {
     this._width = width;
     this._height = height;
 
+    if (Settings.isAutoStartEnabled) {
+      this.setGameState(GameStates.Playing);
+    }
+
     this.observeMotion();
   }
 
   observeMotion = () => {
-    DangerZone.DeviceMotion.setUpdateInterval(30);
+    if (!Settings.isMotionMenuEnabled) {
+      return;
+    }
+
+    DeviceMotion.setUpdateInterval(30);
     this._subscribe();
   };
 
   _subscribe = () => {
-    this._subscription = DangerZone.DeviceMotion.addListener(
+    this._subscription = DeviceMotion.addListener(
       ({ accelerationIncludingGravity }) => {
         const _index = -4;
 
@@ -63,7 +73,13 @@ class Game extends GameObject {
   };
 
   createScene = () => {
-    return new THREE.Scene();
+    const scene = new THREE.Scene();
+    const color = this.color;
+    scene.background = color;
+    scene.fog = new THREE.Fog(color, 100, 950);
+
+    scene.add(this);
+    return scene;
   };
 
   createCameraAsync = async (width, height) => {
@@ -113,20 +129,17 @@ class Game extends GameObject {
   get color() {
     return new THREE.Color(`hsl(${this.hue}, 88%, 66%)`);
   }
+
   async loadAsync() {
     this.scene = this.createScene();
-    const color = this.color;
-    this.scene.background = color;
-    this.scene.fog = new THREE.Fog(color, 100, 950);
 
-    this.scene.add(this);
     this.camera = await this.createCameraAsync(this._width, this._height);
 
     const types = [new Lighting()];
     const promises = types.map(type => this.add(type));
     await Promise.all(promises);
 
-    if (this.state === 'menu') {
+    if (this.state === GameStates.Menu) {
       await this.loadMenu();
       dispatch.game.menu();
     } else {
@@ -138,6 +151,8 @@ class Game extends GameObject {
   }
 
   loadMenu = async () => {
+    this.observeMotion();
+
     const topMaterial = async (res, color) => {
       const image = new THREE.MeshBasicMaterial({
         map: await ExpoTHREE.loadAsync(res),
@@ -236,17 +251,29 @@ class Game extends GameObject {
     }
   };
 
+  startGame = () => {
+    if (this.state === GameStates.playing) {
+      return;
+    }
+    this._unsubscribe();
+    TweenMax.to(this.titleGroup.position, 1.0, {
+      y: -1100,
+      ease: ExpoEase.easeOut,
+      // delay: 0.2,
+      onComplete: async () => {
+        await this.loadGame();
+        this.setGameState(GameStates.playing);
+      },
+    });
+  };
+
+  setGameState = state => {
+    this.state = state;
+  };
+
   onTouchesBegan = async ({ pageX: x, pageY: y }) => {
-    if (this.state === 'menu') {
-      TweenMax.to(this.titleGroup.position, 1.0, {
-        y: -1100,
-        ease: ExpoEase.easeOut,
-        // delay: 0.2,
-        onComplete: async () => {
-          await this.loadGame();
-          this.state = 'game';
-        },
-      });
+    if (this.state === GameStates.Menu) {
+      this.startGame();
     } else {
       this.changeBall();
 
@@ -322,7 +349,7 @@ class Game extends GameObject {
   };
 
   takeScreenshot = async () => {
-    if (this.screenShotTaken) {
+    if (this.screenShotTaken || !Settings.isScreenshotEnabled) {
       return;
     }
     this.screenShotTaken = true;
@@ -386,7 +413,7 @@ class Game extends GameObject {
   update(delta, time) {
     const easing = 0.03;
 
-    if (this.state === 'menu') {
+    if (this.state === GameStates.Menu) {
       this.camera.position.z -=
         (this.offset.z + this.camera.position.z) * easing;
       this.camera.position.x -=

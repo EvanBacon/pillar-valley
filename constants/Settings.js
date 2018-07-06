@@ -2,7 +2,7 @@ import { Constants } from 'expo';
 import { Dimensions } from 'react-native';
 import sizeInfo from '../utils/whatAmI';
 
-export default {
+const Settings = {
   isRunningInExpo: sizeInfo.isRunningInExpo,
   isIPhone: sizeInfo.isIPhone,
   isIPad: sizeInfo.isIPad,
@@ -10,6 +10,10 @@ export default {
   bottomInset: sizeInfo.bottomInset,
   topInset: sizeInfo.topInset,
   isSimulator: !Constants.isDevice,
+  isFirebaseEnabled: !__DEV__ || false,
+  isAutoStartEnabled: !__DEV__ || true,
+  isScreenshotEnabled: !__DEV__ || true,
+  isMotionMenuEnabled: !__DEV__ || false,
   debug: __DEV__,
   ballDistance: 60,
   rotationSpeed: 4,
@@ -18,3 +22,5 @@ export default {
   visibleTargets: 6,
   ignoredYellowBox: ['Module ABI', `Audio doesn't exist`],
 };
+
+export default Settings;
