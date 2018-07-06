@@ -1,5 +1,8 @@
+import { Constants } from 'expo';
+
 export default {
-  debug: true,
+  isSimulator: !Constants.isDevice,
+  debug: __DEV__,
   ballDistance: 60,
   rotationSpeed: 4,
   epsilon: 15,

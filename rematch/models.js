@@ -83,3 +83,11 @@ export const dailyStreak = {
     },
   },
 };
+
+export const user = {
+  state: null,
+  reducers: {
+    update: (state, props) => ({ ...state, ...props }),
+  },
+  effects: {},
+};

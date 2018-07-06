@@ -32,6 +32,7 @@ class Fire {
       await this.getUser();
       this.saveUser();
       this.compareDaily();
+      console.log('signed in');
     }
   };
 
@@ -41,10 +42,15 @@ class Fire {
         .get()
         .then(doc => {
           if (!doc.exists) {
-            // console.log('No such document!');
+            console.log('No such document!');
           } else {
-            // console.log('Document data:', doc.data());
+            console.log('Document data:', doc.data());
             this.userData = doc.data();
+            this.userData.name =
+              this.userData.name ||
+              this.userData.title ||
+              this.userData.deviceName;
+            dispatch.user.update(this.userData);
           }
           res();
         })
@@ -148,32 +154,112 @@ class Fire {
     });
   };
 
+  debugPagedScore = true;
   getPagedScore = async ({ size, start }) => {
-    let ref = this.collection.orderBy('score', 'desc').limit(size);
-    try {
-      if (start) {
-        ref = ref.startAfter(start);
-      }
-
-      const querySnapshot = await ref.get();
-      const data = [];
-      querySnapshot.forEach(function(doc) {
-        if (!doc.exists) {
-          console.log("Fire.getPagedScore(): Error: data doesn't exist", {
-            size,
-            start,
-            collectionName,
-          });
-        } else {
-          const _data = doc.data();
-          data.push({ key: doc.id, ..._data, title: _data.deviceName });
+    if (self.debugPagedScore) {
+      return {
+        data: [
+          {
+            key: 'gUdfd7VmKyWHR84G3tvB9NkYH0b2',
+            appOwnership: 'expo',
+            dailyVisits: 0,
+            deviceId: 'F56CB29A-581A-4517-B3C8-3BDA0D2A5E3B',
+            deviceName: " Evan's iPhone 7 Plus",
+            deviceYearClass: 2016,
+            expoVersion: '2.5.0.1014340',
+            isDevice: true,
+            lastRewardTimestamp: 1524166289798,
+            platform: {
+              ios: {
+                buildNumber: '2.5.0.1014340',
+                model: 'iPhone 7 Plus',
+                platform: 'iPhone9,4',
+                systemVersion: '11.2.6',
+                userInterfaceIdiom: 'handset',
+              },
+            },
+            score: 3,
+            slug: 'crossy-road',
+            uid: 'gUdfd7VmKyWHR84G3tvB9NkYH0b2',
+            title: " Evan's iPhone 7 Plus",
+          },
+          {
+            key: '0oK50HoGt6PqXG1ApBTroS3IxR23',
+            appOwnership: 'expo',
+            dailyVisits: 0,
+            deviceId: 'CDF20BAA-6D0A-4653-8719-CD20006580F7',
+            deviceName: 'Expo iPhone X',
+            deviceYearClass: 2017,
+            expoVersion: '2.6.5',
+            isDevice: true,
+            lastRewardTimestamp: 1530854594628,
+            platform: {
+              ios: {
+                buildNumber: '2.6.5',
+                model: 'iPhone X',
+                platform: 'iPhone10,6',
+                systemVersion: '11.3.1',
+                userInterfaceIdiom: 'handset',
+              },
+            },
+            score: 2,
+            slug: 'crossy-road',
+            uid: '0oK50HoGt6PqXG1ApBTroS3IxR23',
+            title: 'Expo iPhone X',
+          },
+          {
+            key: 'R2XBuw9im3QBtpU6YYck2tdhpEI3',
+            appOwnership: 'expo',
+            dailyVisits: 0,
+            deviceId: '9E917464-CF47-417B-AA41-07E52190F26A',
+            deviceName: 'Expo iPhone X',
+            deviceYearClass: 2017,
+            expoVersion: '2.4.7.1013849',
+            isDevice: true,
+            lastRewardTimestamp: 1524197897114,
+            platform: {
+              ios: {
+                buildNumber: '2.4.7.1013849',
+                model: 'iPhone X',
+                platform: 'iPhone10,6',
+                systemVersion: '11.0.1',
+                userInterfaceIdiom: 'handset',
+              },
+            },
+            score: 1,
+            slug: 'crossy-road',
+            uid: 'R2XBuw9im3QBtpU6YYck2tdhpEI3',
+            title: 'Expo iPhone X',
+          },
+        ],
+      };
+    } else {
+      let ref = this.collection.orderBy('score', 'desc').limit(size);
+      try {
+        if (start) {
+          ref = ref.startAfter(start);
         }
-      });
-      const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
+        const querySnapshot = await ref.get();
 
-      return { data, cursor: lastVisible };
-    } catch (error) {
-      console.error('Error getting documents: ', error);
+        const data = [];
+        querySnapshot.forEach(function(doc) {
+          if (!doc.exists) {
+            console.log("Fire.getPagedScore(): Error: data doesn't exist", {
+              size,
+              start,
+              collectionName,
+            });
+          } else {
+            const _data = doc.data();
+            data.push({ key: doc.id, ..._data, title: _data.deviceName });
+          }
+        });
+        const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
+        return { data, cursor: lastVisible };
+      } catch (error) {
+        console.error('Error getting documents: ', error);
+      }
+      return {};
     }
   };
 
@@ -205,6 +291,7 @@ class Fire {
   get collection() {
     return this.db.collection(collectionName);
   }
+
   get doc() {
     return this.collection.doc(this.uid);
   }
@@ -216,8 +303,9 @@ class Fire {
   get uid() {
     return (firebase.auth().currentUser || {}).uid;
   }
+
   get timestamp() {
-    return firebase.database.ServerValue.TIMESTAMP;
+    return Date.now();
   }
 }
 

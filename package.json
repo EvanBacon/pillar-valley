@@ -10,6 +10,7 @@
     "fix": "rm -rf node_modules/gl-matrix/.babelrc"
   },
   "dependencies": {
+    "@expo/react-native-action-sheet": "^1.0.2",
     "@expo/vector-icons": "6.3.1",
     "@rematch/core": "^0.6.0",
     "@rematch/persist": "^0.2.1",
@@ -24,6 +25,7 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-28.0.0.tar.gz",
     "react-native-animatable": "^1.2.4",
     "react-navigation": "^2.5.2",
+    "react-navigation-material-bottom-tabs": "^0.3.0",
     "react-redux": "^5.0.6",
     "redux-persist": "^5.6.9",
     "three": "^0.93.0"

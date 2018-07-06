@@ -1,17 +1,16 @@
-import './utils/disableLogs';
+// import './utils/disableLogs';
 
 import Expo from 'expo';
+import AssetUtils from 'expo-asset-utils';
 import { THREE } from 'expo-three';
 import React from 'react';
 import { View } from 'react-native';
 
-import AssetUtils from 'expo-asset-utils';
+import AppNavigator from './AppNavigator';
 import Assets from './Assets';
 import Settings from './constants/Settings';
 import AudioManager from './Manager/AudioManager';
 import Gate from './rematch/Gate';
-import AppNavigator from './navigation/AppNavigator';
-import GameScreen from './screens/GameScreen';
 
 export default class App extends React.Component {
   state = { loading: true };
@@ -60,10 +59,7 @@ export default class App extends React.Component {
   }
 
   get files() {
-    return [
-      ...AssetUtils.arrayFromObject(Assets.images || {}),
-      ...AssetUtils.arrayFromObject(Assets.models || {}),
-    ];
+    return AssetUtils.arrayFromObject(Assets.images);
   }
 
   async _preloadAsync() {

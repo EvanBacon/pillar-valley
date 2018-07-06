@@ -6,6 +6,7 @@ import Machine from '../Game';
 import Footer from './Footer';
 import ScoreMeta from './ScoreMeta';
 import TouchableView from './TouchableView';
+import Settings from '../constants/Settings';
 
 class Game extends React.Component {
   componentWillMount() {
@@ -31,13 +32,18 @@ class Game extends React.Component {
           style={styles.touchable}
           onTouchesBegan={this.machine.onTouchesBegan}
         >
-          <GraphicsView
-            ref={ref => (global.gameRef = this.ref = ref)}
-            key="game"
-            onContextCreate={this.onContextCreate}
-            onRender={this.machine.onRender}
-            onResize={this.machine.onResize}
-          />
+          {!Settings.isSimulator && (
+            <GraphicsView
+              ref={ref => (global.gameRef = this.ref = ref)}
+              key="game"
+              onContextCreate={this.onContextCreate}
+              onRender={this.machine.onRender}
+              onResize={this.machine.onResize}
+            />
+          )}
+          {Settings.isSimulator && (
+            <View style={{ flex: 1, backgroundColor: 'red' }} />
+          )}
         </TouchableView>
         <ScoreMeta />
         <Footer onLeaderboardPress={this.onLeaderboardPress} />
