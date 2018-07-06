@@ -4,15 +4,12 @@ import PartyTabNavigator from './ExpoParty/Navigator';
 
 const ModalStack = createStackNavigator(
   {
-    Game: {
-      screen: GameScreen,
-    },
-    Leaderboard: {
-      screen: PartyTabNavigator,
-    },
+    Game: GameScreen,
+    Leaderboard: PartyTabNavigator,
   },
   {
-    initialRouteName: 'Leaderboard',
+    initialRouteName: 'Game',
+    // initialRouteName: 'Leaderboard',
     mode: 'modal',
     headerMode: 'none',
     cardStyle: {

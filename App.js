@@ -12,6 +12,10 @@ import Settings from './constants/Settings';
 import AudioManager from './Manager/AudioManager';
 import Gate from './rematch/Gate';
 
+if (__DEV__) {
+  console.ignoredYellowBox = Settings.ignoredYellowBox;
+}
+
 export default class App extends React.Component {
   state = { loading: true };
 

@@ -3,6 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 import * as Button from './Button';
 import * as Animatable from 'react-native-animatable';
+import Settings from '../constants/Settings';
 
 class Footer extends React.Component {
   render() {
@@ -51,6 +52,7 @@ const styles = StyleSheet.create({
     right: 8,
     height: 64,
     alignItems: 'center',
+    marginBottom: Settings.bottomInset,
   },
   button: {
     height: 64,

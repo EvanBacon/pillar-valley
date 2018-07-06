@@ -7,12 +7,12 @@
     "sdkVersion": "28.0.0",
     "version": "2.0.0",
     "orientation": "portrait",
-    "primaryColor": "#FFC266",
+    "primaryColor": "#E07C4C",
     "icon": "./assets/icons/expo.png",
     "githubUrl": "https://github.com/evanbacon/expo-pillar-valley",
     "splash": {
       "image": "./assets/icons/splash.png",
-      "backgroundColor": "#FFC266",
+      "backgroundColor": "#E07C4C",
       "resizeMode": "cover"
     },
     "packagerOpts": {

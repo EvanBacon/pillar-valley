@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@expo/react-native-action-sheet": "^1.0.2",
+    "@expo/status-bar-height": "^0.0.1",
     "@expo/vector-icons": "6.3.1",
     "@rematch/core": "^0.6.0",
     "@rematch/persist": "^0.2.1",

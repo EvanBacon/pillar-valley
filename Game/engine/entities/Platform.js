@@ -10,7 +10,7 @@ class Platform extends GameObject {
 
     const color = randomColor({
       luminosity: 'dark',
-      hue: '#69301B',
+      hue: '#E07C4C',
     });
 
     global.PlatformGeom =

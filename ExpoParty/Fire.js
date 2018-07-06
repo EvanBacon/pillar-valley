@@ -156,7 +156,7 @@ class Fire {
 
   debugPagedScore = true;
   getPagedScore = async ({ size, start }) => {
-    if (self.debugPagedScore) {
+    if (this.debugPagedScore) {
       return {
         data: [
           {

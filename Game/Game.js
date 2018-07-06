@@ -1,5 +1,5 @@
 import Settings from '../constants/Settings';
-import { DangerZone } from 'expo';
+import { DangerZone, Haptic } from 'expo';
 import ExpoTHREE, { THREE } from 'expo-three';
 import { Back, Expo as ExpoEase, Cubic, TweenMax } from 'gsap';
 
@@ -28,7 +28,7 @@ class Game extends GameObject {
   targets = [];
   offset = { x: 0, z: 0 };
   taps = 0;
-  hue = 36;
+  hue = 19;
 
   constructor(width, height, renderer) {
     super();
@@ -111,7 +111,7 @@ class Game extends GameObject {
   }
 
   get color() {
-    return new THREE.Color(`hsl(${this.hue}, 100%, 70%)`);
+    return new THREE.Color(`hsl(${this.hue}, 88%, 66%)`);
   }
   async loadAsync() {
     this.scene = this.createScene();
@@ -284,6 +284,8 @@ class Game extends GameObject {
     if (distanceFromTarget < Settings.epsilon) {
       dispatch.game.play();
       dispatch.score.increment();
+      Haptic.selection();
+
       this.balls[this.mainBall].x = this.targets[1].x;
       this.balls[this.mainBall].z = this.targets[1].z;
 

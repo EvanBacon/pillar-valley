@@ -4,13 +4,25 @@ import { Ionicons } from '@expo/vector-icons';
 import Avatar from '../Avatar';
 
 export default class UserCell extends React.Component {
+  static defaultProps = {
+    item: {},
+    index: 0,
+    onPress: () => {
+      alert('must override UserCell.onPress');
+    },
+  };
   onPress = () => {
     const { item, index, onPress } = this.props;
     onPress(item, index);
   };
   render() {
-    const { name, score, rank, image } = this.props.item;
-    const { index, onPress, style, ...props } = this.props;
+    const { index, onPress, style, item, ...props } = this.props;
+    if (!item) {
+      return <View />;
+    }
+
+    const { name, score, rank, image } = item;
+
     console.log('IIIINNNPPTUTUT', name, score, rank, index, image);
     return (
       <TouchableHighlight

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
+import Settings from '../constants/Settings';
 
 class ScoreMeta extends React.Component {
   render() {
@@ -22,9 +23,10 @@ export default connect(({ score: { current, best } }) => ({
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    top: 28,
-    left: 8,
-    right: 8,
+    top: Settings.topInset,
+    left: 0,
+    right: 0,
+    paddingHorizontal: 12,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -32,15 +34,14 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: 'GothamNarrow-Book',
     opacity: 0.8,
+    fontSize: 48,
     backgroundColor: 'transparent',
   },
   score: {
     color: 'white',
-    fontSize: 48,
   },
   highScore: {
     color: 'yellow',
-    fontSize: 36,
     textAlign: 'right',
   },
 });
