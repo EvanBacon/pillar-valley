@@ -2,7 +2,7 @@ import ExpoTHREE from 'expo-three';
 
 import Composer from './Composer';
 import Game from './Game';
-
+import Settings from '../constants/Settings';
 class Machine {
   time = 0;
 
@@ -16,12 +16,14 @@ class Machine {
     this.game = new Game(width, height, this.renderer);
     await this.game.loadAsync();
 
-    this.composer = Composer(
-      gl,
-      this.renderer,
-      this.game.scene,
-      this.game.camera,
-    );
+    if (Settings.isComposerEnabled) {
+      this.composer = Composer(
+        gl,
+        this.renderer,
+        this.game.scene,
+        this.game.camera,
+      );
+    }
   };
 
   onTouchesBegan = state => this.game.onTouchesBegan(state);
@@ -45,7 +47,11 @@ class Machine {
     this.time += delta;
 
     this.game.update(delta, this.time);
-    this.composer.render(delta);
+    if (this.composer) {
+      this.composer.render(delta);
+    } else {
+      this.renderer.render(this.game.scene, this.game.camera);
+    }
   };
 }
 

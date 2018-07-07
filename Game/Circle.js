@@ -15,10 +15,31 @@ class CircleMesh extends THREE.Mesh {
   constructor({ radius, color }) {
     const shape = new Circle(radius);
     const geometry = new THREE.ShapeBufferGeometry(shape);
-    super(
-      geometry,
-      new THREE.MeshPhongMaterial({ color: color, side: THREE.DoubleSide }),
-    );
+    const mat = new THREE.MeshPhongMaterial({
+      color: color,
+      transparent: true,
+      // side: THREE.DoubleSide,
+    });
+    super(geometry, mat);
+    this.mat = mat;
+  }
+  _alpha = 1;
+  set alpha(value) {
+    this._alpha = value;
+    const transparent = value !== 1;
+    if (this.materials) {
+      this.materials.map(material => {
+        material.transparent = transparent;
+        material.opacity = value;
+      });
+    } else if (this.material) {
+      this.material.transparent = transparent;
+      this.material.opacity = value;
+    }
+  }
+
+  get alpha() {
+    return this._alpha;
   }
 
   explode = () => {

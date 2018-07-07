@@ -2,7 +2,7 @@ import { dispatch } from '@rematch/core'; // 0.1.0-beta.8
 import Expo from 'expo';
 import { Dimensions } from 'react-native';
 import Fire from '../ExpoParty/Fire';
-
+import Settings from '../constants/Settings';
 export const score = {
   state: { current: 0, best: 0, last: null, isBest: false },
   reducers: {
@@ -17,8 +17,10 @@ export const score = {
       };
     },
     reset: state => {
-      if (state.isBest && state.current >= state.best) {
-        Fire.shared.saveScore(state.current);
+      if (Settings.isFirebaseEnabled) {
+        if (state.isBest && state.current >= state.best) {
+          Fire.shared.saveScore(state.current);
+        }
       }
 
       return {

@@ -6,6 +6,11 @@ class GameObject extends THREE.Object3D {
   _size = { width: null, height: null, depth: null };
   objects = [];
 
+  constructor(game) {
+    super();
+    this._game = game;
+  }
+
   get size() {
     const box = new THREE.Box3().setFromObject(this);
 
@@ -155,6 +160,7 @@ class GameObject extends THREE.Object3D {
       this.children.push(object);
 
       if (object instanceof GameObject) {
+        object.game = this.game;
         await object.loadAsync(this);
         this.objects.push(object);
         return object;
@@ -193,6 +199,14 @@ class GameObject extends THREE.Object3D {
 
     return this;
   };
+
+  get game() {
+    return this._game;
+  }
+  set game(value) {
+    this._game = value;
+    this.setAll('game', value);
+  }
 
   get box() {
     return new THREE.Box3().setFromObject(this);

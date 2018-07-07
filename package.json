@@ -29,6 +29,7 @@
     "react-navigation-material-bottom-tabs": "^0.3.0",
     "react-redux": "^5.0.6",
     "redux-persist": "^5.6.9",
-    "three": "^0.93.0"
+    "three": "^0.93.0",
+    "three.proton.js": "^0.1.5"
   }
 }

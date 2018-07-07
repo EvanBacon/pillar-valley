@@ -4,6 +4,8 @@ const { DeviceMotion } = DangerZone;
 import ExpoTHREE, { THREE } from 'expo-three';
 import { Back, Expo as ExpoEase, Cubic, TweenMax } from 'gsap';
 
+import TrialTween from './engine/Tween';
+
 import GameStates from './GameStates';
 import GameObject from './engine/core/GameObject';
 import Group from './engine/core/Group';
@@ -13,7 +15,7 @@ import PlayerBall from './engine/entities/PlayerBall';
 import flatMaterial from './engine/utils/flatMaterial';
 import randomRange from './engine/utils/randomRange';
 import Assets from '../Assets';
-
+import Particles from './engine/core/Particles';
 import { dispatch } from '@rematch/core';
 
 function distance(p1, p2) {
@@ -34,6 +36,7 @@ class Game extends GameObject {
 
   constructor(width, height, renderer) {
     super();
+    this._game = this;
     this.renderer = renderer;
     this._width = width;
     this._height = height;
@@ -121,9 +124,12 @@ class Game extends GameObject {
     target.z = this.balls[0].z;
     this.targets.push(target);
 
-    for (let i = 0; i < Settings.visibleTargets; i++) {
+    for (let i = 0; i < this.getVisibleTargetsCount(); i++) {
       await this.addTarget();
     }
+
+    this.targets[0].becomeCurrent();
+    this.targets[1].becomeTarget();
   }
 
   get color() {
@@ -135,10 +141,13 @@ class Game extends GameObject {
 
     this.camera = await this.createCameraAsync(this._width, this._height);
 
-    const types = [new Lighting()];
+    const types = [
+      new Lighting(),
+      //  new Particles()
+    ];
     const promises = types.map(type => this.add(type));
-    await Promise.all(promises);
-
+    const [lighting, particles] = await Promise.all(promises);
+    this.particles = particles;
     if (this.state === GameStates.Menu) {
       await this.loadMenu();
       dispatch.game.menu();
@@ -246,10 +255,12 @@ class Game extends GameObject {
     target.x = 0;
     target.z = this.balls[0].z;
     this.targets.push(target);
-    for (let i = 0; i < Settings.visibleTargets; i++) {
+    for (let i = 0; i < this.getVisibleTargetsCount(); i++) {
       await this.addTarget();
     }
+    this.targets[0].becomeCurrent();
   };
+  score = 0;
 
   startGame = () => {
     if (this.state === GameStates.playing) {
@@ -283,22 +294,26 @@ class Game extends GameObject {
     }
   };
 
-  changeBall = () => {
+  animateBackgroundColor = input => {
+    TweenMax.to(this, 2, {
+      hue: (input * randomRange(3, 20)) % 50,
+      onUpdate: () => {
+        const color = this.color;
+        this.scene.background = color;
+        this.scene.fog = new THREE.Fog(color, 100, 950);
+      },
+    });
+    TweenMax.to(this.renderer, 1.0, {
+      y: -530,
+      ease: Back.easeOut,
+      delay: 0.1,
+    });
+  };
+
+  changeBall = async () => {
     this.taps += 1;
     if (this.taps % 3 === 0) {
-      TweenMax.to(this, 2, {
-        hue: (this.taps * randomRange(3, 20)) % 50,
-        onUpdate: () => {
-          const color = this.color;
-          this.scene.background = color;
-          this.scene.fog = new THREE.Fog(color, 100, 950);
-        },
-      });
-      TweenMax.to(this.renderer, 1.0, {
-        y: -530,
-        ease: Back.easeOut,
-        delay: 0.1,
-      });
+      this.animateBackgroundColor(this.taps);
     }
     if (!this.loaded) {
       return;
@@ -308,10 +323,23 @@ class Game extends GameObject {
       this.balls[this.mainBall].position,
       this.targets[1].position,
     );
+
     if (distanceFromTarget < Settings.epsilon) {
+      const perfection = 1 - distanceFromTarget / Settings.epsilon;
       dispatch.game.play();
       dispatch.score.increment();
-      Haptic.selection();
+      this.score += 1;
+      if (perfection < 0.3) {
+        Haptic.impact(Haptic.ImpactStyles.Light);
+      } else if (perfection < 0.6) {
+        Haptic.impact(Haptic.ImpactStyles.Medium);
+      } else {
+        Haptic.impact(Haptic.ImpactStyles.Heavy);
+      }
+
+      if (this.particles) {
+        this.particles.impulse();
+      }
 
       this.balls[this.mainBall].x = this.targets[1].x;
       this.balls[this.mainBall].z = this.targets[1].z;
@@ -319,12 +347,12 @@ class Game extends GameObject {
       this.direction = Math.round(randomRange(0, 1));
 
       const target = this.targets.shift();
-      const detroyTween = TweenMax.to(target, 0.7, {
-        alpha: 0,
-        y: -1000,
-        ease: Cubic.easeIn,
-        onComplete: () => target.destroy(),
-      });
+
+      target.animateOut();
+      this.targets[0].becomeCurrent();
+      this.targets[1].becomeTarget();
+
+      this.balls[this.mainBall].landed(perfection);
 
       this.mainBall = 1 - this.mainBall;
 
@@ -339,12 +367,34 @@ class Game extends GameObject {
 
       this.rotationAngle -= 180;
 
-      for (let i = 0; i < this.targets.length; i++) {
-        this.targets[i].alpha += 1 / 7;
+      while (this.targets.length < this.getVisibleTargetsCount()) {
+        await this.addTarget();
       }
-      this.addTarget();
+
+      this.syncTargetsAlpha();
     } else {
       this.gameOver();
+    }
+  };
+
+  getVisibleTargetsCount = () => {
+    const level = Math.floor(this.score / 10);
+    if (level < 4) {
+      return Math.max(4, Settings.visibleTargets - level);
+    } else {
+      return Math.max(3, Settings.visibleTargets - (this.score % 5));
+    }
+  };
+
+  alphaForTarget = i => {
+    const inverse = i - 1;
+    const alpha = inverse / this.getVisibleTargetsCount();
+    return 1 - alpha;
+  };
+
+  syncTargetsAlpha = () => {
+    for (let i = 0; i < this.targets.length; i++) {
+      this.targets[i].alpha = this.alphaForTarget(i);
     }
   };
 
@@ -365,27 +415,17 @@ class Game extends GameObject {
     this.takeScreenshot();
     this.screenShotTaken = false;
     dispatch.score.reset();
+    this.score = 0;
     dispatch.game.menu();
 
     this.cachedRotationVelocity = 0;
 
     if (animate) {
-      const gameOverTween = TweenMax.to(this.balls[this.mainBall], 0.7, {
-        alpha: 0,
-        onComplete: () => this.reset(),
-      });
-
-      TweenMax.to(this.balls[1 - this.mainBall], 0.4, {
-        alpha: 0,
-      });
+      this.balls[this.mainBall].hide({ onComplete: () => this.reset() });
+      this.balls[1 - this.mainBall].hide({ duration: 0.4 });
 
       for (let target of this.targets) {
-        const detroyTween = TweenMax.to(target, randomRange(0.5, 0.7), {
-          alpha: 0,
-          delay: randomRange(0, 0.2),
-          y: randomRange(-1500, -1000),
-          onComplete: () => target.destroy(),
-        });
+        target.animateOut();
       }
     } else {
       this.reset();
@@ -405,9 +445,10 @@ class Game extends GameObject {
     const radians = THREE.Math.degToRad(randomAngle);
     target.x = startX + Settings.ballDistance * Math.sin(radians);
     target.z = startZ + Settings.ballDistance * Math.cos(radians);
-    target.alpha = 1 - this.targets.length * (1 / 7);
 
     this.targets.push(target);
+    target.alpha = this.alphaForTarget(this.targets.length);
+    target.animateIn();
   };
 
   update(delta, time) {
@@ -430,7 +471,7 @@ class Game extends GameObject {
       const targetPosition = this.targets[1].position;
       const distanceFromTarget = distance(ballPosition, targetPosition);
 
-      const isFirst = this.steps <= Settings.visibleTargets;
+      const isFirst = this.steps <= this.getVisibleTargetsCount();
       const minScale = this.balls[this.mainBall].scale.x <= 0.01;
 
       if (!isFirst) {
