@@ -7,6 +7,7 @@ import Settings from '../constants/Settings';
 import getDeviceInfo from '../ExpoParty/utils/getUserInfo';
 import firebase from 'firebase';
 import GameStates from '../Game/GameStates';
+import getSlug from '../ExpoParty/utils/getSlug';
 
 export const score = {
   state: { current: 0, best: 0, last: null, isBest: false },
@@ -22,18 +23,7 @@ export const score = {
         ...props,
       };
     },
-    reset: state => {
-      if (Settings.isFirebaseEnabled) {
-        if (Settings.isEveryScoreBest) {
-          state.best = state.current;
-          dispatch.score.setHighScore(state.current);
-        } else {
-          if (state.isBest && state.current >= state.best) {
-            dispatch.score.setHighScore(state.current);
-          }
-        }
-      }
-
+    _reset: state => {
       return {
         ...state,
         current: 0,
@@ -43,28 +33,55 @@ export const score = {
     },
   },
   effects: {
-    setHighScore: (highScore, { user: { displayName, photoURL } }) => {
-      Fire.shared.db.runTransaction(transaction => {
-        return transaction.get(Fire.shared.doc).then(doc => {
-          if (!doc.exists) {
-            return highScore;
-          }
+    reset: (props, { score }) => {
+      if (Settings.isFirebaseEnabled) {
+        console.log('reset', score.isBest, score.current);
+        if (Settings.isEveryScoreBest) {
+          console.log('fkit', score.current);
+          dispatch.score.setHighScore(score.current);
+        } else if (score.isBest) {
+          dispatch.score.setHighScore(score.best);
+        }
+      }
+      dispatch.score._reset();
+    },
+    setHighScore: async (highScore, { user: { displayName, photoURL } }) => {
+      console.log('set High score', highScore);
 
-          const data = doc.data();
-          const cloudHighScore = data.score || 0;
-          if (Settings.isEveryScoreBest || cloudHighScore > highScore) {
-            transaction.update(Fire.shared.doc, {
-              score: highScore,
-              timestamp: Date.now(),
-              displayName,
-              photoURL,
-            });
-            return highScore;
-          }
-          dispatch.score.setBest(cloudHighScore);
-          return cloudHighScore;
+      const docRef = Fire.shared.doc;
+      try {
+        await Fire.shared.db.runTransaction(transaction => {
+          return transaction.get(docRef).then(doc => {
+            if (!doc.exists) {
+              throw 'Document does not exist!';
+            }
+
+            const data = doc.data();
+            const cloudHighScore = data.score || 0;
+            console.log('cloud score', cloudHighScore);
+            if (Settings.isEveryScoreBest || highScore > cloudHighScore) {
+              console.log('truly best', highScore);
+              transaction.update(docRef, {
+                score: highScore,
+                timestamp: Date.now(),
+                displayName,
+                photoURL,
+              });
+            } else {
+              transaction.update(docRef, {
+                ...data,
+                displayName,
+                photoURL,
+              });
+              dispatch.score.setBest(cloudHighScore);
+            }
+          });
         });
-      });
+        console.log('Successfully wrote score');
+      } catch ({ message }) {
+        console.log('Failed to write score', message);
+        alert(message);
+      }
     },
   },
 };
@@ -195,6 +212,107 @@ export const dailyStreak = {
   },
 };
 
+function mergeInternal(state, { uid, user }) {
+  const { [uid]: currentUser, ...otherUsers } = state;
+  return {
+    ...otherUsers,
+    [uid]: { ...(currentUser || {}), ...user },
+  };
+}
+
+export const leaders = {
+  state: {},
+  reducers: {
+    batchUpdate: (state, users) => {
+      let nextData = state;
+      for (let user of users) {
+        nextData = mergeInternal(nextData, user);
+      }
+      return nextData;
+    },
+    update: (state, { uid, user }) => {
+      return mergeInternal(state, { uid, user });
+    },
+    set: (state, { uid, user }) => {
+      const { [uid]: currentUser, ...otherUsers } = state;
+      return {
+        ...otherUsers,
+        [uid]: user,
+      };
+    },
+    clear: () => ({}),
+  },
+  effects: {
+    getPagedAsync: async ({ start, size, callback }) => {
+      const collection = firebase.firestore().collection(getSlug());
+
+      let ref = collection.orderBy('score', 'desc').limit(size);
+      try {
+        if (start) {
+          ref = ref.startAfter(start);
+        }
+        const querySnapshot = await ref.get();
+
+        const data = [];
+        querySnapshot.forEach(function(doc) {
+          if (!doc.exists) {
+            console.log("leaders.getPagedAsync(): Error: data doesn't exist", {
+              size,
+              start,
+              collectionName,
+            });
+          } else {
+            const _data = doc.data();
+            const uid = doc.id;
+            data.push({ uid, user: { key: uid, uid, ..._data } });
+          }
+        });
+
+        dispatch.leaders.batchUpdate(data);
+        const cursor = querySnapshot.docs[querySnapshot.docs.length - 1];
+        callback && callback({ data, cursor, noMore: data.length < size });
+        return;
+      } catch (error) {
+        console.error('Error getting documents: ', error);
+      }
+      callback && callback({});
+    },
+    getAsync: async ({ uid, callback }) => {
+      try {
+        const ref = firebase
+          .firestore()
+          .collection(getSlug())
+          .doc(uid);
+        const doc = await ref.get();
+        if (!doc.exists) {
+          if (uid === Fire.shared.uid) {
+            const currentUser = firebase.auth().currentUser || {};
+            ref.set({
+              rank: 999999,
+              displayName:
+                currentUser.displayName ||
+                Constants.deviceName ||
+                'Pillar the Kid',
+              photoURL: currentUser.photoURL,
+              score: 0,
+              timestamp: Date.now(),
+            });
+          }
+          console.log('No document: leaders/' + uid);
+        } else {
+          const user = doc.data();
+          console.log('got leader', user);
+          dispatch.leaders.update({ uid, user });
+          callback && callback(user);
+        }
+      } catch ({ message }) {
+        console.log('Error: leaders.get', message);
+        alert(message);
+      }
+    },
+  },
+};
+
 export const players = {
   state: {},
   reducers: {
@@ -217,16 +335,33 @@ export const players = {
   effects: {
     getAsync: async ({ uid, callback }) => {
       try {
-        const doc = await firebase
+        const ref = firebase
           .firestore()
           .collection('players')
-          .doc(uid)
-          .get();
+          .doc(uid);
+        const doc = await ref.get();
         if (!doc.exists) {
+          if (uid === Fire.shared.uid) {
+            const currentUser = firebase.auth().currentUser || {};
+            const user = {
+              rank: 999999,
+              displayName:
+                currentUser.displayName ||
+                Constants.deviceName ||
+                'Mark Pillar',
+              photoURL: currentUser.photoURL,
+              score: 0,
+              timestamp: Date.now(),
+            };
+            ref.add(user);
+            callback && callback(user);
+          }
           console.log('No document: players/' + uid);
+          callback && callback({});
         } else {
           const user = doc.data();
-          dispatch.user.update({ uid, user });
+          console.log('got player', user);
+          dispatch.players.update({ uid, user });
           callback && callback(user);
         }
       } catch ({ message }) {
@@ -272,7 +407,6 @@ function reduceFirebaseUser(user) {
     emailVerified,
     email,
     createdAt,
-    additionalUserInfo,
   } = nextUser;
 
   return {
@@ -286,7 +420,6 @@ function reduceFirebaseUser(user) {
     emailVerified,
     email,
     createdAt,
-    additionalUserInfo,
     ...possibleUpdates,
 
     // stsTokenManager,
@@ -321,6 +454,7 @@ export const user = {
           dispatch.user.signInAnonymously();
         } else {
           dispatch.user.getAsync();
+          dispatch.leaders.getAsync({ uid: user.uid });
         }
       });
     },

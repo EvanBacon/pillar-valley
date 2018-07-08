@@ -9,7 +9,7 @@ export default class Icon extends Component {
   static defaultProps = {
     soundIn: 'button_in',
     soundOut: 'button_out',
-    size: 30,
+    size: 24,
     color: '#ffffff',
   };
 
@@ -45,8 +45,8 @@ export default class Icon extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    width: 64,
-    minWidth: 64,
+    width: 56,
+    minWidth: 56,
     aspectRatio: 1,
     // borderRadius: 64 / 2,
     backgroundColor: 'transparent',

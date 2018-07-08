@@ -8,7 +8,7 @@ import LeaderboardScreen from './ExpoParty/screens/LeaderboardScreen';
 import ProfileScreen from './ExpoParty/screens/ProfileScreen';
 import ReportScreen from './ExpoParty/screens/ReportScreen';
 import GameScreen from './screens/GameScreen';
-
+import Licenses from './components/Licenses';
 const themedHeaderProps = {
   headerTintColor: 'white',
   headerStyle: {
@@ -17,39 +17,39 @@ const themedHeaderProps = {
   headerTitleStyle: { color: 'white' },
 };
 
-const PartyTabNavigator = LeaderboardScreen;
-// const PartyTabNavigator = createMaterialBottomTabNavigator(
-//   {
-//     Achievement: {
-//       screen: AchievementScreen,
-//       navigationOptions: () => ({
-//         tabBarColor: '#9013FE',
-//         tabBarIcon: tabBarIcon('star'),
-//       }),
-//     },
-//     Leaderboard: {
-//       screen: LeaderboardScreen,
-//       navigationOptions: () => ({
-//         tabBarColor: '#2962ff',
-//         tabBarIcon: tabBarIcon('show-chart'),
-//       }),
-//     },
-//   },
-//   {
-//     shifting: true,
+// const PartyTabNavigator = LeaderboardScreen;
+const PartyTabNavigator = createMaterialBottomTabNavigator(
+  {
+    Leaderboard: {
+      screen: LeaderboardScreen,
+      navigationOptions: () => ({
+        tabBarColor: '#2962ff',
+        tabBarIcon: tabBarIcon('show-chart'),
+      }),
+    },
+    Achievement: {
+      screen: AchievementScreen,
+      navigationOptions: () => ({
+        tabBarColor: '#9013FE',
+        tabBarIcon: tabBarIcon('star'),
+      }),
+    },
+  },
+  {
+    shifting: true,
 
-//     initialRouteName: 'Leaderboard',
-//     activeTintColor: '#f0edf6',
-//     inactiveTintColor: '#3e2465',
-//     barStyle: { backgroundColor: '#694fad' },
+    initialRouteName: 'Leaderboard',
+    activeTintColor: '#f0edf6',
+    inactiveTintColor: '#3e2465',
+    barStyle: { backgroundColor: '#694fad' },
 
-//     mode: 'modal',
-//     title: Constants.manifest.name,
-//     cardStyle: {
-//       backgroundColor: 'transparent',
-//     },
-//   },
-// );
+    mode: 'modal',
+    title: Constants.manifest.name,
+    cardStyle: {
+      backgroundColor: 'transparent',
+    },
+  },
+);
 
 const ModalStack = createStackNavigator(
   {
@@ -60,6 +60,7 @@ const ModalStack = createStackNavigator(
         title: `Expo ${Constants.manifest.name}`,
       },
     },
+    Licenses,
     Report: ReportScreen,
     Profile: ProfileScreen,
   },
@@ -67,8 +68,8 @@ const ModalStack = createStackNavigator(
     navigationOptions: {
       ...themedHeaderProps,
     },
-    // initialRouteName: 'Game',
-    initialRouteName: 'Leaderboard',
+    initialRouteName: 'Game',
+    // initialRouteName: 'Leaderboard',
     // mode: 'modal',
     // headerMode: 'none',
     cardStyle: {

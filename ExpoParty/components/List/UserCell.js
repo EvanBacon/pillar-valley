@@ -21,8 +21,8 @@ export default class UserCell extends React.Component {
       return <View />;
     }
 
-    const { name, score, rank, image } = item;
-
+    const { displayName: name, score, rank, photoURL: image } = item;
+    const _rank = rank || index + 1;
     return (
       <TouchableHighlight
         underlayColor={'#eeeeee'}
@@ -37,12 +37,12 @@ export default class UserCell extends React.Component {
               textStyle={{ fontWeight: 'bold' }}
               avatarStyle={{ marginRight: 16 }}
               name={name}
-              image={image}
+              avatar={image}
             />
             <View styles={{ alignItems: 'flex-start' }}>
-              <Text style={styles.rank}>{rank || index + 1}</Text>
+              <Text style={styles.rank}>{name}</Text>
               <Text style={styles.text}>
-                {name} <Text style={styles.subtitle}>{score} Points</Text>
+                <Text style={styles.subtitle}>{score} Points</Text>
               </Text>
             </View>
           </View>

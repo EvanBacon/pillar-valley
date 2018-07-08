@@ -31,7 +31,7 @@ class Rate extends React.Component {
     if (!StoreReview.hasAction()) {
       return null;
     }
-    return <Icon onPress={this.onPress} name="star-o" {...props} />;
+    return <Icon onPress={this.onPress} name="star" {...props} />;
   }
 }
 

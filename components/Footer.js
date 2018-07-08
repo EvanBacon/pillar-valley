@@ -8,7 +8,13 @@ import GameStates from '../Game/GameStates';
 
 class Footer extends React.Component {
   render() {
-    const { style, game, onLeaderboardPress, ...props } = this.props;
+    const {
+      style,
+      game,
+      onLeaderboardPress,
+      onLicensesPress,
+      ...props
+    } = this.props;
     const animation = game === GameStates.Menu ? 'zoomIn' : 'zoomOut';
     const delay = 100;
     const initialDelay = 100;
@@ -20,6 +26,7 @@ class Footer extends React.Component {
       <Button.Leaderboard onPress={onLeaderboardPress} />,
       <Button.Sound />,
       <Button.Share />,
+      <Button.Licenses onPress={onLicensesPress} />,
     ];
     return (
       <View style={[styles.container, style]}>

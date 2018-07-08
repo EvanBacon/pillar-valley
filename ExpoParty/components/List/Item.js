@@ -12,8 +12,9 @@ export default class Item extends React.Component {
     const { index, onPress, style, ...props } = this.props;
     let item = this.props.item || {};
 
-    const { name, score, rank, image } = item;
-
+    const { displayName, score, photoURL, rank: brokenRank, timestamp } = item;
+    let rank = index + 1;
+    console.log('FphotoURLphotoURLphotoURL', photoURL);
     return (
       <TouchableHighlight
         underlayColor={'#eeeeee'}
@@ -23,15 +24,15 @@ export default class Item extends React.Component {
       >
         <View style={styles.container}>
           <View style={{ flexDirection: 'row' }}>
-            <Text style={styles.rank}>{rank || index + 1}</Text>
+            <Text style={styles.rank}>{rank}</Text>
             <Avatar
               textStyle={{ fontWeight: 'bold' }}
               avatarStyle={{ marginRight: 16 }}
-              name={name}
-              image={image}
+              name={displayName}
+              avatar={photoURL}
             />
             <View>
-              <Text style={styles.text}>{name}</Text>
+              <Text style={styles.text}>{displayName}</Text>
               <Text style={styles.subtitle}>{score} Points</Text>
             </View>
           </View>

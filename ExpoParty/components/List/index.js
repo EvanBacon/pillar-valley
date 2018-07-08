@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, View, StyleSheet } from 'react-native';
+import { FlatList, Text, View, StyleSheet } from 'react-native';
 
 import { Platform, Dimensions } from 'react-native';
 import { Constants } from 'expo';
@@ -33,6 +33,20 @@ class List extends React.Component {
   }
 
   keyExtractor = (item, index) => `item-${index}`;
+
+  get footer() {
+    if (this.props.noMore) {
+      return null;
+    }
+
+    return footerProps => (
+      <Footer
+        {...footerProps}
+        item={this.props.userItem}
+        onPress={this.props.onPressFooter}
+      />
+    );
+  }
   render() {
     const {
       style,
@@ -42,6 +56,7 @@ class List extends React.Component {
       onPressFooter,
       onPress,
       headerButtonTitle,
+      noMore,
       ...props
     } = this.props;
     return (
@@ -49,10 +64,20 @@ class List extends React.Component {
         <FlatList
           style={[style, styles.container]}
           keyExtractor={this.keyExtractor}
-          ListFooterComponent={footerProps => (
-            <Footer {...footerProps} item={userItem} onPress={onPressFooter} />
-          )}
+          ListFooterComponent={this.footer}
           ItemSeparatorComponent={Separator}
+          ListEmptyComponent={
+            <View
+              style={{
+                justifyContent: 'center',
+                flex: 1,
+                height: Dimensions.get('window').height,
+                alignItems: 'center',
+              }}
+            >
+              <Text style={{ fontSize: 24 }}>Coming Soon</Text>
+            </View>
+          }
           renderItem={this.renderItem}
           {...props}
         />

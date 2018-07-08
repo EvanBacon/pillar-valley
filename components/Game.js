@@ -24,6 +24,9 @@ class Game extends React.Component {
     this.props.onLoad();
   };
 
+  onLicensesPress = () => {
+    this.props.navigation.navigate('Licenses');
+  };
   onLeaderboardPress = () => {
     if (Settings.isFirebaseEnabled) {
       this.props.navigation.navigate('Leaderboard');
@@ -58,7 +61,10 @@ class Game extends React.Component {
       <View style={styles.container} pointerEvents="box-none">
         {this.gameScreen}
         <ScoreMeta />
-        <Footer onLeaderboardPress={this.onLeaderboardPress} />
+        <Footer
+          onLeaderboardPress={this.onLeaderboardPress}
+          onLicensesPress={this.onLicensesPress}
+        />
       </View>
     );
   }

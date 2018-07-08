@@ -29,9 +29,11 @@ const Settings = {
   visibleTargets: 5,
   ignoredYellowBox: ['Module ABI', `Audio doesn't exist`],
 
-  isEveryScoreBest: __DEV__ && true,
+  isEveryScoreBest: __DEV__ && false,
   isCacheProfileUpdateActive: !__DEV__ || true,
   shouldDelayFirebaseProfileSyncInMinutes: 25,
+
+  canEditPhoto: false,
 };
 
 export default Settings;

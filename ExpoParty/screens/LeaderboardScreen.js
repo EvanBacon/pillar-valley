@@ -152,43 +152,40 @@ class App extends Component {
     // if (DEBUG) {
     //   return;
     // }
+    if (this.state.refreshing) {
+      return;
+    }
 
     let timeout = setTimeout(() => {
       this.setState({ refreshing: false });
     }, 5000);
-    if (this.state.refreshing) {
-      return;
-    }
     this.setState({ refreshing: true });
-    const { data, cursor } = await Fire.shared.getPagedScore({
-      size: PAGE_SIZE,
+
+    dispatch.leaders.getPagedAsync({
       start: this.lastKnownKey,
+      size: PAGE_SIZE,
+      callback: ({ cursor, noMore }) => {
+        clearTimeout(timeout);
+
+        this.setState({ noMore, refreshing: false });
+        this.lastKnownKey = cursor;
+      },
     });
-    this.lastKnownKey = cursor;
-
-    // console.log('Got data', JSON.stringify(data));
-    let items = {};
-    for (let child of data) {
-      child.name = child.name || child.title || 'Mystery Duck';
-      items[child.key] = child;
-    }
-    this.addChild(items);
-    clearTimeout(timeout);
-
-    this.setState({ refreshing: false });
   };
 
   render() {
     return (
       <View style={styles.container}>
         <List
+          noMore={this.state.noMore}
           renderItem={props => <Item onPress={this._onPressItem} {...props} />}
           title={'Players'}
           headerButtonTitle={this.state.filter}
-          data={this.state.dataSorted}
+          data={this.props.leaders}
           userItem={this.props.user}
           onPress={this._onPressItem}
           onPressHeader={this._onOpenActionSheet}
+          renderUserItem={() => null}
           onPressFooter={this.makeRemoteRequest}
           refreshControl={
             <RefreshControl
@@ -221,7 +218,12 @@ const styles = StyleSheet.create({
 });
 
 import { connect } from 'react-redux';
-
-const ConnectedProfile = connect(({ user }) => ({ user }))(App);
+import { dispatch } from '@rematch/core';
+const ConnectedProfile = connect(({ user, leaders }) => {
+  const _leadersSorted = Object.values(leaders).sort(
+    (a, b) => a.score < b.score,
+  );
+  return { user, leaders: _leadersSorted };
+})(App);
 
 export default connectActionSheet(ConnectedProfile);

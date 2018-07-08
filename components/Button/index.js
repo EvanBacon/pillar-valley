@@ -5,3 +5,4 @@ export { default as Share } from './Share';
 export { default as Sound } from './Sound';
 export { default as Leaderboard } from './Leaderboard';
 export { default as Cancel } from './Cancel';
+export { default as Licenses } from './LicensesButton';

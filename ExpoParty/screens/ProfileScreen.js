@@ -9,9 +9,10 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-
+import Settings from '../../constants/Settings';
 import Avatar from '../components/Avatar';
 import Fire from '../Fire';
+import { dispatch } from '@rematch/core';
 import firebase from 'firebase';
 const FacebookButton = ({ onPress, children }) => (
   <FontAwesome.Button
@@ -73,6 +74,13 @@ class App extends Component {
     };
   };
 
+  constructor(props) {
+    super(props);
+
+    const { uid } = props.navigation.state.params;
+    dispatch.players.getAsync({ uid });
+  }
+
   get isUser() {
     const { uid } = this.props.navigation.state.params;
 
@@ -130,6 +138,9 @@ class App extends Component {
   };
 
   _onPressPhoto = async () => {
+    if (!Settings.canEditPhoto) {
+      return;
+    }
     if (!this.isUser) {
       this._viewProfilePicture();
       return;
@@ -175,22 +186,22 @@ class App extends Component {
     Fire.shared.upgradeAccount();
   };
 
-  render() {
-    let { name, image } = this.props.navigation.state.params;
-    let userData = null;
-    if (this.isUser) {
-      const providerData = (firebase.auth().currentUser || {}).providerData;
-      if (providerData && providerData.length > 0) {
-        userData = providerData[0];
-      }
+  get image() {
+    const { user = {} } = this.props;
+    if (user.fbuid) {
+      return `https://graph.facebook.com/${user.fbuid}/picture?type=large`;
+    } else {
+      return user.photoURL;
     }
-    let isSignedInWithFB;
+  }
 
-    if (userData) {
-      isSignedInWithFB = userData.providerId === 'facebook.com';
-      name = userData.displayName;
-      image = userData.photoURL;
-    }
+  render() {
+    const { uid } = this.props.navigation.state.params;
+
+    const { user = {} } = this.props;
+
+    let isSignedInWithFB = !!user.fbuid;
+
     const avatarSize = 128;
 
     const canUpgrade = this.isUser && !isSignedInWithFB;
@@ -212,23 +223,26 @@ class App extends Component {
                   height: '100%',
                   borderRadius: avatarSize / 2,
                 }}
-                name={name}
-                avatar={image}
+                name={user.displayName}
+                avatar={this.image}
               />
-              {this.isUser && (
-                <EditPhotoButton
-                  style={{ position: 'absolute', bottom: 0, right: 0 }}
-                  onPress={this._onPressEditPhoto}
-                />
-              )}
+              {this.isUser &&
+                Settings.canEditPhoto && (
+                  <EditPhotoButton
+                    style={{ position: 'absolute', bottom: 0, right: 0 }}
+                    onPress={this._onPressEditPhoto}
+                  />
+                )}
             </TouchableOpacity>
           </View>
 
           <View style={{ alignItems: 'flex-start', justifyContent: 'center' }}>
-            <Text style={styles.paragraph}>{name}</Text>
-            <Text style={styles.subtitle}>
-              Plays Nitro Roll, Sunset Cyberspace, and Pillar Valley
-            </Text>
+            <Text style={styles.paragraph}>{user.displayName}</Text>
+            {false && (
+              <Text style={styles.subtitle}>
+                Plays Nitro Roll, Sunset Cyberspace, and Pillar Valley
+              </Text>
+            )}
           </View>
         </View>
         {canUpgrade && (
@@ -280,4 +294,23 @@ const styles = StyleSheet.create({
     color: '#34495e',
   },
 });
-export default connectActionSheet(App);
+import { connect } from 'react-redux';
+const ASProfile = connectActionSheet(App);
+export default connect(
+  ({ players }) => ({ players }),
+  {},
+  ({ players = {}, ...stateProps }, dispatchProps, ownProps) => {
+    const params = ownProps.navigation.state.params || {};
+    const { uid } = params;
+    const user = players[uid];
+
+    console.log('parse user data', uid, user);
+
+    return {
+      ...ownProps,
+      ...dispatchProps,
+      ...stateProps,
+      user,
+    };
+  },
+)(ASProfile);
