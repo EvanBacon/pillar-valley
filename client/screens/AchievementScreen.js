@@ -5,7 +5,7 @@ import { StyleSheet, View } from 'react-native';
 import AchievementsItem from '../components/AchievementsItem';
 import List from '../components/List';
 import UserAchievementsItem from '../components/UserAchievementsItem';
-import connectAchievementToast from '../connectAchievementToast';
+import connectAchievementToast from '../ExpoParty/connectAchievementToast';
 
 const data = [
   // {

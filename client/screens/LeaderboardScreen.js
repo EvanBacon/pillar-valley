@@ -1,5 +1,3 @@
-'use strict';
-
 import { connectActionSheet } from '@expo/react-native-action-sheet';
 import React, { Component } from 'react';
 import { StyleSheet, View, RefreshControl } from 'react-native';
@@ -7,7 +5,7 @@ import firebase from 'firebase';
 import Item from '../components/List/Item';
 import List from '../components/List';
 import addNth from '../utils/addNth';
-import Fire from '../Fire';
+import Fire from '../ExpoParty/Fire';
 import { Constants } from 'expo';
 const data = [
   {

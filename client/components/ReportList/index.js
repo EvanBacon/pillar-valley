@@ -7,7 +7,7 @@ import { Constants } from 'expo';
 import Item from './Item';
 import Separator from './Separator';
 import Header from './Header';
-import Settings from '../../../constants/Settings';
+import Settings from '../../constants/Settings';
 class List extends React.Component {
   renderItem = props => <Item {...props} onPress={this.props.onPress} />;
 

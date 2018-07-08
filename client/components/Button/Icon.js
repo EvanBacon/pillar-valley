@@ -3,7 +3,7 @@ import { Image, StyleSheet } from 'react-native';
 import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
 import { FontAwesome } from '@expo/vector-icons'; // 6.2.0
 
-import AudioManager from '../../Manager/AudioManager';
+import AudioManager from '../../AudioManager';
 
 export default class Icon extends Component {
   static defaultProps = {
@@ -28,8 +28,8 @@ export default class Icon extends Component {
     return (
       <TouchableBounce
         onPress={onPress}
-        onPressIn={() => AudioManager.sharedInstance.playAsync(soundIn)}
-        onPressOut={() => AudioManager.sharedInstance.playAsync(soundOut)}
+        onPressIn={() => AudioManager.shared.playAsync(soundIn)}
+        onPressOut={() => AudioManager.shared.playAsync(soundOut)}
         style={[styles.container, style]}
       >
         <FontAwesome
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     borderColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
-    marginHorizontal: 8,
+    marginHorizontal: 4,
   },
   icon: {
     backgroundColor: 'transparent',

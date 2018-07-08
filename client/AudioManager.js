@@ -1,10 +1,9 @@
-import { store } from '../rematch/Gate';
+import { store } from './rematch/Gate';
 import Expo from 'expo';
-import Assets from '../Assets';
+import Assets from './Assets';
 import AssetUtils from 'expo-asset-utils';
-import Manager from './Manager';
 
-class AudioManager extends Manager {
+class AudioManager {
   sounds = {};
 
   playAsync = async (name, isLooping, startOver = true) => {
@@ -93,14 +92,13 @@ class AudioManager extends Manager {
       files: [...AssetUtils.arrayFromObject(this.assets)],
     });
 
-  async setupAsync() {
+  setupAsync = async () => {
     await this.configureExperienceAudioAsync();
     await this.downloadAsync();
     await this.setupAudioAsync();
-    await super.setupAsync();
-  }
+  };
 }
 
-AudioManager.sharedInstance = new AudioManager();
+AudioManager.shared = new AudioManager();
 
 export default AudioManager;

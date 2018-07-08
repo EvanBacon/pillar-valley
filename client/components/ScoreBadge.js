@@ -8,13 +8,13 @@ import {
 } from 'react-native';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import Avatar from './Avatar';
-import Assets from '../../Assets';
+import Assets from '../Assets';
 
 const ScoreBadge = ({ style, children, color }) => (
   <View
     style={[
       {
-        borderRadius: '50%',
+        borderRadius: 20,
         backgroundColor: '#4630eb',
         flexDirection: 'row',
         justifyContent: 'center',

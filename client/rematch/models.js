@@ -4,7 +4,7 @@ import Expo from 'expo';
 import { Dimensions, AsyncStorage } from 'react-native';
 import Fire from '../ExpoParty/Fire';
 import Settings from '../constants/Settings';
-import getDeviceInfo from '../ExpoParty/utils/getUserInfo';
+import getDeviceInfo from '../utils/getUserInfo';
 import firebase from 'firebase';
 import GameStates from '../Game/GameStates';
 

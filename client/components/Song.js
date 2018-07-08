@@ -1,28 +1,28 @@
 import React from 'react';
 
-import AudioManager from '../Manager/AudioManager';
+import AudioManager from '../AudioManager';
 import { connect } from 'react-redux';
 
 class Song extends React.Component {
   async componentWillMount() {
-    await AudioManager.sharedInstance.playAsync('song', true);
+    await AudioManager.shared.playAsync('song', true);
 
     const { muted } = this.props;
 
     if (muted) {
-      AudioManager.sharedInstance.pauseAsync('song');
+      AudioManager.shared.pauseAsync('song');
     }
   }
   componentWillUnmount() {
-    AudioManager.sharedInstance.stopAsync('song');
+    AudioManager.shared.stopAsync('song');
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.muted != this.props.muted) {
       if (nextProps.muted) {
-        AudioManager.sharedInstance.pauseAsync('song');
+        AudioManager.shared.pauseAsync('song');
       } else {
-        AudioManager.sharedInstance.playAsync('song', true, false);
+        AudioManager.shared.playAsync('song', true, false);
       }
     }
   }

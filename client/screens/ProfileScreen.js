@@ -9,9 +9,9 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import Settings from '../../constants/Settings';
+import Settings from '../constants/Settings';
 import Avatar from '../components/Avatar';
-import Fire from '../Fire';
+import Fire from '../ExpoParty/Fire';
 import { dispatch } from '@rematch/core';
 import firebase from 'firebase';
 const FacebookButton = ({ onPress, children }) => (

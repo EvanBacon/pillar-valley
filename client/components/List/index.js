@@ -71,7 +71,7 @@ class List extends React.Component {
               style={{
                 justifyContent: 'center',
                 flex: 1,
-                height: Dimensions.get('window').height,
+                height: Dimensions.get('window').height / 2,
                 alignItems: 'center',
               }}
             >

@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
     right: 8,
     height: 64,
     alignItems: 'center',
+    justifyContent: 'space-around',
     marginBottom: Settings.bottomInset,
   },
   button: {

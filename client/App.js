@@ -6,10 +6,10 @@ import { THREE } from 'expo-three';
 import React from 'react';
 import { View } from 'react-native';
 
-import AppNavigator from './AppNavigator';
+import Navigation from './Navigation';
 import Assets from './Assets';
 import Settings from './constants/Settings';
-import AudioManager from './Manager/AudioManager';
+import AudioManager from './AudioManager';
 import Gate from './rematch/Gate';
 import Fire from './ExpoParty/Fire';
 if (__DEV__) {
@@ -30,7 +30,7 @@ export default class App extends React.Component {
   get screen() {
     return (
       <Gate>
-        <AppNavigator />
+        <Navigation />
       </Gate>
     );
   }
@@ -48,10 +48,7 @@ export default class App extends React.Component {
   }
 
   _setupExperienceAsync = async () => {
-    await Promise.all([
-      this._preloadAsync(),
-      AudioManager.sharedInstance.setupAsync(),
-    ]);
+    await Promise.all([this._preloadAsync(), AudioManager.shared.setupAsync()]);
     this.setState({ loading: false });
   };
 

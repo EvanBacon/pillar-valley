@@ -2,7 +2,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-import Fire from '../Fire';
+import Fire from '../ExpoParty/Fire';
 import ReportList from '../components/ReportList';
 
 const offenses = [

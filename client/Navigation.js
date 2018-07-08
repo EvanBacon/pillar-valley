@@ -2,11 +2,11 @@ import { Constants } from 'expo';
 import { createStackNavigator } from 'react-navigation';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 
-import tabBarIcon from './ExpoParty/components/tabBarIcon';
-import AchievementScreen from './ExpoParty/screens/AchievementScreen';
-import LeaderboardScreen from './ExpoParty/screens/LeaderboardScreen';
-import ProfileScreen from './ExpoParty/screens/ProfileScreen';
-import ReportScreen from './ExpoParty/screens/ReportScreen';
+import tabBarIcon from './components/tabBarIcon';
+import AchievementScreen from './screens/AchievementScreen';
+import LeaderboardScreen from './screens/LeaderboardScreen';
+import ProfileScreen from './screens/ProfileScreen';
+import ReportScreen from './screens/ReportScreen';
 import GameScreen from './screens/GameScreen';
 import Licenses from './components/Licenses';
 const themedHeaderProps = {
