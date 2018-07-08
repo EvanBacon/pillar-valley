@@ -48,7 +48,6 @@ const styles = StyleSheet.create({
     width: 56,
     minWidth: 56,
     aspectRatio: 1,
-    // borderRadius: 64 / 2,
     backgroundColor: 'transparent',
     borderBottomWidth: 3,
     borderColor: 'white',

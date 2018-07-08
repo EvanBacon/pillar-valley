@@ -510,10 +510,12 @@ class Game extends GameObject {
         }
       }
 
+      const speed = Math.min(
+        this.cachedRotationVelocity + this.score * 0.05,
+        6,
+      );
       this.rotationAngle =
-        (this.rotationAngle +
-          this.cachedRotationVelocity * (this.direction * 2 - 1)) %
-        360;
+        (this.rotationAngle + speed * (this.direction * 2 - 1)) % 360;
 
       const radians = THREE.Math.degToRad(this.rotationAngle);
 

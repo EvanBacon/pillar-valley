@@ -2,6 +2,7 @@ import { Constants } from 'expo';
 import { Dimensions } from 'react-native';
 import sizeInfo from '../utils/whatAmI';
 
+const debug = true; //__DEV__
 const Settings = {
   facebookLoginProps: {
     permissions: ['public_profile', 'email', 'user_friends'],
@@ -16,21 +17,21 @@ const Settings = {
   bottomInset: sizeInfo.bottomInset,
   topInset: sizeInfo.topInset,
   isSimulator: !Constants.isDevice,
-  isFirebaseEnabled: !__DEV__ || true,
-  isAutoStartEnabled: !__DEV__ || false,
-  isScreenshotEnabled: !__DEV__ || true,
-  isMotionMenuEnabled: !__DEV__ || false,
-  isComposerEnabled: !__DEV__ || false,
-  debug: __DEV__,
+  isFirebaseEnabled: !debug || true,
+  isAutoStartEnabled: !debug && false,
+  isScreenshotEnabled: !debug || true,
+  isMotionMenuEnabled: !debug || false,
+  isComposerEnabled: !debug || false,
+  debug: debug,
   ballDistance: 60,
   rotationSpeed: 4,
   epsilon: 15,
   angleRange: [25, 155],
   visibleTargets: 5,
   ignoredYellowBox: ['Module ABI', `Audio doesn't exist`],
-  slug: __DEV__ ? 'crossy-road' : 'users',
-  isEveryScoreBest: __DEV__ && false,
-  isCacheProfileUpdateActive: !__DEV__ || true,
+  slug: debug ? 'crossy-road' : 'users',
+  isEveryScoreBest: debug && false,
+  isCacheProfileUpdateActive: !debug || true,
   shouldDelayFirebaseProfileSyncInMinutes: 25,
 
   canEditPhoto: false,
