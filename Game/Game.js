@@ -17,6 +17,7 @@ import randomRange from './engine/utils/randomRange';
 import Assets from '../Assets';
 import Particles from './engine/core/Particles';
 import { dispatch } from '@rematch/core';
+import TextMesh from './TextMesh';
 
 function distance(p1, p2) {
   var a = p1.x - p2.x;
@@ -232,6 +233,27 @@ class Game extends GameObject {
     this.titleGroup = normalizer;
   };
 
+  createText = () => {
+    this.textMesh = new TextMesh();
+    // this.textMesh.rotation.y = Math.PI;
+    this.textMesh.position.y = -200;
+    this.textMesh.position.x = -150;
+    this.textMesh.position.z = -200;
+    this.gameGroup.add(this.textMesh);
+    this.textMesh.material = new THREE.MeshPhongMaterial({ color: 0xfac575 });
+    this.textMesh.update({
+      text: '1',
+      font: require('./neue_haas_unica_pro_black.json'), // This accepts json, THREE.Font, or a uri to remote THREE.Font json
+      size: 200, //Size of the text. Default is 100.
+      height: 20, //Thickness to extrude text. Default is 50.
+      curveSegments: 12, // — Integer. Number of points on the curves. Default is 12.
+      bevelEnabled: false, // — Boolean. Turn on bevel. Default is False.
+      bevelThickness: 1, // — Float. How deep into text bevel goes. Default is 10.
+      bevelSize: 0.8, // — Float. How far from text outline is bevel. Default is 8.
+      bevelSegments: 0.3, // — Integer. Number of bevel segments. Default is 3.
+    });
+  };
+
   loadGame = async () => {
     this.cachedRotationVelocity = Settings.rotationSpeed;
     this.steps = 0;
@@ -259,6 +281,7 @@ class Game extends GameObject {
       await this.addTarget();
     }
     this.targets[0].becomeCurrent();
+    // this.createText();
   };
   score = 0;
 

@@ -5,6 +5,7 @@ export default {
     'song.mp3': require(`./assets/audio/song.mp3`),
   },
   icons: {
+    'android.png': require(`./assets/icons/android.png`),
     'expo.png': require(`./assets/icons/expo.png`),
     'ios.png': require(`./assets/icons/ios.png`),
     'splash.png': require(`./assets/icons/splash.png`),
@@ -16,5 +17,7 @@ export default {
     'BEGIN.png': require(`./assets/images/BEGIN.png`),
     'PILLAR.png': require(`./assets/images/PILLAR.png`),
     'VALLEY.png': require(`./assets/images/VALLEY.png`),
+    'expoBadge.png': require(`./assets/images/expoBadge.png`),
+    'particle.png': require(`./assets/images/particle.png`),
   },
 };
