@@ -1,5 +1,4 @@
 import { Constants } from 'expo';
-import getSlug from './getSlug';
 
 function getUserInfo() {
   const {
@@ -12,13 +11,12 @@ function getUserInfo() {
     platform,
   } = Constants;
   return {
-    // slug: getSlug(),
-    // appOwnership,
-    // expoVersion,
+    appOwnership,
+    expoVersion,
     deviceId,
     deviceName,
-    // deviceYearClass,
-    // isDevice,
+    deviceYearClass,
+    isDevice,
     // platform,
   };
 }

@@ -28,7 +28,7 @@ const Settings = {
   angleRange: [25, 155],
   visibleTargets: 5,
   ignoredYellowBox: ['Module ABI', `Audio doesn't exist`],
-
+  slug: __DEV__ ? 'crossy-road' : 'users',
   isEveryScoreBest: __DEV__ && false,
   isCacheProfileUpdateActive: !__DEV__ || true,
   shouldDelayFirebaseProfileSyncInMinutes: 25,

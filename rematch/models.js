@@ -7,7 +7,6 @@ import Settings from '../constants/Settings';
 import getDeviceInfo from '../ExpoParty/utils/getUserInfo';
 import firebase from 'firebase';
 import GameStates from '../Game/GameStates';
-import getSlug from '../ExpoParty/utils/getSlug';
 
 export const score = {
   state: { current: 0, best: 0, last: null, isBest: false },
@@ -244,7 +243,7 @@ export const leaders = {
   },
   effects: {
     getPagedAsync: async ({ start, size, callback }) => {
-      const collection = firebase.firestore().collection(getSlug());
+      const collection = firebase.firestore().collection(Settings.slug);
 
       let ref = collection.orderBy('score', 'desc').limit(size);
       try {
@@ -281,7 +280,7 @@ export const leaders = {
       try {
         const ref = firebase
           .firestore()
-          .collection(getSlug())
+          .collection(Settings.slug)
           .doc(uid);
         const doc = await ref.get();
         if (!doc.exists) {
