@@ -5,6 +5,9 @@ import Loading from '../components/Loading';
 import Song from '../components/Song';
 
 class GameScreen extends React.Component {
+  static navigationOptions = {
+    header: null,
+  };
   state = {
     loading: true,
   };

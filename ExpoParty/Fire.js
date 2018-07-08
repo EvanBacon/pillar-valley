@@ -1,7 +1,7 @@
 const firebase = require('firebase');
 // Required for side-effects
 require('firebase/firestore');
-
+import { Constants } from 'expo';
 import Secret from './Secret';
 import getUserInfo from './utils/getUserInfo';
 import getSlug from './utils/getSlug';
@@ -10,156 +10,148 @@ import { dispatch } from '@rematch/core';
 const collectionName = getSlug();
 
 import Settings from '../constants/Settings';
+
 class Fire {
-  constructor() {
+  constructor() {}
+
+  init = () => {
     if (!Settings.isFirebaseEnabled) {
       return;
     }
 
-    this.init();
+    firebase.initializeApp(Secret);
     firebase.firestore().settings({ timestampsInSnapshots: true });
-    this.observeAuth();
-  }
-
-  init = () => firebase.initializeApp(Secret);
-
-  observeAuth = () =>
-    firebase.auth().onAuthStateChanged(this.onAuthStateChanged);
-
-  onAuthStateChanged = async user => {
-    if (!user) {
-      try {
-        firebase.auth().signInAnonymously();
-      } catch ({ message }) {
-        alert(message);
-      }
-    } else {
-      await this.getUser();
-      this.saveUser();
-      this.compareDaily();
-      console.log('signed in');
-    }
+    dispatch.user.observeAuth();
   };
 
-  getUser = () => {
-    return new Promise((res, rej) => {
-      this.doc
-        .get()
-        .then(doc => {
-          if (!doc.exists) {
-            console.log('No such document!');
-          } else {
-            console.log('Document data:', doc.data());
-            this.userData = doc.data();
-            this.userData.name =
-              this.userData.name ||
-              this.userData.title ||
-              this.userData.deviceName;
-            dispatch.user.update(this.userData);
-          }
-          res();
-        })
-        .catch(rej);
-    });
-  };
+  // onAuthStateChanged = async user => {
+  //   if (!user) {
+  //     try {
+  //       firebase.auth().signInAnonymously();
+  //     } catch ({ message }) {
+  //       alert(message);
+  //     }
+  //   } else {
+  //     // await this.getUser();
+  //     // this.saveUser();
+  //     dispatch.dailyStreak.compareDaily()
+  //   }
+  // };
 
-  compareDaily = async () => {
-    const dailyVisits = await this.incrementDailyReward();
+  // getUser = () => {
+  //   return new Promise((res, rej) => {
+  //     this.collection
+  //       .doc('players')
+  //       .get()
+  //       .then(doc => {
+  //         if (!doc.exists) {
+  //           console.log('No such document!');
+  //         } else {
+  //           console.log('Document data:', doc.data());
+  //           this.userData = doc.data();
+  //           this.userData.name =
+  //             this.userData.name ||
+  //             this.userData.title ||
+  //             this.userData.deviceName;
+  //           dispatch.user.update(this.userData);
+  //         }
+  //         res();
+  //       })
+  //       .catch(rej);
+  //   });
+  // };
 
-    if (dailyVisits != this.userData.dailyVisits) {
-      // console.log('Yay! You came back, your streak is now at: ' + dailyVisits);
+  // compareDaily = async () => {
+  //   const dailyVisits = await this.incrementDailyReward();
 
-      dispatch.dailyStreak.assign(dailyVisits);
-      if (dailyVisits > this.userData.dailyVisits) {
-        dispatch.dailyStreak.rewardUser(dailyVisits);
-      }
-      this.userData.dailyVisits = dailyVisits;
-      /// Give reward!
-    } else {
-      // console.log('ummmm', dailyVisits);
-    }
-  };
+  //   if (dailyVisits != this.userData.dailyVisits) {
+  //     // console.log('Yay! You came back, your streak is now at: ' + dailyVisits);
 
-  incrementDailyReward = async () => {
-    const timestamp = new Date().getTime();
-    return new Promise((res, rej) => {
-      this.db
-        .runTransaction(transaction => {
-          return transaction.get(this.doc).then(userDoc => {
-            if (!userDoc.exists) {
-              throw 'Document does not exist!';
-            }
+  //     dispatch.dailyStreak.assign(dailyVisits);
+  //     if (dailyVisits > this.userData.dailyVisits) {
+  //       dispatch.dailyStreak.rewardUser(dailyVisits);
+  //     }
+  //     this.userData.dailyVisits = dailyVisits;
+  //     /// Give reward!
+  //   } else {
+  //     // console.log('ummmm', dailyVisits);
+  //   }
+  // };
 
-            const data = userDoc.data();
-            const { lastRewardTimestamp } = data;
+  // incrementDailyReward = async () => {
+  //   const timestamp = new Date().getTime();
+  //   return new Promise((res, rej) => {
+  //     this.db
+  //       .runTransaction(transaction => {
+  //         return transaction.get(this.doc).then(userDoc => {
+  //           if (!userDoc.exists) {
+  //             throw 'Document does not exist!';
+  //           }
 
-            const hours = Math.abs(lastRewardTimestamp - timestamp) / 36e5; // 60000;
+  //           const data = userDoc.data();
+  //           const { lastRewardTimestamp } = data;
 
-            if (hours >= 24) {
-              if (hours >= 48) {
-                // console.log('More than a day');
-                // It has been more than 1 day since the last visit - break the streak
-                const newDailyVisits = 0;
-                transaction.update(this.doc, {
-                  dailyVisits: newDailyVisits,
-                  lastRewardTimestamp: timestamp,
-                });
-                this.userData.lastRewardTimestamp = timestamp;
-                return newDailyVisits;
-              } else {
-                // console.log('You were here yesterday');
-                // Perfect! It has been 1 day since the last visit - increment streak and save current time
+  //           const hours = Math.abs(lastRewardTimestamp - timestamp) / 36e5; // 60000;
 
-                const dailyVisits = data.dailyVisits || 0;
-                const newDailyVisits = dailyVisits + 1;
-                transaction.update(this.doc, {
-                  dailyVisits: newDailyVisits,
-                  lastRewardTimestamp: timestamp,
-                });
-                this.userData.lastRewardTimestamp = timestamp;
-                return newDailyVisits;
-              }
-            } else {
-              // console.log('Within day');
-              transaction.update(this.doc, {
-                dailyVisits: data.dailyVisits || 0,
-                lastRewardTimestamp:
-                  data.lastRewardTimestamp || new Date().getTime(),
-              });
+  //           if (hours >= 24) {
+  //             if (hours >= 48) {
+  //               // console.log('More than a day');
+  //               // It has been more than 1 day since the last visit - break the streak
+  //               const newDailyVisits = 0;
+  //               transaction.update(this.doc, {
+  //                 dailyVisits: newDailyVisits,
+  //                 lastRewardTimestamp: timestamp,
+  //               });
+  //               this.userData.lastRewardTimestamp = timestamp;
+  //               return newDailyVisits;
+  //             } else {
+  //               // console.log('You were here yesterday');
+  //               // Perfect! It has been 1 day since the last visit - increment streak and save current time
 
-              // It hasn't been a day yet - do nothing
-            }
-            return data.dailyVisits || 0;
-          });
-        })
-        .then(res)
-        .catch(rej);
-    });
-  };
+  //               const dailyVisits = data.dailyVisits || 0;
+  //               const newDailyVisits = dailyVisits + 1;
+  //               transaction.update(this.doc, {
+  //                 dailyVisits: newDailyVisits,
+  //                 lastRewardTimestamp: timestamp,
+  //               });
+  //               this.userData.lastRewardTimestamp = timestamp;
+  //               return newDailyVisits;
+  //             }
+  //           } else {
+  //             // console.log('Within day');
+  //             transaction.update(this.doc, {
+  //               dailyVisits: data.dailyVisits || 0,
+  //               lastRewardTimestamp:
+  //                 data.lastRewardTimestamp || new Date().getTime(),
+  //             });
 
-  saveUser = () => {
-    const user = getUserInfo();
-    this.saveUserInfo(user);
-  };
+  //             // It hasn't been a day yet - do nothing
+  //           }
+  //           return data.dailyVisits || 0;
+  //         });
+  //       })
+  //       .then(res)
+  //       .catch(rej);
+  //   });
+  // };
 
-  saveUserInfo = info => {
-    const { uid } = this;
-    if (!uid) {
-      return;
-    }
-    // console.log('saveUserInfo', uid, info);
-    const ref = this.doc;
-    const setWithMerge = ref.set({ uid, ...info }, { merge: true });
-  };
+  // saveUser = () => {
+  //   const user = getUserInfo();
+  //   this.saveUserInfo(user);
+  // };
 
-  saveScore = score => {
-    this.saveUserInfo({
-      timestamp: new Date().getTime(),
-      score,
-    });
-  };
+  // saveUserInfo = info => {
+  //   const { uid } = this;
+  //   if (!uid) {
+  //     return;
+  //   }
+  //   // console.log('saveUserInfo', uid, info);
+  //   const ref = this.doc;
+  //   const setWithMerge = ref.set({ uid, ...info }, { merge: true });
+  // };
 
   debugPagedScore = true;
+
   getPagedScore = async ({ size, start }) => {
     if (this.debugPagedScore) {
       return {
@@ -293,6 +285,69 @@ class Fire {
     });
   };
 
+  upgradeAccount = async () => {
+    dispatch.facebook.upgradeAccount();
+  };
+
+  uploadImageAsync = uri => {
+    return new Promise(async (res, rej) => {
+      //todo: meta data is cool
+      var metadata = {
+        contentType: 'image/jpeg',
+      };
+
+      const response = await fetch(uri);
+      const blob = await response.blob();
+      const ref = firebase
+        .storage()
+        .ref(`${this.uid}/images`)
+        .child(uuid.v4() + '.jpg');
+
+      const uploadTask = ref.put(blob, metadata);
+
+      uploadTask.on(
+        'state_changed',
+        snapshot => {
+          // Observe state change events such as progress, pause, and resume
+          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log('Upload is ' + progress + '% done');
+          switch (snapshot.state) {
+            case firebase.storage.TaskState.PAUSED: // or 'paused'
+              console.log('Upload is paused');
+              break;
+            case firebase.storage.TaskState.RUNNING: // or 'running'
+              console.log('Upload is running');
+              break;
+          }
+        },
+        function(error) {
+          rej(error);
+          // Handle unsuccessful uploads
+        },
+        function() {
+          // Handle successful uploads on complete
+          // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+          uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+            console.log('File available at', downloadURL);
+            res(downloadURL);
+          });
+        },
+      );
+    });
+  };
+
+  submitComplaint = (targetUid, complaint) => {
+    this.db.collection('complaints').add({
+      slug: Constants.manifest.slug,
+      uid: this.uid,
+      targetUid: uid,
+      complaint,
+      timestamp: Date.now(),
+    });
+  };
+
   get collection() {
     return this.db.collection(collectionName);
   }
@@ -311,6 +366,10 @@ class Fire {
 
   get timestamp() {
     return Date.now();
+  }
+
+  get isAuthed() {
+    return !!this.uid;
   }
 }
 

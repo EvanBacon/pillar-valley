@@ -2,26 +2,35 @@ import { MaterialIcons } from '@expo/vector-icons';
 import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
+import Fire from '../Fire';
 import ReportList from '../components/ReportList';
 
 const offenses = [
   'Cheating',
-  // 'Naughty Photo',
+  'Naughty Photo',
   'Risqué Name',
   'Terrorist',
   'Annoying',
   'Something Else...',
 ].map(offense => ({ name: offense }));
 
-export default class App extends Component {
+export default class ReportScreen extends Component {
   static navigationOptions = {
     title: 'Report',
   };
 
-  _onPressItem = (item, index) => {};
+  _onPressItem = ({ name }, index) => {
+    Fire.shared.submitComplaint(uid, name);
+    this.props.navigation.goBack();
+    alert(
+      `Congrats! ${
+        this.props.navigation.state.params.name
+      } will be investigated with surgical precision.`,
+    );
+  };
 
   render() {
-    const { name } = this.props.navigation.state.params;
+    const { name, uid } = this.props.navigation.state.params;
     return (
       <View style={styles.container}>
         <View style={{ flexDirection: 'row', margin: 24, marginLeft: 16 }}>

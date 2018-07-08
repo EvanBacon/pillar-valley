@@ -23,7 +23,6 @@ export default class UserCell extends React.Component {
 
     const { name, score, rank, image } = item;
 
-    console.log('IIIINNNPPTUTUT', name, score, rank, index, image);
     return (
       <TouchableHighlight
         underlayColor={'#eeeeee'}

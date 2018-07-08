@@ -8,7 +8,7 @@ import Item from '../components/List/Item';
 import List from '../components/List';
 import addNth from '../utils/addNth';
 import Fire from '../Fire';
-
+import { Constants } from 'expo';
 const data = [
   {
     name: 'Evan Bacon',
@@ -84,11 +84,11 @@ class App extends Component {
 
   _onPressItem = item => {
     console.log(item);
-    // this.props.navigation.navigate('LeaderboardReport', {
+    // this.props.navigation.navigate('Report', {
     //   title: item.name,
     //   ...item,
     // });
-    this.props.navigation.navigate('LeaderboardProfile', {
+    this.props.navigation.navigate('Profile', {
       title: item.name,
       ...item,
     });
@@ -145,7 +145,6 @@ class App extends Component {
   };
   //
   makeRemoteRequest = async () => {
-    console.log('make req');
     // console.log('makeRemoteRequest', Object.keys(Fire.shared));
     if (!Fire.shared.uid) {
       return;
@@ -157,21 +156,17 @@ class App extends Component {
     let timeout = setTimeout(() => {
       this.setState({ refreshing: false });
     }, 5000);
-    console.log('Get data', this.state.refreshing);
     if (this.state.refreshing) {
       return;
     }
-    console.log('-a');
     this.setState({ refreshing: true });
-    console.log('-b', Fire.shared.getPagedScore);
     const { data, cursor } = await Fire.shared.getPagedScore({
       size: PAGE_SIZE,
       start: this.lastKnownKey,
     });
-    console.log('f');
     this.lastKnownKey = cursor;
 
-    console.log('Got data', JSON.stringify(data));
+    // console.log('Got data', JSON.stringify(data));
     let items = {};
     for (let child of data) {
       child.name = child.name || child.title || 'Mystery Duck';
@@ -180,18 +175,15 @@ class App extends Component {
     this.addChild(items);
     clearTimeout(timeout);
 
-    // console.log('got data', JSON.stringify(this.state.data));
-
     this.setState({ refreshing: false });
   };
 
   render() {
-    console.log('USERRRR', this.props.user);
     return (
       <View style={styles.container}>
         <List
           renderItem={props => <Item onPress={this._onPressItem} {...props} />}
-          title={'16,982 Players'}
+          title={'Players'}
           headerButtonTitle={this.state.filter}
           data={this.state.dataSorted}
           userItem={this.props.user}
@@ -200,6 +192,7 @@ class App extends Component {
           onPressFooter={this.makeRemoteRequest}
           refreshControl={
             <RefreshControl
+              tintColor={Constants.manifest.primaryColor}
               refreshing={this.state.refreshing}
               onRefresh={this.makeRemoteRequest}
             />

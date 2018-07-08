@@ -12,7 +12,7 @@ import {
 
 import Avatar from '../components/Avatar';
 import Fire from '../Fire';
-
+import firebase from 'firebase';
 const FacebookButton = ({ onPress, children }) => (
   <FontAwesome.Button
     name="facebook"
@@ -54,7 +54,7 @@ class App extends Component {
       headerRight = (
         <Text
           onPress={() => {
-            navigation.navigate('LeaderboardReport', navigation.state.params);
+            navigation.navigate('Report', navigation.state.params);
           }}
           style={{
             fontWeight: 'bold',
@@ -172,12 +172,28 @@ class App extends Component {
   };
 
   _upgradeAccount = () => {
-    alert('TODO: Evan: Add account upgrade');
+    Fire.shared.upgradeAccount();
   };
 
   render() {
-    const { name, image } = this.props.navigation.state.params;
+    let { name, image } = this.props.navigation.state.params;
+    let userData = null;
+    if (this.isUser) {
+      const providerData = (firebase.auth().currentUser || {}).providerData;
+      if (providerData && providerData.length > 0) {
+        userData = providerData[0];
+      }
+    }
+    let isSignedInWithFB;
+
+    if (userData) {
+      isSignedInWithFB = userData.providerId === 'facebook.com';
+      name = userData.displayName;
+      image = userData.photoURL;
+    }
     const avatarSize = 128;
+
+    const canUpgrade = this.isUser && !isSignedInWithFB;
     return (
       <View style={styles.container}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -197,7 +213,7 @@ class App extends Component {
                   borderRadius: avatarSize / 2,
                 }}
                 name={name}
-                image={image}
+                avatar={image}
               />
               {this.isUser && (
                 <EditPhotoButton
@@ -215,7 +231,7 @@ class App extends Component {
             </Text>
           </View>
         </View>
-        {this.isUser && (
+        {canUpgrade && (
           <View
             style={{
               alignItems: 'flex-start',

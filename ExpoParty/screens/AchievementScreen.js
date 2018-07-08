@@ -84,7 +84,7 @@ class App extends Component {
 
   _onPressItem = item => {
     console.log(item);
-    // this.props.navigation.navigate('LeaderboardReport', {
+    // this.props.navigation.navigate('Report', {
     //   title: item.name,
     //   ...item,
     // });

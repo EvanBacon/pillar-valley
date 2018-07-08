@@ -11,7 +11,7 @@ import Assets from './Assets';
 import Settings from './constants/Settings';
 import AudioManager from './Manager/AudioManager';
 import Gate from './rematch/Gate';
-
+import Fire from './ExpoParty/Fire';
 if (__DEV__) {
   console.ignoredYellowBox = Settings.ignoredYellowBox;
 }
@@ -39,6 +39,10 @@ export default class App extends React.Component {
     THREE.suppressExpoWarnings();
     this._setupExperienceAsync();
   }
+  componentDidMount() {
+    Fire.shared.init();
+  }
+
   componentWillUnmount() {
     THREE.suppressExpoWarnings(false);
   }

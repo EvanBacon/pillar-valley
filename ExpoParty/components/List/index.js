@@ -22,7 +22,6 @@ class List extends React.Component {
     if (this.props.renderUserItem) {
       return this.props.renderUserItem();
     } else {
-      console.log('userItem', this.props.userItem);
       return (
         <UserCell
           style={{ backgroundColor: 'white' }}
@@ -50,14 +49,6 @@ class List extends React.Component {
         <FlatList
           style={[style, styles.container]}
           keyExtractor={this.keyExtractor}
-          ListHeaderComponent={headerProps => (
-            <Header
-              {...headerProps}
-              buttonTitle={headerButtonTitle}
-              onPress={onPressHeader}
-              title={title}
-            />
-          )}
           ListFooterComponent={footerProps => (
             <Footer {...footerProps} item={userItem} onPress={onPressFooter} />
           )}
@@ -70,6 +61,15 @@ class List extends React.Component {
     );
   }
 }
+
+// ListHeaderComponent={headerProps => (
+//             <Header
+//               {...headerProps}
+//               buttonTitle={headerButtonTitle}
+//               onPress={onPressHeader}
+//               title={title}
+//             />
+//           )}
 
 const styles = StyleSheet.create({
   container: {},

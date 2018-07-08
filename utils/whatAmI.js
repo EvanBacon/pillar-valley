@@ -88,7 +88,37 @@ const getInset = (key, isLandscape) => {
   }
 };
 
+const osVersion = Platform.select({
+  ios: parseInt(Platform.Version, 10),
+  android: Platform.Version,
+});
+
+// TODO: Evan: Should we use `browser` anywhere?
+function getFBloginBehavior() {
+  // Attempts to log in through a modal UIWebView pop up.
+  if (isRunningInExpo) {
+    return 'web';
+  }
+  /*
+   * Attempts to log in through the Facebook account currently signed in through the device Settings. 
+   * This is only supported for standalone apps.
+   * This will fallback to web behavior on iOS 11+ as Facebook has been removed from iOS's Settings.
+   */
+  let behavior = 'system';
+
+  if (Platform.OS === 'ios' && osVersion >= 11) {
+    /*
+     * Attempts to log in through the native Facebook app, but the Facebook SDK may use Safari or Chrome instead. 
+     * This is only supported for standalone apps.
+     */
+    behavior = 'native';
+  }
+  return behavior;
+}
+
 export default {
+  osVersion,
+  loginBehavior: getFBloginBehavior(),
   isIPhoneX: isIPhoneX,
   isIPad: isIPhoneX,
   isRunningInExpo,

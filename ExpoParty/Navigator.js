@@ -9,38 +9,17 @@ import LeaderboardScreen from './screens/LeaderboardScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import ReportScreen from './screens/ReportScreen';
 
-const LeaderboardNavigator = createStackNavigator({
-  LeaderboardMain: {
-    screen: LeaderboardScreen,
-  },
-  LeaderboardProfile: {
-    screen: ProfileScreen,
-  },
-  LeaderboardReport: {
-    screen: ReportScreen,
-  },
-});
-
-const AchievementNavigator = createStackNavigator({
-  AchievementMain: {
-    screen: AchievementScreen,
-  },
-  AchievementInfo: {
-    screen: ProfileScreen,
-  },
-});
-
 const PartyTabNavigator = createMaterialBottomTabNavigator(
   {
     Achievement: {
-      screen: AchievementNavigator,
+      screen: AchievementScreen,
       navigationOptions: () => ({
         tabBarColor: '#9013FE',
         tabBarIcon: tabBarIcon('star'),
       }),
     },
     Leaderboard: {
-      screen: LeaderboardNavigator,
+      screen: LeaderboardScreen,
       navigationOptions: () => ({
         tabBarColor: '#2962ff',
         tabBarIcon: tabBarIcon('show-chart'),
