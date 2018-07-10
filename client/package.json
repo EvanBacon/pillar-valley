@@ -21,6 +21,7 @@
     "expo-three": "3.0.0-alpha.2",
     "firebase": "^5.1.0",
     "gsap": "^2.0.1",
+    "moment": "^2.22.2",
     "randomcolor": "^0.5.3",
     "react": "16.4.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-28.0.0.tar.gz",

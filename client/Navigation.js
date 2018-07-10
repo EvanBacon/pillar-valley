@@ -27,11 +27,19 @@ const PartyTabNavigator = createMaterialBottomTabNavigator(
         tabBarIcon: tabBarIcon('show-chart'),
       }),
     },
-    Achievement: {
-      screen: AchievementScreen,
+    // Achievement: {
+    //   screen: AchievementScreen,
+    //   navigationOptions: () => ({
+    //     tabBarColor: '#9013FE',
+    //     tabBarIcon: tabBarIcon('star'),
+    //   }),
+    // },
+    ProfileScreen: {
+      screen: ProfileScreen,
       navigationOptions: () => ({
-        tabBarColor: '#9013FE',
-        tabBarIcon: tabBarIcon('star'),
+        title: 'Profile',
+        tabBarColor: '#40D8FF',
+        tabBarIcon: tabBarIcon('person'),
       }),
     },
   },

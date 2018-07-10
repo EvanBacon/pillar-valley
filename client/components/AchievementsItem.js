@@ -12,12 +12,12 @@ import ScoreBadge from './ScoreBadge';
 
 export default class Item extends React.Component {
   onPress = () => {
-    const { item, index, onPress } = this.props;
-    onPress(item, index);
+    const { index, onPress } = this.props;
+    // onPress(index);
   };
 
   get icon() {
-    const { complete } = this.props.item;
+    const { complete } = this.props;
     const style = { marginLeft: 12 };
     if (complete) {
       return (
@@ -33,9 +33,16 @@ export default class Item extends React.Component {
       />
     );
   }
+
+  get description() {
+    return this.props.isSecret ? 'Secret Achievement' : this.props.description;
+  }
   render() {
     const {
-      item: { name, subtitle, points, image },
+      name,
+      points,
+      isSecret,
+      image,
       index,
       onPress,
       style,
@@ -46,17 +53,19 @@ export default class Item extends React.Component {
         underlayColor={'#eeeeee'}
         {...props}
         onPress={this.onPress}
-        style={[styles.touchable, style]}>
+        style={[styles.touchable, style]}
+      >
         <View style={styles.container}>
           <View style={{ flexDirection: 'row', maxWidth: '50%' }}>
             <Avatar
               textStyle={{ fontWeight: 'bold' }}
               avatarStyle={{ marginRight: 16 }}
               name={name}
+              avatar={image}
             />
             <View>
               <Text style={styles.text}>{name}</Text>
-              <Text style={styles.subtitle}>{subtitle} Points</Text>
+              <Text style={styles.subtitle}>{this.description}</Text>
             </View>
           </View>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>

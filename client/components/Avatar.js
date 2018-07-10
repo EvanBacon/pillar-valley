@@ -152,7 +152,7 @@ const styles = {
     borderRadius: 20,
   },
   avatarTransparent: {
-    backgroundColor: Color.backgroundTransparent,
+    backgroundColor: '#B8B8B8',
   },
   textStyle: {
     color: Color.white,

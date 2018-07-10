@@ -19,6 +19,14 @@ class Fire {
     firebase.initializeApp(Secret);
     firebase.firestore().settings({ timestampsInSnapshots: true });
     dispatch.user.observeAuth();
+
+    //DEBUG
+    if (!Settings.debug) {
+      dispatch.leaders.clear();
+    }
+
+    // dispatch.players.clear();
+    // dispatch.user.clear();
   };
 
   /*
@@ -97,7 +105,7 @@ class Fire {
     this.db.collection('complaints').add({
       slug: Constants.manifest.slug,
       uid: this.uid,
-      targetUid: uid,
+      targetUid: targetUid,
       complaint,
       timestamp: this.timestamp,
     });

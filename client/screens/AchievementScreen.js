@@ -7,51 +7,7 @@ import List from '../components/List';
 import UserAchievementsItem from '../components/UserAchievementsItem';
 import connectAchievementToast from '../ExpoParty/connectAchievementToast';
 
-const data = [
-  // {
-  //   name: '1st Gold',
-  //   subtitle: 'Finish a level with a gold record.',
-  //   points: 50,
-  //   image: null,
-  //   complete: true,
-  // },
-  // {
-  //   name: '1st Silver',
-  //   subtitle: 'Finish a level with a silver record.',
-  //   points: 25,
-  //   image: null,
-  //   complete: false,
-  // },
-  // {
-  //   name: '1st Bronze',
-  //   subtitle: 'Finish a level with a bronze record.',
-  //   points: 10,
-  //   image: null,
-  // },
-  // {
-  //   name: 'get your s-w-a-g-agger up',
-  //   subtitle: 'Finish a level with all the apples.',
-  //   points: 100,
-  //   image: null,
-  //   complete: true,
-  // },
-  // {
-  //   name: 'just like a fender bender',
-  //   subtitle: 'Finish a level with all the apples.',
-  //   points: 10,
-  //   image: null,
-  // },
-  // {
-  //   name: 'red like dodgeball',
-  //   subtitle: 'Finish a level with all the apples.',
-  //   points: 50,
-  //   image: null,
-  // },
-].map((user, index) => {
-  return {
-    ...user,
-  };
-});
+import Achievements from '../constants/Achievements';
 
 class App extends Component {
   static navigationOptions = {};
@@ -83,20 +39,7 @@ class App extends Component {
   }
 
   _onPressItem = item => {
-    console.log(item);
-    // this.props.navigation.navigate('Report', {
-    //   title: item.name,
-    //   ...item,
-    // });
-    // this.props.navigation.navigate('AchievementInfo', {
-    //   title: item.name,
-    //   ...item,
-    // });
-
-    this.props.showAchievementToastWithOptions(
-      { title: item.name, ...item },
-      buttonIndex => {},
-    );
+    // console.log(item);
   };
 
   _loadMore = () => {};
@@ -105,23 +48,25 @@ class App extends Component {
     return (
       <View style={styles.container}>
         <List
-          renderItem={props => (
+          noMore
+          renderItem={({ item, index }) => (
             <AchievementsItem
               onPress={this._onPressItem}
-              {...props}
-              data={data}
+              {...item}
+              index={index}
             />
           )}
-          title={`${data.length} Achievements`}
+          title={`${Achievements.length} Achievements`}
           headerButtonTitle={this.state.filter}
-          data={data}
-          renderUserItem={props => <UserAchievementsItem data={data} />}
+          data={Achievements}
+          renderUserItem={props => null}
           onPress={this._onPressItem}
           onPressHeader={this._onOpenActionSheet}
           onPressFooter={this._loadMore}
         />
       </View>
     );
+    // renderUserItem={props => <UserAchievementsItem data={props} />}
   }
 }
 

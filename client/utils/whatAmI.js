@@ -3,6 +3,7 @@
 import { Dimensions, DeviceInfo, NativeModules, Platform } from 'react-native';
 import StatusBarHeight from '@expo/status-bar-height';
 import { Constants } from 'expo';
+const { height: D_HEIGHT, width: D_WIDTH } = Dimensions.get('window');
 
 const { PlatformConstants = {} } = NativeModules;
 const { minor = 0 } = PlatformConstants.reactNativeVersion || {};
@@ -50,6 +51,7 @@ const statusBarHeight = isLandscape => {
     return _customStatusBarHeight;
   }
 
+  const height = 20;
   /**
    * This is a temporary workaround because we don't have a way to detect
    * if the status bar is translucent or opaque. If opaque, we don't need to
@@ -57,7 +59,7 @@ const statusBarHeight = isLandscape => {
    * we do.
    */
   if (Platform.OS === 'android') {
-    return StatusBarHeight.height;
+    return height;
   }
 
   if (isIPhoneX) {
@@ -65,10 +67,10 @@ const statusBarHeight = isLandscape => {
   }
 
   if (isIPad) {
-    return StatusBarHeight.height;
+    return height;
   }
 
-  return isLandscape ? 0 : StatusBarHeight.height;
+  return isLandscape ? 0 : height;
 };
 
 const getInset = (key, isLandscape) => {
@@ -125,6 +127,6 @@ export default {
   isIPhone,
   statusBarHeight: StatusBarHeight.height,
   bottomInset: getInset('bottom', false),
-  topInset: isIPhoneX ? 34 : 0,
+  topInset: isIPhoneX ? 34 : 20,
   getInset,
 };

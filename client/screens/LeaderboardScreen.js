@@ -1,56 +1,17 @@
 import { connectActionSheet } from '@expo/react-native-action-sheet';
-import React, { Component } from 'react';
-import { StyleSheet, View, RefreshControl } from 'react-native';
-import firebase from 'firebase';
-import Item from '../components/List/Item';
-import List from '../components/List';
-import addNth from '../utils/addNth';
-import Fire from '../ExpoParty/Fire';
+import { dispatch } from '@rematch/core';
 import { Constants } from 'expo';
-const data = [
-  {
-    name: 'Evan Bacon',
-    score: 1546,
-    image: null,
-  },
-  {
-    name: 'Harambe',
-    score: 1500,
-    image: null,
-  },
-  {
-    name: 'Tekashi',
-    score: 1496,
-    image: null,
-  },
-  {
-    name: 'Trippie',
-    score: 1453,
-    image: null,
-  },
-  {
-    name: 'Willy',
-    score: 1421,
-    image: null,
-  },
-  {
-    name: 'Jonas Brothers fan',
-    score: 1412,
-    image: null,
-  },
-].map((user, index) => {
-  const rank = index + 1;
+import firebase from 'firebase';
+import React, { Component } from 'react';
+import { RefreshControl, StyleSheet, View } from 'react-native';
+import { connect } from 'react-redux';
 
-  return {
-    ...user,
-    rank: rank + addNth(rank),
-  };
-});
+import List from '../components/List';
+import Item from '../components/List/Item';
+import Settings from '../constants/Settings';
+import Fire from '../ExpoParty/Fire';
 
-const PAGE_SIZE = 5;
-class App extends Component {
-  static navigationOptions = {};
-
+class LeaderboardScreen extends Component {
   state = {
     filter: 'Forever',
     refreshing: false,
@@ -81,11 +42,7 @@ class App extends Component {
   };
 
   _onPressItem = item => {
-    console.log(item);
-    // this.props.navigation.navigate('Report', {
-    //   title: item.name,
-    //   ...item,
-    // });
+    // console.log(item);
     this.props.navigation.navigate('Profile', {
       title: item.name,
       ...item,
@@ -147,9 +104,7 @@ class App extends Component {
     if (!Fire.shared.uid) {
       return;
     }
-    // if (DEBUG) {
-    //   return;
-    // }
+
     if (this.state.refreshing) {
       return;
     }
@@ -161,7 +116,7 @@ class App extends Component {
 
     dispatch.leaders.getPagedAsync({
       start: this.lastKnownKey,
-      size: PAGE_SIZE,
+      size: Settings.leaderPageSize,
       callback: ({ cursor, noMore }) => {
         clearTimeout(timeout);
 
@@ -215,13 +170,11 @@ const styles = StyleSheet.create({
   },
 });
 
-import { connect } from 'react-redux';
-import { dispatch } from '@rematch/core';
 const ConnectedProfile = connect(({ user, leaders }) => {
   const _leadersSorted = Object.values(leaders).sort(
     (a, b) => a.score < b.score,
   );
   return { user, leaders: _leadersSorted };
-})(App);
+})(LeaderboardScreen);
 
 export default connectActionSheet(ConnectedProfile);

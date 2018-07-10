@@ -9,19 +9,7 @@ class Lighting extends GameObject {
 
   get shadow() {
     let light = new THREE.DirectionalLight(0xffffff, 0.9);
-
     light.position.set(0, 350, 350);
-    light.castShadow = true;
-
-    light.shadow.camera.right = 650;
-    light.shadow.camera.left = -650;
-
-    light.shadow.camera.bottom = -650;
-    light.shadow.camera.top = 650;
-
-    light.shadow.camera.far = 1000;
-    light.shadow.camera.near = 1;
-
     return light;
   }
 

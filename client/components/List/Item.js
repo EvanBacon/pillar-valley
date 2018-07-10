@@ -2,7 +2,8 @@ import React from 'react';
 import { StyleSheet, Text, TouchableHighlight, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Avatar from '../Avatar';
-
+import TimeAgo from '../TimeAgo';
+import addNth from '../../utils/addNth';
 export default class Item extends React.Component {
   onPress = () => {
     const { item, index, onPress } = this.props;
@@ -13,8 +14,9 @@ export default class Item extends React.Component {
     let item = this.props.item || {};
 
     const { displayName, score, photoURL, rank: brokenRank, timestamp } = item;
-    let rank = index + 1;
-    console.log('FphotoURLphotoURLphotoURL', photoURL);
+
+    const _rankValue = index + 1;
+    let rank = _rankValue + addNth(_rankValue);
     return (
       <TouchableHighlight
         underlayColor={'#eeeeee'}
@@ -34,6 +36,7 @@ export default class Item extends React.Component {
             <View>
               <Text style={styles.text}>{displayName}</Text>
               <Text style={styles.subtitle}>{score} Points</Text>
+              {score && <TimeAgo>{timestamp}</TimeAgo>}
             </View>
           </View>
           <Ionicons size={24} color={'#CCCCCC'} name="ios-arrow-forward" />
@@ -55,7 +58,7 @@ const styles = StyleSheet.create({
   rank: {
     alignSelf: 'center',
     fontSize: 24,
-    minWidth: 48,
+    minWidth: 24,
     marginRight: 8,
   },
   text: { fontWeight: 'bold' },

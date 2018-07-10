@@ -66,18 +66,6 @@ class List extends React.Component {
           keyExtractor={this.keyExtractor}
           ListFooterComponent={this.footer}
           ItemSeparatorComponent={Separator}
-          ListEmptyComponent={
-            <View
-              style={{
-                justifyContent: 'center',
-                flex: 1,
-                height: Dimensions.get('window').height / 2,
-                alignItems: 'center',
-              }}
-            >
-              <Text style={{ fontSize: 24 }}>Coming Soon</Text>
-            </View>
-          }
           renderItem={this.renderItem}
           {...props}
         />
@@ -86,6 +74,19 @@ class List extends React.Component {
     );
   }
 }
+
+// ListEmptyComponent={
+//   <View
+//     style={{
+//       justifyContent: 'center',
+//       flex: 1,
+//       height: Dimensions.get('window').height / 2,
+//       alignItems: 'center',
+//     }}
+//   >
+//     <Text style={{ fontSize: 24 }}>Coming Soon</Text>
+//   </View>
+// }
 
 // ListHeaderComponent={headerProps => (
 //             <Header

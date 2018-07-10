@@ -31,10 +31,11 @@ const Settings = {
   ignoredYellowBox: ['Module ABI', `Audio doesn't exist`],
   slug: debug ? 'crossy-road' : 'users',
   isEveryScoreBest: debug && false,
-  isCacheProfileUpdateActive: !debug || true,
+  isCacheProfileUpdateActive: !debug || false,
   shouldDelayFirebaseProfileSyncInMinutes: 25,
 
   canEditPhoto: false,
+  leaderPageSize: 5,
 };
 
 export default Settings;

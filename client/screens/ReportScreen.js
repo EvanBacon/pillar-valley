@@ -2,17 +2,9 @@ import { MaterialIcons } from '@expo/vector-icons';
 import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-import Fire from '../ExpoParty/Fire';
 import ReportList from '../components/ReportList';
-
-const offenses = [
-  'Cheating',
-  'Naughty Photo',
-  'Risqué Name',
-  'Terrorist',
-  'Annoying',
-  'Something Else...',
-].map(offense => ({ name: offense }));
+import Offenses from '../constants/Offenses';
+import Fire from '../ExpoParty/Fire';
 
 export default class ReportScreen extends Component {
   static navigationOptions = {
@@ -20,26 +12,22 @@ export default class ReportScreen extends Component {
   };
 
   _onPressItem = ({ name }, index) => {
+    const { uid } = this.props.navigation.state.params;
     Fire.shared.submitComplaint(uid, name);
     this.props.navigation.goBack();
-    alert(
-      `Congrats! ${
-        this.props.navigation.state.params.name
-      } will be investigated with surgical precision.`,
-    );
+    alert(`This user will be investigated with surgical precision.`);
   };
 
   render() {
     const { name, uid } = this.props.navigation.state.params;
     return (
       <View style={styles.container}>
-        <View style={{ flexDirection: 'row', margin: 24, marginLeft: 16 }}>
+        <View style={styles.row}>
           <MaterialIcons size={36} color={'#34495e'} name="security" />
-
           <Text style={styles.header}>Report {name}</Text>
         </View>
         <ReportList
-          data={offenses}
+          data={Offenses}
           onPress={this._onPressItem}
           title={`What did ${name} do to you?`}
         />
@@ -51,8 +39,11 @@ export default class ReportScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // alignItems: 'center',
-    // justifyContent: 'center',
+  },
+  row: {
+    flexDirection: 'row',
+    margin: 24,
+    marginLeft: 16,
   },
   header: {
     marginLeft: 12,

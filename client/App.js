@@ -12,9 +12,10 @@ import Settings from './constants/Settings';
 import AudioManager from './AudioManager';
 import Gate from './rematch/Gate';
 import Fire from './ExpoParty/Fire';
-if (__DEV__) {
-  console.ignoredYellowBox = Settings.ignoredYellowBox;
-}
+import AchievementToastProvider from './ExpoParty/AchievementToastProvider';
+import { dispatch } from '@rematch/core';
+
+console.ignoredYellowBox = Settings.ignoredYellowBox;
 
 export default class App extends React.Component {
   state = { loading: true };
@@ -30,17 +31,22 @@ export default class App extends React.Component {
   get screen() {
     return (
       <Gate>
-        <Navigation />
+        <AchievementToastProvider>
+          <Navigation />
+        </AchievementToastProvider>
       </Gate>
     );
   }
 
   componentWillMount() {
+    console.time('Startup');
     THREE.suppressExpoWarnings();
     this._setupExperienceAsync();
   }
+
   componentDidMount() {
     Fire.shared.init();
+    dispatch.locale.getAsync();
   }
 
   componentWillUnmount() {
@@ -48,8 +54,10 @@ export default class App extends React.Component {
   }
 
   _setupExperienceAsync = async () => {
-    await Promise.all([this._preloadAsync(), AudioManager.shared.setupAsync()]);
+    await Promise.all([this._preloadAsync()]);
     this.setState({ loading: false });
+    console.timeEnd('Startup');
+    await AudioManager.shared.setupAsync();
   };
 
   get fonts() {

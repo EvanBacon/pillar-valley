@@ -6,3 +6,6 @@ export { default as Sound } from './Sound';
 export { default as Leaderboard } from './Leaderboard';
 export { default as Cancel } from './Cancel';
 export { default as Licenses } from './LicensesButton';
+export { default as Facebook } from './Facebook';
+export { default as EditPhoto } from './EditPhoto';
+export { default as Logout } from './Logout';

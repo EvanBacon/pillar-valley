@@ -34,9 +34,7 @@ export const score = {
   effects: {
     reset: (props, { score }) => {
       if (Settings.isFirebaseEnabled) {
-        console.log('reset', score.isBest, score.current);
         if (Settings.isEveryScoreBest) {
-          console.log('fkit', score.current);
           dispatch.score.setHighScore(score.current);
         } else if (score.isBest) {
           dispatch.score.setHighScore(score.best);
@@ -46,7 +44,7 @@ export const score = {
     },
     setHighScore: async (highScore, { user: { displayName, photoURL } }) => {
       console.log('set High score', highScore);
-
+      let _displayName = parseName(displayName);
       const docRef = Fire.shared.doc;
       try {
         await Fire.shared.db.runTransaction(transaction => {
@@ -59,17 +57,16 @@ export const score = {
             const cloudHighScore = data.score || 0;
             console.log('cloud score', cloudHighScore);
             if (Settings.isEveryScoreBest || highScore > cloudHighScore) {
-              console.log('truly best', highScore);
               transaction.update(docRef, {
                 score: highScore,
                 timestamp: Date.now(),
-                displayName,
+                displayName: _displayName,
                 photoURL,
               });
             } else {
               transaction.update(docRef, {
                 ...data,
-                displayName,
+                displayName: _displayName,
                 photoURL,
               });
               dispatch.score.setBest(cloudHighScore);
@@ -219,6 +216,14 @@ function mergeInternal(state, { uid, user }) {
   };
 }
 
+function parseName(inputName, backupName) {
+  let name = inputName || backupName || 'Markipillar';
+  if (typeof name === 'string') {
+    name = name.trim();
+  }
+  return name;
+}
+
 export const leaders = {
   state: {},
   reducers: {
@@ -243,7 +248,10 @@ export const leaders = {
   },
   effects: {
     getPagedAsync: async ({ start, size, callback }) => {
-      const collection = firebase.firestore().collection(Settings.slug);
+      const collection = firebase
+        .firestore()
+        .collection(Settings.slug)
+        .where('score', '>', 0);
 
       let ref = collection.orderBy('score', 'desc').limit(size);
       try {
@@ -263,10 +271,18 @@ export const leaders = {
           } else {
             const _data = doc.data();
             const uid = doc.id;
-            data.push({ uid, user: { key: uid, uid, ..._data } });
+            data.push({
+              uid,
+              user: {
+                key: uid,
+                uid,
+                displayName: parseName(_data.displayName, _data.deviceName),
+                ..._data,
+              },
+            });
           }
         });
-
+        console.log('Batch update', data.length, { data });
         dispatch.leaders.batchUpdate(data);
         const cursor = querySnapshot.docs[querySnapshot.docs.length - 1];
         callback && callback({ data, cursor, noMore: data.length < size });
@@ -286,28 +302,37 @@ export const leaders = {
         if (!doc.exists) {
           if (uid === Fire.shared.uid) {
             const currentUser = firebase.auth().currentUser || {};
-            ref.set({
+
+            let _displayName = parseName(
+              currentUser.displayName,
+              Constants.deviceName,
+            );
+
+            const nUser = {
               rank: 999999,
-              displayName:
-                currentUser.displayName ||
-                Constants.deviceName ||
-                'Pillar the Kid',
+              displayName: _displayName,
               photoURL: currentUser.photoURL,
               score: 0,
               timestamp: Date.now(),
-            });
+            };
+            ref.set(nUser);
+            callback && callback(nUser);
+            return;
+          } else {
+            console.log('No document: leaders/' + uid);
           }
-          console.log('No document: leaders/' + uid);
         } else {
           const user = doc.data();
           console.log('got leader', user);
           dispatch.leaders.update({ uid, user });
           callback && callback(user);
+          return;
         }
       } catch ({ message }) {
         console.log('Error: leaders.get', message);
         alert(message);
       }
+      callback && callback(null);
     },
   },
 };
@@ -340,23 +365,35 @@ export const players = {
           .doc(uid);
         const doc = await ref.get();
         if (!doc.exists) {
+          console.log('No document: players/' + uid);
           if (uid === Fire.shared.uid) {
             const currentUser = firebase.auth().currentUser || {};
+            let _displayName = parseName(
+              currentUser.displayName,
+              Constants.deviceName,
+            );
+
             const user = {
               rank: 999999,
-              displayName:
-                currentUser.displayName ||
-                Constants.deviceName ||
-                'Mark Pillar',
+              displayName: _displayName,
               photoURL: currentUser.photoURL,
               score: 0,
               timestamp: Date.now(),
             };
             ref.add(user);
+            dispatch.players.update({ uid, user });
             callback && callback(user);
+          } else {
+            dispatch.leaders.getAsync({
+              uid,
+              callback: user => {
+                if (user) {
+                  dispatch.players.update({ uid, user });
+                }
+                callback && callback(user);
+              },
+            });
           }
-          console.log('No document: players/' + uid);
-          callback && callback({});
         } else {
           const user = doc.data();
           console.log('got player', user);
@@ -415,7 +452,7 @@ function reduceFirebaseUser(user) {
     lastLoginAt,
     isAnonymous,
     fbuid,
-    displayName,
+    displayName: displayName || Constants.deviceName,
     emailVerified,
     email,
     createdAt,
@@ -429,6 +466,25 @@ function reduceFirebaseUser(user) {
   };
 }
 
+import moment from 'moment';
+const { Localization } = Expo.DangerZone;
+
+export const locale = {
+  state: null,
+  reducers: {
+    set: (state, props) => props,
+  },
+  effects: {
+    getAsync: async () => {
+      const locale = await Localization.getPreferredLocalesAsync();
+      const code = locale[0];
+      dispatch.locale.set(code);
+      console.log({ locale: code });
+      moment.locale(code);
+    },
+  },
+};
+
 export const user = {
   state: null,
   reducers: {
@@ -437,6 +493,16 @@ export const user = {
     clear: () => null,
   },
   effects: {
+    logoutAsync: async (props, { players }) => {
+      try {
+        const uid = firebase.auth().currentUser.uid;
+        await firebase.auth().signOut();
+        // dispatch.leaders.set({ uid, user: null });
+      } catch ({ message }) {
+        console.log('ERROR: user.logoutAsync: ', message);
+        alert(message);
+      }
+    },
     signInAnonymously: () => {
       try {
         firebase.auth().signInAnonymously();
@@ -457,14 +523,8 @@ export const user = {
         }
       });
     },
-    maybeSyncUserWithFirebase: (currentUserProps, { user }) => {
-      if (JSON.stringify(currentUserProps) !== JSON.stringify(user)) {
-        console.log('REMATCH: new user data', currentUserProps);
-        console.log('REMATCH: current user data', user);
-        // Fire.shared.saveUser;
-      }
-    },
     getAsync: async (props, { user: localUserData }) => {
+      const nextLocalUserData = localUserData || {};
       let combinedUserData = {};
       let firebaseAuthData = firebase.auth().currentUser.toJSON();
 
@@ -486,12 +546,11 @@ export const user = {
       for (let key of Object.keys(combinedUserData)) {
         if (
           combinedUserData[key] != undefined &&
-          combinedUserData[key] !== localUserData[key]
+          combinedUserData[key] !== nextLocalUserData[key]
         ) {
           updates[key] = combinedUserData[key];
         }
       }
-      console.log({ updates });
       if (Object.keys(updates).length > 0) {
         dispatch.user.update(updates);
       }
@@ -525,13 +584,16 @@ export const user = {
         .doc(Fire.shared.uid);
       const setWithMerge = doc.set(props, { merge: true });
     },
-    syncLocalToFirebase: async (props, { user }) => {
-      console.log('syncLocalToFirebase');
+    syncLocalToFirebase: async (
+      props,
+      { user: { additionalUserInfo, credential, user, ...otherUserProps } },
+    ) => {
+      console.log('syncLocalToFirebase', otherUserProps);
       const doc = await firebase
         .firestore()
         .collection('players')
         .doc(Fire.shared.uid);
-      const setWithMerge = doc.set(user, { merge: true });
+      const setWithMerge = doc.set(otherUserProps, { merge: true });
     },
     setGameData: props => {
       const { uid, doc } = Fire.shared;
@@ -548,6 +610,21 @@ const FacebookLoginTypes = {
   Success: 'success',
   Cancel: 'cancel',
 };
+
+function deleteUserAsync(uid) {
+  const db = firebase.firestore();
+
+  return Promise.all([
+    db
+      .collection(Settings.slug)
+      .doc(uid)
+      .delete(),
+    db
+      .collection('players')
+      .doc(uid)
+      .delete(),
+  ]);
+}
 
 export const facebook = {
   state: null,
@@ -607,10 +684,25 @@ export const facebook = {
         const user = await linkAndRetrieveDataWithToken(_token);
         console.log('upgradeAccountWithToken: Upgraded Successful');
         dispatch.facebook.authorized(user);
-      } catch ({ message }) {
-        // If the account is already linked this error will be thrown
-        console.log('Error: upgradeAccountWithToken', message);
-        dispatch.facebook.loginToFirebase();
+      } catch ({ message, code, ...error }) {
+        if (code === 'auth/credential-already-in-use') {
+          // Delete current account while signed in
+          //TODO: This wont work
+          const uid = Fire.shared.uid;
+          if (uid) {
+            console.log('Should delete:', uid);
+            await deleteUserAsync(uid);
+            console.log('All deleted');
+          } else {
+            console.log('??? do something:', uid);
+          }
+          await dispatch.facebook.loginToFirebaseWithToken(_token);
+        } else {
+          // If the account is already linked this error will be thrown
+          console.log('Error: upgradeAccountWithToken', message);
+          console.log('error', code, error);
+          alert(message);
+        }
       }
     },
     loginToFirebaseWithToken: async (token, { facebook }) => {
@@ -659,7 +751,11 @@ export const facebook = {
     authorized: (user, {}) => {
       console.log('Authorized Facebook', user);
       // dispatch.facebook.setAuth(user);
-      dispatch.user.update(user);
+      let _user = user;
+      if (_user.toJSON) {
+        _user = user.toJSON();
+      }
+      dispatch.user.update(_user);
     },
   },
 };
@@ -673,7 +769,7 @@ function linkAndRetrieveDataWithToken(token) {
 
 function signInWithToken(token) {
   const credential = firebase.auth.FacebookAuthProvider.credential(token);
-  return firebase.auth().signInWithCredential(credential);
+  return firebase.auth().signInAndRetrieveDataWithCredential(credential);
 }
 
 /**

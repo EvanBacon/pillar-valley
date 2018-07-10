@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import AchievementToast from './AchievementToast';
+import AchievementToast from '../components/AchievementToast';
 
-export default class ActionSheetProvider extends React.Component {
+export default class AchievementToastProvider extends React.Component {
   static propTypes = {
     children: PropTypes.any,
   };
