@@ -1,0 +1,36 @@
+{
+  "name": "pillar-valley",
+  "version": "2.0.0",
+  "description": "No description",
+  "author": "Evan Bacon",
+  "private": true,
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "metadata": "fastlane deliver --skip_binary_upload",
+    "fix": "rm -rf node_modules/gl-matrix/.babelrc"
+  },
+  "dependencies": {
+    "@expo/react-native-action-sheet": "^1.0.2",
+    "@expo/status-bar-height": "^0.0.1",
+    "@expo/vector-icons": "6.3.1",
+    "@rematch/core": "^0.6.0",
+    "@rematch/persist": "^0.2.1",
+    "expo": "^28.0.0",
+    "expo-asset-utils": "^0.0.4-alpha.2",
+    "expo-graphics": "^1.0.0-alpha.1",
+    "expo-three": "3.0.0-alpha.2",
+    "firebase": "^5.1.0",
+    "gsap": "^2.0.1",
+    "moment": "^2.22.2",
+    "randomcolor": "^0.5.3",
+    "react": "16.4.1",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-28.0.0.tar.gz",
+    "react-native-animatable": "^1.2.4",
+    "react-navigation": "^2.5.2",
+    "react-navigation-material-bottom-tabs": "^0.3.0",
+    "react-redux": "^5.0.6",
+    "redux-persist": "^5.6.9",
+    "three": "^0.93.0",
+    "three.proton.js": "^0.1.5"
+  }
+}
