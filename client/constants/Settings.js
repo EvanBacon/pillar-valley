@@ -21,7 +21,7 @@ const Settings = {
   isAutoStartEnabled: !debug && false,
   isScreenshotEnabled: !debug || true,
   isMotionMenuEnabled: !debug || false,
-  isComposerEnabled: !debug || false,
+  isComposerEnabled: false, //!debug || false,
   debug: debug,
   ballDistance: 60,
   rotationSpeed: 4,
@@ -32,10 +32,10 @@ const Settings = {
   slug: debug ? 'crossy-road' : 'users',
   isEveryScoreBest: debug && false,
   isCacheProfileUpdateActive: !debug || false,
-  shouldDelayFirebaseProfileSyncInMinutes: 25,
+  shouldDelayFirebaseProfileSyncInMinutes: 60,
 
   canEditPhoto: false,
-  leaderPageSize: 5,
+  leaderPageSize: 25,
 };
 
 export default Settings;
