@@ -8,6 +8,21 @@ import getDeviceInfo from '../utils/getUserInfo';
 import firebase from 'firebase';
 import GameStates from '../Game/GameStates';
 
+export const skins = {
+  state: {},
+  reducers: {
+    setBest: (state, best) => ({ ...state, best }),
+    increment: ({ current, best, isBest, ...props }) => {},
+  },
+  effects: {
+    sync: () => {},
+    unlock: ({ key }, { skins }) => {
+      if (skins) {
+      }
+    },
+  },
+};
+
 export const score = {
   state: { current: 0, best: 0, last: null, isBest: false },
   reducers: {
@@ -466,8 +481,8 @@ function reduceFirebaseUser(user) {
   };
 }
 
-import moment from 'moment';
-const { Localization } = Expo.DangerZone;
+// import moment from 'moment';
+// const { Localization } = Expo.DangerZone;
 
 export const locale = {
   state: null,
@@ -479,8 +494,8 @@ export const locale = {
       const locale = await Localization.getPreferredLocalesAsync();
       const code = locale[0];
       dispatch.locale.set(code);
-      console.log({ locale: code });
-      moment.locale(code);
+      // console.log({ locale: code });
+      // moment.locale(code);
     },
   },
 };

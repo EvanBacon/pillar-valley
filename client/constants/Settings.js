@@ -2,7 +2,7 @@ import { Constants } from 'expo';
 import { Dimensions } from 'react-native';
 import sizeInfo from '../utils/whatAmI';
 
-const debug = true; //__DEV__
+const debug = __DEV__;
 const Settings = {
   facebookLoginProps: {
     permissions: ['public_profile', 'email', 'user_friends'],
