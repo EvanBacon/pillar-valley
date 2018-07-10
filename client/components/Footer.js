@@ -22,11 +22,11 @@ class Footer extends React.Component {
     const easing = 'ease-out';
 
     const views = [
-      <Button.Rate />,
-      <Button.Leaderboard onPress={onLeaderboardPress} />,
+      // <Button.Rate />,
+      // <Button.Leaderboard onPress={onLeaderboardPress} />,
       <Button.Sound />,
       <Button.Share />,
-      <Button.Licenses onPress={onLicensesPress} />,
+      // <Button.Licenses onPress={onLicensesPress} />,
     ];
     return (
       <View style={[styles.container, style]}>

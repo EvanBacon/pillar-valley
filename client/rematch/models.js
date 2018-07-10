@@ -76,13 +76,13 @@ export const score = {
                 score: highScore,
                 timestamp: Date.now(),
                 displayName: _displayName,
-                photoURL,
+                photoURL: photoURL || '',
               });
             } else {
               transaction.update(docRef, {
                 ...data,
                 displayName: _displayName,
-                photoURL,
+                photoURL: photoURL || '',
               });
               dispatch.score.setBest(cloudHighScore);
             }
@@ -326,7 +326,7 @@ export const leaders = {
             const nUser = {
               rank: 999999,
               displayName: _displayName,
-              photoURL: currentUser.photoURL,
+              photoURL: currentUser.photoURL || '',
               score: 0,
               timestamp: Date.now(),
             };
@@ -388,13 +388,15 @@ export const players = {
               Constants.deviceName,
             );
 
-            const user = {
+            let user = {
               rank: 999999,
               displayName: _displayName,
-              photoURL: currentUser.photoURL,
               score: 0,
               timestamp: Date.now(),
             };
+            if (currentUser.photoURL) {
+              user.photoURL = currentUser.photoURL;
+            }
             ref.add(user);
             dispatch.players.update({ uid, user });
             callback && callback(user);
@@ -462,7 +464,7 @@ function reduceFirebaseUser(user) {
 
   return {
     uid,
-    photoURL,
+    photoURL: photoURL || '',
     phoneNumber,
     lastLoginAt,
     isAnonymous,
