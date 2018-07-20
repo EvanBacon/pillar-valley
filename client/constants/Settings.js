@@ -1,13 +1,18 @@
 import { Constants } from 'expo';
-import { Dimensions } from 'react-native';
+import { Dimensions, Platform } from 'react-native';
 import sizeInfo from '../utils/whatAmI';
 
 const debug = __DEV__;
 const Settings = {
   facebookLoginProps: {
-    permissions: ['public_profile', 'email', 'user_friends'],
+    permissions: [
+      'public_profile', 
+      'email', 
+      // 'user_friends'
+    ],
     behavior: sizeInfo.loginBehavior,
   },
+  isIos: Platform.OS === "ios",
   osVersion: sizeInfo.osVersion,
   loginBehavior: sizeInfo.loginBehavior,
   isRunningInExpo: sizeInfo.isRunningInExpo,

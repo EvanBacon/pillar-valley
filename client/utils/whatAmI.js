@@ -108,7 +108,7 @@ function getFBloginBehavior() {
    */
   let behavior = 'system';
 
-  if (Platform.OS === 'ios' && osVersion >= 11) {
+  if (Platform.OS === 'ios' && osVersion < 11) {
     /*
      * Attempts to log in through the native Facebook app, but the Facebook SDK may use Safari or Chrome instead. 
      * This is only supported for standalone apps.

@@ -26,6 +26,7 @@
     "react": "16.4.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-28.0.0.tar.gz",
     "react-native-animatable": "^1.2.4",
+    "react-native-google-analytics": "^1.3.2",
     "react-navigation": "^2.5.2",
     "react-navigation-material-bottom-tabs": "^0.3.0",
     "react-redux": "^5.0.6",

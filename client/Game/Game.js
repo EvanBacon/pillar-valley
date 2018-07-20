@@ -60,7 +60,7 @@ class Game extends GameObject {
 
   _subscribe = () => {
     this._subscription = DeviceMotion.addListener(
-      ({ accelerationIncludingGravity }) => {
+      ({ accelerationIncludingGravity = {} }) => {
         const _index = -4;
 
         this.offset = {
@@ -98,9 +98,10 @@ class Game extends GameObject {
   async reset() {
     super.reset();
 
-    this.gameGroup.z = 0;
-    this.gameGroup.x = 0;
-
+    if (this.gameGroup) {
+      this.gameGroup.z = 0;
+      this.gameGroup.x = 0;
+    }
     this.cachedRotationVelocity = Settings.rotationSpeed;
     this.steps = 0;
     this.direction = Math.round(randomRange(0, 1));
@@ -108,10 +109,14 @@ class Game extends GameObject {
     this.rotationAngle = 0;
     this.mainBall = 1;
 
-    this.balls[0].x = 0;
-    this.balls[0].z = Settings.ballDistance;
-    this.balls[1].x = 0;
-    this.balls[1].z = 0;
+    if (this.balls[0]) {
+      this.balls[0].x = 0;
+      this.balls[0].z = Settings.ballDistance;
+    }
+    if (this.balls[1]) {
+      this.balls[1].x = 0;
+      this.balls[1].z = 0;
+    }
     this.alpha = 1;
     this.balls[1 - this.mainBall].scale.set(1, 1, 1);
     this.balls[this.mainBall].scale.set(1, 1, 1);
@@ -121,10 +126,11 @@ class Game extends GameObject {
     }
     this.targets = [];
     const target = await this.targetGroup.add(new Platform());
-    target.x = 0;
-    target.z = this.balls[0].z;
-    this.targets.push(target);
-
+    if (target) {
+      target.x = 0;
+      target.z = this.balls[0].z;
+      this.targets.push(target);
+    }
     for (let i = 0; i < this.getVisibleTargetsCount(); i++) {
       await this.addTarget();
     }
@@ -204,15 +210,16 @@ class Game extends GameObject {
     const pillarB = await makePillar(Assets.images['VALLEY.png']);
     titleGroup.add(pillarB);
 
-    pillarB.position.y = -1100;
-    pillarB.position.x = 55;
-    pillarB.position.z = 55;
-    TweenMax.to(pillarB.position, 1.0, {
-      y: -530,
-      ease: Back.easeOut,
-      delay: 0.1,
-    });
-
+    if (pillarB.position) {
+      pillarB.position.y = -1100;
+      pillarB.position.x = 55;
+      pillarB.position.z = 55;
+      TweenMax.to(pillarB.position, 1.0, {
+        y: -530,
+        ease: Back.easeOut,
+        delay: 0.1,
+      });
+    }
     const pillarC = await makePillar(Assets.images['BEGIN.png'], 0xedcbbf);
     titleGroup.add(pillarC);
 
@@ -352,6 +359,7 @@ class Game extends GameObject {
       dispatch.game.play();
       dispatch.score.increment();
       this.score += 1;
+      if (Settings.isIos) {
       if (perfection < 0.3) {
         Haptic.impact(Haptic.ImpactStyles.Light);
       } else if (perfection < 0.6) {
@@ -359,6 +367,7 @@ class Game extends GameObject {
       } else {
         Haptic.impact(Haptic.ImpactStyles.Heavy);
       }
+    }
 
       if (this.particles) {
         this.particles.impulse();

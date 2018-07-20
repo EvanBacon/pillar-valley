@@ -2036,6 +2036,10 @@ expand-range@^1.8.1:
   dependencies:
     fill-range "^2.1.0"
 
+expo-analytics@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/expo-analytics/-/expo-analytics-1.0.7.tgz#d78b4b9090ba359b2ec233fce35512b90ef392db"
+
 expo-asset-utils@^0.0.4-alpha.2:
   version "0.0.4-alpha.2"
   resolved "https://registry.yarnpkg.com/expo-asset-utils/-/expo-asset-utils-0.0.4-alpha.2.tgz#c559a490c326cb35fcfa1362e2dc1cc1b8284b35"
@@ -3792,6 +3796,10 @@ react-native-gesture-handler@1.0.4:
     hoist-non-react-statics "^2.3.1"
     invariant "^2.2.2"
     prop-types "^15.5.10"
+
+react-native-google-analytics@^1.3.2:
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/react-native-google-analytics/-/react-native-google-analytics-1.3.2.tgz#6bc21ed938e9866eb1e4584fe8468b1543a81dd5"
 
 react-native-maps@0.21.0:
   version "0.21.0"
