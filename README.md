@@ -19,19 +19,19 @@ touch ExpoParty/Secret.js
 
 Then go to the [Firebase Console](https://console.firebase.google.com) and create a **Web App**.
 
-
 Here is an example of what your Secret.js file should look like:
 This one totally works but eventually it'll hit the rate limit.
 
 **Secret.js**
+
 ```js
 export default {
-  apiKey: "AIzaSyAfgPq82VdNqEZ8hqnOvYdD7kSPiFK9W1k",
-  authDomain: "keira-knightley-51df6.firebaseapp.com",
-  databaseURL: "https://keira-knightley-51df6.firebaseio.com",
-  projectId: "keira-knightley-51df6",
-  storageBucket: "keira-knightley-51df6.appspot.com",
-  messagingSenderId: "628588079444"
+  apiKey: 'AIzaSyAfgPq82VdNqEZ8hqnOvYdD7kSPiFK9W1k',
+  authDomain: 'keira-knightley-51df6.firebaseapp.com',
+  databaseURL: 'https://keira-knightley-51df6.firebaseio.com',
+  projectId: 'keira-knightley-51df6',
+  storageBucket: 'keira-knightley-51df6.appspot.com',
+  messagingSenderId: '628588079444',
 };
 ```
 
@@ -41,16 +41,15 @@ Now you can install the packages and run the expo project! 💙💙💙
 yarn && exp start
 ```
 
-
 ### Preview
 
 <div style="text-align:center">
   
-<img src="https://raw.githubusercontent.com/EvanBacon/Expo-Pillar-Valley/master/release/screenshots/apple/English%20(U.S.)/1_5.5%20inch%20-%20iPhone%207%20Plus_screen__1.jpg" width="281"  />
+<img src="https://github.com/EvanBacon/Expo-Pillar-Valley/blob/master/ios/fastlane/raw_screenshots/IMG_0494.PNG" width="281"  />
 
-<img src="https://raw.githubusercontent.com/EvanBacon/Expo-Pillar-Valley/master/release/screenshots/apple/English%20(U.S.)/2_5.5%20inch%20-%20iPhone%207%20Plus_screen__2.jpg" width="281"  />
+<img src="https://github.com/EvanBacon/Expo-Pillar-Valley/blob/master/ios/fastlane/raw_screenshots/IMG_0496.PNG" width="281"  />
 
-<img src="https://raw.githubusercontent.com/EvanBacon/Expo-Pillar-Valley/master/release/screenshots/apple/English%20(U.S.)/3_5.5%20inch%20-%20iPhone%207%20Plus_screen__3.jpg" width="281"  />
+<img src="https://github.com/EvanBacon/Expo-Pillar-Valley/blob/master/ios/fastlane/raw_screenshots/IMG_0497.PNG" width="281"  />
 
 </div>
 
@@ -68,6 +67,4 @@ The beautiful Android version can be found here 👉 [Play Store](https://play.g
 - [THREE.js](https://threejs.org/)
 - [GSAP](https://greensock.com/)
 
-----
-
-
+---

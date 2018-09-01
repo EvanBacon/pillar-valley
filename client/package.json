@@ -16,7 +16,8 @@
     "lint:fix": "eslint --ignore-path .gitignore . --fix",
     "prettier": "prettier --write '*.js'",
     "format-code": "yarn run prettier && yarn run lint:fix",
-    "deploy": "gh-pages -d build"
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d public"
   },
   "homepage": "https://evanbacon.github.io/Expo-Pillar-Valley/",
   "lint-staged": {
