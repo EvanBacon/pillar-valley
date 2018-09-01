@@ -5,35 +5,33 @@
     "slug": "pillar-valley",
     "privacy": "public",
     "sdkVersion": "28.0.0",
-    "version": "2.0.0",
+    "version": "2.1.0",
     "orientation": "portrait",
     "primaryColor": "#E07C4C",
-    "icon": "./assets/icons/expo.png",
+    "icon": "./src/assets/icons/expo.png",
     "facebookScheme": "fb270942376819196",
     "facebookAppId": "270942376819196",
     "facebookDisplayName": "Bacon Box",
     "githubUrl": "https://github.com/evanbacon/expo-pillar-valley",
     "splash": {
-      "image": "./assets/icons/splash.png",
+      "image": "./src/assets/icons/splash.png",
       "backgroundColor": "#E07C4C",
       "resizeMode": "cover"
     },
     "packagerOpts": {
       "assetExts": ["ttf", "mp4", "otf", "xml", "mp3"]
     },
-    "assetBundlePatterns": ["assets/**/*"],
+    "assetBundlePatterns": ["src/assets/**/*"],
     "ios": {
-      "appStoreUrl":
-        "https://itunes.apple.com/us/app/pillar-valley/id1336398804?ls=1&mt=8",
-      "icon": "./assets/icons/ios.png",
+      "appStoreUrl": "https://itunes.apple.com/us/app/pillar-valley/id1336398804?ls=1&mt=8",
+      "icon": "./src/assets/icons/ios.png",
       "supportsTablet": true,
       "bundleIdentifier": "com.evanbacon.pillarvalley",
-      "buildNumber": "2"
+      "buildNumber": "3"
     },
     "android": {
-      "playStoreUrl":
-        "https://play.google.com/store/apps/details?id=com.evanbacon.pillarvalley",
-      "icon": "./assets/icons/expo.png",
+      "playStoreUrl": "https://play.google.com/store/apps/details?id=com.evanbacon.pillarvalley",
+      "icon": "./src/assets/icons/expo.png",
       "package": "com.evanbacon.pillarvalley",
       "versionCode": 2
     }
