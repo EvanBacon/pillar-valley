@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-export default props => <View {...props} style={[styles.container, props.style]} />;
+export default class Separator extends PureComponent {
+  render() {
+    return <View {...this.props} style={StyleSheet.flatten([styles.container, this.props.style])} />;
+  }
+}
 
 const styles = StyleSheet.create({
   container: {

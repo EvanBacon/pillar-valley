@@ -1,7 +1,6 @@
 // @flow
-import React from 'react';
-
 import { FontAwesome } from '@expo/vector-icons';
+import React from 'react';
 
 import createIconButtonComponent from './createIconButtonComponent';
 

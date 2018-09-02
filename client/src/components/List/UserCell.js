@@ -1,5 +1,4 @@
 import { Ionicons } from '@expo/vector-icons';
-
 import React from 'react';
 import { StyleSheet, Text, TouchableHighlight, View } from 'react-native';
 
@@ -10,7 +9,7 @@ export default class UserCell extends React.Component {
     item: {},
     index: 0,
     onPress: () => {
-      alert('must override UserCell.onPress');
+      alert('must override UserCell.onPress'); // eslint-disable-line
     },
   };
   onPress = () => {
@@ -26,14 +25,22 @@ export default class UserCell extends React.Component {
     }
 
     const {
-      displayName: name, score, rank, photoURL: image,
+      displayName: name,
+      score,
+      // rank,
+      photoURL: image,
     } = item;
-    const _rank = rank || index + 1;
+    // const _rank = rank || index + 1;
     return (
-      <TouchableHighlight underlayColor="#eeeeee" {...props} onPress={this.onPress} style={[styles.touchable, style]}>
+      <TouchableHighlight
+        underlayColor="#eeeeee"
+        {...props}
+        onPress={this.onPress}
+        style={StyleSheet.flatten([styles.touchable, style])}
+      >
         <View style={styles.container}>
           <View style={{ flexDirection: 'row' }}>
-            <Text style={[styles.rank, { alignSelf: 'center' }]}>ME</Text>
+            <Text style={StyleSheet.flatten([styles.rank, { alignSelf: 'center' }])}>ME</Text>
             <Avatar textStyle={{ fontWeight: 'bold' }} avatarStyle={{ marginRight: 16 }} name={name} avatar={image} />
             <View styles={{ alignItems: 'flex-start' }}>
               <Text style={styles.rank}>{name}</Text>

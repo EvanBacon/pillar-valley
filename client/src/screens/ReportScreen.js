@@ -1,8 +1,8 @@
 // @flow
+import { MaterialIcons } from '@expo/vector-icons';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-
-import { MaterialIcons } from '@expo/vector-icons';
+import PropTypes from 'prop-types';
 import ReportList from '../components/ReportList';
 import Offenses from '../constants/Offenses';
 import Fire from '../ExpoParty/Fire';
@@ -12,7 +12,11 @@ export default class ReportScreen extends React.Component {
     title: 'Report',
   };
 
-  _onPressItem = ({ name }, index) => {
+  static propTypes = {
+    navigation: PropTypes.object.isRequired,
+  };
+
+  _onPressItem = ({ name }) => {
     const { uid } = this.props.navigation.state.params;
     Fire.shared.submitComplaint(uid, name);
     this.props.navigation.goBack();
@@ -20,7 +24,7 @@ export default class ReportScreen extends React.Component {
   };
 
   render() {
-    const { name, uid } = this.props.navigation.state.params;
+    const { name } = this.props.navigation.state.params;
     return (
       <View style={styles.container}>
         <View style={styles.row}>

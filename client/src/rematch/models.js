@@ -1,11 +1,11 @@
 import { dispatch } from '@rematch/core';
-import { takeSnapshotAsync, Constants, Facebook } from '../universal/Expo';
 import firebase from 'firebase';
-import { AsyncStorage, Dimensions } from 'react-native';
+import { Alert, AsyncStorage, Dimensions } from 'react-native';
 
 import Settings from '../constants/Settings';
 import Fire from '../ExpoParty/Fire';
 import GameStates from '../Game/GameStates';
+import { Constants, Facebook, takeSnapshotAsync } from '../universal/Expo';
 import getDeviceInfo from '../utils/getUserInfo';
 
 export const skins = {
@@ -68,7 +68,7 @@ export const score = {
       try {
         await Fire.shared.db.runTransaction(transaction => transaction.get(docRef).then((doc) => {
           if (!doc.exists) {
-            throw 'Document does not exist!';
+            throw new Error('Document does not exist!');
           }
 
           const data = doc.data();
@@ -93,7 +93,7 @@ export const score = {
         console.log('Successfully wrote score');
       } catch ({ message }) {
         console.log('Failed to write score', message);
-        alert(message);
+        Alert.alert(message);
       }
     },
   },
@@ -143,7 +143,7 @@ async function incrementDailyReward() {
     Fire.shared.db
       .runTransaction(transaction => transaction.get(Fire.shared.doc).then((userDoc) => {
         if (!userDoc.exists) {
-          throw 'Document does not exist!';
+          throw new Error('Document does not exist!');
         }
 
         const data = userDoc.data();
@@ -296,12 +296,12 @@ export const leaders = {
         console.log('Batch update', data.length, { data });
         dispatch.leaders.batchUpdate(data);
         const cursor = querySnapshot.docs[querySnapshot.docs.length - 1];
-        callback && callback({ data, cursor, noMore: data.length < size });
+        if (callback) callback({ data, cursor, noMore: data.length < size });
         return;
       } catch (error) {
         console.error('Error getting documents: ', error);
       }
-      callback && callback({});
+      if (callback) callback({});
     },
     getAsync: async ({ uid, callback }) => {
       try {
@@ -327,7 +327,7 @@ export const leaders = {
               timestamp: Date.now(),
             };
             ref.set(nUser);
-            callback && callback(nUser);
+            if (callback) callback(nUser);
             return;
           }
           console.log(`No document: leaders/${uid}`);
@@ -335,14 +335,14 @@ export const leaders = {
           const user = doc.data();
           console.log('got leader', user);
           dispatch.leaders.update({ uid, user });
-          callback && callback(user);
+          if (callback) callback(user);
           return;
         }
       } catch ({ message }) {
         console.log('Error: leaders.get', message);
         alert(message);
       }
-      callback && callback(null);
+      if (callback) callback(null);
     },
   },
 };
@@ -394,7 +394,7 @@ export const players = {
             }
             ref.add(user);
             dispatch.players.update({ uid, user });
-            callback && callback(user);
+            if (callback) callback(user);
           } else {
             dispatch.leaders.getAsync({
               uid,
@@ -402,7 +402,7 @@ export const players = {
                 if (user) {
                   dispatch.players.update({ uid, user });
                 }
-                callback && callback(user);
+                if (callback) callback(user);
               },
             });
           }
@@ -410,11 +410,11 @@ export const players = {
           const user = doc.data();
           console.log('got player', user);
           dispatch.players.update({ uid, user });
-          callback && callback(user);
+          if (callback) callback(user);
         }
       } catch ({ message }) {
         console.log('Error: players.get', message);
-        alert(message);
+        Alert.alert(message);
       }
     },
   },
@@ -512,7 +512,7 @@ export const user = {
         // dispatch.leaders.set({ uid, user: null });
       } catch ({ message }) {
         console.log('ERROR: user.logoutAsync: ', message);
-        alert(message);
+        Alert.alert(message);
       }
     },
     signInAnonymously: () => {
@@ -520,10 +520,10 @@ export const user = {
         firebase.auth().signInAnonymously();
       } catch ({ message }) {
         console.log('Error: signInAnonymously', message);
-        alert(message);
+        Alert.alert(message);
       }
     },
-    observeAuth: (props, state) => {
+    observeAuth: (props) => {
       firebase.auth().onAuthStateChanged((user) => {
         if (!user) {
           // TODO: Evan: Y tho...
@@ -683,7 +683,7 @@ export const facebook = {
           // unknown type, this should never happen
           alert('Failed to authenticate', type);
         }
-        callback && callback(token);
+        if (callback) callback(token);
       }
     },
     upgradeAccountWithToken: async (token, { facebook }) => {
@@ -713,7 +713,7 @@ export const facebook = {
           // If the account is already linked this error will be thrown
           console.log('Error: upgradeAccountWithToken', message);
           console.log('error', code, error);
-          alert(message);
+          Alert.alert(message);
         }
       }
     },
@@ -728,7 +728,7 @@ export const facebook = {
         dispatch.facebook.authorized(user);
       } catch ({ message }) {
         console.log('Error: loginToFirebase');
-        alert(message);
+        Alert.alert(message);
       }
     },
     callGraphWithToken: async ({ token, params, callback }, { facebook }) => {
@@ -748,7 +748,7 @@ export const facebook = {
         console.log('Error: callGraphWithToken', message);
         alert(message);
       }
-      callback && callback(results);
+      if (callback) callback(results);
     },
     authorized: (user, {}) => {
       console.log('Authorized Facebook', user);

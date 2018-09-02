@@ -2,12 +2,9 @@ import React from 'react';
 
 import Icon from './Icon';
 
-class Cancel extends React.Component {
-  onPress = () => {
-    this.props.onPress && this.props.onPress();
-  };
+class Cancel extends React.PureComponent {
   render() {
-    const { onPress, name, ...props } = this.props;
+    const { name, ...props } = this.props;
     return <Icon onPress={this.onPress} name="times" {...props} />;
   }
 }

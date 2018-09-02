@@ -1,11 +1,11 @@
 // @flow
 import { dispatch } from '@rematch/core';
-import { DangerZone, Haptic } from '../universal/Expo';
-import ExpoTHREE from '../universal/ExpoThree';
 import { Back, Expo as ExpoEase, TweenMax } from 'gsap';
 
 import Assets from '../Assets';
 import Settings from '../constants/Settings';
+import { DangerZone, Haptic } from '../universal/Expo';
+import ExpoTHREE from '../universal/ExpoThree';
 import THREE from '../universal/THREE';
 import GameObject from './engine/core/GameObject';
 import Group from './engine/core/Group';

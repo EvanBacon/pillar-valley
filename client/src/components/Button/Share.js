@@ -34,7 +34,7 @@ class ShareButton extends React.Component {
         ],
       },
     );
-    this.props.onPress && this.props.onPress();
+    if (this.props.onPress) this.props.onPress();
   };
 
   render() {

@@ -1,14 +1,14 @@
 // @flow
+import { MaterialIcons } from '@expo/vector-icons';
 import React from 'react';
 import { StyleSheet, Text, TouchableHighlight, View } from 'react-native';
 
 import Avatar from './Avatar';
-import { MaterialIcons } from '@expo/vector-icons';
 import ScoreBadge from './ScoreBadge';
 
 export default class Item extends React.Component {
   onPress = () => {
-    const { index, onPress } = this.props;
+    // const { index, onPress } = this.props;
     // onPress(index);
   };
 
@@ -59,12 +59,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-  },
-  rank: {
-    alignSelf: 'center',
-    fontSize: 24,
-    minWidth: 36,
-    marginRight: 8,
   },
   text: { fontWeight: 'bold' },
   subtitle: {

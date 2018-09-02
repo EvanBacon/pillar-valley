@@ -1,9 +1,8 @@
 // @flow
+import Settings from '../constants/Settings';
 import ExpoTHREE from '../universal/ExpoThree';
-
 import Composer from './Composer';
 import Game from './Game';
-import Settings from '../constants/Settings';
 
 class Machine {
   time = 0;

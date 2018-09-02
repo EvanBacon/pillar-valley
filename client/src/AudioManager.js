@@ -1,13 +1,12 @@
-import { Audio } from './universal/Expo';
-import AssetUtils from './universal/AssetUtils';
-
 import Assets from './Assets';
 import { store } from './rematch/Gate';
-
+import AssetUtils from './universal/AssetUtils';
+import { Audio } from './universal/Expo';
+// eslint-disable-line
 class AudioManager {
   sounds = {};
 
-  playAsync = async (name, isLooping, startOver = true) => {
+  playAsync = async (name, isLooping) => {
     if (store.getState().muted) {
       return;
     }

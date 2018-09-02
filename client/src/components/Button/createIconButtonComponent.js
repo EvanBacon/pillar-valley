@@ -1,8 +1,8 @@
 import isString from 'lodash/isString';
 import omit from 'lodash/omit';
 import pick from 'lodash/pick';
-import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import React, { PureComponent } from 'react';
 import { StyleSheet, Text, TouchableHighlight, View } from 'react-native';
 
 const styles = StyleSheet.create({

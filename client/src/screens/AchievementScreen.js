@@ -1,4 +1,3 @@
-import { connectActionSheet } from '../universal/ActionSheet';
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
 
@@ -6,6 +5,7 @@ import AchievementsItem from '../components/AchievementsItem';
 import List from '../components/List';
 import Achievements from '../constants/Achievements';
 import connectAchievementToast from '../ExpoParty/connectAchievementToast';
+import { connectActionSheet } from '../universal/ActionSheet';
 
 class App extends Component {
   static navigationOptions = {};
@@ -69,13 +69,6 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
     // paddingTop: Constants.statusBarHeight,
     backgroundColor: '#ecf0f1',
-  },
-  paragraph: {
-    margin: 24,
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    color: '#34495e',
   },
 });
 

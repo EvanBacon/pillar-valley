@@ -1,6 +1,4 @@
-import { connectActionSheet } from '../universal/ActionSheet';
 import { dispatch } from '@rematch/core';
-import { Constants } from '../universal/Expo';
 import firebase from 'firebase';
 import React, { Component } from 'react';
 import { RefreshControl, StyleSheet, View } from 'react-native';
@@ -10,43 +8,16 @@ import List from '../components/List';
 import Item from '../components/List/Item';
 import Settings from '../constants/Settings';
 import Fire from '../ExpoParty/Fire';
+import { connectActionSheet } from '../universal/ActionSheet';
+import { Constants } from '../universal/Expo';
 
 class LeaderboardScreen extends Component {
   state = {
     filter: 'Forever',
     refreshing: false,
     data: {},
-    dataSorted: [],
-    isLoggedIn: false,
-  };
-
-  _onOpenActionSheet = () => {
-    // Same interface as https://facebook.github.io/react-native/docs/actionsheetios.html
-    const options = ['Today', 'This Week', 'Forever', 'Cancel'];
-    const destructiveButtonIndex = 0;
-    const cancelButtonIndex = options.length - 1;
-
-    this.props.showActionSheetWithOptions(
-      {
-        options,
-        icons: ['md-show-chart'],
-        cancelButtonIndex,
-      },
-      (buttonIndex) => {
-        if (buttonIndex !== cancelButtonIndex) {
-          this.setState({ filter: options[buttonIndex] });
-        }
-        // Do something here depending on the button index selected
-      },
-    );
-  };
-
-  _onPressItem = (item) => {
-    // console.log(item);
-    this.props.navigation.navigate('Profile', {
-      title: item.name,
-      ...item,
-    });
+    // dataSorted: [],
+    // isLoggedIn: false,
   };
 
   componentDidMount() {
@@ -95,7 +66,7 @@ class LeaderboardScreen extends Component {
     };
     this.setState({
       data,
-      dataSorted: Object.values(data).sort((a, b) => a.timestamp > b.timestamp),
+      // dataSorted: Object.values(data).sort((a, b) => a.timestamp > b.timestamp),
     });
   };
   //
@@ -123,6 +94,34 @@ class LeaderboardScreen extends Component {
         this.setState({ noMore, refreshing: false });
         this.lastKnownKey = cursor;
       },
+    });
+  };
+
+  _onOpenActionSheet = () => {
+    // Same interface as https://facebook.github.io/react-native/docs/actionsheetios.html
+    const options = ['Today', 'This Week', 'Forever', 'Cancel'];
+    const cancelButtonIndex = options.length - 1;
+
+    this.props.showActionSheetWithOptions(
+      {
+        options,
+        icons: ['md-show-chart'],
+        cancelButtonIndex,
+      },
+      (buttonIndex) => {
+        if (buttonIndex !== cancelButtonIndex) {
+          this.setState({ filter: options[buttonIndex] });
+        }
+        // Do something here depending on the button index selected
+      },
+    );
+  };
+
+  _onPressItem = (item) => {
+    // console.log(item);
+    this.props.navigation.navigate('Profile', {
+      title: item.name,
+      ...item,
     });
   };
 
@@ -160,13 +159,6 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
     // paddingTop: Constants.statusBarHeight,
     // backgroundColor: '#ecf0f1',
-  },
-  paragraph: {
-    margin: 24,
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    color: '#34495e',
   },
 });
 

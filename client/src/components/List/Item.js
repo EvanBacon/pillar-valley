@@ -1,9 +1,9 @@
+import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { StyleSheet, Text, TouchableHighlight, View } from 'react-native';
 
 import addNth from '../../utils/addNth';
 import Avatar from '../Avatar';
-import { Ionicons } from '@expo/vector-icons';
 import TimeAgo from '../TimeAgo';
 
 export default class Item extends React.Component {
@@ -18,7 +18,11 @@ export default class Item extends React.Component {
     const item = this.props.item || {};
 
     const {
-      displayName, score, photoURL, rank: brokenRank, timestamp,
+      displayName,
+      score,
+      photoURL,
+      // rank: brokenRank,
+      timestamp,
     } = item;
 
     const _rankValue = index + 1;

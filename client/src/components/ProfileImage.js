@@ -1,9 +1,9 @@
 // @flow
-import { ImagePicker, Permissions } from '../universal/Expo';
 import React from 'react';
 import { Linking, TouchableOpacity, View } from 'react-native';
 
 import Settings from '../constants/Settings';
+import { ImagePicker, Permissions } from '../universal/Expo';
 import Avatar from './Avatar';
 import EditPhotoButton from './Button/EditPhoto';
 

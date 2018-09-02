@@ -48,7 +48,7 @@ class CircleMesh extends THREE.Mesh {
     // todo tween disapate animation
   };
 
-  update = (dt) => {};
+  update = () => {};
 }
 
 export default CircleMesh;

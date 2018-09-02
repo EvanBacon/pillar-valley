@@ -1,54 +1,59 @@
 {
-    "parser": "babel-eslint",
-    "parserOptions": {
-        "ecmaVersion": 6,
-        "sourceType": "module",
-        "ecmaFeatures": {
-            "jsx": true,
-            "modules": true,
-            "experimentalObjectRestSpread": true
-        }
-    },
-    "plugins": [
-        "react",
-        "react-native"
-    ],
-    "extends": "airbnb",
-    "env": {
-        "browser": true,
-        "jest": true,
-        "react-native/react-native": true
-    },
-    "rules": {
-        "global-require": 0,
-        "no-console": 0,
-        "max-len": [
-            2, 
-            {
-                "code": 120,
-                "ignoreComments": true,
-                "ignoreUrls": true
-            }
-        ],
-        "no-underscore-dangle": 0,
-        "no-use-before-define": 0,
-        "react/forbid-prop-types": 0,
-        "react/jsx-filename-extension": [
-            2,
-            {
-                "extensions": [".js", ".jsx"]
-            }
-        ],
-        "no-param-reassign": [
-            2,
-            {
-                "props": false
-            }
-        ],
-        "react-native/no-unused-styles": 2,
-        "react-native/split-platform-components": 2,
-        "react-native/no-inline-styles": 0,
-        "react/prefer-stateless-function": 0,
-        "react-native/no-color-literals": 0
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true,
+      "modules": true,
+      "experimentalObjectRestSpread": true
     }
+  },
+  "plugins": ["react", "react-native"],
+  "extends": "airbnb",
+  "env": {
+    "browser": true,
+    "jest": true,
+    "react-native/react-native": true
+  },
+  "rules": {
+    "global-require": 0,
+    "no-console": 0,
+    "max-len": [
+      2,
+      {
+        "code": 120,
+        "ignoreComments": true,
+        "ignoreUrls": true
+      }
+    ],
+    "no-underscore-dangle": 0,
+    "no-use-before-define": 0,
+    "react/forbid-prop-types": 0,
+    "react/jsx-filename-extension": [
+      2,
+      {
+        "extensions": [".js", ".jsx"]
+      }
+    ],
+    "no-param-reassign": [
+      2,
+      {
+        "props": false
+      }
+    ],
+    "react-native/no-unused-styles": 2,
+    "react-native/split-platform-components": 2,
+    "react-native/no-inline-styles": 0,
+    "react/prefer-stateless-function": 0,
+    "react-native/no-color-literals": 0
+  },
+  "overrides": [
+    {
+      "files": ["*.js"],
+      "rules": {
+        "no-restricted-syntax": "off"
+      }
+    }
+  ]
 }

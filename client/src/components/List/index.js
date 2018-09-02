@@ -7,22 +7,12 @@ import Separator from './Separator';
 import UserCell from './UserCell';
 
 class List extends React.Component {
-  renderItem = (props) => {
-    if (this.props.renderItem) {
-      return this.props.renderItem(props);
-    }
-
-    return <Item {...props} onPress={this.props.onPress} />;
-  };
-
   get userItem() {
     if (this.props.renderUserItem) {
       return this.props.renderUserItem();
     }
     return <UserCell style={{ backgroundColor: 'white' }} item={this.props.userItem} onPress={this.props.onPress} />;
   }
-
-  keyExtractor = (item, index) => `item-${index}`;
 
   get footer() {
     if (this.props.noMore) {
@@ -31,6 +21,17 @@ class List extends React.Component {
 
     return footerProps => <Footer {...footerProps} item={this.props.userItem} onPress={this.props.onPressFooter} />;
   }
+
+  keyExtractor = (item, index) => `item-${index}`;
+
+  renderItem = (props) => {
+    if (this.props.renderItem) {
+      return this.props.renderItem(props);
+    }
+
+    return <Item {...props} onPress={this.props.onPress} />;
+  };
+
   render() {
     const {
       style,

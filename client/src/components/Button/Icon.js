@@ -1,9 +1,9 @@
+import { FontAwesome } from '@expo/vector-icons';
 import React, { Component } from 'react';
-import { StyleSheet, Platform } from 'react-native';
-import TouchableBounce from '../../universal/TouchableBounce';
+import { Platform, StyleSheet } from 'react-native';
 
 import AudioManager from '../../AudioManager';
-import { FontAwesome } from '@expo/vector-icons';
+import TouchableBounce from '../../universal/TouchableBounce'; // eslint-disable-line
 
 export default class Icon extends Component {
   static defaultProps = {
@@ -11,6 +11,7 @@ export default class Icon extends Component {
     soundOut: 'button_out',
     size: 24,
     color: '#ffffff',
+    onPress: () => {},
   };
 
   render() {

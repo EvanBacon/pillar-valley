@@ -1,6 +1,7 @@
-import { Constants } from '../../universal/Expo';
 import React from 'react';
 import { StyleSheet, Text, TouchableHighlight, View } from 'react-native';
+
+import { Constants } from '../../universal/Expo'; // eslint-disable-line
 
 export default class Header extends React.Component {
   onPress = () => {
@@ -37,9 +38,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
   text: { fontWeight: 'bold', opacity: 0.7 },
-  subtitle: {
-    opacity: 0.7,
-  },
   link: {
     color: Constants.manifest.primaryColor,
   },

@@ -6,7 +6,7 @@ import Icon from './Icon';
 class Home extends React.Component {
   onPress = () => {
     dispatch.game.menu();
-    this.props.onPress && this.props.onPress();
+    if (this.props.onPress) this.props.onPress();
   };
   render() {
     const { onPress, name, ...props } = this.props;

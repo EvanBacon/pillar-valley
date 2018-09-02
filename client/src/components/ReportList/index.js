@@ -5,12 +5,12 @@ import { FlatList, StyleSheet } from 'react-native';
 import Settings from '../../constants/Settings';
 import Header from './Header';
 import Item from './Item';
-import Separator from './Separator';
+import Separator from '../List/Separator';
 
 class List extends React.Component {
+  keyExtractor = (item, index) => `item-${index}`;
   renderItem = props => <Item {...props} onPress={this.props.onPress} />;
 
-  keyExtractor = (item, index) => `item-${index}`;
   render() {
     const {
       style, title, onPressHeader, headerButtonTitle, ...props

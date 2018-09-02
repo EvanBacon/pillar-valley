@@ -1,4 +1,3 @@
-import { connectActionSheet } from '../universal/ActionSheet';
 import { dispatch } from '@rematch/core';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
@@ -8,6 +7,7 @@ import ProfileImage from '../components/ProfileImage';
 import ProfileMetaDataView from '../components/ProfileMetaDataView';
 import UpgradeAccountView from '../components/UpgradeAccountView';
 import Fire from '../ExpoParty/Fire';
+import { connectActionSheet } from '../universal/ActionSheet';
 
 class App extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -67,7 +67,7 @@ class App extends React.Component {
 
     const isSignedInWithFB = !!user.fbuid;
 
-    const canUpgrade = this.isUser && !isSignedInWithFB;
+    // const canUpgrade = this.isUser && !isSignedInWithFB;
     const canLogout = isSignedInWithFB;
     const name = user.displayName || user.deviceName;
     const createdAt = user.createdAt || user.lastRewardTimestamp;
@@ -93,21 +93,6 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  infoText: {
-    fontSize: 14,
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 14,
-    marginTop: 2,
-    maxWidth: '80%',
-  },
-  paragraph: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    color: '#34495e',
   },
   reportButton: {
     fontWeight: 'bold',

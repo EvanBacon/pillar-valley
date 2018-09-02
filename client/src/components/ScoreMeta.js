@@ -1,10 +1,14 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
-
+import PropTypes from 'prop-types';
 import Settings from '../constants/Settings';
 
 class ScoreMeta extends React.Component {
+  static propTypes = {
+    current: PropTypes.number.isRequired,
+    best: PropTypes.number.isRequired,
+  };
   render() {
     const { current, best } = this.props;
     return (
@@ -38,6 +42,7 @@ const styles = StyleSheet.create({
     opacity: 0.8,
     fontSize: 48,
     backgroundColor: 'transparent',
+    userSelect: 'none',
   },
   score: {
     color: 'white',

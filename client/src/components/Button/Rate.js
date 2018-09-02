@@ -1,7 +1,7 @@
 import React from 'react';
 import { Alert, Linking } from 'react-native';
 
-import { Constants, StoreReview } from '../../universal/Expo';
+import { Constants, StoreReview } from '../../universal/Expo'; // eslint-disable-line
 import Icon from './Icon';
 
 class Rate extends React.Component {

@@ -1,8 +1,7 @@
 // @flow
+import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { StyleSheet, Text, TouchableHighlight, View } from 'react-native';
-
-import { Ionicons } from '@expo/vector-icons';
 
 export default class Item extends React.Component {
   onPress = () => {
@@ -38,7 +37,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   text: { fontWeight: 'bold' },
-  subtitle: {
-    opacity: 0.7,
-  },
 });

@@ -1,5 +1,6 @@
-import { Constants, Permissions, Notifications } from '../universal/Expo';
 import { Platform } from 'react-native';
+
+import { Constants, Notifications, Permissions } from '../universal/Expo';
 
 // Example server, implemented in Rails: https://git.io/vKHKv
 const PUSH_ENDPOINT = 'https://expo-push-server.herokuapp.com/tokens';

@@ -1,10 +1,8 @@
 // @flow
 import React from 'react';
-import { Dimensions, Image, StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 
 import Assets from '../Assets';
-
-const { width, height } = Dimensions.get('window');
 
 export default class Loading extends React.Component {
   static defaultProps = {
@@ -37,8 +35,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#FFC266',
-  },
-  text: {
-    textAlign: 'center',
   },
 });

@@ -1,7 +1,7 @@
 import { init } from '@rematch/core';
 import createRematchPersist, { getPersistor } from '@rematch/persist';
 import React from 'react';
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage, View } from 'react-native';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/es/integration/react';
 
@@ -18,8 +18,11 @@ export const store = init({
   models,
   plugins: [persistPlugin],
 });
-
 class Gate extends React.Component {
+  static propTypes = {
+    children: View.propTypes.children.isRequired,
+  };
+
   render() {
     return (
       <Provider store={store}>

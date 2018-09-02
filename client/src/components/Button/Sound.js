@@ -1,6 +1,5 @@
 import { dispatch } from '@rematch/core';
 import React from 'react';
-import { StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
 import Icon from './Icon';
@@ -8,7 +7,7 @@ import Icon from './Icon';
 class Sound extends React.Component {
   onPress = () => {
     dispatch.muted.toggle();
-    this.props.onPress && this.props.onPress();
+    if (this.props.onPress) this.props.onPress();
   };
   render() {
     const {
@@ -18,13 +17,5 @@ class Sound extends React.Component {
     return <Icon onPress={this.onPress} name={iconName} {...props} />;
   }
 }
-
-const styles = StyleSheet.create({
-  container: {},
-  icon: {
-    resizeMode: 'contain',
-    height: 48,
-  },
-});
 
 export default connect(({ muted }) => ({ muted }))(Sound);

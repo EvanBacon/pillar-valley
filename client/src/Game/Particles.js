@@ -1,11 +1,9 @@
 // @flow
-
-import ExpoTHREE from '../universal/ExpoThree';
-
 import Proton from 'three.proton.js';
 
-import GameObject from './engine/core/GameObject';
+import ExpoTHREE from '../universal/ExpoThree';
 import THREE from '../universal/THREE';
+import GameObject from './engine/core/GameObject';
 
 class Snow extends GameObject {
   proton = new Proton();
