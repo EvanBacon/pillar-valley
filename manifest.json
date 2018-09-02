@@ -1,6 +1,7 @@
 {
-  "short_name": "Pillar Valley",
-  "name": "Create React App Sample",
+  "short_name": "pillar",
+  "name": "Pillar Valley",
+  "description": "Immerse yourself in a suave world of zen",
   "icons": [
     {
       "src": "favicon.ico",
