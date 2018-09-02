@@ -19,7 +19,7 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d public"
   },
-  "homepage": "https://evanbacon.github.io/Expo-Pillar-Valley/",
+  "homepage": "https://evanbacon.github.io/Expo-Pillar-Valley",
   "lint-staged": {
     "*.js": [
       "yarn run format-code",

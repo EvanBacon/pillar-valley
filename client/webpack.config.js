@@ -44,10 +44,7 @@ const babelLoaderConfiguration = {
         'expo-web',
         'react-native-web',
         'transform-decorators-legacy',
-        [
-          'transform-runtime',
-          { helpers: false, polyfill: false, regenerator: true },
-        ],
+        ['transform-runtime', { helpers: false, polyfill: false, regenerator: true }],
       ],
       // The 'react-native' preset is recommended to match React Native's packager
       presets: ['react-native'],
@@ -84,10 +81,7 @@ const ttfLoaderConfiguration = {
   include: [
     path.resolve(appDirectory, './src/assets/fonts'),
     path.resolve(appDirectory, 'node_modules/react-native-vector-icons'),
-    path.resolve(
-      appDirectory,
-      'node_modules/expo-web/node_modules/react-native-vector-icons',
-    ),
+    path.resolve(appDirectory, 'node_modules/expo-web/node_modules/react-native-vector-icons'),
   ],
 };
 
@@ -111,7 +105,7 @@ module.exports = {
   // configures where the build ends up
   output: {
     filename: 'bundle.js',
-    publicPath: '/assets/',
+    publicPath: '/Expo-Pillar-Valley/assets/',
     path: path.resolve(appDirectory, './public/assets'),
   },
 
