@@ -1,28 +1,39 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Image } from 'react-native';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Settings from '../constants/Settings';
+import { FontAwesome } from '@expo/vector-icons';
 
 class ScoreMeta extends React.Component {
   static propTypes = {
     current: PropTypes.number.isRequired,
     best: PropTypes.number.isRequired,
+    currency: PropTypes.number.isRequired,
   };
   render() {
-    const { current, best } = this.props;
+    const { current, best, currency } = this.props;
     return (
       <View style={styles.container}>
-        <Text style={[styles.text, styles.score]}>{current}</Text>
-        <Text style={[styles.text, styles.highScore]}>{best}</Text>
+        <View style={{ flexDirection: 'row' }}>
+          <Text style={[styles.text, styles.highScore]}>{best}</Text>
+          <Text style={[styles.text, styles.score]}>{current}</Text>
+        </View>
+        {currency && (
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Text style={[styles.text, styles.currency]}>{currency}</Text>
+            <FontAwesome name="diamond" size={20} color="lime" style={{ marginHorizontal: 6, userSelect: 'none' }} />
+          </View>
+        )}
       </View>
     );
   }
 }
 
-export default connect(({ score: { current, best } }) => ({
+export default connect(({ score: { current, best }, currency: { current: currency } }) => ({
   current,
   best,
+  currency,
 }))(ScoreMeta);
 
 const styles = StyleSheet.create({
@@ -50,5 +61,11 @@ const styles = StyleSheet.create({
   highScore: {
     color: 'yellow',
     textAlign: 'right',
+    fontSize: 24,
+    marginRight: 6,
+  },
+  currency: {
+    fontSize: 24,
+    color: 'white',
   },
 });

@@ -8,7 +8,7 @@
   "scripts": {
     "metadata": "fastlane deliver --skip_binary_upload",
     "fix": "rm -rf node_modules/gl-matrix/.babelrc",
-    "start": "./node_modules/.bin/webpack-dev-server -d --port 8100 --config ./webpack.config.js  --inline --hot --colors --content-base public/",
+    "start": "./node_modules/.bin/webpack-dev-server -d --config ./webpack.config.js  --inline --hot --colors --content-base public/",
     "build": "NODE_ENV=production ./node_modules/.bin/webpack -p --config ./webpack.config.js",
     "test": "node_modules/.bin/jest",
     "eject": "react-scripts eject",

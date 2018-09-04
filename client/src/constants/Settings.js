@@ -11,8 +11,8 @@ const Settings = {
       'email',
       // 'user_friends'
     ],
-    behavior: sizeInfo.loginBehavior,
   },
+  circleEnabled: false,
   isIos: Platform.OS === 'ios',
   osVersion: sizeInfo.osVersion,
   loginBehavior: sizeInfo.loginBehavior,
@@ -24,7 +24,7 @@ const Settings = {
   topInset: sizeInfo.topInset,
   isSimulator: !Constants.isDevice,
   isFirebaseEnabled: !debug || false,
-  isAutoStartEnabled: !debug && false,
+  isAutoStartEnabled: false, //! debug && true,
   isScreenshotEnabled: !debug || false,
   isMotionMenuEnabled: !debug || true,
   isComposerEnabled: false, //! debug || false,

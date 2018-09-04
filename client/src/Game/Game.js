@@ -105,6 +105,10 @@ class Game extends GameObject {
     return camera;
   };
 
+  generateDirection = () => {
+    this.direction = Math.round(randomRange(0, 1)) * 2 - 1;
+  };
+
   async reset() {
     super.reset();
 
@@ -114,7 +118,7 @@ class Game extends GameObject {
     }
     this.cachedRotationVelocity = Settings.rotationSpeed;
     this.steps = 0;
-    this.direction = Math.round(randomRange(0, 1));
+    this.generateDirection();
 
     this.rotationAngle = 0;
     this.mainBall = 1;
@@ -174,6 +178,11 @@ class Game extends GameObject {
     }
 
     await super.loadAsync(this.scene);
+  }
+
+
+  get currentTarget() {
+    return this.targets[0];
   }
 
   loadMenu = async () => {
@@ -274,7 +283,7 @@ class Game extends GameObject {
   loadGame = async () => {
     this.cachedRotationVelocity = Settings.rotationSpeed;
     this.steps = 0;
-    this.direction = Math.round(randomRange(0, 1));
+    this.generateDirection();
     this.gameGroup = await this.add(new Group());
     this.targetGroup = await this.gameGroup.add(new Group());
     this.ballGroup = await this.gameGroup.add(new Group());
@@ -350,6 +359,32 @@ class Game extends GameObject {
     });
   };
 
+  runHapticsWithValue = (perfection: number) => {
+    if (Settings.isIos) {
+      if (perfection < 0.3) {
+        Haptic.impact(Haptic.ImpactStyles.Light);
+      } else if (perfection < 0.6) {
+        Haptic.impact(Haptic.ImpactStyles.Medium);
+      } else {
+        Haptic.impact(Haptic.ImpactStyles.Heavy);
+      }
+    }
+  }
+
+  valueForPerfection = (perfection) => {
+    return Math.floor(perfection * 6);
+  }
+
+
+  testCollisionWithGem = (gem) => {
+    const distanceFromTarget = distance(
+      this.balls[this.mainBall].position,
+      gem.position,
+    );
+
+    return distanceFromTarget < 20;
+  }
+
   changeBall = async () => {
     this.taps += 1;
     if (this.taps % 3 === 0) {
@@ -369,16 +404,8 @@ class Game extends GameObject {
       dispatch.game.play();
       dispatch.score.increment();
       this.score += 1;
-      if (Settings.isIos) {
-        if (perfection < 0.3) {
-          Haptic.impact(Haptic.ImpactStyles.Light);
-        } else if (perfection < 0.6) {
-          Haptic.impact(Haptic.ImpactStyles.Medium);
-        } else {
-          Haptic.impact(Haptic.ImpactStyles.Heavy);
-        }
-      }
-
+      this.runHapticsWithValue(perfection);
+      
       if (this.particles) {
         this.particles.impulse();
       }
@@ -386,12 +413,17 @@ class Game extends GameObject {
       this.balls[this.mainBall].x = this.targets[1].x;
       this.balls[this.mainBall].z = this.targets[1].z;
 
-      this.direction = Math.round(randomRange(0, 1));
+      this.generateDirection();
 
       const target = this.targets.shift();
+      if (this.currentTarget) this.currentTarget.updateDirection(this.direction);
 
       target.animateOut();
       this.targets[0].becomeCurrent();
+
+      if (this.score > 3) {
+        this.targets[0].showGems(this.valueForPerfection(perfection))
+      }
       this.targets[1].becomeTarget();
 
       this.balls[this.mainBall].landed(perfection);
@@ -400,13 +432,6 @@ class Game extends GameObject {
 
       this.balls[1 - this.mainBall].scale.set(1, 1, 1);
       this.balls[this.mainBall].scale.set(1, 1, 1);
-      const nBallPosition = this.balls[1 - this.mainBall];
-      const bBallPosition = this.balls[this.mainBall];
-      const angleDeg = Math.atan2(
-        bBallPosition.y - nBallPosition.y,
-        bBallPosition.x - nBallPosition.x,
-      );
-
       this.rotationAngle -= 180;
 
       while (this.targets.length < this.getVisibleTargetsCount()) {
@@ -487,7 +512,9 @@ class Game extends GameObject {
     target.x = startX + Settings.ballDistance * Math.sin(radians);
     target.z = startZ + Settings.ballDistance * Math.cos(radians);
 
+    const last = this.targets[this.targets.length - 1];
     this.targets.push(target);
+    target.lastAngle = Math.atan2(last.z - target.z, last.x - target.x);
     target.alpha = this.alphaForTarget(this.targets.length);
     target.animateIn();
   };
@@ -533,7 +560,7 @@ class Game extends GameObject {
         6,
       );
       this.rotationAngle =
-        (this.rotationAngle + speed * (this.direction * 2 - 1)) % 360;
+        (this.rotationAngle + speed * this.direction) % 360;
 
       const radians = THREE.Math.degToRad(this.rotationAngle);
 
@@ -550,6 +577,24 @@ class Game extends GameObject {
       const easing = 0.03;
       this.gameGroup.z -= (distanceZ - 0 + this.gameGroup.z) * easing;
       this.gameGroup.x -= (distanceX - 0 + this.gameGroup.x) * easing;
+
+
+      if (this.currentTarget && this.currentTarget.gems && this.currentTarget.gems.length) {
+        const collideGems = this.currentTarget.gems.filter(gem => gem.canBeCollected && gem._driftAngle !== undefined );
+        if (collideGems.length) {
+          let _ballPosition = new THREE.Vector3();
+          this.balls[this.mainBall].getWorldPosition(_ballPosition);
+          for (const gem of collideGems) {
+            let position = new THREE.Vector3();
+            gem.getWorldPosition(position);
+            const angleDist = distance(_ballPosition, position);
+            if (angleDist < 15) {
+              gem.pickup();
+              dispatch.currency.change(gem.getValue());
+            }
+          }
+        }
+      }
     }
   }
 

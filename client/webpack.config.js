@@ -105,7 +105,7 @@ module.exports = {
   // configures where the build ends up
   output: {
     filename: 'bundle.js',
-    publicPath: '/Expo-Pillar-Valley/assets/',
+    publicPath: '/assets/',
     path: path.resolve(appDirectory, './public/assets'),
   },
 

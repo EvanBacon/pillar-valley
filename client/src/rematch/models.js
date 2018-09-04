@@ -99,6 +99,29 @@ export const score = {
   },
 };
 
+export const currency = {
+  state: {
+    current: 0,
+  },
+  reducers: {
+    change: ({
+      current, ...props
+    }, value) => {
+      return {
+        current: current + value,
+        ...props
+      };
+    },
+    _reset: state => ({
+      ...state,
+      current: 0,
+    }),
+  },
+  effects: {
+  },
+};
+
+
 export const game = {
   state: GameStates.Menu,
   reducers: {

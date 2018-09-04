@@ -6,6 +6,7 @@ import { Power2 as Cubic, TweenMax } from 'gsap';
 import Colors from '../../../constants/Colors';
 import Circle from '../../Circle';
 import GameObject from '../core/GameObject';
+import Settings from '../../../constants/Settings';
 
 class PlayerBall extends GameObject {
   loadAsync = async (scene) => {
@@ -48,6 +49,8 @@ class PlayerBall extends GameObject {
   };
 
   landed = (perfection) => {
+    if (!Settings.circleEnabled) return;
+
     this.circle.visible = true;
 
     const duration = 0.7;
