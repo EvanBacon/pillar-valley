@@ -65,10 +65,8 @@ The lovely iOS version can be found here 👉 [App Store](https://itunes.apple.c
 
 The beautiful Android version can be found here 👉 [Play Store](https://play.google.com/store/apps/details?id=com.evanbacon.pillarvalley).
 
-### Stack
+### Stack 🥞
 
 - [Expo](http://expo.io)
 - [THREE.js](https://threejs.org/)
 - [GSAP](https://greensock.com/)
-
----
