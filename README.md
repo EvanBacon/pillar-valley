@@ -43,7 +43,7 @@ yarn && exp start
 
 ### Preview
 
-<div style="text-align:center">
+<div>
   
 <img src="https://github.com/EvanBacon/Expo-Pillar-Valley/blob/master/ios/fastlane/raw_screenshots/IMG_0494.PNG" width="281"  />
 
