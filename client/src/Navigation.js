@@ -1,4 +1,4 @@
-import { Constants } from './universal/Expo';
+import Constants from 'expo-constants';
 import { createStackNavigator } from 'react-navigation';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 

@@ -1,7 +1,7 @@
 import Assets from './Assets';
 import { store } from './rematch/Gate';
-import AssetUtils from './universal/AssetUtils';
-import { Audio } from './universal/Expo';
+import * as AssetUtils from 'expo-asset-utils';
+import { Audio } from 'expo-av';
 // eslint-disable-line
 class AudioManager {
   sounds = {};
@@ -24,7 +24,7 @@ class AudioManager {
       console.warn("Audio doesn't exist", name);
     }
   };
-  stopAsync = async (name) => {
+  stopAsync = async name => {
     if (name in this.sounds) {
       const soundObject = this.sounds[name];
       try {
@@ -49,7 +49,7 @@ class AudioManager {
     }
   };
 
-  pauseAsync = async (name) => {
+  pauseAsync = async name => {
     if (name in this.sounds) {
       const soundObject = this.sounds[name];
       try {
@@ -64,6 +64,7 @@ class AudioManager {
 
   configureExperienceAudioAsync = async () =>
     Audio.setAudioModeAsync({
+      playThroughEarpieceAndroid: false,
       allowsRecordingIOS: false,
       interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
       playsInSilentModeIOS: false,

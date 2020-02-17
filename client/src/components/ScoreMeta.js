@@ -19,10 +19,15 @@ class ScoreMeta extends React.Component {
           <Text style={[styles.text, styles.highScore]}>{best}</Text>
           <Text style={[styles.text, styles.score]}>{current}</Text>
         </View>
-        {currency && (
+        {!currency && (
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Text style={[styles.text, styles.currency]}>{currency}</Text>
-            <FontAwesome name="diamond" size={20} color="lime" style={{ marginHorizontal: 6, userSelect: 'none' }} />
+            <FontAwesome
+              name="diamond"
+              size={20}
+              color="lime"
+              style={{ marginHorizontal: 6, userSelect: 'none' }}
+            />
           </View>
         )}
       </View>
@@ -30,11 +35,13 @@ class ScoreMeta extends React.Component {
   }
 }
 
-export default connect(({ score: { current, best }, currency: { current: currency } }) => ({
-  current,
-  best,
-  currency,
-}))(ScoreMeta);
+export default connect(
+  ({ score: { current, best }, currency: { current: currency } }) => ({
+    current,
+    best,
+    currency,
+  }),
+)(ScoreMeta);
 
 const styles = StyleSheet.create({
   container: {

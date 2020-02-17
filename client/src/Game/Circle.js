@@ -1,4 +1,4 @@
-import THREE from '../universal/THREE';
+import * as THREE from 'three';
 
 // @flow
 
@@ -30,7 +30,7 @@ class CircleMesh extends THREE.Mesh {
     this._alpha = value;
     const transparent = value !== 1;
     if (this.materials) {
-      this.materials.map((material) => {
+      this.materials.map(material => {
         material.transparent = transparent;
         material.opacity = value;
       });

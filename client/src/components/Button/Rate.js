@@ -1,7 +1,8 @@
 import React from 'react';
 import { Alert, Linking } from 'react-native';
 
-import { Constants, StoreReview } from '../../universal/Expo'; // eslint-disable-line
+import * as StoreReview from 'expo-store-review';
+import Constants from 'expo-constants'; 
 import Icon from './Icon';
 
 class Rate extends React.Component {
@@ -31,7 +32,7 @@ class Rate extends React.Component {
   render() {
     const { onPress, name, ...props } = this.props;
 
-    if (!StoreReview.hasAction()) {
+    if (!StoreReview.isSupported()) {
       return null;
     }
     return <Icon onPress={this.onPress} name="star" {...props} />;

@@ -1,6 +1,6 @@
 // @flow
-import THREE from '../universal/THREE';
-import AssetUtils from '../universal/AssetUtils';
+import * as THREE from 'three';
+import * as AssetUtils from 'expo-asset-utils';
 // 0.0.4-alpha.0
 class TextMesh extends THREE.Mesh {
   params = {};

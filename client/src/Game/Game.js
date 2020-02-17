@@ -4,9 +4,9 @@ import { Back, Expo as ExpoEase, TweenMax } from 'gsap';
 
 import Assets from '../Assets';
 import Settings from '../constants/Settings';
-import { DangerZone, Haptic } from '../universal/Expo';
-import ExpoTHREE from '../universal/ExpoThree';
-import THREE from '../universal/THREE';
+import * as Haptics from 'expo-haptics';
+import { TextureLoader } from 'expo-three';
+import * as THREE from 'three';
 import GameObject from './engine/core/GameObject';
 import Group from './engine/core/Group';
 import Lighting from './engine/entities/Lighting';
@@ -16,8 +16,8 @@ import flatMaterial from './engine/utils/flatMaterial';
 import randomRange from './engine/utils/randomRange';
 import GameStates from './GameStates';
 import TextMesh from './TextMesh';
+import { DeviceMotion } from 'expo-sensors';
 
-const { DeviceMotion } = DangerZone;
 function distance(p1, p2) {
   const a = p1.x - p2.x;
   const b = p1.z - p2.z;
@@ -53,12 +53,13 @@ class Game extends GameObject {
       return;
     }
 
-    if (DeviceMotion.setUpdateInterval) { DeviceMotion.setUpdateInterval(30); }
+    DeviceMotion.setUpdateInterval(30);
+    
     this._subscribe();
   };
 
   _subscribe = () => {
-    if (!DeviceMotion.addListener) {
+    if (Platform.OS === 'web') {
       const last = { x: 0, y: 0 };
       window.addEventListener('mousemove', ({ pageX: x, pageY: y }) => {
         const _index = -0.1;
@@ -72,12 +73,14 @@ class Game extends GameObject {
     } else {
       const _index = -4;
 
-      this._subscription = DeviceMotion.addListener(({ accelerationIncludingGravity = {} }) => {
-        this.offset = {
-          x: accelerationIncludingGravity.x * _index,
-          z: accelerationIncludingGravity.z * _index,
-        };
-      });
+      this._subscription = DeviceMotion.addListener(
+        ({ accelerationIncludingGravity = {} }) => {
+          this.offset = {
+            x: accelerationIncludingGravity.x * _index,
+            z: accelerationIncludingGravity.z * _index,
+          };
+        },
+      );
     }
   };
 
@@ -177,9 +180,8 @@ class Game extends GameObject {
       await this.loadGame();
     }
 
-    await super.loadAsync(this.scene);
+    // await super.loadAsync(this.scene);
   }
-
 
   get currentTarget() {
     return this.targets[0];
@@ -190,7 +192,7 @@ class Game extends GameObject {
 
     const topMaterial = async (res, color) => {
       const image = new THREE.MeshBasicMaterial({
-        map: await ExpoTHREE.loadAsync(res),
+        map: new TextureLoader().load(res),
       });
 
       const material = flatMaterial({ color });
@@ -327,7 +329,7 @@ class Game extends GameObject {
     });
   };
 
-  setGameState = (state) => {
+  setGameState = state => {
     this.state = state;
   };
 
@@ -343,7 +345,7 @@ class Game extends GameObject {
     }
   };
 
-  animateBackgroundColor = (input) => {
+  animateBackgroundColor = input => {
     TweenMax.to(this, 2, {
       hue: (input * randomRange(3, 20)) % 50,
       onUpdate: () => {
@@ -362,28 +364,27 @@ class Game extends GameObject {
   runHapticsWithValue = (perfection: number) => {
     if (Settings.isIos) {
       if (perfection < 0.3) {
-        Haptic.impact(Haptic.ImpactStyles.Light);
+        Haptics.impact(Haptics.ImpactFeedbackStyle.Light);
       } else if (perfection < 0.6) {
-        Haptic.impact(Haptic.ImpactStyles.Medium);
+        Haptics.impact(Haptics.ImpactFeedbackStyle.Medium);
       } else {
-        Haptic.impact(Haptic.ImpactStyles.Heavy);
+        Haptics.impact(Haptics.ImpactFeedbackStyle.Heavy);
       }
     }
-  }
+  };
 
-  valueForPerfection = (perfection) => {
+  valueForPerfection = perfection => {
     return Math.floor(perfection * 6);
-  }
+  };
 
-
-  testCollisionWithGem = (gem) => {
+  testCollisionWithGem = gem => {
     const distanceFromTarget = distance(
       this.balls[this.mainBall].position,
       gem.position,
     );
 
     return distanceFromTarget < 20;
-  }
+  };
 
   changeBall = async () => {
     this.taps += 1;
@@ -405,7 +406,7 @@ class Game extends GameObject {
       dispatch.score.increment();
       this.score += 1;
       this.runHapticsWithValue(perfection);
-      
+
       if (this.particles) {
         this.particles.impulse();
       }
@@ -416,13 +417,14 @@ class Game extends GameObject {
       this.generateDirection();
 
       const target = this.targets.shift();
-      if (this.currentTarget) this.currentTarget.updateDirection(this.direction);
+      if (this.currentTarget)
+        this.currentTarget.updateDirection(this.direction);
 
       target.animateOut();
       this.targets[0].becomeCurrent();
 
       if (this.score > 3) {
-        this.targets[0].showGems(this.valueForPerfection(perfection))
+        this.targets[0].showGems(this.valueForPerfection(perfection));
       }
       this.targets[1].becomeTarget();
 
@@ -452,7 +454,7 @@ class Game extends GameObject {
     return Math.max(3, Settings.visibleTargets - (this.score % 5));
   };
 
-  alphaForTarget = (i) => {
+  alphaForTarget = i => {
     const inverse = i - 1;
     const alpha = inverse / this.getVisibleTargetsCount();
     return 1 - alpha;
@@ -559,8 +561,7 @@ class Game extends GameObject {
         this.cachedRotationVelocity + this.score * 0.05,
         6,
       );
-      this.rotationAngle =
-        (this.rotationAngle + speed * this.direction) % 360;
+      this.rotationAngle = (this.rotationAngle + speed * this.direction) % 360;
 
       const radians = THREE.Math.degToRad(this.rotationAngle);
 
@@ -578,9 +579,14 @@ class Game extends GameObject {
       this.gameGroup.z -= (distanceZ - 0 + this.gameGroup.z) * easing;
       this.gameGroup.x -= (distanceX - 0 + this.gameGroup.x) * easing;
 
-
-      if (this.currentTarget && this.currentTarget.gems && this.currentTarget.gems.length) {
-        const collideGems = this.currentTarget.gems.filter(gem => gem.canBeCollected && gem._driftAngle !== undefined );
+      if (
+        this.currentTarget &&
+        this.currentTarget.gems &&
+        this.currentTarget.gems.length
+      ) {
+        const collideGems = this.currentTarget.gems.filter(
+          gem => gem.canBeCollected && gem._driftAngle !== undefined,
+        );
         if (collideGems.length) {
           let _ballPosition = new THREE.Vector3();
           this.balls[this.mainBall].getWorldPosition(_ballPosition);

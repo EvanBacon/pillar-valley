@@ -16,7 +16,15 @@ export default class Icon extends Component {
 
   render() {
     const {
-      onPress, size, color, name, soundOut, soundIn, source, style, iconStyle,
+      onPress,
+      size,
+      color,
+      name,
+      soundOut,
+      soundIn,
+      source,
+      style,
+      iconStyle,
     } = this.props;
     return (
       <TouchableBounce
@@ -25,7 +33,12 @@ export default class Icon extends Component {
         onPressOut={() => AudioManager.shared.playAsync(soundOut)}
         style={[styles.container, style]}
       >
-        <FontAwesome size={size} color={color} name={name} style={[styles.icon, iconStyle]} />
+        <FontAwesome
+          size={size}
+          color={color}
+          name={name}
+          style={[styles.icon, iconStyle]}
+        />
       </TouchableBounce>
     );
   }

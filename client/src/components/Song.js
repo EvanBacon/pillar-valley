@@ -12,7 +12,7 @@ class Song extends React.Component {
   };
 
   async componentDidMount() {
-    await AudioManager.shared.playAsync('song', true);
+    // await AudioManager.shared.playAsync('song', true);
 
     const { muted } = this.props;
 

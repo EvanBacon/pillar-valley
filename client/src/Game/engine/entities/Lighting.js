@@ -1,24 +1,24 @@
 // @flow
-import THREE from '../../../universal/THREE';
+import { HemisphereLight, DirectionalLight } from 'three';
 
 import GameObject from '../core/GameObject';
 
 class Lighting extends GameObject {
   get hemisphere() {
-    return new THREE.HemisphereLight(0xaaaaaa, 0x000000, 0.9);
+    return new HemisphereLight(0xaaaaaa, 0x000000, 0.9);
   }
 
   get shadow() {
-    const light = new THREE.DirectionalLight(0xffffff, 0.9);
+    const light = new DirectionalLight(0xffffff, 0.9);
     light.position.set(0, 350, 350);
     return light;
   }
 
-  loadAsync = async (scene) => {
+  async loadAsync(scene) {
     this.add(this.hemisphere);
     this.add(this.shadow);
-    await super.loadAsync(scene);
-  };
+    // return await super.loadAsync(scene);
+  }
 }
 
 export default Lighting;

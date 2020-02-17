@@ -7,7 +7,7 @@ import ProfileImage from '../components/ProfileImage';
 import ProfileMetaDataView from '../components/ProfileMetaDataView';
 import UpgradeAccountView from '../components/UpgradeAccountView';
 import Fire from '../ExpoParty/Fire';
-import { connectActionSheet } from '../universal/ActionSheet';
+import { connectActionSheet } from '@expo/react-native-action-sheet';
 
 class App extends React.Component {
   static navigationOptions = ({ navigation }) => {

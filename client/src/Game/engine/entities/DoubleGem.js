@@ -1,16 +1,18 @@
 // @flow
-import { Haptic } from 'expo';
+import * as Haptics from 'expo-haptics';
 
 import Colors from '../../../constants/Colors';
 import Settings from '../../../constants/Settings';
-import THREE from '../../../universal/THREE';
+import * as THREE from 'three';
 import Gem from './Gem';
 
 export default class DoubleGem extends Gem {
   pickup() {
     super.pickup();
-    if (Settings.isIos) {
-      Haptic.selection();
+    try {
+      Haptics.selection();
+    } catch (error) {
+      /* not supported */
     }
   }
   getValue() {

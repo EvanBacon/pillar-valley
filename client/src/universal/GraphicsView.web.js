@@ -2,7 +2,7 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 
-import { GLView } from './Expo';
+import { GLView } from 'expo-gl';
 
 const uuidv4 = require('uuid/v4');
 
@@ -77,9 +77,7 @@ export default class GraphicsView extends React.Component<Props> {
       return;
     }
 
-    const {
-      width, height, scale, x, y,
-    } = this.nativeRef;
+    const { width, height, scale, x, y } = this.nativeRef;
 
     console.log('resize', width, height, scale, x, y);
     if (this.props.onResize) {
@@ -101,7 +99,8 @@ export default class GraphicsView extends React.Component<Props> {
     const render = () => {
       if (this.gl) {
         const now = 0.001 * Date.now(); // global.nativePerformanceNow();
-        const delta = typeof lastFrameTime !== 'undefined' ? now - lastFrameTime : 0.16666;
+        const delta =
+          typeof lastFrameTime !== 'undefined' ? now - lastFrameTime : 0.16666;
         this.rafID = requestAnimationFrame(render);
 
         this.props.onRender(delta);

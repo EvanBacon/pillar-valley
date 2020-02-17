@@ -5,7 +5,9 @@ import { Alert, AsyncStorage, Dimensions } from 'react-native';
 import Settings from '../constants/Settings';
 import Fire from '../ExpoParty/Fire';
 import GameStates from '../Game/GameStates';
-import { Constants, Facebook, takeSnapshotAsync } from '../universal/Expo';
+import Constants from 'expo-constants'; 
+import * as Facebook from 'expo-facebook';
+import { takeSnapshotAsync } from 'expo';
 import getDeviceInfo from '../utils/getUserInfo';
 
 export const skins = {

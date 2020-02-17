@@ -4,7 +4,7 @@ import { StyleSheet, View } from 'react-native';
 
 import Settings from '../constants/Settings';
 import GameState from '../Game';
-import GraphicsView from '../universal/GraphicsView';
+import { GraphicsView } from 'expo-graphics';
 import Footer from './Footer';
 import ScoreMeta from './ScoreMeta';
 import TouchableView from './TouchableView';
@@ -19,7 +19,7 @@ class Game extends React.Component {
     this.machine = null;
   }
 
-  onContextCreate = async (props) => {
+  onContextCreate = async props => {
     await this.machine.onContextCreateAsync(props);
 
     this.props.onLoad();
@@ -41,7 +41,10 @@ class Game extends React.Component {
       return <View style={{ flex: 1, backgroundColor: 'red' }} />;
     }
     return (
-      <TouchableView style={styles.touchable} onTouchesBegan={this.machine.onTouchesBegan}>
+      <TouchableView
+        style={styles.touchable}
+        onTouchesBegan={this.machine.onTouchesBegan}
+      >
         <GraphicsView
           ref={ref => (global.gameRef = this.ref = ref)}
           key="game"
@@ -58,7 +61,10 @@ class Game extends React.Component {
       <View style={styles.container} pointerEvents="box-none">
         {this.gameScreen}
         <ScoreMeta />
-        <Footer onLeaderboardPress={this.onLeaderboardPress} onLicensesPress={this.onLicensesPress} />
+        <Footer
+          onLeaderboardPress={this.onLeaderboardPress}
+          onLicensesPress={this.onLicensesPress}
+        />
       </View>
     );
   }

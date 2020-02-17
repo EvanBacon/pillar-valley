@@ -1,7 +1,6 @@
 // @flow
 import { dispatch } from '@rematch/core';
-import { Constants } from '../universal/Expo';
-
+import Constants from 'expo-constants'; 
 import Settings from '../constants/Settings';
 import Secret from './Secret';
 
@@ -39,7 +38,7 @@ class Fire {
     new Promise((res, rej) => {
       this.db
         .runTransaction(transaction =>
-          transaction.get(this.doc).then((userDoc) => {
+          transaction.get(this.doc).then(userDoc => {
             if (!userDoc.exists) {
               throw 'Document does not exist!';
             }
@@ -50,7 +49,8 @@ class Fire {
             transaction.update(this.doc, { currency: newCurrency });
             this.user.currency = newCurrency;
             return newCurrency;
-          }))
+          }),
+        )
         .then(res)
         .catch(rej);
     });

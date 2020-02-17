@@ -24,7 +24,10 @@ class GameScreen extends React.Component {
     return (
       <Song>
         <Loading loading={this.state.loading}>
-          <Game navigation={this.props.navigation} onLoad={() => this.setState({ loading: false })} />
+          <Game
+            navigation={this.props.navigation}
+            onLoad={() => this.setState({ loading: false })}
+          />
         </Loading>
       </Song>
     );

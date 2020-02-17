@@ -1,8 +1,7 @@
-// @flow
-import THREE from '../../../universal/THREE';
+import { MeshPhongMaterial } from 'three';
 
 export default props =>
-  new THREE.MeshPhongMaterial({
+  new MeshPhongMaterial({
     flatShading: true,
     ...props,
   });

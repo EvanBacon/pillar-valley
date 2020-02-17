@@ -2,7 +2,7 @@
 import { TweenMax } from 'gsap';
 
 import Colors from '../../../constants/Colors';
-import THREE from '../../../universal/THREE';
+import * as THREE from 'three';
 import GameObject from '../core/GameObject';
 
 export default class Gem extends GameObject {
@@ -54,7 +54,7 @@ export default class Gem extends GameObject {
     return mesh;
   }
 
-  loadAsync = async (scene) => {
+  loadAsync = async scene => {
     this.add(this.gem);
     await super.loadAsync(scene);
   };
@@ -65,7 +65,7 @@ export default class Gem extends GameObject {
     return new THREE.Color(`hsl(${this.hue}, ${Math.floor(this.sat)}%, 66%)`);
   }
 
-  _animateColorTo = (s) => {
+  _animateColorTo = s => {
     TweenMax.to(this, 0.5, {
       sat: s,
       onUpdate: () => {

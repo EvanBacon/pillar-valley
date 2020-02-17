@@ -1,5 +1,5 @@
 // @flow
-import THREE from '../../../universal/THREE';
+import * as THREE from 'three';
 
 // import Factory from '../Factory';
 
@@ -39,7 +39,7 @@ class GameObject extends THREE.Object3D {
     this._alpha = value;
     const transparent = value !== 1;
     if (this.materials) {
-      this.materials.map((material) => {
+      this.materials.map(material => {
         material.transparent = transparent;
         material.opacity = value;
       });
@@ -50,10 +50,10 @@ class GameObject extends THREE.Object3D {
 
     this.setAll('alpha', value);
 
-    this.traverse((child) => {
+    this.traverse(child => {
       if (child instanceof THREE.Mesh) {
         if (child.materials) {
-          child.materials.map((material) => {
+          child.materials.map(material => {
             material.transparent = transparent;
             material.opacity = value;
           });
@@ -126,7 +126,7 @@ class GameObject extends THREE.Object3D {
     }
   };
 
-  destroyChild = (object) => {
+  destroyChild = object => {
     if (object instanceof GameObject) {
       const index = this.objects.indexOf(object);
       if (index > -1) {
@@ -138,10 +138,11 @@ class GameObject extends THREE.Object3D {
     }
   };
 
-  async add(object) {
-    if (arguments.length > 1) {
-      for (let i = 0; i < arguments.length; i++) {
-        await this.add(arguments[i]);
+  async add(...props) {
+    const object = props[0];
+    if (props.length > 1) {
+      for (let i = 0; i < props.length; i++) {
+        await this.add(props[i]);
       }
       return this;
     }
@@ -177,10 +178,11 @@ class GameObject extends THREE.Object3D {
     return this;
   }
 
-  remove = (object) => {
-    if (arguments.length > 1) {
-      for (let i = 0; i < arguments.length; i++) {
-        this.remove(arguments[i]);
+  remove = (...props) => {
+    const object = props[0];
+    if (props.length > 1) {
+      for (let i = 0; i < props.length; i++) {
+        this.remove(props[i]);
       }
       return this;
     }

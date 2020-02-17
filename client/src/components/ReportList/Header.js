@@ -2,19 +2,21 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableHighlight, View } from 'react-native';
 
-import { Constants } from '../../universal/Expo'; // eslint-disable-line
-
+import Constants from 'expo-constants'; 
 export default class Header extends React.Component {
   onPress = () => {
     const { item, index, onPress } = this.props;
     onPress(item, index);
   };
   render() {
-    const {
-      title, buttonTitle, index, onPress, style, ...props
-    } = this.props;
+    const { title, buttonTitle, index, onPress, style, ...props } = this.props;
     return (
-      <TouchableHighlight underlayColor="#eeeeee" {...props} onPress={this.onPress} style={[styles.touchable, style]}>
+      <TouchableHighlight
+        underlayColor="#eeeeee"
+        {...props}
+        onPress={this.onPress}
+        style={[styles.touchable, style]}
+      >
         <View style={styles.container}>
           <View>
             <Text style={styles.text}>{title}</Text>

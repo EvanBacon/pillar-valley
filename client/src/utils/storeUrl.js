@@ -1,5 +1,5 @@
 import { Platform } from 'react-native';
-import Constants from '../universal/Expo';
+import Constants from 'expo-constants'; 
 
 function storeUrl() {
   const { OS } = Platform;

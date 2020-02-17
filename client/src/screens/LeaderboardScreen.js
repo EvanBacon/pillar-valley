@@ -8,9 +8,8 @@ import List from '../components/List';
 import Item from '../components/List/Item';
 import Settings from '../constants/Settings';
 import Fire from '../ExpoParty/Fire';
-import { connectActionSheet } from '../universal/ActionSheet';
-import { Constants } from '../universal/Expo';
-
+import { connectActionSheet } from '@expo/react-native-action-sheet';
+import Constants from 'expo-constants'; 
 class LeaderboardScreen extends Component {
   state = {
     filter: 'Forever',
@@ -24,7 +23,7 @@ class LeaderboardScreen extends Component {
     if (Fire.shared.uid) {
       this.makeRemoteRequest();
     } else {
-      firebase.auth().onAuthStateChanged((user) => {
+      firebase.auth().onAuthStateChanged(user => {
         if (user) {
           this.makeRemoteRequest();
         }
@@ -59,7 +58,7 @@ class LeaderboardScreen extends Component {
     // });
   }
 
-  addChild = (items) => {
+  addChild = items => {
     const data = {
       ...this.state.data,
       ...items,
@@ -108,7 +107,7 @@ class LeaderboardScreen extends Component {
         icons: ['md-show-chart'],
         cancelButtonIndex,
       },
-      (buttonIndex) => {
+      buttonIndex => {
         if (buttonIndex !== cancelButtonIndex) {
           this.setState({ filter: options[buttonIndex] });
         }
@@ -117,7 +116,7 @@ class LeaderboardScreen extends Component {
     );
   };
 
-  _onPressItem = (item) => {
+  _onPressItem = item => {
     // console.log(item);
     this.props.navigation.navigate('Profile', {
       title: item.name,
@@ -163,7 +162,9 @@ const styles = StyleSheet.create({
 });
 
 const ConnectedProfile = connect(({ user, leaders }) => {
-  const _leadersSorted = Object.values(leaders).sort((a, b) => a.score < b.score);
+  const _leadersSorted = Object.values(leaders).sort(
+    (a, b) => a.score < b.score,
+  );
   return { user, leaders: _leadersSorted };
 })(LeaderboardScreen);
 

@@ -3,12 +3,13 @@ import React from 'react';
 import { Linking, TouchableOpacity, View } from 'react-native';
 
 import Settings from '../constants/Settings';
-import { ImagePicker, Permissions } from '../universal/Expo';
+import * as ImagePicker from 'expo-image-picker';
+import * as Permissions from 'expo-permissions';
 import Avatar from './Avatar';
 import EditPhotoButton from './Button/EditPhoto';
 
 export default class ProfileImage extends React.Component {
-  _getPermission = async (permission) => {
+  _getPermission = async permission => {
     const { status } = await Permissions.askAsync(permission);
     if (status !== 'granted') {
       Linking.openURL('app-settings:');
@@ -32,7 +33,7 @@ export default class ProfileImage extends React.Component {
     }
   };
 
-  _setNewPhoto = async (uri) => {
+  _setNewPhoto = async uri => {
     alert('TODO: Evan: Add photo upload', uri);
   };
 
@@ -87,7 +88,7 @@ export default class ProfileImage extends React.Component {
         options: sheetOptions.map(({ name }) => name),
         cancelButtonIndex,
       },
-      (buttonIndex) => {
+      buttonIndex => {
         if (buttonIndex !== cancelButtonIndex) {
           const { action } = sheetOptions[buttonIndex];
           console.log(buttonIndex, sheetOptions[buttonIndex]);
@@ -124,7 +125,11 @@ export default class ProfileImage extends React.Component {
             name={name}
             avatar={image}
           />
-          {isUser && Settings.canEditPhoto && <EditPhotoButton style={{ position: 'absolute', bottom: 0, right: 0 }} />}
+          {isUser && Settings.canEditPhoto && (
+            <EditPhotoButton
+              style={{ position: 'absolute', bottom: 0, right: 0 }}
+            />
+          )}
         </TouchableOpacity>
       </View>
     );

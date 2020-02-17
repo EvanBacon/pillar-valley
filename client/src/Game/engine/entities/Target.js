@@ -1,15 +1,19 @@
 // @flow
-import THREE from '../../../universal/THREE';
+import * as THREE from 'three';
 
 import CombustableObject from '../core/CombustableObject';
 import Factory from '../Factory';
 import randomRange from '../utils/randomRange';
 
 class Target extends CombustableObject {
-  loadAsync = async (scene) => {
-    global.TargetGeom = global.TargetGeom || new THREE.SphereBufferGeometry(20, 8, 8);
+  loadAsync = async scene => {
+    global.TargetGeom =
+      global.TargetGeom || new THREE.SphereBufferGeometry(20, 8, 8);
 
-    const mesh = new THREE.Mesh(global.TargetGeom.clone(), Factory.shared.materials.red);
+    const mesh = new THREE.Mesh(
+      global.TargetGeom.clone(),
+      Factory.shared.materials.red,
+    );
     this.add(mesh);
     this.z = -250;
 

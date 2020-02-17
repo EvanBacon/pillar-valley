@@ -1,8 +1,8 @@
 // @flow
 import Proton from 'three.proton.js';
 
-import ExpoTHREE from '../universal/ExpoThree';
-import THREE from '../universal/THREE';
+import { TextureLoader } from 'expo-three';
+import * as THREE from 'three';
 import GameObject from './engine/core/GameObject';
 
 class Snow extends GameObject {
@@ -50,9 +50,8 @@ class Snow extends GameObject {
   }
 
   createSprite = async (resource) => {
-    const map = await ExpoTHREE.loadAsync(resource);
     const material = new THREE.SpriteMaterial({
-      map,
+      map: new TextureLoader().load(resource),
       transparent: true,
       opacity: 0.5,
       color: 0xffffff,

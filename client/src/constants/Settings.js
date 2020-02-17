@@ -1,5 +1,5 @@
 // @flow
-import { Constants } from 'expo';
+import Constants from 'expo-constants'; 
 import { Dimensions, Platform } from 'react-native';
 import sizeInfo from '../utils/whatAmI';
 

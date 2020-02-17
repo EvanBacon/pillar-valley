@@ -1,3 +1,3 @@
-import { View } from 'expo-graphics';
+import { GraphicsView } from 'expo-graphics';
 
-export default View;
+export default GraphicsView;

@@ -2,7 +2,7 @@ import './utils/disableLogs';
 
 import { dispatch } from '@rematch/core';
 import React from 'react';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 
 import Assets from './Assets';
 import AudioManager from './AudioManager';
@@ -12,23 +12,22 @@ import Fire from './ExpoParty/Fire';
 import Navigation from './Navigation';
 import Gate from './rematch/Gate';
 
-import AssetUtils from './universal/AssetUtils'; // eslint-disable-line
-import { AppLoading } from './universal/Expo'; // eslint-disable-line
-import THREE from './universal/THREE';
+import AssetUtils from 'expo-asset-utils'; // eslint-disable-line
+import { AppLoading } from 'expo';
 
 console.ignoredYellowBox = Settings.ignoredYellowBox;
 
 export default class App extends React.Component {
   state = { loading: true };
 
-  get loadingScreen() {
+  getLoadingScreen = () => {
     if (Settings.debug) {
       return <View />;
     }
     return <AppLoading />;
-  }
+  };
 
-  get screen() {
+  getScreen = () => {
     return (
       <Gate>
         <AchievementToastProvider>
@@ -36,9 +35,9 @@ export default class App extends React.Component {
         </AchievementToastProvider>
       </Gate>
     );
-  }
+  };
 
-  get fonts() {
+  getFonts = () => {
     const items = {};
     const keys = Object.keys(Assets.fonts || {});
     for (const key of keys) {
@@ -47,15 +46,14 @@ export default class App extends React.Component {
       items[name] = item;
     }
     return [items];
-  }
+  };
 
-  get files() {
+  getFiles = () => {
     return AssetUtils.arrayFromObject(Assets.images);
-  }
+  };
 
   componentWillMount() {
     console.time('Startup');
-    THREE.suppressExpoWarnings();
     this._setupExperienceAsync();
   }
 
@@ -64,26 +62,27 @@ export default class App extends React.Component {
     dispatch.locale.getAsync();
   }
 
-  componentWillUnmount() {
-    THREE.suppressExpoWarnings(false);
-  }
-
   _setupExperienceAsync = async () => {
-    await Promise.all([this._preloadAsync()]);
-
-    await AudioManager.shared.setupAsync();
-    console.timeEnd('Startup');
-    this.setState({ loading: false });
+    try {
+      await Promise.all([this._preloadAsync()]);
+      await AudioManager.shared.setupAsync();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      console.timeEnd('Startup');
+      this.setState({ loading: false });
+    }
   };
 
   async _preloadAsync() {
     await AssetUtils.cacheAssetsAsync({
-      fonts: this.fonts,
-      files: this.files,
+      fonts: this.getFonts(),
+      files: this.getFiles(),
     });
   }
 
   render() {
-    return this.state.loading ? this.loadingScreen : this.screen;
+    console.log('loading', this.state.loading);
+    return this.state.loading ? this.getLoadingScreen() : this.getScreen();
   }
 }

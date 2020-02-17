@@ -5,7 +5,7 @@ import AchievementsItem from '../components/AchievementsItem';
 import List from '../components/List';
 import Achievements from '../constants/Achievements';
 import connectAchievementToast from '../ExpoParty/connectAchievementToast';
-import { connectActionSheet } from '../universal/ActionSheet';
+import { connectActionSheet } from '@expo/react-native-action-sheet';
 
 class App extends Component {
   static navigationOptions = {};
@@ -24,7 +24,7 @@ class App extends Component {
         options,
         cancelButtonIndex,
       },
-      (buttonIndex) => {
+      buttonIndex => {
         if (buttonIndex !== cancelButtonIndex) {
           this.setState({ filter: options[buttonIndex] });
         }
@@ -36,7 +36,7 @@ class App extends Component {
     // this._onPressItem(data[0]);
   }
 
-  _onPressItem = (item) => {
+  _onPressItem = item => {
     // console.log(item);
   };
 
@@ -47,7 +47,13 @@ class App extends Component {
       <View style={styles.container}>
         <List
           noMore
-          renderItem={({ item, index }) => <AchievementsItem onPress={this._onPressItem} {...item} index={index} />}
+          renderItem={({ item, index }) => (
+            <AchievementsItem
+              onPress={this._onPressItem}
+              {...item}
+              index={index}
+            />
+          )}
           title={`${Achievements.length} Achievements`}
           headerButtonTitle={this.state.filter}
           data={Achievements}

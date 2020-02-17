@@ -8,20 +8,35 @@ import Settings from '../constants/Settings';
 import GameStates from '../Game/GameStates';
 import * as Button from './Button';
 
-import { StoreReview } from '../universal/Expo';
+import * as StoreReview from 'expo-store-review';
 
-class Footer extends React.Component {
-  render() {
-    const {
-      style, game, screenshot, onLeaderboardPress, onLicensesPress, ...props
-    } = this.props;
+function Footer({
+  style,
+  game,
+  screenshot,
+  onLeaderboardPress,
+  onLicensesPress,
+  ...props
+}) {
+  
+  const [supportsStoreReview, setStoreReview] = React.useState(false);
+  React.useEffect(() => {
+    StoreReview.isAvailableAsync().then(isAvailable => {
+      setStoreReview(isAvailable)
+    });
+  }, []);
     const animation = game === GameStates.Menu ? 'zoomIn' : 'zoomOut';
     const delay = 100;
     const initialDelay = 100;
     const duration = 500;
     const easing = 'ease-out';
 
-    const views = [<Button.Sound />, <Button.Licenses onPress={onLicensesPress} />];
+   
+
+    const views = [
+      <Button.Sound />,
+      <Button.Licenses onPress={onLicensesPress} />,
+    ];
 
     if (Settings.isFirebaseEnabled) {
       views.unshift(<Button.Leaderboard onPress={onLeaderboardPress} />);
@@ -30,7 +45,7 @@ class Footer extends React.Component {
       views.push(<Button.Share />);
     }
 
-    if (StoreReview.hasAction()) {
+    if (supportsStoreReview) {
       views.push(<Button.Rate />);
     }
     return (
@@ -53,7 +68,7 @@ class Footer extends React.Component {
         })}
       </View>
     );
-  }
+  
 }
 
 const styles = StyleSheet.create({
@@ -73,4 +88,6 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(({ game, screenshot }) => ({ game, screenshot }))(Footer);
+export default connect(({ game, screenshot }) => ({ game, screenshot }))(
+  Footer,
+);

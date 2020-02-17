@@ -1,6 +1,6 @@
 // @flow
 import Settings from '../constants/Settings';
-import ExpoTHREE from '../universal/ExpoThree';
+import { Renderer } from 'expo-three';
 import Composer from './Composer';
 import Game from './Game';
 
@@ -10,7 +10,7 @@ class Machine {
   onContextCreateAsync = async ({
     gl, width, height, scale: pixelRatio,
   }) => {
-    this.renderer = new ExpoTHREE.Renderer({
+    this.renderer = new Renderer({
       gl,
       width,
       height,

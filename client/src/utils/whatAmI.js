@@ -2,7 +2,7 @@
 // import StatusBarHeight from '@expo/status-bar-height';
 import { DeviceInfo, Dimensions, NativeModules, Platform } from 'react-native';
 
-import { Constants } from '../universal/Expo';
+import Constants from 'expo-constants'; 
 
 const StatusBarHeight = 64;
 
@@ -28,7 +28,8 @@ const isIPhoneX = (() => {
 
   return (
     Platform.OS === 'ios' &&
-    ((D_HEIGHT === X_HEIGHT && D_WIDTH === X_WIDTH) || (D_HEIGHT === X_WIDTH && D_WIDTH === X_HEIGHT))
+    ((D_HEIGHT === X_HEIGHT && D_WIDTH === X_WIDTH) ||
+      (D_HEIGHT === X_WIDTH && D_WIDTH === X_HEIGHT))
   );
 })();
 
@@ -48,7 +49,7 @@ const isIPad = (() => {
   return true;
 })();
 
-const statusBarHeight = (isLandscape) => {
+const statusBarHeight = isLandscape => {
   if (_customStatusBarHeight !== null) {
     return _customStatusBarHeight;
   }

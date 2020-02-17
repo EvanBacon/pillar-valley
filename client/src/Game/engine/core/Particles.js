@@ -64,8 +64,8 @@
 // export default Particles;
 
 import Proton from 'three.proton.js';
-import ExpoTHREE from '../../../universal/ExpoThree';
-import THREE from '../../../universal/THREE';
+import { TextureLoader } from 'expo-three';
+import * as THREE from 'three';
 
 import GameObject from './GameObject';
 import Assets from '../../../Assets';
@@ -73,11 +73,14 @@ import Assets from '../../../Assets';
 class Snow extends GameObject {
   proton = new Proton();
   debug = false;
-  async loadAsync() {
+  async loadAsync(...props) {
     const { camera, scene, renderer } = this.game;
     const size = 150;
     const emitter = new Proton.Emitter();
-    emitter.rate = new Proton.Rate(new Proton.Span(10, 20), new Proton.Span(1, 2));
+    emitter.rate = new Proton.Rate(
+      new Proton.Span(10, 20),
+      new Proton.Span(1, 2),
+    );
 
     emitter.addInitialize(new Proton.Mass(1));
     emitter.addInitialize(new Proton.Radius(new Proton.Span(10, 0.01)));
@@ -99,7 +102,11 @@ class Snow extends GameObject {
     // emitter.addBehaviour(new Proton.Gravity(0.1));
     emitter.addBehaviour(new Proton.Scale(2, 0.001));
 
-    this.repulsionBehaviour = new Proton.Repulsion(new Proton.Vector3D(0, 0, 0), 0, 0);
+    this.repulsionBehaviour = new Proton.Repulsion(
+      new Proton.Vector3D(0, 0, 0),
+      0,
+      0,
+    );
     const zone = new Proton.BoxZone(400);
     this.crossZoneBehaviour = new Proton.CrossZone(zone, 'cross');
     emitter.addBehaviour(this.repulsionBehaviour, this.crossZoneBehaviour);
@@ -126,7 +133,7 @@ class Snow extends GameObject {
       Proton.Debug.drawZone(this.proton, scene, positionZone);
     }
 
-    return super.loadAsync(arguments);
+    return super.loadAsync(...props);
   }
 
   impulse = () => {
@@ -142,10 +149,9 @@ class Snow extends GameObject {
     // this.impulseBehaviour = behaviour;
   };
 
-  createSprite = async (resource) => {
-    const map = await ExpoTHREE.loadAsync(resource);
+  createSprite = async resource => {    
     const material = new THREE.SpriteMaterial({
-      map,
+      map: new TextureLoader().load(resource),
       transparent: true,
       opacity: 0.5,
       color: 0xffffff,
