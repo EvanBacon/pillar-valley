@@ -1,39 +1,24 @@
 import { AppLoading } from "expo";
 import AssetUtils from "expo-asset-utils";
+import * as Font from "expo-font";
 import React from "react";
-import { View } from "react-native";
+import { Platform, View } from "react-native";
 
 import Assets from "./Assets";
 import AudioManager from "./AudioManager";
 import Settings from "./constants/Settings";
 import AchievementToastProvider from "./ExpoParty/AchievementToastProvider";
 import Fire from "./ExpoParty/Fire";
-// import Navigation from "./screens/GameScreen";
 import Navigation from "./Navigation";
 import Gate from "./rematch/Gate";
 
+// import Navigation from "./screens/GameScreen";
 console.ignoredYellowBox = Settings.ignoredYellowBox;
 
 const LoadingScreen = Settings.debug ? View : AppLoading;
 
-const getFonts = () => {
-  const items = {};
-  const keys = Object.keys(Assets.fonts || {});
-  for (const key of keys) {
-    const item = Assets.fonts[key];
-    const name = key.substr(0, key.lastIndexOf("."));
-    items[name] = item;
-  }
-  return [items];
-};
-
-const getFiles = () => {
-  return AssetUtils.arrayFromObject(Assets.images);
-};
-
 const assets = AssetUtils.cacheAssetsAsync({
-  fonts: getFonts(),
-  files: getFiles(),
+  files: AssetUtils.arrayFromObject(Assets.images),
 });
 
 export default function App() {
@@ -44,8 +29,15 @@ export default function App() {
     (async () => {
       console.time("Startup");
       try {
-        await Promise.all(assets);
-        await AudioManager.shared.setupAsync();
+        if (Platform.OS !== "web") {
+          await Promise.all(assets);
+        }
+        await Promise.all([
+          Font.loadAsync({
+            "GothamNarrow-Book": require("./assets/fonts/GothamNarrow-Book.ttf"),
+          }),
+          AudioManager.shared.setupAsync(),
+        ]);
       } catch (error) {
         console.log(error);
       } finally {
