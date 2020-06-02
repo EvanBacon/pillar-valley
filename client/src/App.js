@@ -1,88 +1,67 @@
-import './utils/disableLogs';
+import { AppLoading } from "expo";
+import AssetUtils from "expo-asset-utils";
+import React from "react";
+import { View } from "react-native";
 
-import { dispatch } from '@rematch/core';
-import React from 'react';
-import { View, Text } from 'react-native';
-
-import Assets from './Assets';
-import AudioManager from './AudioManager';
-import Settings from './constants/Settings';
-import AchievementToastProvider from './ExpoParty/AchievementToastProvider';
-import Fire from './ExpoParty/Fire';
-import Navigation from './Navigation';
-import Gate from './rematch/Gate';
-
-import AssetUtils from 'expo-asset-utils'; // eslint-disable-line
-import { AppLoading } from 'expo';
+import Assets from "./Assets";
+import AudioManager from "./AudioManager";
+import Settings from "./constants/Settings";
+import AchievementToastProvider from "./ExpoParty/AchievementToastProvider";
+import Fire from "./ExpoParty/Fire";
+// import Navigation from "./screens/GameScreen";
+import Navigation from "./Navigation";
+import Gate from "./rematch/Gate";
 
 console.ignoredYellowBox = Settings.ignoredYellowBox;
 
-export default class App extends React.Component {
-  state = { loading: true };
+const LoadingScreen = Settings.debug ? View : AppLoading;
 
-  getLoadingScreen = () => {
-    if (Settings.debug) {
-      return <View />;
-    }
-    return <AppLoading />;
-  };
-
-  getScreen = () => {
-    return (
-      <Gate>
-        <AchievementToastProvider>
-          <Navigation />
-        </AchievementToastProvider>
-      </Gate>
-    );
-  };
-
-  getFonts = () => {
-    const items = {};
-    const keys = Object.keys(Assets.fonts || {});
-    for (const key of keys) {
-      const item = Assets.fonts[key];
-      const name = key.substr(0, key.lastIndexOf('.'));
-      items[name] = item;
-    }
-    return [items];
-  };
-
-  getFiles = () => {
-    return AssetUtils.arrayFromObject(Assets.images);
-  };
-
-  componentWillMount() {
-    console.time('Startup');
-    this._setupExperienceAsync();
+const getFonts = () => {
+  const items = {};
+  const keys = Object.keys(Assets.fonts || {});
+  for (const key of keys) {
+    const item = Assets.fonts[key];
+    const name = key.substr(0, key.lastIndexOf("."));
+    items[name] = item;
   }
+  return [items];
+};
 
-  componentDidMount() {
+const getFiles = () => {
+  return AssetUtils.arrayFromObject(Assets.images);
+};
+
+const assets = AssetUtils.cacheAssetsAsync({
+  fonts: getFonts(),
+  files: getFiles(),
+});
+
+export default function App() {
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
     Fire.shared.init();
-    dispatch.locale.getAsync();
-  }
+    (async () => {
+      console.time("Startup");
+      try {
+        await Promise.all(assets);
+        await AudioManager.shared.setupAsync();
+      } catch (error) {
+        console.log(error);
+      } finally {
+        console.timeEnd("Startup");
+        setLoading(false);
+      }
+    })();
+  }, []);
 
-  _setupExperienceAsync = async () => {
-    try {
-      await Promise.all([this._preloadAsync()]);
-      await AudioManager.shared.setupAsync();
-    } catch (error) {
-      console.log(error);
-    } finally {
-      console.timeEnd('Startup');
-      this.setState({ loading: false });
-    }
-  };
-
-  async _preloadAsync() {
-    await AssetUtils.cacheAssetsAsync({
-      fonts: this.getFonts(),
-      files: this.getFiles(),
-    });
-  }
-
-  render() {
-    console.log('loading', this.state.loading);
-    return this.state.loading ? this.getLoadingScreen() : this.getScreen();
-  }
+  return loading ? (
+    <LoadingScreen />
+  ) : (
+    <Gate>
+      <AchievementToastProvider>
+        <Navigation />
+      </AchievementToastProvider>
+    </Gate>
+  );
 }

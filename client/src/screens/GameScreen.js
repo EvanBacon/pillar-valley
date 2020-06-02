@@ -1,19 +1,12 @@
-import PropTypes from 'prop-types';
-import React from 'react';
+import React from "react";
 
-import Game from '../components/Game';
-import Loading from '../components/Loading';
-import Song from '../components/Song';
+import Game from "../components/Game";
+import Loading from "../components/Loading";
+import Song from "../components/Song";
 
 class GameScreen extends React.Component {
   static navigationOptions = {
     header: null,
-  };
-
-  static propTypes = {
-    navigation: PropTypes.shape({
-      navigate: PropTypes.func.isRequired,
-    }).isRequired,
   };
 
   state = {

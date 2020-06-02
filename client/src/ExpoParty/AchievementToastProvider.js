@@ -1,8 +1,8 @@
 // @flow
-import PropTypes from 'prop-types';
-import React from 'react';
+import PropTypes from "prop-types";
+import React from "react";
 
-import AchievementToast from '../components/AchievementToast';
+import AchievementToast from "../components/AchievementToast";
 
 export default class AchievementToastProvider extends React.Component {
   static propTypes = {
@@ -15,14 +15,15 @@ export default class AchievementToastProvider extends React.Component {
 
   getChildContext() {
     return {
-      showAchievementToastWithOptions: (...args) => this.ref.showAchievementToastWithOptions(...args),
+      showAchievementToastWithOptions: (...args) =>
+        this.ref.showAchievementToastWithOptions(...args),
     };
   }
 
   render() {
     return (
-      <AchievementToast ref={component => (this.ref = component)}>
-        {React.Children.only(this.props.children)}
+      <AchievementToast ref={(component) => (this.ref = component)}>
+        {this.props.children}
       </AchievementToast>
     );
   }
