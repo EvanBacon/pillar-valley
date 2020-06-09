@@ -18,11 +18,23 @@ const initialDelay = 100;
 const duration = 500;
 const easing = "ease-out";
 
-function Footer({ game, screenshot, onLeaderboardPress, onLicensesPress }) {
+function Footer({ game, screenshot, navigation }) {
   const { bottom } = useSafeArea();
   const supportsStoreReview = useStoreReview();
   const animation = game === GameStates.Menu ? "zoomIn" : "zoomOut";
   const views = [<SoundButton />, <LicensesButton onPress={onLicensesPress} />];
+
+  const onLicensesPress = () => {
+    navigation.navigate("Licenses");
+  };
+
+  const onLeaderboardPress = () => {
+    if (Settings.isFirebaseEnabled) {
+      navigation.navigate("Social");
+    } else {
+      alert("Expo Online is disabled");
+    }
+  };
 
   if (Settings.isFirebaseEnabled) {
     views.unshift(<LeaderboardButton onPress={onLeaderboardPress} />);
