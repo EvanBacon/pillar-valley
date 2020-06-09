@@ -6,9 +6,7 @@ export default function Header({
   title,
   buttonTitle,
   index,
-  index,
   onPress,
-  style,
   ...props
 }) {
   return (
@@ -16,7 +14,6 @@ export default function Header({
       underlayColor="#eeeeee"
       {...props}
       onPress={() => onPress(item, index)}
-      style={[styles.touchable, style]}
     >
       <View style={styles.container}>
         <View>
@@ -29,7 +26,6 @@ export default function Header({
 }
 
 const styles = StyleSheet.create({
-  touchable: {},
   container: {
     paddingVertical: 6,
     marginTop: 8,
