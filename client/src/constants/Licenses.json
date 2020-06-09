@@ -5,12 +5,6 @@
         "licenseUrl": "https://github.com/expo/react-native-action-sheet/raw/master/LICENSE",
         "parents": "pillar-valley"
     },
-    "@expo/status-bar-height@0.0.1": {
-        "licenses": "MIT",
-        "repository": "https://github.com/expo/status-bar-height",
-        "licenseUrl": "https://github.com/expo/status-bar-height",
-        "parents": "pillar-valley"
-    },
     "@expo/vector-icons@10.0.6": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/vector-icons",
@@ -62,12 +56,6 @@
     "@rematch/persist@0.2.1": {
         "licenses": "ISC",
         "licenseUrl": "https://github.com/rematch/rematch/tree/master/plugins/persist#readme",
-        "parents": "pillar-valley"
-    },
-    "expo-asset-utils@1.2.0": {
-        "licenses": "MIT",
-        "repository": "https://github.com/expo/expo-asset-utils",
-        "licenseUrl": "https://github.com/expo/expo-asset-utils/raw/master/LICENSE",
         "parents": "pillar-valley"
     },
     "expo-av@8.1.0": {
@@ -146,12 +134,6 @@
         "licenses": "Standard 'no charge' license: https://greensock.com/standard-license. Club GreenSock members get more: https://greensock.com/licensing/. Why GreenSock doesn't employ an MIT license: https://greensock.com/why-license/",
         "repository": "https://github.com/greensock/GreenSock-JS",
         "licenseUrl": "https://github.com/greensock/GreenSock-JS",
-        "parents": "pillar-valley"
-    },
-    "query-string@5.1.1": {
-        "licenses": "MIT",
-        "repository": "https://github.com/sindresorhus/query-string",
-        "licenseUrl": "https://github.com/sindresorhus/query-string/raw/master/license",
         "parents": "pillar-valley"
     },
     "react-dom@16.12.0": {
