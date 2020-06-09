@@ -84,7 +84,7 @@ class AudioManager {
       const item = this.assets[key];
       const { sound } = await Audio.Sound.createAsync(item);
       const soundName = key.substr(0, key.lastIndexOf("."));
-      console.log("Audio", soundName, sound);
+      // console.log("Audio", soundName, sound);
       this.sounds[soundName] = sound;
     }
   };

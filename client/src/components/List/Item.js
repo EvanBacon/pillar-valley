@@ -1,10 +1,10 @@
-import { Ionicons } from '@expo/vector-icons';
-import React from 'react';
-import { StyleSheet, Text, TouchableHighlight, View } from 'react-native';
+import Ionicons from "@expo/vector-icons/Ionicons";
+import React from "react";
+import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
 
-import addNth from '../../utils/addNth';
-import Avatar from '../Avatar';
-import TimeAgo from '../TimeAgo';
+import addNth from "../../utils/addNth";
+import Avatar from "../Avatar";
+import TimeAgo from "../TimeAgo";
 
 export default class Item extends React.Component {
   onPress = () => {
@@ -12,9 +12,7 @@ export default class Item extends React.Component {
     onPress(item, index);
   };
   render() {
-    const {
-      index, onPress, style, ...props
-    } = this.props;
+    const { index, onPress, style, ...props } = this.props;
     const item = this.props.item || {};
 
     const {
@@ -28,12 +26,17 @@ export default class Item extends React.Component {
     const _rankValue = index + 1;
     const rank = _rankValue + addNth(_rankValue);
     return (
-      <TouchableHighlight underlayColor="#eeeeee" {...props} onPress={this.onPress} style={[styles.touchable, style]}>
+      <TouchableHighlight
+        underlayColor="#eeeeee"
+        {...props}
+        onPress={this.onPress}
+        style={[styles.touchable, style]}
+      >
         <View style={styles.container}>
-          <View style={{ flexDirection: 'row' }}>
+          <View style={{ flexDirection: "row" }}>
             <Text style={styles.rank}>{rank}</Text>
             <Avatar
-              textStyle={{ fontWeight: 'bold' }}
+              textStyle={{ fontWeight: "bold" }}
               avatarStyle={{ marginRight: 16 }}
               name={displayName}
               avatar={photoURL}
@@ -56,17 +59,17 @@ const styles = StyleSheet.create({
   container: {
     paddingVertical: 16,
     paddingHorizontal: 16,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   rank: {
-    alignSelf: 'center',
+    alignSelf: "center",
     fontSize: 24,
     minWidth: 24,
     marginRight: 8,
   },
-  text: { fontWeight: 'bold' },
+  text: { fontWeight: "bold" },
   subtitle: {
     opacity: 0.7,
   },

@@ -1,5 +1,5 @@
 import { dispatch } from "@rematch/core";
-import firebase from "firebase";
+import firebase from "firebase/app";
 import React, { Component } from "react";
 import { RefreshControl, StyleSheet, View } from "react-native";
 import { connect } from "react-redux";

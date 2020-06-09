@@ -4,7 +4,7 @@ import * as Haptics from "expo-haptics";
 import { DeviceMotion } from "expo-sensors";
 import { loadTextureAsync } from "expo-three";
 import { Back, Expo as ExpoEase, TweenMax } from "gsap";
-import { Platform as RNPlatform } from "react-native";
+import { Dimensions, Platform as RNPlatform } from "react-native";
 import * as THREE from "three";
 
 import Settings from "../constants/Settings";
@@ -62,7 +62,7 @@ class Game extends GameObject {
       window.addEventListener("mousemove", ({ pageX: x, pageY: y }) => {
         const _index = -0.1;
 
-        const { width, height } = this.renderer.getSize();
+        const { width, height } = Dimensions.get("window");
         this.offset = {
           x: (width / 2 - x) * _index,
           z: (height / 2 - y) * _index,

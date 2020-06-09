@@ -15,7 +15,7 @@ const Settings = {
   isSimulator: !Constants.isDevice,
   isFirebaseEnabled: false, // !debug || false,
   isAutoStartEnabled: false, //! debug && true,
-  isScreenshotEnabled: !debug || false,
+  isScreenshotEnabled: false, //!debug || false,
   isMotionMenuEnabled: !debug || true,
   isComposerEnabled: false, //! debug || false,
   debug,

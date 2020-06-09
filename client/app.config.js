@@ -32,4 +32,7 @@ export default {
     package: "com.evanbacon.pillarvalley",
     versionCode: 2,
   },
+  web: {
+    favicon: "./src/assets/icons/expo.png",
+  },
 };

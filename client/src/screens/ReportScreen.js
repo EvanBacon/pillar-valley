@@ -1,4 +1,4 @@
-import { MaterialIcons } from "@expo/vector-icons";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
@@ -7,7 +7,7 @@ import Offenses from "../constants/Offenses";
 import Fire from "../ExpoParty/Fire";
 
 export default function ReportScreen({ navigation, route }) {
-  const { name, uid } = route;
+  const { username, uid } = route;
 
   const onPressItem = ({ name }) => {
     Fire.shared.submitComplaint(uid, name);
@@ -19,12 +19,12 @@ export default function ReportScreen({ navigation, route }) {
     <View style={styles.container}>
       <View style={styles.row}>
         <MaterialIcons size={36} color="#34495e" name="security" />
-        <Text style={styles.header}>Report {name}</Text>
+        <Text style={styles.header}>Report {username}</Text>
       </View>
       <ReportList
         data={Offenses}
         onPress={onPressItem}
-        title={`What did ${name} do to you?`}
+        title={`What did ${username} do to you?`}
       />
     </View>
   );

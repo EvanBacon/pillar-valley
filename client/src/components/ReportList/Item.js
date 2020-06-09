@@ -1,40 +1,31 @@
-// @flow
-import { Ionicons } from '@expo/vector-icons';
-import React from 'react';
-import { StyleSheet, Text, TouchableHighlight, View } from 'react-native';
+import Ionicons from "@expo/vector-icons/Ionicons";
+import * as React from "react";
+import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
 
-export default class Item extends React.Component {
-  onPress = () => {
-    const { item, index, onPress } = this.props;
-    onPress(item, index);
-  };
-  render() {
-    const {
-      item: { name },
-      index,
-      onPress,
-      style,
-      ...props
-    } = this.props;
-    return (
-      <TouchableHighlight underlayColor="#eeeeee" {...props} onPress={this.onPress} style={[styles.touchable, style]}>
-        <View style={styles.container}>
-          <Text style={styles.text}>{name}</Text>
-          <Ionicons size={24} color="#CCCCCC" name="ios-arrow-forward" />
-        </View>
-      </TouchableHighlight>
-    );
-  }
+export default function Item({ item, index, onPress, ...props }) {
+  return (
+    <TouchableHighlight
+      {...props}
+      underlayColor="#eeeeee"
+      onPress={() => {
+        onPress(item, index);
+      }}
+    >
+      <View style={styles.container}>
+        <Text style={styles.text}>{item.name}</Text>
+        <Ionicons size={24} color="#CCCCCC" name="ios-arrow-forward" />
+      </View>
+    </TouchableHighlight>
+  );
 }
 
 const styles = StyleSheet.create({
-  touchable: {},
   container: {
     paddingVertical: 16,
     paddingHorizontal: 16,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
-  text: { fontWeight: 'bold' },
+  text: { fontWeight: "bold" },
 });

@@ -54,8 +54,8 @@ const licenses = Object.keys(Data).map((key) => {
   let image;
   if (username) {
     username = capitalizeFirstLetter(username);
-    image = `http://github.com/${username}.png`;
-    userUrl = `http://github.com/${username}`;
+    image = `https://github.com/${username}.png`;
+    userUrl = `https://github.com/${username}`;
   }
 
   return {

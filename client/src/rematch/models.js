@@ -1,5 +1,5 @@
 import { dispatch } from "@rematch/core";
-import firebase from "firebase";
+import firebase from "firebase/app";
 import { Alert, AsyncStorage, Dimensions } from "react-native";
 
 import Settings from "../constants/Settings";

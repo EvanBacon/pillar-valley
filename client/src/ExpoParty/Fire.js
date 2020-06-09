@@ -1,12 +1,12 @@
 // @flow
-import { dispatch } from '@rematch/core';
-import Constants from 'expo-constants'; 
-import Settings from '../constants/Settings';
-import Secret from './Secret';
+import { dispatch } from "@rematch/core";
+import Constants from "expo-constants";
+import Settings from "../constants/Settings";
+import Secret from "./Secret";
 
-const firebase = require('firebase');
+import firebase from "firebase/app";
 // Required for side-effects
-require('firebase/firestore');
+import "firebase/firestore";
 
 const collectionName = Settings.slug;
 
@@ -34,13 +34,13 @@ class Fire {
   /*
     negative values are also accepted... Use this for spending and for updating after a game.
   */
-  addCurrency = amount =>
+  addCurrency = (amount) =>
     new Promise((res, rej) => {
       this.db
-        .runTransaction(transaction =>
-          transaction.get(this.doc).then(userDoc => {
+        .runTransaction((transaction) =>
+          transaction.get(this.doc).then((userDoc) => {
             if (!userDoc.exists) {
-              throw 'Document does not exist!';
+              throw "Document does not exist!";
             }
 
             const data = userDoc.data();
@@ -49,7 +49,7 @@ class Fire {
             transaction.update(this.doc, { currency: newCurrency });
             this.user.currency = newCurrency;
             return newCurrency;
-          }),
+          })
         )
         .then(res)
         .catch(rej);
@@ -60,7 +60,7 @@ class Fire {
   };
 
   submitComplaint = (targetUid, complaint) => {
-    this.db.collection('complaints').add({
+    this.db.collection("complaints").add({
       slug: Constants.manifest.slug,
       uid: this.uid,
       targetUid,
