@@ -343,11 +343,11 @@ class Game extends GameObject {
   runHapticsWithValue = (perfection: number) => {
     if (RNPlatform.OS === "ios") {
       if (perfection < 0.3) {
-        Haptics.impact(Haptics.ImpactFeedbackStyle.Light);
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       } else if (perfection < 0.6) {
-        Haptics.impact(Haptics.ImpactFeedbackStyle.Medium);
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
       } else {
-        Haptics.impact(Haptics.ImpactFeedbackStyle.Heavy);
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
       }
     }
   };

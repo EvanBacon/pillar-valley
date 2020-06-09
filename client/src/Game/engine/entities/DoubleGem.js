@@ -10,7 +10,7 @@ export default class DoubleGem extends Gem {
     super.pickup();
     if (Platform.OS !== "ios") return;
     try {
-      Haptics.selection();
+      Haptics.selectionAsync();
     } catch (error) {
       /* not supported */
     }

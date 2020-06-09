@@ -6,6 +6,7 @@ export default {
   version: "4.0.0",
   orientation: "portrait",
   primaryColor: "#E07C4C",
+  scheme: "plrvly",
   icon: "./src/assets/icons/expo.png",
   facebookScheme: "fb270942376819196",
   facebookAppId: "270942376819196",
@@ -13,7 +14,7 @@ export default {
   githubUrl: "https://github.com/evanbacon/expo-pillar-valley",
   splash: {
     image: "./src/assets/icons/splash.png",
-    backgroundColor: "#E07C4C",
+    backgroundColor: "#F09458",
     resizeMode: "cover",
   },
   assetBundlePatterns: ["src/assets/**/*"],

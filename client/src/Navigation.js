@@ -5,7 +5,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Constants from "expo-constants";
 import * as Linking from "expo-linking";
 import * as React from "react";
-
+import { Platform } from "react-native";
 import Licenses from "./components/Licenses";
 import Fire from "./ExpoParty/Fire";
 import GameScreen from "./screens/GameScreen";
@@ -25,6 +25,7 @@ const tabBarIcon = (name) => ({ tintColor }) => (
 );
 
 const AppStack = createStackNavigator();
+
 const linking = {
   prefixes: [Linking.makeUrl()],
   config: {
@@ -43,6 +44,7 @@ const linking = {
 export default () => (
   <NavigationContainer linking={linking}>
     <AppStack.Navigator
+      headerMode="screen"
       screenOptions={{
         headerTintColor: "white",
         headerStyle: {
@@ -62,10 +64,15 @@ export default () => (
         component={GameScreen}
         options={{ header: () => null }}
       />
-      <AppStack.Screen name="Licenses" component={Licenses} />
+      <AppStack.Screen
+        name="Licenses"
+        component={Licenses}
+        options={{ stackPresentation: "modal" }}
+      />
       <AppStack.Screen
         name="Social"
         component={TabNavigation}
+        options={{ stackPresentation: "modal" }}
         options={{
           title: `Expo ${Constants.manifest.name}`,
         }}

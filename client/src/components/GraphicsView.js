@@ -101,11 +101,13 @@ export default class GraphicsView extends React.Component {
       "expo-graphics: GraphicsView.onContextCreate(): `onContextCreate` must be defined."
     );
 
+    const scale = PixelRatio.get();
     await onContextCreate({
       gl,
-      width: gl.drawingBufferWidth,
-      height: gl.drawingBufferHeight,
-      scale: PixelRatio.get(),
+      width: gl.drawingBufferWidth / scale,
+      height: gl.drawingBufferHeight / scale,
+      scale,
+      pixelRatio: scale,
       // ...props,
     });
     let lastFrameTime;

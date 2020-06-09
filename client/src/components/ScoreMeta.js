@@ -1,6 +1,6 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Platform, Text, View } from "react-native";
 import { useSafeArea } from "react-native-safe-area-context";
 import { connect } from "react-redux";
 
@@ -19,7 +19,10 @@ function ScoreMeta({ current, best, currency }) {
             name="diamond"
             size={20}
             color="lime"
-            style={{ marginHorizontal: 6, userSelect: "none" }}
+            style={{
+              marginHorizontal: 6,
+              ...Platform.select({ web: { userSelect: "none" }, default: {} }),
+            }}
           />
         </View>
       )}
@@ -51,7 +54,7 @@ const styles = StyleSheet.create({
     opacity: 0.8,
     fontSize: 48,
     backgroundColor: "transparent",
-    userSelect: "none",
+    ...Platform.select({ web: { userSelect: "none" }, default: {} }),
   },
   score: {
     color: "white",

@@ -14,7 +14,7 @@ function GameScreen({ navigation }) {
       <Game navigation={navigation} onLoad={() => setLoading(false)} />
       {loading && (
         <Image
-          style={styles.image}
+          style={StyleSheet.absoluteFill}
           source={require("../assets/icons/splash.png")}
         />
       )}
