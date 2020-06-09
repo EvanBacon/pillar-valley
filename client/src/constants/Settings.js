@@ -1,19 +1,19 @@
 // @flow
-import Constants from 'expo-constants'; 
-import { Dimensions, Platform } from 'react-native';
-import sizeInfo from '../utils/whatAmI';
+import Constants from "expo-constants";
+import { Dimensions, Platform } from "react-native";
+import sizeInfo from "../utils/whatAmI";
 
 const debug = __DEV__;
 const Settings = {
   facebookLoginProps: {
     permissions: [
-      'public_profile',
-      'email',
+      "public_profile",
+      "email",
       // 'user_friends'
     ],
   },
   circleEnabled: false,
-  isIos: Platform.OS === 'ios',
+  isIos: Platform.OS === "ios",
   osVersion: sizeInfo.osVersion,
   loginBehavior: sizeInfo.loginBehavior,
   isRunningInExpo: sizeInfo.isRunningInExpo,
@@ -23,7 +23,7 @@ const Settings = {
   bottomInset: sizeInfo.bottomInset,
   topInset: sizeInfo.topInset,
   isSimulator: !Constants.isDevice,
-  isFirebaseEnabled: !debug || false,
+  isFirebaseEnabled: false, // !debug || false,
   isAutoStartEnabled: false, //! debug && true,
   isScreenshotEnabled: !debug || false,
   isMotionMenuEnabled: !debug || true,
@@ -34,10 +34,10 @@ const Settings = {
   epsilon: 15,
   angleRange: [25, 155],
   visibleTargets: 5,
-  ignoredYellowBox: ['Module ABI', "Audio doesn't exist"],
-  slug: debug ? 'crossy-road' : 'users',
+  ignoredYellowBox: ["Module ABI", "Audio doesn't exist"],
+  slug: debug ? "crossy-road" : "users",
   isEveryScoreBest: debug && false,
-  isCacheProfileUpdateActive: !debug || false,
+  isCacheProfileUpdateActive: true, //!debug || false,
   shouldDelayFirebaseProfileSyncInMinutes: 60,
 
   canEditPhoto: false,

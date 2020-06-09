@@ -1,8 +1,7 @@
-// @flow
-import React from 'react';
-import { StyleSheet, Text, TouchableHighlight, View } from 'react-native';
+import Constants from "expo-constants";
+import React from "react";
+import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
 
-import Constants from 'expo-constants'; 
 export default class Header extends React.Component {
   onPress = () => {
     const { item, index, onPress } = this.props;
@@ -34,13 +33,13 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     marginTop: 8,
     paddingHorizontal: 16,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    borderBottomColor: 'rgba(0,0,0,0.3)',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    borderBottomColor: "rgba(0,0,0,0.3)",
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
-  text: { fontWeight: 'bold', opacity: 0.7 },
+  text: { fontWeight: "bold", opacity: 0.7 },
   link: {
     color: Constants.manifest.primaryColor,
   },

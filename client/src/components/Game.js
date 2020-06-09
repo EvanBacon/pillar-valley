@@ -1,4 +1,3 @@
-// @flow
 import React from "react";
 import { StyleSheet, View } from "react-native";
 
@@ -30,7 +29,7 @@ class Game extends React.Component {
   };
   onLeaderboardPress = () => {
     if (Settings.isFirebaseEnabled) {
-      this.props.navigation.navigate("Leaderboard");
+      this.props.navigation.navigate("Social");
     } else {
       alert("Expo Online is disabled");
     }

@@ -1,14 +1,8 @@
-import React from 'react';
+import * as React from "react";
 
-import Icon from './Icon';
+import Icon from "./Icon";
 
-class Leaderboard extends React.Component {
-  static defaultProps = {
-    onPress: () => {},
-  };
-  render() {
-    return <Icon {...this.props} name="trophy" />;
-  }
-}
-
-export default Leaderboard;
+const LeaderboardButton = React.forwardRef((props, ref) => {
+  return <Icon {...props} ref={ref} name="trophy" />;
+});
+export default LeaderboardButton;

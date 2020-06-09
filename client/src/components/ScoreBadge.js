@@ -1,12 +1,8 @@
 // @flow
-import React, { PureComponent } from 'react';
-import { Image, Text, View } from 'react-native';
-
-import Assets from '../Assets';
+import React, { PureComponent } from "react";
+import { Image, Text, View } from "react-native";
 
 export default class ScoreBadge extends PureComponent {
-
-
   static defaultProps = {
     style: {},
     children: null,
@@ -19,10 +15,10 @@ export default class ScoreBadge extends PureComponent {
         style={[
           {
             borderRadius: 20,
-            backgroundColor: '#4630eb',
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
+            backgroundColor: "#4630eb",
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
             paddingHorizontal: 8,
             paddingVertical: 6,
           },
@@ -30,20 +26,18 @@ export default class ScoreBadge extends PureComponent {
         ]}
       >
         <Image
-          source={Assets.images['expoBadge.png']}
+          source={require("../assets/images/expoBadge.png")}
           style={{
             marginRight: 12,
-            resizeMode: 'contain',
+            resizeMode: "contain",
             tintColor: color,
             width: 20,
             height: 20,
-
-            aspectRatio: 1,
           }}
         />
         <Text
           style={{
-            fontWeight: 'bold',
+            fontWeight: "bold",
             fontSize: 16,
             marginRight: 6,
             color,

@@ -1,39 +1,20 @@
-import React from 'react';
-import { View } from 'react-native';
-import { connect } from 'react-redux';
+import * as React from "react";
+import { View } from "react-native";
+import { connect } from "react-redux";
 
-import AudioManager from '../AudioManager';
+import AudioManager from "../AudioManager";
 
-class Song extends React.Component {
- 
-
-  async componentDidMount() {
-    // await AudioManager.shared.playAsync('song', true);
-
-    const { muted } = this.props;
-
+function Song({ muted }) {
+  React.useEffect(() => {
     if (muted) {
-      AudioManager.shared.pauseAsync('song');
+      AudioManager.shared.pauseAsync("song");
+    } else {
+      AudioManager.shared.playAsync("song", true, false);
     }
-  }
+    return () => AudioManager.shared.stopAsync("song");
+  }, [muted]);
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.muted !== this.props.muted) {
-      if (nextProps.muted) {
-        AudioManager.shared.pauseAsync('song');
-      } else {
-        AudioManager.shared.playAsync('song', true, false);
-      }
-    }
-  }
-
-  componentWillUnmount() {
-    AudioManager.shared.stopAsync('song');
-  }
-
-  render() {
-    return this.props.children;
-  }
+  return null;
 }
 
 export default connect(({ muted }) => ({ muted }))(Song);

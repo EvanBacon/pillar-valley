@@ -165,6 +165,7 @@ async function incrementDailyReward() {
     Fire.shared.db
       .runTransaction((transaction) =>
         transaction.get(Fire.shared.doc).then((userDoc) => {
+          console.log("Fire.shared.doc", Fire.shared.doc);
           if (!userDoc.exists) {
             throw new Error("Document does not exist!");
           }
@@ -284,6 +285,54 @@ export const leaders = {
   },
   effects: {
     getPagedAsync: async ({ start, size, callback }) => {
+      // This is just a place holder to prevent constant updates in development
+      if (__DEV__) {
+        dispatch.leaders.batchUpdate([
+          {
+            uid: "0oK50HoGt6PqXG1ApBTroS3IxR23",
+            user: {
+              key: "0oK50HoGt6PqXG1ApBTroS3IxR23",
+              uid: "0oK50HoGt6PqXG1ApBTroS3IxR23",
+              displayName: "Evan Bacon",
+              dailyVisits: 1,
+              lastRewardTimestamp: 1531172844644,
+              photoURL: "https://graph.facebook.com/10209775308018161/picture",
+              rank: 999999,
+              score: 33,
+              timestamp: 1531019432478,
+            },
+          },
+          {
+            uid: "R2XBuw9im3QBtpU6YYck2tdhpEI3",
+            user: {
+              key: "R2XBuw9im3QBtpU6YYck2tdhpEI3",
+              uid: "R2XBuw9im3QBtpU6YYck2tdhpEI3",
+              displayName: "Expo iPhone X",
+              appOwnership: "expo",
+              dailyVisits: 0,
+              deviceId: "9E917464-CF47-417B-AA41-07E52190F26A",
+              deviceName: "Expo iPhone X",
+              deviceYearClass: 2017,
+              expoVersion: "2.4.7.1013849",
+              isDevice: true,
+              lastRewardTimestamp: 1524197897114,
+              platform: {
+                ios: {
+                  buildNumber: "2.4.7.1013849",
+                  model: "iPhone X",
+                  platform: "iPhone10,6",
+                  systemVersion: "11.0.1",
+                  userInterfaceIdiom: "handset",
+                },
+              },
+              score: 1,
+              slug: "crossy-road",
+            },
+          },
+        ]);
+        return;
+      }
+
       const collection = firebase
         .firestore()
         .collection(Settings.slug)
@@ -317,7 +366,8 @@ export const leaders = {
             });
           }
         });
-        console.log("Batch update", data.length, { data });
+        console.log("Batch update", data.length, JSON.stringify(data));
+        // console.log("Batch update", data.length, { data });
         dispatch.leaders.batchUpdate(data);
         const cursor = querySnapshot.docs[querySnapshot.docs.length - 1];
         if (callback) callback({ data, cursor, noMore: data.length < size });
@@ -389,6 +439,8 @@ export const players = {
   },
   effects: {
     getAsync: async ({ uid, callback }) => {
+      // DO NOTHING IN DEV
+      return;
       try {
         const ref = firebase.firestore().collection("players").doc(uid);
         const doc = await ref.get();
@@ -530,7 +582,8 @@ export const user = {
           dispatch.user.signInAnonymously();
         } else {
           dispatch.user.getAsync();
-          dispatch.leaders.getAsync({ uid: user.uid });
+          // DISABLED IN DEV
+          // dispatch.leaders.getAsync({ uid: user.uid });
         }
       });
     },
@@ -565,11 +618,13 @@ export const user = {
       if (Object.keys(updates).length > 0) {
         dispatch.user.update(updates);
       }
-      dispatch.dailyStreak.compareDaily();
+      // dispatch.dailyStreak.compareDaily();
       dispatch.players.update({
         uid: combinedUserData.uid,
         user: combinedUserData,
       });
+      // THIS IS DEV ONLY
+      return;
 
       if (Settings.isCacheProfileUpdateActive) {
         const shouldUpdateKey = "@PillarValley/shouldUpdateProfile";

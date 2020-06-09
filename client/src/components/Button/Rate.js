@@ -1,42 +1,43 @@
-import React from 'react';
-import { Alert, Linking } from 'react-native';
+import Constants from "expo-constants";
+import * as StoreReview from "expo-store-review";
+import React from "react";
+import { Alert, Linking } from "react-native";
 
-import * as StoreReview from 'expo-store-review';
-import Constants from 'expo-constants'; 
-import Icon from './Icon';
+import useStoreReview from "../../hooks/useStoreReview";
+import Icon from "./Icon";
 
-class Rate extends React.Component {
-  static defaultProps = {
-    onPress: () => {},
-  };
-  onPress = () => {
-    if (StoreReview.isSupported()) {
-      StoreReview.requestReview();
-    } else {
-      const { name } = Constants.manifest;
-      Alert.alert(
-        `Do you like ${name}?`,
-        `Would you like to rate this app in the app store? It help's others discover ${name} too!`,
-        [
-          {
-            text: 'OK',
-            onPress: () => Linking.openURL(StoreReview.storeUrl()),
-          },
-          { text: 'Cancel', onPress: () => {}, style: 'cancel' },
-        ],
-        { cancelable: true },
-      );
-    }
-    this.props.onPress();
-  };
-  render() {
-    const { onPress, name, ...props } = this.props;
+const { name } = Constants.manifest;
 
-    if (!StoreReview.isSupported()) {
-      return null;
-    }
-    return <Icon onPress={this.onPress} name="star" {...props} />;
-  }
+function alertToReview() {
+  Alert.alert(
+    `Do you like ${name}?`,
+    `Would you like to rate this app in the app store? It help's others discover ${name} too!`,
+    [
+      {
+        text: "OK",
+        onPress: () => Linking.openURL(StoreReview.storeUrl()),
+      },
+      { text: "Cancel", onPress: () => {}, style: "cancel" },
+    ],
+    { cancelable: true }
+  );
+}
+
+function Rate() {
+  const canReview = useStoreReview();
+
+  const onPress = React.useMemo(
+    () => () => {
+      if (canReview) {
+        StoreReview.requestReview();
+      } else {
+        alertToReview();
+      }
+    },
+    [canReview]
+  );
+
+  return <Icon onPress={onPress} name="star" />;
 }
 
 export default Rate;

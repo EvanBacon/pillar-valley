@@ -1,88 +1,41 @@
-import { dispatch } from '@rematch/core';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { connect } from 'react-redux';
+import { dispatch } from "@rematch/core";
+import React from "react";
+import { StyleSheet, View } from "react-native";
+import { connect } from "react-redux";
 
-import ProfileImage from '../components/ProfileImage';
-import ProfileMetaDataView from '../components/ProfileMetaDataView';
-import UpgradeAccountView from '../components/UpgradeAccountView';
-import Fire from '../ExpoParty/Fire';
-import { connectActionSheet } from '@expo/react-native-action-sheet';
+import ProfileImage from "../components/ProfileImage";
+import ProfileMetaDataView from "../components/ProfileMetaDataView";
+import UpgradeAccountView from "../components/UpgradeAccountView";
+import Fire from "../ExpoParty/Fire";
+import { connectActionSheet } from "@expo/react-native-action-sheet";
 
-class App extends React.Component {
-  static navigationOptions = ({ navigation }) => {
-    const { params = {} } = navigation.state;
-    const uid = params.uid || Fire.shared.uid;
+function ProfileScreen({ user = {} }) {
+  const isSignedInWithFB = !!user.fbuid;
 
-    let headerRight;
-    if (uid !== Fire.shared.uid) {
-      headerRight = (
-        <Text
-          onPress={() => {
-            navigation.navigate('Report', navigation.state.params);
-          }}
-          style={styles.reportButton}
-        >
-          Report
-        </Text>
-      );
-    }
+  // const canUpgrade = this.isUser && !isSignedInWithFB;
+  const canLogout = isSignedInWithFB;
+  const name = user.displayName || user.deviceName;
+  const createdAt = user.createdAt || user.lastRewardTimestamp;
+  const isUser = Fire.shared.uid === user.uid;
 
-    return {
-      title: 'Player Profile',
-      headerRight,
-    };
-  };
+  const image = isSignedInWithFB
+    ? `https://graph.facebook.com/${user.fbuid}/picture?type=large`
+    : user.photoURL;
 
-  constructor(props) {
-    super(props);
+  React.useEffect(() => {
+    dispatch.players.getAsync({ uid: user.uid });
+  }, []);
 
-    dispatch.players.getAsync({ uid: this.uid });
-  }
-
-  get uid() {
-    const { params = {} } = this.props.navigation.state;
-    const uid = params.uid || Fire.shared.uid;
-    return uid;
-  }
-
-  get isUser() {
-    return Fire.shared.uid === this.uid;
-  }
-
-  get image() {
-    const { user = {} } = this.props;
-    if (user.fbuid) {
-      return `https://graph.facebook.com/${user.fbuid}/picture?type=large`;
-    }
-    return user.photoURL;
-  }
-
-  onLogout = () => {
-    dispatch.user.logoutAsync();
-  };
-
-  render() {
-    const { user = {} } = this.props;
-
-    const isSignedInWithFB = !!user.fbuid;
-
-    // const canUpgrade = this.isUser && !isSignedInWithFB;
-    const canLogout = isSignedInWithFB;
-    const name = user.displayName || user.deviceName;
-    const createdAt = user.createdAt || user.lastRewardTimestamp;
-
-    return (
-      <View style={styles.container}>
-        <View style={styles.row}>
-          <ProfileImage isUser={this.isUser} name={name} image={this.image} />
-          <ProfileMetaDataView name={name} createdAt={createdAt} />
-        </View>
-
-        {this.isUser && <UpgradeAccountView canLogout={canLogout} />}
+  return (
+    <View style={styles.container}>
+      <View style={styles.row}>
+        <ProfileImage isUser={isUser} name={name} image={image} />
+        <ProfileMetaDataView name={name} createdAt={createdAt} />
       </View>
-    );
-  }
+
+      {isUser && <UpgradeAccountView canLogout={canLogout} />}
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -91,31 +44,31 @@ const styles = StyleSheet.create({
     padding: 24,
   },
   row: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   reportButton: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginRight: 12,
-    color: 'white',
+    color: "white",
   },
 });
 
-const ASProfile = connectActionSheet(App);
+const ASProfile = connectActionSheet(ProfileScreen);
 
 export default connect(
   ({ players }) => ({ players }),
   {},
   ({ players = {}, ...stateProps }, dispatchProps, ownProps) => {
-    const { params = {} } = ownProps.navigation.state;
-    const uid = params.uid || Fire.shared.uid;
+    const uid = ownProps.route.uid || Fire.shared.uid;
     const user = players[uid];
 
     return {
       ...ownProps,
       ...dispatchProps,
       ...stateProps,
+      uid,
       user,
     };
-  },
+  }
 )(ASProfile);

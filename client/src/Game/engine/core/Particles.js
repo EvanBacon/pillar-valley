@@ -1,9 +1,8 @@
-import Proton from 'three.proton.js';
-import { TextureLoader } from 'expo-three';
-import * as THREE from 'three';
+import Proton from "three.proton.js";
+import { TextureLoader } from "expo-three";
+import * as THREE from "three";
 
-import GameObject from './GameObject';
-import Assets from '../../../Assets';
+import GameObject from "./GameObject";
 
 class Snow extends GameObject {
   proton = new Proton();
@@ -14,7 +13,7 @@ class Snow extends GameObject {
     const emitter = new Proton.Emitter();
     emitter.rate = new Proton.Rate(
       new Proton.Span(10, 20),
-      new Proton.Span(1, 2),
+      new Proton.Span(1, 2)
     );
 
     emitter.addInitialize(new Proton.Mass(1));
@@ -26,7 +25,9 @@ class Snow extends GameObject {
 
     emitter.addInitialize(new Proton.Life(5, 10));
 
-    const sprite = await this.createSprite(Assets.images['particle.png']);
+    const sprite = await this.createSprite(
+      require("../../../assets/images/particle.png")
+    );
     emitter.addInitialize(new Proton.Body(sprite));
     // emitter.addInitialize(
     //   new Proton.Velocity(0, new Proton.Vector3D(0, -0.05, -0.05), 90),
@@ -40,10 +41,10 @@ class Snow extends GameObject {
     this.repulsionBehaviour = new Proton.Repulsion(
       new Proton.Vector3D(0, 0, 0),
       0,
-      0,
+      0
     );
     const zone = new Proton.BoxZone(400);
-    this.crossZoneBehaviour = new Proton.CrossZone(zone, 'cross');
+    this.crossZoneBehaviour = new Proton.CrossZone(zone, "cross");
     emitter.addBehaviour(this.repulsionBehaviour, this.crossZoneBehaviour);
 
     // const screenZone = new Proton.ScreenZone(camera, renderer, size, '1234');
@@ -84,7 +85,7 @@ class Snow extends GameObject {
     // this.impulseBehaviour = behaviour;
   };
 
-  createSprite = async resource => {    
+  createSprite = async (resource) => {
     const material = new THREE.SpriteMaterial({
       map: new TextureLoader().load(resource),
       transparent: true,

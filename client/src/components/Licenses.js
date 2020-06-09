@@ -1,10 +1,9 @@
-// @flow
-import React, { Component } from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import * as React from "react";
+import { FlatList } from "react-native";
+import { useSafeArea } from "react-native-safe-area-context";
 
-import Settings from '../constants/Settings';
-import Data from '../licenses';
-import LicensesListItem from './LicensesListItem';
+import Data from "../licenses";
+import LicensesListItem from "./LicensesListItem";
 
 function extractNameFromGithubUrl(url) {
   if (!url) {
@@ -31,10 +30,12 @@ function capitalizeFirstLetter(string) {
 
 const licenses = Object.keys(Data).map((key) => {
   const { licenses, ...license } = Data[key];
-  const [name, version] = key.split('@');
+  const [name, version] = key.split("@");
 
   const reg = /((https?:\/\/)?(www\.)?github\.com\/)?(@|#!\/)?([A-Za-z0-9_]{1,15})(\/([-a-z]{1,20}))?/i;
-  let username = extractNameFromGithubUrl(license.repository) || extractNameFromGithubUrl(license.licenseUrl);
+  let username =
+    extractNameFromGithubUrl(license.repository) ||
+    extractNameFromGithubUrl(license.licenseUrl);
 
   let userUrl;
   let image;
@@ -56,30 +57,17 @@ const licenses = Object.keys(Data).map((key) => {
   };
 });
 
-sortDataByKey(licenses, 'username');
+sortDataByKey(licenses, "username");
 
-export default class Licenses extends Component {
-  static navigationOptions = {
-    title: 'Libraries',
-  };
-  renderItem = ({ item }) => <LicensesListItem {...item} />;
-  render() {
-    // const { licenses } = this.props;
-
-    return (
-      <FlatList
-        style={styles.list}
-        keyExtractor={({ key }) => key}
-        data={licenses}
-        contentContainerStyle={{ paddingBottom: Settings.bottomInset }}
-        renderItem={this.renderItem}
-      />
-    );
-  }
+export default function Licenses() {
+  const { bottom } = useSafeArea();
+  return (
+    <FlatList
+      style={{ flex: 1 }}
+      keyExtractor={({ key }) => key}
+      data={licenses}
+      contentContainerStyle={{ paddingBottom: bottom }}
+      renderItem={({ item }) => <LicensesListItem {...item} />}
+    />
+  );
 }
-
-const styles = StyleSheet.create({
-  list: {
-    flex: 1,
-  },
-});

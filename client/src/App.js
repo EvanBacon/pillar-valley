@@ -1,25 +1,11 @@
 import { AppLoading } from "expo";
-import AssetUtils from "expo-asset-utils";
 import * as Font from "expo-font";
 import React from "react";
-import { Platform, View } from "react-native";
 
-import Assets from "./Assets";
 import AudioManager from "./AudioManager";
-import Settings from "./constants/Settings";
-// import AchievementToastProvider from "./ExpoParty/AchievementToastProvider";
 import Fire from "./ExpoParty/Fire";
 import Navigation from "./Navigation";
 import Gate from "./rematch/Gate";
-
-// import Navigation from "./screens/GameScreen";
-console.ignoredYellowBox = Settings.ignoredYellowBox;
-
-const LoadingScreen = Settings.debug ? View : AppLoading;
-
-const assets = AssetUtils.cacheAssetsAsync({
-  files: AssetUtils.arrayFromObject(Assets.images),
-});
 
 export default function App() {
   const [loading, setLoading] = React.useState(true);
@@ -27,11 +13,8 @@ export default function App() {
   React.useEffect(() => {
     Fire.shared.init();
     (async () => {
-      console.time("Startup");
+      console.time("Setup");
       try {
-        if (Platform.OS !== "web") {
-          await Promise.all(assets);
-        }
         await Promise.all([
           Font.loadAsync({
             "GothamNarrow-Book": require("./assets/fonts/GothamNarrow-Book.ttf"),
@@ -39,23 +22,24 @@ export default function App() {
           AudioManager.shared.setupAsync(),
         ]);
       } catch (error) {
-        console.log(error);
+        console.log("Error loading fonts and audio!");
+        console.error(error);
       } finally {
-        console.timeEnd("Startup");
-        setLoading(false);
+        console.timeEnd("Setup");
       }
+      setLoading(false);
     })();
   }, []);
 
-  return loading ? (
-    <LoadingScreen />
-  ) : (
+  if (loading) return <AppLoading />;
+
+  return (
     <Gate>
-        <Navigation />
-      </Gate>
-    );
+      <Navigation />
+    </Gate>
+  );
 }
-    
-    // <AchievementToastProvider>
-    //   <Navigation />
-    // </AchievementToastProvider>
+
+// <AchievementToastProvider>
+//   <Navigation />
+// </AchievementToastProvider>

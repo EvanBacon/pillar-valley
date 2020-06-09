@@ -1,4 +1,3 @@
-import Assets from "./Assets";
 import { store } from "./rematch/Gate";
 import * as AssetUtils from "expo-asset-utils";
 import { Audio } from "expo-av";
@@ -73,7 +72,11 @@ class AudioManager {
     });
 
   get assets() {
-    return Assets.audio;
+    return {
+      "button_in.wav": require("./assets/audio/button_in.wav"),
+      "button_out.wav": require("./assets/audio/button_out.wav"),
+      "song.mp3": require("./assets/audio/song.mp3"),
+    };
   }
 
   setupAudioAsync = async () => {
@@ -87,14 +90,8 @@ class AudioManager {
     }
   };
 
-  // downloadAsync = async () =>
-  //   AssetUtils.cacheAssetsAsync({
-  //     files: AssetUtils.arrayFromObject(this.assets),
-  //   });
-
   setupAsync = async () => {
     await this.configureExperienceAudioAsync();
-    // await this.downloadAsync();
     await this.setupAudioAsync();
   };
 }

@@ -1,12 +1,13 @@
 // @flow
 import { dispatch } from "@rematch/core";
-import { Back, Expo as ExpoEase, TweenMax } from "gsap";
-
-import Assets from "../Assets";
-import Settings from "../constants/Settings";
 import * as Haptics from "expo-haptics";
-import { TextureLoader } from "expo-three";
+import { DeviceMotion } from "expo-sensors";
+import { loadTextureAsync } from "expo-three";
+import { Back, Expo as ExpoEase, TweenMax } from "gsap";
+import { Platform as RNPlatform } from "react-native";
 import * as THREE from "three";
+
+import Settings from "../constants/Settings";
 import GameObject from "./engine/core/GameObject";
 import Group from "./engine/core/Group";
 import Lighting from "./engine/entities/Lighting";
@@ -15,9 +16,6 @@ import PlayerBall from "./engine/entities/PlayerBall";
 import flatMaterial from "./engine/utils/flatMaterial";
 import randomRange from "./engine/utils/randomRange";
 import GameStates from "./GameStates";
-import TextMesh from "./TextMesh";
-import { DeviceMotion } from "expo-sensors";
-import { Platform as RNPlatform } from "react-native";
 
 function distance(p1, p2) {
   const a = p1.x - p2.x;
@@ -193,7 +191,7 @@ class Game extends GameObject {
 
     const topMaterial = async (res, color) => {
       const image = new THREE.MeshBasicMaterial({
-        map: new TextureLoader().load(res),
+        map: await loadTextureAsync({ asset: res }),
       });
 
       const material = flatMaterial({ color });
@@ -219,7 +217,7 @@ class Game extends GameObject {
     titleGroup.position.x = offset;
     titleGroup.position.z = -200;
 
-    const pillar = await makePillar(Assets.images["PILLAR.png"]);
+    const pillar = await makePillar(require("../assets/images/PILLAR.png"));
     titleGroup.add(pillar);
 
     pillar.position.y = -1100;
@@ -229,7 +227,7 @@ class Game extends GameObject {
       delay: 0,
     });
 
-    const pillarB = await makePillar(Assets.images["VALLEY.png"]);
+    const pillarB = await makePillar(require("../assets/images/VALLEY.png"));
     titleGroup.add(pillarB);
 
     if (pillarB.position) {
@@ -242,7 +240,10 @@ class Game extends GameObject {
         delay: 0.1,
       });
     }
-    const pillarC = await makePillar(Assets.images["BEGIN.png"], 0xedcbbf);
+    const pillarC = await makePillar(
+      require("../assets/images/BEGIN.png"),
+      0xedcbbf
+    );
     titleGroup.add(pillarC);
 
     pillarC.position.y = -1100;
@@ -260,27 +261,6 @@ class Game extends GameObject {
 
     this.pillars = [pillar, pillarB, pillarC];
     this.titleGroup = normalizer;
-  };
-
-  createText = () => {
-    this.textMesh = new TextMesh();
-    // this.textMesh.rotation.y = Math.PI;
-    this.textMesh.position.y = -200;
-    this.textMesh.position.x = -150;
-    this.textMesh.position.z = -200;
-    this.gameGroup.add(this.textMesh);
-    this.textMesh.material = new THREE.MeshPhongMaterial({ color: 0xfac575 });
-    this.textMesh.update({
-      text: "1",
-      font: require("./neue_haas_unica_pro_black.json"), // This accepts json, THREE.Font, or a uri to remote THREE.Font json
-      size: 200, // Size of the text. Default is 100.
-      height: 20, // Thickness to extrude text. Default is 50.
-      curveSegments: 12, // — Integer. Number of points on the curves. Default is 12.
-      bevelEnabled: false, // — Boolean. Turn on bevel. Default is False.
-      bevelThickness: 1, // — Float. How deep into text bevel goes. Default is 10.
-      bevelSize: 0.8, // — Float. How far from text outline is bevel. Default is 8.
-      bevelSegments: 0.3, // — Integer. Number of bevel segments. Default is 3.
-    });
   };
 
   loadGame = async () => {
@@ -310,7 +290,6 @@ class Game extends GameObject {
       await this.addTarget();
     }
     this.targets[0].becomeCurrent();
-    // this.createText();
   };
   score = 0;
 

@@ -1,33 +1,42 @@
-import { dispatch } from '@rematch/core';
-import firebase from 'firebase';
-import React, { Component } from 'react';
-import { RefreshControl, StyleSheet, View } from 'react-native';
-import { connect } from 'react-redux';
+import { dispatch } from "@rematch/core";
+import firebase from "firebase";
+import React, { Component } from "react";
+import { RefreshControl, StyleSheet, View } from "react-native";
+import { connect } from "react-redux";
 
-import List from '../components/List';
-import Item from '../components/List/Item';
-import Settings from '../constants/Settings';
-import Fire from '../ExpoParty/Fire';
-import { connectActionSheet } from '@expo/react-native-action-sheet';
-import Constants from 'expo-constants'; 
-class LeaderboardScreen extends Component {
-  state = {
-    filter: 'Forever',
-    refreshing: false,
-    data: {},
-    // dataSorted: [],
-    // isLoggedIn: false,
-  };
+import List from "../components/List";
+import Item from "../components/List/Item";
+import Settings from "../constants/Settings";
+import Fire from "../ExpoParty/Fire";
+import { connectActionSheet } from "@expo/react-native-action-sheet";
+import Constants from "expo-constants";
 
-  componentDidMount() {
-    if (Fire.shared.uid) {
-      this.makeRemoteRequest();
-    } else {
-      firebase.auth().onAuthStateChanged(user => {
-        if (user) {
-          this.makeRemoteRequest();
-        }
-      });
+function useCurrentUser() {
+  const [user, setUser] = React.useState(firebase.auth().currentUser);
+  React.useEffect(() => {
+    const unsub = firebase.auth().onAuthStateChanged((user) => {
+      setUser(user);
+    });
+    return () => unsub();
+  }, []);
+  return user;
+}
+
+function LeaderboardScreen({
+  showActionSheetWithOptions,
+  user,
+  leaders,
+  navigation,
+}) {
+  const [filter, setFilter] = React.useState("Forever");
+  const [refreshing, setRefreshing] = React.useState(false);
+  const [data, setData] = React.useState({});
+  const [hasMore, setHasMore] = React.useState(true);
+  const [lastKnownKey, setLast] = React.useState(null);
+
+  React.useEffect(() => {
+    if (user) {
+      makeRemoteRequest();
     }
 
     // this._onPressItem({
@@ -56,99 +65,95 @@ class LeaderboardScreen extends Component {
     //   name: 'Bingo Boi',
     //   rank: 2,
     // });
-  }
+  }, [(user || {}).uid]);
 
-  addChild = items => {
-    const data = {
-      ...this.state.data,
+  const addChild = (items) => {
+    setData({
+      ...data,
       ...items,
-    };
-    this.setState({
-      data,
-      // dataSorted: Object.values(data).sort((a, b) => a.timestamp > b.timestamp),
     });
   };
-  //
-  makeRemoteRequest = async () => {
+
+  const makeRemoteRequest = async () => {
     // console.log('makeRemoteRequest', Object.keys(Fire.shared));
     if (!Fire.shared.uid) {
       return;
     }
 
-    if (this.state.refreshing) {
+    if (refreshing) {
       return;
     }
 
+    // Create a timer
     const timeout = setTimeout(() => {
-      this.setState({ refreshing: false });
+      setRefreshing(false);
     }, 5000);
-    this.setState({ refreshing: true });
+    setRefreshing(true);
 
     dispatch.leaders.getPagedAsync({
-      start: this.lastKnownKey,
+      start: lastKnownKey,
       size: Settings.leaderPageSize,
       callback: ({ cursor, noMore }) => {
         clearTimeout(timeout);
 
-        this.setState({ noMore, refreshing: false });
-        this.lastKnownKey = cursor;
+        setRefreshing(false);
+        setHasMore(!noMore);
+        setLast(cursor);
       },
     });
   };
 
-  _onOpenActionSheet = () => {
+  const _onOpenActionSheet = () => {
     // Same interface as https://facebook.github.io/react-native/docs/actionsheetios.html
-    const options = ['Today', 'This Week', 'Forever', 'Cancel'];
+    const options = ["Today", "This Week", "Forever", "Cancel"];
     const cancelButtonIndex = options.length - 1;
 
-    this.props.showActionSheetWithOptions(
+    showActionSheetWithOptions(
       {
         options,
-        icons: ['md-show-chart'],
+        icons: ["md-show-chart"],
         cancelButtonIndex,
       },
-      buttonIndex => {
+      (buttonIndex) => {
         if (buttonIndex !== cancelButtonIndex) {
-          this.setState({ filter: options[buttonIndex] });
+          setFilter(options[buttonIndex]);
         }
         // Do something here depending on the button index selected
-      },
+      }
     );
   };
 
-  _onPressItem = item => {
+  const _onPressItem = (item) => {
     // console.log(item);
-    this.props.navigation.navigate('Profile', {
+    navigation.navigate("Profile", {
       title: item.name,
       ...item,
     });
   };
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <List
-          noMore={this.state.noMore}
-          renderItem={props => <Item onPress={this._onPressItem} {...props} />}
-          title="Players"
-          headerButtonTitle={this.state.filter}
-          data={this.props.leaders}
-          userItem={this.props.user}
-          onPress={this._onPressItem}
-          onPressHeader={this._onOpenActionSheet}
-          renderUserItem={() => null}
-          onPressFooter={this.makeRemoteRequest}
-          refreshControl={
-            <RefreshControl
-              tintColor={Constants.manifest.primaryColor}
-              refreshing={this.state.refreshing}
-              onRefresh={this.makeRemoteRequest}
-            />
-          }
-        />
-      </View>
-    );
-  }
+  return (
+    <View style={styles.container}>
+      <List
+        noMore={!hasMore}
+        renderItem={(props) => <Item onPress={_onPressItem} {...props} />}
+        title="Players"
+        headerButtonTitle={filter}
+        data={leaders}
+        userItem={user}
+        onPress={_onPressItem}
+        onPressHeader={_onOpenActionSheet}
+        renderUserItem={() => null}
+        onPressFooter={makeRemoteRequest}
+        refreshControl={
+          <RefreshControl
+            tintColor={Constants.manifest.primaryColor}
+            refreshing={refreshing}
+            onRefresh={makeRemoteRequest}
+          />
+        }
+      />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -163,7 +168,7 @@ const styles = StyleSheet.create({
 
 const ConnectedProfile = connect(({ user, leaders }) => {
   const _leadersSorted = Object.values(leaders).sort(
-    (a, b) => a.score < b.score,
+    (a, b) => a.score < b.score
   );
   return { user, leaders: _leadersSorted };
 })(LeaderboardScreen);
