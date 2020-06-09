@@ -1,0 +1,41 @@
+{
+  "background_color": "#E07C4C",
+  "description": "Immerse yourself in a suave world of zen",
+  "display": "standalone",
+  "lang": "en",
+  "name": "Pillar Valley",
+  "short_name": "Pillar Valley",
+  "start_url": "/?utm_source=web_app_manifest",
+  "theme_color": "#E07C4C",
+  "orientation": "portrait",
+  "related_applications": [
+    {
+      "platform": "itunes",
+      "url": "https://itunes.apple.com/us/app/pillar-valley/id1336398804?ls=1&mt=8",
+      "id": "com.evanbacon.pillarvalley"
+    },
+    {
+      "platform": "play",
+      "url": "https://play.google.com/store/apps/details?id=com.evanbacon.pillarvalley",
+      "id": "com.evanbacon.pillarvalley"
+    }
+  ],
+  "prefer_related_applications": true,
+  "icons": [
+    {
+      "src": "/pwa/chrome-icon/chrome-icon-144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "/pwa/chrome-icon/chrome-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/pwa/chrome-icon/chrome-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
