@@ -1,10 +1,10 @@
 import Game from "./Game";
-
+import { Renderer } from "expo-three";
 class Machine {
   time = 0;
 
   onContextCreateAsync = async ({ gl, width, height, scale: pixelRatio }) => {
-    this.renderer = new ExpoTHREE.Renderer({
+    this.renderer = new Renderer({
       gl,
       width,
       height,
