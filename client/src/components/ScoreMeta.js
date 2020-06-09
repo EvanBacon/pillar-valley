@@ -3,14 +3,20 @@ import React from "react";
 import { StyleSheet, Platform, Text, View } from "react-native";
 import { useSafeArea } from "react-native-safe-area-context";
 import { connect } from "react-redux";
-
+import * as Animatable from "react-native-animatable";
 function ScoreMeta({ current, best, currency }) {
   const { top } = useSafeArea();
   return (
     <View style={[styles.container, { top }]}>
       <View style={{ flexDirection: "row" }}>
         <Text style={[styles.text, styles.highScore]}>{best}</Text>
-        <Text style={[styles.text, styles.score]}>{current}</Text>
+        <Animatable.Text
+          animation="rubberBand"
+          key={current}
+          style={[styles.text, styles.score]}
+        >
+          {current}
+        </Animatable.Text>
       </View>
       {!currency && (
         <View style={{ flexDirection: "row", alignItems: "center" }}>

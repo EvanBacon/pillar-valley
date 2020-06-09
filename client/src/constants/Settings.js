@@ -11,7 +11,7 @@ const Settings = {
       // 'user_friends'
     ],
   },
-  circleEnabled: false,
+  circleEnabled: true,
   isSimulator: !Constants.isDevice,
   isFirebaseEnabled: false, // !debug || false,
   isAutoStartEnabled: false, //! debug && true,
