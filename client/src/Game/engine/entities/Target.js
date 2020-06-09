@@ -3,14 +3,15 @@ import { SphereBufferGeometry, Mesh } from "three";
 import CombustableObject from "../core/CombustableObject";
 import Factory from "../Factory";
 import randomRange from "../utils/randomRange";
-
+import Colors from "../../../constants/Colors";
+import FlatMaterial from "../utils/flatMaterial";
 class Target extends CombustableObject {
   loadAsync = async (scene) => {
     global.TargetGeom = global.TargetGeom || new SphereBufferGeometry(20, 8, 8);
 
     const mesh = new Mesh(
       global.TargetGeom.clone(),
-      Factory.shared.materials.red
+      new FlatMaterial({ color: Colors.red })
     );
     this.add(mesh);
     this.z = -250;

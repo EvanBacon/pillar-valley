@@ -13,7 +13,7 @@ import Group from "./engine/core/Group";
 import Lighting from "./engine/entities/Lighting";
 import Platform from "./engine/entities/Platform";
 import PlayerBall from "./engine/entities/PlayerBall";
-import flatMaterial from "./engine/utils/flatMaterial";
+import FlatMaterial from "./engine/utils/flatMaterial";
 import randomRange from "./engine/utils/randomRange";
 import GameStates from "./GameStates";
 
@@ -194,7 +194,7 @@ class Game extends GameObject {
         map: await loadTextureAsync({ asset: res }),
       });
 
-      const material = flatMaterial({ color });
+      const material = new FlatMaterial({ color });
 
       return [material, material, image, material, material, material];
     };

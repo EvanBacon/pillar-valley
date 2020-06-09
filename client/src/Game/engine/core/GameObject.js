@@ -1,6 +1,4 @@
-import * as THREE from 'three';
-
-// import Factory from '../Factory';
+import * as THREE from "three";
 
 class GameObject extends THREE.Object3D {
   _loaded = false;
@@ -38,7 +36,7 @@ class GameObject extends THREE.Object3D {
     this._alpha = value;
     const transparent = value !== 1;
     if (this.materials) {
-      this.materials.map(material => {
+      this.materials.map((material) => {
         material.transparent = transparent;
         material.opacity = value;
       });
@@ -47,12 +45,12 @@ class GameObject extends THREE.Object3D {
       this.material.opacity = value;
     }
 
-    this.setAll('alpha', value);
+    this.setAll("alpha", value);
 
-    this.traverse(child => {
+    this.traverse((child) => {
       if (child instanceof THREE.Mesh) {
         if (child.materials) {
-          child.materials.map(material => {
+          child.materials.map((material) => {
             material.transparent = transparent;
             material.opacity = value;
           });
@@ -125,7 +123,7 @@ class GameObject extends THREE.Object3D {
     }
   };
 
-  destroyChild = object => {
+  destroyChild = (object) => {
     if (object instanceof GameObject) {
       const index = this.objects.indexOf(object);
       if (index > -1) {
@@ -148,7 +146,7 @@ class GameObject extends THREE.Object3D {
     if (object === this) {
       console.error(
         "GameObject.add: object can't be added as a child of itself.",
-        object,
+        object
       );
       return this;
     }
@@ -157,7 +155,7 @@ class GameObject extends THREE.Object3D {
         object.parent.remove(object);
       }
       object.parent = this;
-      object.dispatchEvent({ type: 'added' });
+      object.dispatchEvent({ type: "added" });
 
       this.children.push(object);
 
@@ -169,8 +167,8 @@ class GameObject extends THREE.Object3D {
       }
     } else {
       console.error(
-        'GameObject.add: object not an instance of THREE.Object3D.',
-        object,
+        "GameObject.add: object not an instance of THREE.Object3D.",
+        object
       );
     }
 
@@ -189,7 +187,7 @@ class GameObject extends THREE.Object3D {
     const index = this.children.indexOf(object);
     if (index !== -1) {
       object.parent = null;
-      object.dispatchEvent({ type: 'removed' });
+      object.dispatchEvent({ type: "removed" });
       this.children.splice(index, 1);
     }
 
@@ -208,7 +206,7 @@ class GameObject extends THREE.Object3D {
   }
   set game(value) {
     this._game = value;
-    this.setAll('game', value);
+    this.setAll("game", value);
   }
 
   get box() {

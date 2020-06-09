@@ -1,7 +1,10 @@
 import { MeshPhongMaterial } from "three";
 
-export default (props) =>
-  new MeshPhongMaterial({
-    flatShading: true,
-    ...props,
-  });
+export default class FlatMaterial extends MeshPhongMaterial {
+  constructor(props) {
+    super({
+      flatShading: true,
+      ...props,
+    });
+  }
+}

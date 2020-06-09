@@ -2,7 +2,7 @@ import { TweenMax } from "gsap";
 
 import { Color, Mesh, BoxBufferGeometry } from "three";
 import GameObject from "../core/GameObject";
-import flatMaterial from "../utils/flatMaterial";
+import FlatMaterial from "../utils/flatMaterial";
 import randomRange from "../utils/randomRange";
 import Gem from "./Gem";
 import Settings from "../../../constants/Settings";
@@ -65,7 +65,7 @@ class Platform extends GameObject {
     global.PlatformGeom =
       global.PlatformGeom || new BoxBufferGeometry(radius, 1000, radius);
 
-    this._platformMaterial = flatMaterial({ color });
+    this._platformMaterial = new FlatMaterial({ color });
     this.mesh = new PlatformMesh(this._platformMaterial);
     this.mesh.y = -500;
     this.add(this.mesh);
