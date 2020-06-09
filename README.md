@@ -1,47 +1,24 @@
-# [Expo Pillar Valley](https://pillarvalley.netlify.app/)
+<h1 align="center">Welcome to Pillar Valley 👋</h1>
+
+<p align="center">
+  <a aria-label="made with expo" href="https://github.com/expo">
+    <img src="https://img.shields.io/badge/MADE%20WITH%20EXPO-000.svg?style=for-the-badge&logo=expo&labelColor=4630eb&logoWidth=20">
+  </a>
+  <a href="https://twitter.com/baconbrix">
+    <img alt="Twitter: baconbrix" src="https://img.shields.io/twitter/follow/baconbrix.svg?style=for-the-badge&logo=TWITTER&logoColor=FFFFFF&labelColor=00aced&logoWidth=20&color=lightgray" target="_blank" />
+  </a>
+  <a href="https://github.com/evanbacon" aria-label="Follow EvanBacon on Github">
+    <img alt="Github: evanbacon" src="https://img.shields.io/github/followers/evanbacon.svg?label=Follow&style=for-the-badge&logo=github&logoColor=FFFFFF&labelColor=24292e&logoWidth=20&color=lightgray" target="_blank" />
+  </a>
+  <a href="https://blog.expo.io/@Baconbrix" aria-label="Follow Baconbrix on Medium">
+    <img alt="Medium: baconbrix" src="https://img.shields.io/badge/BACON%20BLOG%20🥓-4630EB.svg?style=for-the-badge&logo=MEDIUM&labelColor=000&logoWidth=20" target="_blank" />
+  </a>
+  <a href="/LICENSE">
+    <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge" target="_blank" />
+  </a>
+</p>
 
 ### Immerse yourself in a suave world of zen
-
-**Demo: https://expo.io/@bacon/pillar-valley**
-
-**Read about my process: https://blog.expo.io/building-a-connected-game-with-expo-f09295c512a9?source=linkShare-16b715de038f-1516680763**
-
-[![Twitter](https://img.shields.io/badge/twitter-@baconbrix-55acee.svg?maxAge=2592000)](http://twitter.com/baconbrix)
-[![Twitter](https://img.shields.io/badge/twitter-@expo_io-4039E2.svg?maxAge=2592000)](http://twitter.com/expo_io)
-
-### Installation
-
-Add then create the **Secret.js** which will contain your firebase config.
-
-```bash
-touch ExpoParty/Secret.js
-```
-
-Then go to the [Firebase Console](https://console.firebase.google.com) and create a **Web App**.
-
-Here is an example of what your Secret.js file should look like:
-This one totally works but eventually it'll hit the rate limit.
-
-**Secret.js**
-
-```js
-export default {
-  apiKey: 'AIzaSyAfgPq82VdNqEZ8hqnOvYdD7kSPiFK9W1k',
-  authDomain: 'keira-knightley-51df6.firebaseapp.com',
-  databaseURL: 'https://keira-knightley-51df6.firebaseio.com',
-  projectId: 'keira-knightley-51df6',
-  storageBucket: 'keira-knightley-51df6.appspot.com',
-  messagingSenderId: '628588079444',
-};
-```
-
-Now you can install the packages and run the expo project! 💙💙💙
-
-```bash
-yarn && exp start
-```
-
-### Preview
 
 <div>
   
