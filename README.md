@@ -1,4 +1,4 @@
-# [Expo Pillar Valley](https://evanbacon.github.io/Expo-Pillar-Valley)
+# [Expo Pillar Valley](https://pillarvalley.netlify.app/)
 
 ### Immerse yourself in a suave world of zen
 
@@ -55,7 +55,7 @@ yarn && exp start
 
 ### Play in the Browser
 
-You can play in any browser here 👉 [Cyber Web](https://evanbacon.github.io/Expo-Pillar-Valley)
+You can play in any browser here 👉 [Pillar Web](https://pillarvalley.netlify.app/)
 
 ### Download on iOS
 
