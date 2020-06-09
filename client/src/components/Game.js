@@ -4,7 +4,7 @@ import { StyleSheet, View } from "react-native";
 
 import Settings from "../constants/Settings";
 import GameState from "../Game";
-import { GraphicsView } from "expo-graphics";
+import GraphicsView from "./GraphicsView";
 import Footer from "./Footer";
 import ScoreMeta from "./ScoreMeta";
 import TouchableView from "./TouchableView";

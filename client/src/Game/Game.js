@@ -181,7 +181,7 @@ class Game extends GameObject {
       await this.loadGame();
     }
 
-    // await super.loadAsync(this.scene);
+    await super.loadAsync(this.scene);
   }
 
   get currentTarget() {
