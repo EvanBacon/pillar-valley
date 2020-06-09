@@ -352,7 +352,7 @@ class Game extends GameObject {
     }
   };
 
-  valueForPerfection = (perfection) => {
+  valueForAccuracy = (perfection) => {
     return Math.floor(perfection * 6);
   };
 
@@ -381,18 +381,15 @@ class Game extends GameObject {
     );
 
     if (distanceFromTarget < targetPlatform.radius) {
-      const perfection = 1 - distanceFromTarget / Settings.epsilon;
+      const accuracy = 1 - distanceFromTarget / targetPlatform.radius;
       dispatch.game.play();
       dispatch.score.increment();
       this.score += 1;
-      this.runHapticsWithValue(perfection);
+      this.runHapticsWithValue(accuracy);
 
       if (this.particles) {
         this.particles.impulse();
       }
-
-      // this.balls[this.mainBall].x = targetPlatform.x;
-      // this.balls[this.mainBall].z = targetPlatform.z;
 
       this.generateDirection();
 
@@ -404,11 +401,11 @@ class Game extends GameObject {
       this.targets[0].becomeCurrent();
 
       if (this.score > 3) {
-        this.targets[0].showGems(this.valueForPerfection(perfection));
+        this.targets[0].showGems(this.valueForAccuracy(accuracy));
       }
       this.targets[1].becomeTarget();
 
-      this.balls[this.mainBall].landed(perfection);
+      this.balls[this.mainBall].landed(accuracy);
 
       this.mainBall = 1 - this.mainBall;
 
