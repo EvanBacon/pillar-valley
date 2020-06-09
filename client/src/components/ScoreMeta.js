@@ -1,16 +1,11 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import Settings from '../constants/Settings';
 import { FontAwesome } from '@expo/vector-icons';
 
 class ScoreMeta extends React.Component {
-  static propTypes = {
-    current: PropTypes.number.isRequired,
-    best: PropTypes.number.isRequired,
-    currency: PropTypes.number.isRequired,
-  };
+ 
   render() {
     const { current, best, currency } = this.props;
     return (

@@ -16,8 +16,4 @@ function GameScreen({ navigation }) {
   );
 }
 
-GameScreen.navigationOptions = {
-  header: null,
-};
-
 export default GameScreen;

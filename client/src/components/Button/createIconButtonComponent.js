@@ -1,7 +1,6 @@
 import isString from 'lodash/isString';
 import omit from 'lodash/omit';
 import pick from 'lodash/pick';
-import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import { StyleSheet, Text, TouchableHighlight, View } from 'react-native';
 
@@ -28,16 +27,7 @@ const IOS7_BLUE = '#007AFF';
 
 export default function createIconButtonComponent(Icon) {
   return class IconButton extends PureComponent {
-    static propTypes = {
-      backgroundColor: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-      borderRadius: PropTypes.number,
-      color: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-      size: PropTypes.number,
-      iconStyle: PropTypes.any, // eslint-disable-line react/forbid-prop-types
-      style: PropTypes.any, // eslint-disable-line react/forbid-prop-types
-      children: PropTypes.node,
-    };
-
+    
     static defaultProps = {
       backgroundColor: IOS7_BLUE,
       borderRadius: 5,

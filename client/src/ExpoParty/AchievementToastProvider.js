@@ -4,9 +4,6 @@ import AchievementToast from "../components/AchievementToast";
 
 export default class AchievementToastProvider extends React.Component {
 
-  static childContextTypes = {
-    showAchievementToastWithOptions: PropTypes.func,
-  };
 
   getChildContext() {
     return {

@@ -1,5 +1,4 @@
 // @flow
-import PropTypes from 'prop-types';
 import React from 'react';
 import { Image, Text, StyleSheet, TouchableOpacity, View } from 'react-native';
 
@@ -136,10 +135,4 @@ Avatar.defaultProps = {
   onPress: null,
   avatarStyle: {},
   textStyle: {},
-};
-
-Avatar.propTypes = {
-  onPress: PropTypes.func,
-  avatarStyle: Image.propTypes.style,
-  textStyle: Text.propTypes.style,
 };

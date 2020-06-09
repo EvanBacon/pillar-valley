@@ -1,16 +1,11 @@
 // @flow
-import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import { Image, Text, View } from 'react-native';
 
 import Assets from '../Assets';
 
 export default class ScoreBadge extends PureComponent {
-  static propTypes = {
-    style: View.propTypes.style,
-    children: View.propTypes.children,
-    color: PropTypes.string.isRequired,
-  };
+
 
   static defaultProps = {
     style: {},

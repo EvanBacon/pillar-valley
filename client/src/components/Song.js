@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import { View } from 'react-native';
 import { connect } from 'react-redux';
@@ -6,10 +5,7 @@ import { connect } from 'react-redux';
 import AudioManager from '../AudioManager';
 
 class Song extends React.Component {
-  static propTypes = {
-    muted: PropTypes.bool.isRequired,
-    children: View.propTypes.children.isRequired,
-  };
+ 
 
   async componentDidMount() {
     // await AudioManager.shared.playAsync('song', true);

@@ -7,7 +7,7 @@ import { Platform, View } from "react-native";
 import Assets from "./Assets";
 import AudioManager from "./AudioManager";
 import Settings from "./constants/Settings";
-import AchievementToastProvider from "./ExpoParty/AchievementToastProvider";
+// import AchievementToastProvider from "./ExpoParty/AchievementToastProvider";
 import Fire from "./ExpoParty/Fire";
 import Navigation from "./Navigation";
 import Gate from "./rematch/Gate";
@@ -51,9 +51,11 @@ export default function App() {
     <LoadingScreen />
   ) : (
     <Gate>
-      <AchievementToastProvider>
         <Navigation />
-      </AchievementToastProvider>
-    </Gate>
-  );
+      </Gate>
+    );
 }
+    
+    // <AchievementToastProvider>
+    //   <Navigation />
+    // </AchievementToastProvider>

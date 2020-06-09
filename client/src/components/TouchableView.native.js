@@ -1,17 +1,9 @@
-// // @flow
-// /* global Alert */
-import { PropTypes } from 'prop-types';
+/* global Alert */
 import React from 'react';
 import { PanResponder, View } from 'react-native';
 
 export default class TouchableView extends React.Component {
-  static propTypes = {
-    onTouchesBegan: PropTypes.func,
-    onTouchesMoved: PropTypes.func,
-    onTouchesEnded: PropTypes.func,
-    onTouchesCancelled: PropTypes.func,
-    onStartShouldSetPanResponderCapture: PropTypes.func,
-  };
+  
   static defaultProps = {
     onTouchesBegan: () => {},
     onTouchesMoved: () => {},
