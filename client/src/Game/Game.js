@@ -516,7 +516,9 @@ class Game extends GameObject {
       }
       super.update(delta, time);
 
+      if (!this.targets[1] || !this.balls[this.mainBall]) return;
       const ballPosition = this.balls[this.mainBall].position;
+
       const targetPosition = this.targets[1].position;
       const distanceFromTarget = distance(ballPosition, targetPosition);
 

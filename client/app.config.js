@@ -24,16 +24,30 @@ export default {
     icon: "./src/assets/icons/ios.png",
     supportsTablet: true,
     bundleIdentifier: "com.evanbacon.pillarvalley",
-    buildNumber: "3",
+    buildNumber: "4",
+    googleServicesFile: "./GoogleService-Info.plist",
   },
   android: {
     playStoreUrl:
       "https://play.google.com/store/apps/details?id=com.evanbacon.pillarvalley",
     icon: "./src/assets/icons/expo.png",
     package: "com.evanbacon.pillarvalley",
-    versionCode: 2,
+    googleServicesFile: "./google-services.json",
+    versionCode: 3,
   },
   web: {
     favicon: "./src/assets/icons/expo.png",
+    config: {
+      firebase: {
+        apiKey: "AIzaSyAkOa9Hyx6aKaSItFWBbrw_zou6RlQYdck",
+        authDomain: "game-f26ee.firebaseapp.com",
+        databaseURL: "https://game-f26ee.firebaseio.com",
+        projectId: "game-f26ee",
+        storageBucket: "game-f26ee.appspot.com",
+        messagingSenderId: "997358977148",
+        appId: "1:997358977148:web:a3a494984ed9dd976909f9",
+        measurementId: "G-3PJBNEEFP4",
+      },
+    },
   },
 };
