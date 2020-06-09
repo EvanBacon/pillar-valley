@@ -1,5 +1,4 @@
-// @flow
-import * as Funcs from './Ease';
+import * as Funcs from "./Ease";
 
 export default class Tween {
   constructor(props, target, params) {
@@ -30,7 +29,7 @@ export default class Tween {
 
   start() {
     this.isRunning = true;
-    if (typeof this.onStart === 'function') {
+    if (typeof this.onStart === "function") {
       this.onStart.call(null);
     }
   }
@@ -44,7 +43,7 @@ export default class Tween {
       this.swapValues();
     }
 
-    if (this.isFinished && typeof this.onFinish === 'function') {
+    if (this.isFinished && typeof this.onFinish === "function") {
       this.onFinish.call(null);
     }
   }
@@ -73,11 +72,11 @@ export default class Tween {
           this.timeIterator,
           this.initValue[val],
           this.target[val] - this.initValue[val],
-          this.duration,
+          this.duration
         );
       });
 
-      if (typeof this.onUpdate === 'function') {
+      if (typeof this.onUpdate === "function") {
         this.onUpdate.call(null, this.result);
       }
 
@@ -88,7 +87,7 @@ export default class Tween {
           if (this.pingpong) {
             this.swapValues();
           }
-          if (typeof this.onLoop === 'function') {
+          if (typeof this.onLoop === "function") {
             this.onLoop.call(null, this.count);
           }
 

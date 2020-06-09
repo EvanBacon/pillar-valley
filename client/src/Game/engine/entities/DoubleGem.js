@@ -1,4 +1,3 @@
-// @flow
 import * as Haptics from 'expo-haptics';
 
 import Colors from '../../../constants/Colors';

@@ -1,6 +1,6 @@
-import { MeshPhongMaterial } from 'three';
+import { MeshPhongMaterial } from "three";
 
-export default props =>
+export default (props) =>
   new MeshPhongMaterial({
     flatShading: true,
     ...props,

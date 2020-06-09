@@ -1,6 +1,5 @@
-// @flow
-import Colors from '../../constants/Colors';
-import flatMaterial from './utils/flatMaterial';
+import Colors from "../../constants/Colors";
+import flatMaterial from "./utils/flatMaterial";
 
 class Factory {
   materials = {};

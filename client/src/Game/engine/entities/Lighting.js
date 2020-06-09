@@ -1,4 +1,3 @@
-// @flow
 import { HemisphereLight, DirectionalLight } from 'three';
 
 import GameObject from '../core/GameObject';

@@ -1,8 +1,7 @@
-// @flow
 import { TweenMax } from 'gsap';
+import { Color, CylinderGeometry, Mesh, MeshPhongMaterial } from 'three';
 
 import Colors from '../../../constants/Colors';
-import * as THREE from 'three';
 import GameObject from '../core/GameObject';
 
 export default class Gem extends GameObject {
@@ -14,7 +13,7 @@ export default class Gem extends GameObject {
   }
 
   getGemGeometry = () => {
-    const geometry = new THREE.CylinderGeometry(0.6, 1, 0.3, 7, 1);
+    const geometry = new CylinderGeometry(0.6, 1, 0.3, 7, 1);
     geometry.vertices[geometry.vertices.length - 1].y = -1;
     geometry.verticesNeedUpdate = true;
     return geometry;
@@ -27,7 +26,7 @@ export default class Gem extends GameObject {
   getMaterial() {
     global.GemMaterial =
       global.GemMaterial ||
-      new THREE.MeshPhongMaterial({
+      new MeshPhongMaterial({
         color: Colors.blue,
       });
     return global.GemMaterial.clone();
@@ -47,7 +46,7 @@ export default class Gem extends GameObject {
   }
 
   get gem() {
-    const mesh = new THREE.Mesh(this.getGemGeometry(), this.getMaterial());
+    const mesh = new Mesh(this.getGemGeometry(), this.getMaterial());
     mesh.position.y = 10;
 
     mesh.scale.multiplyScalar(10);
@@ -62,7 +61,7 @@ export default class Gem extends GameObject {
   sat = 0;
   hue = 19;
   get color() {
-    return new THREE.Color(`hsl(${this.hue}, ${Math.floor(this.sat)}%, 66%)`);
+    return new Color(`hsl(${this.hue}, ${Math.floor(this.sat)}%, 66%)`);
   }
 
   _animateColorTo = s => {

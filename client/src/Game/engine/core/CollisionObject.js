@@ -1,4 +1,3 @@
-// @flow
 import GameObject from './GameObject';
 
 class CollisionObject extends GameObject {
@@ -10,6 +9,7 @@ class CollisionObject extends GameObject {
 
     return dist.length() < a._size.width / 2;
   };
+  
   hit = false;
 
   get collisionBounds() {

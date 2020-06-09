@@ -4,26 +4,20 @@ import Game from "../components/Game";
 import Loading from "../components/Loading";
 import Song from "../components/Song";
 
-class GameScreen extends React.Component {
-  static navigationOptions = {
-    header: null,
-  };
+function GameScreen({ navigation }) {
+  const [loading, setLoading] = React.useState(true);
 
-  state = {
-    loading: true,
-  };
-
-  render() {
-    return (
-      <Song>
-        <Loading loading={this.state.loading}>
-          <Game
-            navigation={this.props.navigation}
-            onLoad={() => this.setState({ loading: false })}
-          />
-        </Loading>
-      </Song>
-    );
-  }
+  return (
+    <Song>
+      <Loading loading={loading}>
+        <Game navigation={navigation} onLoad={() => setLoading(false)} />
+      </Loading>
+    </Song>
+  );
 }
+
+GameScreen.navigationOptions = {
+  header: null,
+};
+
 export default GameScreen;

@@ -1,4 +1,3 @@
-// @flow
 import GameObject from './GameObject';
 
 class Group extends GameObject {}

@@ -1,8 +1,12 @@
-import * as THREE from 'three';
+import {
+  Shape,
+  Mesh,
+  DoubleSide,
+  ShapeBufferGeometry,
+  MeshPhongMaterial,
+} from "three";
 
-// @flow
-
-class Circle extends THREE.Shape {
+class Circle extends Shape {
   constructor(radius) {
     super();
     this.moveTo(0, radius);
@@ -13,14 +17,14 @@ class Circle extends THREE.Shape {
   }
 }
 
-class CircleMesh extends THREE.Mesh {
+class CircleMesh extends Mesh {
   constructor({ radius, color }) {
     const shape = new Circle(radius);
-    const geometry = new THREE.ShapeBufferGeometry(shape);
-    const mat = new THREE.MeshPhongMaterial({
+    const geometry = new ShapeBufferGeometry(shape);
+    const mat = new MeshPhongMaterial({
       color,
       transparent: true,
-      // side: THREE.DoubleSide,
+      // side: DoubleSide,
     });
     super(geometry, mat);
     this.mat = mat;
@@ -30,7 +34,7 @@ class CircleMesh extends THREE.Mesh {
     this._alpha = value;
     const transparent = value !== 1;
     if (this.materials) {
-      this.materials.map(material => {
+      this.materials.map((material) => {
         material.transparent = transparent;
         material.opacity = value;
       });

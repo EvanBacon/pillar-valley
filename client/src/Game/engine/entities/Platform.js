@@ -1,22 +1,21 @@
-// @flow
-import { TweenMax } from 'gsap';
+import { TweenMax } from "gsap";
 
-import * as THREE from 'three';
-import GameObject from '../core/GameObject';
-import flatMaterial from '../utils/flatMaterial';
-import randomRange from '../utils/randomRange';
-import Gem from './Gem';
-import Settings from '../../../constants/Settings';
-import DoubleGem from './DoubleGem';
+import { Color, Mesh, BoxBufferGeometry } from "three";
+import GameObject from "../core/GameObject";
+import flatMaterial from "../utils/flatMaterial";
+import randomRange from "../utils/randomRange";
+import Gem from "./Gem";
+import Settings from "../../../constants/Settings";
+import DoubleGem from "./DoubleGem";
 
 const radius = 33.3333333;
 
 const pointForGem = (r, a) => ({ x: r * Math.cos(a), y: r * Math.sin(a) });
 
-class PlatformMesh extends THREE.Mesh {
+class PlatformMesh extends Mesh {
   constructor(material) {
     global.PlatformGeom =
-      global.PlatformGeom || new THREE.BoxBufferGeometry(radius, 1000, radius);
+      global.PlatformGeom || new BoxBufferGeometry(radius, 1000, radius);
     super(global.PlatformGeom.clone(), material);
   }
 
@@ -35,7 +34,7 @@ class PlatformMesh extends THREE.Mesh {
     this._alpha = value;
     const transparent = value !== 1;
     if (this.materials) {
-      this.materials.map(material => {
+      this.materials.map((material) => {
         material.transparent = transparent;
         material.opacity = value;
       });
@@ -44,10 +43,10 @@ class PlatformMesh extends THREE.Mesh {
       this.material.opacity = value;
     }
 
-    this.traverse(child => {
-      if (child instanceof THREE.Mesh) {
+    this.traverse((child) => {
+      if (child instanceof Mesh) {
         if (child.materials) {
-          child.materials.map(material => {
+          child.materials.map((material) => {
             material.transparent = transparent;
             material.opacity = value;
           });
@@ -61,10 +60,10 @@ class PlatformMesh extends THREE.Mesh {
 }
 
 class Platform extends GameObject {
-  loadAsync = async scene => {
+  loadAsync = async (scene) => {
     const color = this.color;
     global.PlatformGeom =
-      global.PlatformGeom || new THREE.BoxBufferGeometry(radius, 1000, radius);
+      global.PlatformGeom || new BoxBufferGeometry(radius, 1000, radius);
 
     this._platformMaterial = flatMaterial({ color });
     this.mesh = new PlatformMesh(this._platformMaterial);
@@ -76,7 +75,7 @@ class Platform extends GameObject {
 
   lastAngle = 0;
 
-  updateDirection = direction => {
+  updateDirection = (direction) => {
     this.playerDirection = direction;
 
     if (this.playerDirection === undefined) return;
@@ -98,7 +97,7 @@ class Platform extends GameObject {
     }
   };
 
-  ensureGems = async count => {
+  ensureGems = async (count) => {
     if (!this.gems) this.gems = [];
 
     while (this.gems.length < count) {
@@ -116,7 +115,7 @@ class Platform extends GameObject {
     this.updateDirection(this.playerDirection);
   };
 
-  showGems = async count => {
+  showGems = async (count) => {
     if (count > 2) {
       await this.ensureGems(count);
 
@@ -138,7 +137,7 @@ class Platform extends GameObject {
         const gem = this.gems[i];
         const { x, y } = pointForGem(
           Settings.ballDistance * 1.5,
-          gem._driftAngle,
+          gem._driftAngle
         );
         TweenMax.to(gem, 0.4, {
           alpha: 0,
@@ -153,10 +152,10 @@ class Platform extends GameObject {
   sat = 0;
   hue = 19;
   get color() {
-    return new THREE.Color(`hsl(${this.hue}, ${Math.floor(this.sat)}%, 66%)`);
+    return new Color(`hsl(${this.hue}, ${Math.floor(this.sat)}%, 66%)`);
   }
 
-  _animateColorTo = s => {
+  _animateColorTo = (s) => {
     TweenMax.to(this, 0.5, {
       sat: s,
       onUpdate: () => {

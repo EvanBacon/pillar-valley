@@ -1,13 +1,8 @@
-// @flow
-import PropTypes from "prop-types";
 import React from "react";
 
 import AchievementToast from "../components/AchievementToast";
 
 export default class AchievementToastProvider extends React.Component {
-  static propTypes = {
-    children: PropTypes.any,
-  };
 
   static childContextTypes = {
     showAchievementToastWithOptions: PropTypes.func,

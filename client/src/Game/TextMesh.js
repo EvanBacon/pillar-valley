@@ -1,8 +1,8 @@
 // @flow
-import * as THREE from 'three';
-import * as AssetUtils from 'expo-asset-utils';
+import { FontLoader, TextBufferGeometry, Mesh, Font } from "three";
+import * as AssetUtils from "expo-asset-utils";
 // 0.0.4-alpha.0
-class TextMesh extends THREE.Mesh {
+class TextMesh extends Mesh {
   params = {};
   get text() {
     return this.params.text;
@@ -12,7 +12,7 @@ class TextMesh extends THREE.Mesh {
   }
 
   /*
-font — an instance of THREE.Font.
+font — an instance of Font.
 size — Float. Size of the text. Default is 100.
 height — Float. Thickness to extrude text. Default is 50.
 curveSegments — Integer. Number of points on the curves. Default is 12.
@@ -29,23 +29,28 @@ bevelSegments — Integer. Number of bevel segments. Default is 3.
 
     const { font } = this.params;
     if (!font) {
-      console.warn('TextMesh.updateWithParams: font is required to create TextBufferGeometry!');
+      console.warn(
+        "TextMesh.updateWithParams: font is required to create TextBufferGeometry!"
+      );
       return;
-    } else if (!(font instanceof THREE.Font)) {
-      if (typeof font === 'object') {
+    } else if (!(font instanceof Font)) {
+      if (typeof font === "object") {
         this.params.font = this.loadFontFromJson(font);
-      } else if (typeof font === 'string') {
+      } else if (typeof font === "string") {
         const uri = await AssetUtils.uriAsync(font);
         this.params.font = this.loadFontFromUriAsync(uri);
       }
     }
-    this.geometry = new THREE.TextBufferGeometry(this.params.text || this.text, this.params);
+    this.geometry = new TextBufferGeometry(
+      this.params.text || this.text,
+      this.params
+    );
     this.geometry.computeBoundingBox();
     this.geometry.computeVertexNormals();
     return this.geometry;
   };
   loadFontFromJson = (json) => {
-    const font = new THREE.FontLoader().parse(json);
+    const font = new FontLoader().parse(json);
     this.update({ font });
     return font;
   };
@@ -55,7 +60,7 @@ bevelSegments — Integer. Number of bevel segments. Default is 3.
     return font;
   };
   _loadFontFromUriAsync = async (uri) => {
-    new Promise((res, rej) => new THREE.FontLoader().load(uri, res, () => {}, rej));
+    new Promise((res, rej) => new FontLoader().load(uri, res, () => {}, rej));
   };
 }
 export default TextMesh;

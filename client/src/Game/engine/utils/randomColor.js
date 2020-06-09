@@ -1,6 +1,5 @@
-// @flow
-import randomColor from 'randomcolor';
+import randomColor from "randomcolor";
 
-import colorToHex from './colorToHex';
+import colorToHex from "./colorToHex";
 
-export default props => colorToHex(randomColor(props));
+export default (props) => colorToHex(randomColor(props));
