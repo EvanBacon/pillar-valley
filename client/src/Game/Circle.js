@@ -1,8 +1,12 @@
-import THREE from '../universal/THREE';
+import {
+  Shape,
+  Mesh,
+  DoubleSide,
+  ShapeBufferGeometry,
+  MeshPhongMaterial,
+} from "three";
 
-// @flow
-
-class Circle extends THREE.Shape {
+class Circle extends Shape {
   constructor(radius) {
     super();
     this.moveTo(0, radius);
@@ -13,14 +17,14 @@ class Circle extends THREE.Shape {
   }
 }
 
-class CircleMesh extends THREE.Mesh {
+class CircleMesh extends Mesh {
   constructor({ radius, color }) {
     const shape = new Circle(radius);
-    const geometry = new THREE.ShapeBufferGeometry(shape);
-    const mat = new THREE.MeshPhongMaterial({
+    const geometry = new ShapeBufferGeometry(shape);
+    const mat = new MeshPhongMaterial({
       color,
       transparent: true,
-      // side: THREE.DoubleSide,
+      // side: DoubleSide,
     });
     super(geometry, mat);
     this.mat = mat;

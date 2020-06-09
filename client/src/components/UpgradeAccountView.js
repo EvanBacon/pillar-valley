@@ -1,38 +1,56 @@
-import { dispatch } from '@rematch/core';
-import React, { Component } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { dispatch } from "@rematch/core";
+import firebase from "firebase/app";
+import "firebase/auth";
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
 
-import { Facebook, Logout } from './Button';
+const LogoutButton = React.forwardRef((props, ref) => {
+  return (
+    <FontAwesome.Button
+      ref={ref}
+      name="sign-out"
+      backgroundColor="#CA5D6B"
+      children="Log Out"
+      onPress={() => firebase.auth().signOut()}
+      {...props}
+    />
+  );
+});
 
-export default class UpgradeAccountView extends React.Component {
-  render() {
-    const { canLogout } = this.props;
+const FacebookButton = React.forwardRef((props, ref) => {
+  return (
+    <FontAwesome.Button
+      ref={ref}
+      name="facebook"
+      backgroundColor="#3b5998"
+      children="Link with Facebook"
+      onPress={() => dispatch.facebook.upgradeAccount()}
+      {...props}
+    />
+  );
+});
 
-    return (
-      <View style={styles.container}>
-        {!canLogout && (
-          <Text style={styles.text}>
-            Link your account to access your score and achievements across games and devices.
-          </Text>
-        )}
-        {canLogout && <Logout onPress={this._onLogout}>Log Out</Logout>}
-        {!canLogout && <Facebook onPress={this._onPress}>Link with Facebook</Facebook>}
-      </View>
-    );
-  }
-  _onPress = () => {
-    dispatch.facebook.upgradeAccount();
-  };
-  _onLogout = () => {
-    dispatch.user.logoutAsync();
-  };
+export default function UpgradeAccountView({ canLogout }) {
+  return (
+    <View style={styles.container}>
+      {!canLogout && (
+        <Text style={styles.text}>
+          Link your account to access your score and achievements across games
+          and devices.
+        </Text>
+      )}
+      {canLogout && <LogoutButton />}
+      {!canLogout && <FacebookButton />}
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'flex-start',
+    alignItems: "flex-start",
     borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: 'gray',
+    borderTopColor: "gray",
     paddingTop: 8,
     marginTop: 24,
   },

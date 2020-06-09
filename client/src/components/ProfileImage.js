@@ -1,17 +1,18 @@
 // @flow
-import React from 'react';
-import { Linking, TouchableOpacity, View } from 'react-native';
+import React from "react";
+import { Linking, TouchableOpacity, View } from "react-native";
 
-import Settings from '../constants/Settings';
-import { ImagePicker, Permissions } from '../universal/Expo';
-import Avatar from './Avatar';
-import EditPhotoButton from './Button/EditPhoto';
+import Settings from "../constants/Settings";
+import * as ImagePicker from "expo-image-picker";
+import * as Permissions from "expo-permissions";
+import Avatar from "./Avatar";
+import EditPhotoButton from "./Button/EditPhoto";
 
 export default class ProfileImage extends React.Component {
   _getPermission = async (permission) => {
     const { status } = await Permissions.askAsync(permission);
-    if (status !== 'granted') {
-      Linking.openURL('app-settings:');
+    if (status !== "granted") {
+      Linking.openURL("app-settings:");
       return false;
     }
     return true;
@@ -33,7 +34,7 @@ export default class ProfileImage extends React.Component {
   };
 
   _setNewPhoto = async (uri) => {
-    alert('TODO: Evan: Add photo upload', uri);
+    alert("TODO: Evan: Add photo upload", uri);
   };
 
   _selectPhoto = async () => {
@@ -66,18 +67,18 @@ export default class ProfileImage extends React.Component {
     // Same interface as https://facebook.github.io/react-native/docs/actionsheetios.html
     const sheetOptions = [
       {
-        name: 'View Profile Picture',
+        name: "View Profile Picture",
         action: this._viewProfilePicture,
       },
       {
-        name: 'Take New Photo',
+        name: "Take New Photo",
         action: this._takePhoto,
       },
       {
-        name: 'Select New Photo',
+        name: "Select New Photo",
         action: this._selectPhoto,
       },
-      { name: 'Cancel' },
+      { name: "Cancel" },
     ];
     const destructiveButtonIndex = 0;
     const cancelButtonIndex = sheetOptions.length - 1;
@@ -96,7 +97,7 @@ export default class ProfileImage extends React.Component {
           }
         }
         // Do something here depending on the button index selected
-      },
+      }
     );
   };
 
@@ -109,22 +110,27 @@ export default class ProfileImage extends React.Component {
         style={{
           marginRight: 16,
           height: avatarSize,
+          width: avatarSize,
           minWidth: avatarSize,
           minHeight: avatarSize,
         }}
       >
         <TouchableOpacity onPress={this.onPress}>
           <Avatar
-            textStyle={{ fontWeight: 'bold', fontSize: 48 }}
+            textStyle={{ fontWeight: "bold", fontSize: 48 }}
             avatarStyle={{
-              width: '100%',
-              height: '100%',
+              width: "100%",
+              height: "100%",
               borderRadius: avatarSize / 2,
             }}
             name={name}
             avatar={image}
           />
-          {isUser && Settings.canEditPhoto && <EditPhotoButton style={{ position: 'absolute', bottom: 0, right: 0 }} />}
+          {isUser && Settings.canEditPhoto && (
+            <EditPhotoButton
+              style={{ position: "absolute", bottom: 0, right: 0 }}
+            />
+          )}
         </TouchableOpacity>
       </View>
     );

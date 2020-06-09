@@ -1,0 +1,217 @@
+{
+    "@expo/react-native-action-sheet@3.5.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/expo/react-native-action-sheet",
+        "licenseUrl": "https://github.com/expo/react-native-action-sheet/raw/master/LICENSE",
+        "parents": "pillar-valley"
+    },
+    "@expo/vector-icons@10.0.6": {
+        "licenses": "MIT",
+        "repository": "https://github.com/expo/vector-icons",
+        "licenseUrl": "https://github.com/expo/vector-icons",
+        "parents": "pillar-valley"
+    },
+    "@react-native-community/masked-view@0.1.6": {
+        "licenses": "MIT",
+        "repository": "https://github.com/react-native-community/react-native-masked-view",
+        "licenseUrl": "https://github.com/react-native-community/react-native-masked-view",
+        "parents": "pillar-valley"
+    },
+    "@react-navigation/bottom-tabs@5.5.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/react-navigation/react-navigation/tree/master/packages/bottom-tabs",
+        "licenseUrl": "https://github.com/react-navigation/react-navigation/tree/master/packages/bottom-tabs/raw/master/LICENSE",
+        "parents": "pillar-valley"
+    },
+    "@react-navigation/drawer@5.8.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/react-navigation/react-navigation/tree/master/packages/drawer",
+        "licenseUrl": "https://github.com/react-navigation/react-navigation/tree/master/packages/drawer/raw/master/LICENSE",
+        "parents": "pillar-valley"
+    },
+    "@react-navigation/material-top-tabs@5.2.10": {
+        "licenses": "MIT",
+        "repository": "https://github.com/react-navigation/react-navigation/tree/master/packages/material-top-tabs",
+        "licenseUrl": "https://github.com/react-navigation/react-navigation/tree/master/packages/material-top-tabs/raw/master/LICENSE",
+        "parents": "pillar-valley"
+    },
+    "@react-navigation/native@5.5.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/react-navigation/react-navigation/tree/master/packages/native",
+        "licenseUrl": "https://github.com/react-navigation/react-navigation/tree/master/packages/native/raw/master/LICENSE",
+        "parents": "pillar-valley"
+    },
+    "@react-navigation/stack@5.5.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/react-navigation/react-navigation/tree/master/packages/stack",
+        "licenseUrl": "https://github.com/react-navigation/react-navigation/tree/master/packages/stack/raw/master/LICENSE",
+        "parents": "pillar-valley"
+    },
+    "@rematch/core@0.6.0": {
+        "licenses": "ISC",
+        "repository": "https://github.com/rematch/rematch",
+        "licenseUrl": "https://github.com/rematch/rematch/raw/master/LICENSE",
+        "parents": "pillar-valley"
+    },
+    "@rematch/persist@0.2.1": {
+        "licenses": "ISC",
+        "licenseUrl": "https://github.com/rematch/rematch/tree/master/plugins/persist#readme",
+        "parents": "pillar-valley"
+    },
+    "expo-av@8.1.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/expo/expo",
+        "licenseUrl": "https://github.com/expo/expo",
+        "parents": "pillar-valley"
+    },
+    "expo-constants@9.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/expo/expo",
+        "licenseUrl": "https://github.com/expo/expo",
+        "parents": "pillar-valley"
+    },
+    "expo-facebook@8.1.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/expo/expo",
+        "licenseUrl": "https://github.com/expo/expo",
+        "parents": "pillar-valley"
+    },
+    "expo-gl@8.1.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/expo/expo",
+        "licenseUrl": "https://github.com/expo/expo",
+        "parents": "pillar-valley"
+    },
+    "expo-graphics@1.1.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/expo/expo-graphics",
+        "licenseUrl": "https://github.com/expo/expo-graphics/raw/master/LICENSE",
+        "parents": "pillar-valley"
+    },
+    "expo-haptics@8.1.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/expo/expo",
+        "licenseUrl": "https://github.com/expo/expo",
+        "parents": "pillar-valley"
+    },
+    "expo-image-picker@8.1.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/expo/expo",
+        "licenseUrl": "https://github.com/expo/expo",
+        "parents": "pillar-valley"
+    },
+    "expo-sensors@8.1.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/expo/expo",
+        "licenseUrl": "https://github.com/expo/expo",
+        "parents": "pillar-valley"
+    },
+    "expo-store-review@2.0.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/expo/expo",
+        "licenseUrl": "https://github.com/expo/expo",
+        "parents": "pillar-valley"
+    },
+    "expo-three@5.4.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/expo/expo-three",
+        "licenseUrl": "https://github.com/expo/expo-three/raw/master/LICENSE",
+        "parents": "pillar-valley"
+    },
+    "expo@37.0.12": {
+        "licenses": "MIT",
+        "repository": "https://github.com/expo/expo",
+        "licenseUrl": "https://github.com/expo/expo",
+        "parents": "pillar-valley"
+    },
+    "firebase@5.2.0": {
+        "licenses": "Apache-2.0",
+        "repository": "https://github.com/firebase/firebase-js-sdk",
+        "licenseUrl": "https://github.com/firebase/firebase-js-sdk",
+        "parents": "pillar-valley"
+    },
+    "gsap@2.0.1": {
+        "licenses": "Standard 'no charge' license: https://greensock.com/standard-license. Club GreenSock members get more: https://greensock.com/licensing/. Why GreenSock doesn't employ an MIT license: https://greensock.com/why-license/",
+        "repository": "https://github.com/greensock/GreenSock-JS",
+        "licenseUrl": "https://github.com/greensock/GreenSock-JS",
+        "parents": "pillar-valley"
+    },
+    "react-dom@16.12.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/facebook/react",
+        "licenseUrl": "https://github.com/facebook/react/raw/master/LICENSE",
+        "parents": "pillar-valley"
+    },
+    "react-native-animatable@1.3.3": {
+        "licenses": "MIT",
+        "repository": "https://github.com/oblador/react-native-animatable",
+        "licenseUrl": "https://github.com/oblador/react-native-animatable/raw/master/LICENSE",
+        "parents": "pillar-valley"
+    },
+    "react-native-gesture-handler@1.6.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/software-mansion/react-native-gesture-handler",
+        "licenseUrl": "https://github.com/software-mansion/react-native-gesture-handler/raw/master/LICENSE",
+        "parents": "pillar-valley"
+    },
+    "react-native-reanimated@1.7.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/software-mansion/react-native-reanimated",
+        "licenseUrl": "https://github.com/software-mansion/react-native-reanimated/raw/master/LICENSE",
+        "parents": "pillar-valley"
+    },
+    "react-native-safe-area-context@0.7.3": {
+        "licenses": "MIT",
+        "repository": "https://github.com/th3rdwave/react-native-safe-area-context",
+        "licenseUrl": "https://github.com/th3rdwave/react-native-safe-area-context/raw/master/LICENSE",
+        "parents": "pillar-valley"
+    },
+    "react-native-screens@2.2.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/kmagiera/react-native-screens",
+        "licenseUrl": "https://github.com/kmagiera/react-native-screens/raw/master/LICENSE",
+        "parents": "pillar-valley"
+    },
+    "react-native-web@0.11.7": {
+        "licenses": "MIT",
+        "repository": "https://github.com/necolas/react-native-web",
+        "licenseUrl": "https://github.com/necolas/react-native-web",
+        "parents": "pillar-valley"
+    },
+    "react-native@0.61.4": {
+        "licenses": "MIT",
+        "repository": "https://github.com/facebook/react-native",
+        "licenseUrl": "https://github.com/facebook/react-native/raw/master/LICENSE",
+        "parents": "pillar-valley"
+    },
+    "react-redux@5.0.7": {
+        "licenses": "MIT",
+        "repository": "https://github.com/reactjs/react-redux",
+        "licenseUrl": "https://github.com/reactjs/react-redux/raw/master/LICENSE.md",
+        "parents": "pillar-valley"
+    },
+    "react@16.12.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/facebook/react",
+        "licenseUrl": "https://github.com/facebook/react/raw/master/LICENSE",
+        "parents": "pillar-valley"
+    },
+    "redux-persist@5.10.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/rt2zz/redux-persist",
+        "licenseUrl": "https://github.com/rt2zz/redux-persist/raw/master/LICENSE",
+        "parents": "pillar-valley"
+    },
+    "three.proton.js@0.1.5": {
+        "licenses": "MIT",
+        "repository": "https://github.com/a-jie/three.proton",
+        "licenseUrl": "https://github.com/a-jie/three.proton",
+        "parents": "pillar-valley"
+    },
+    "three@0.113.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/mrdoob/three.js",
+        "licenseUrl": "https://github.com/mrdoob/three.js/raw/master/LICENSE",
+        "parents": "pillar-valley"
+    }
+}

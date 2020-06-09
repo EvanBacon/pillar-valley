@@ -1,39 +1,46 @@
-// @flow
-import React from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import React from "react";
+import { FlatList, StyleSheet } from "react-native";
+import { useSafeArea } from "react-native-safe-area-context";
 
-import Settings from '../../constants/Settings';
-import Header from './Header';
-import Item from './Item';
-import Separator from '../List/Separator';
+import Separator from "../List/Separator";
+import Header from "./Header";
+import Item from "./Item";
 
-class List extends React.Component {
-  keyExtractor = (item, index) => `item-${index}`;
-  renderItem = props => <Item {...props} onPress={this.props.onPress} />;
+function List({
+  style,
+  title,
+  onPress,
+  onPressHeader,
+  headerButtonTitle,
+  ...props
+}) {
+  const keyExtractor = (item, index) => `item-${index}`;
+  const renderItem = (props) => <Item {...props} onPress={onPress} />;
 
-  render() {
-    const {
-      style, title, onPressHeader, headerButtonTitle, ...props
-    } = this.props;
-    return (
-      <FlatList
-        style={[style, styles.container]}
-        keyExtractor={this.keyExtractor}
-        ListHeaderComponent={headerProps => (
-          <Header {...headerProps} buttonTitle={headerButtonTitle} onPress={onPressHeader} title={title} />
-        )}
-        ItemSeparatorComponent={Separator}
-        contentContainerStyle={{ paddingBottom: Settings.isIPhoneX ? 64 : 0 }}
-        renderItem={this.renderItem}
-        {...props}
-      />
-    );
-  }
+  const { bottom } = useSafeArea();
+  return (
+    <FlatList
+      style={[style, styles.container]}
+      keyExtractor={keyExtractor}
+      ListHeaderComponent={(headerProps) => (
+        <Header
+          {...headerProps}
+          buttonTitle={headerButtonTitle}
+          onPress={onPressHeader}
+          title={title}
+        />
+      )}
+      ItemSeparatorComponent={Separator}
+      contentContainerStyle={{ paddingBottom: bottom }}
+      renderItem={renderItem}
+      {...props}
+    />
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
   },
 });
 

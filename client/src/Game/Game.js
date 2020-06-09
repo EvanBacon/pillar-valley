@@ -1,23 +1,21 @@
 // @flow
-import { dispatch } from '@rematch/core';
-import { Back, Expo as ExpoEase, TweenMax } from 'gsap';
+import { dispatch } from "@rematch/core";
+import * as Haptics from "expo-haptics";
+import { DeviceMotion } from "expo-sensors";
+import { loadTextureAsync } from "expo-three";
+import { Back, Expo as ExpoEase, TweenMax } from "gsap";
+import { Dimensions, Platform as RNPlatform } from "react-native";
+import * as THREE from "three";
 
-import Assets from '../Assets';
-import Settings from '../constants/Settings';
-import { DangerZone, Haptic } from '../universal/Expo';
-import ExpoTHREE from '../universal/ExpoThree';
-import THREE from '../universal/THREE';
-import GameObject from './engine/core/GameObject';
-import Group from './engine/core/Group';
-import Lighting from './engine/entities/Lighting';
-import Platform from './engine/entities/Platform';
-import PlayerBall from './engine/entities/PlayerBall';
-import flatMaterial from './engine/utils/flatMaterial';
-import randomRange from './engine/utils/randomRange';
-import GameStates from './GameStates';
-import TextMesh from './TextMesh';
+import Settings from "../constants/Settings";
+import GameObject from "./engine/core/GameObject";
+import Lighting from "./engine/entities/Lighting";
+import Platform from "./engine/entities/Platform";
+import PlayerBall from "./engine/entities/PlayerBall";
+import FlatMaterial from "./engine/utils/flatMaterial";
+import randomRange from "./engine/utils/randomRange";
+import GameStates from "./GameStates";
 
-const { DeviceMotion } = DangerZone;
 function distance(p1, p2) {
   const a = p1.x - p2.x;
   const b = p1.z - p2.z;
@@ -53,17 +51,18 @@ class Game extends GameObject {
       return;
     }
 
-    if (DeviceMotion.setUpdateInterval) { DeviceMotion.setUpdateInterval(30); }
+    if (RNPlatform.OS !== "web") DeviceMotion.setUpdateInterval(30);
+
     this._subscribe();
   };
 
   _subscribe = () => {
-    if (!DeviceMotion.addListener) {
+    if (RNPlatform.OS === "web") {
       const last = { x: 0, y: 0 };
-      window.addEventListener('mousemove', ({ pageX: x, pageY: y }) => {
+      window.addEventListener("mousemove", ({ pageX: x, pageY: y }) => {
         const _index = -0.1;
 
-        const { width, height } = this.renderer.getSize();
+        const { width, height } = Dimensions.get("window");
         this.offset = {
           x: (width / 2 - x) * _index,
           z: (height / 2 - y) * _index,
@@ -72,12 +71,14 @@ class Game extends GameObject {
     } else {
       const _index = -4;
 
-      this._subscription = DeviceMotion.addListener(({ accelerationIncludingGravity = {} }) => {
-        this.offset = {
-          x: accelerationIncludingGravity.x * _index,
-          z: accelerationIncludingGravity.z * _index,
-        };
-      });
+      this._subscription = DeviceMotion.addListener(
+        ({ accelerationIncludingGravity = {} }) => {
+          this.offset = {
+            x: accelerationIncludingGravity.x * _index,
+            z: accelerationIncludingGravity.z * _index,
+          };
+        }
+      );
     }
   };
 
@@ -166,7 +167,7 @@ class Game extends GameObject {
       new Lighting(),
       //  new Particles()
     ];
-    const promises = types.map(type => this.add(type));
+    const promises = types.map((type) => this.add(type));
     const [lighting, particles] = await Promise.all(promises);
     this.particles = particles;
     if (this.state === GameStates.Menu) {
@@ -180,7 +181,6 @@ class Game extends GameObject {
     await super.loadAsync(this.scene);
   }
 
-
   get currentTarget() {
     return this.targets[0];
   }
@@ -190,10 +190,10 @@ class Game extends GameObject {
 
     const topMaterial = async (res, color) => {
       const image = new THREE.MeshBasicMaterial({
-        map: await ExpoTHREE.loadAsync(res),
+        map: await loadTextureAsync({ asset: res }),
       });
 
-      const material = flatMaterial({ color });
+      const material = new FlatMaterial({ color });
 
       return [material, material, image, material, material, material];
     };
@@ -205,7 +205,7 @@ class Game extends GameObject {
 
       const mesh = new THREE.Mesh(
         new THREE.CubeGeometry(radius * 3, 1000, radius, 1, 1, 1),
-        materials,
+        materials
       );
       mesh.position.y = -500;
       return mesh;
@@ -216,7 +216,7 @@ class Game extends GameObject {
     titleGroup.position.x = offset;
     titleGroup.position.z = -200;
 
-    const pillar = await makePillar(Assets.images['PILLAR.png']);
+    const pillar = await makePillar(require("../assets/images/PILLAR.png"));
     titleGroup.add(pillar);
 
     pillar.position.y = -1100;
@@ -226,7 +226,7 @@ class Game extends GameObject {
       delay: 0,
     });
 
-    const pillarB = await makePillar(Assets.images['VALLEY.png']);
+    const pillarB = await makePillar(require("../assets/images/VALLEY.png"));
     titleGroup.add(pillarB);
 
     if (pillarB.position) {
@@ -239,7 +239,10 @@ class Game extends GameObject {
         delay: 0.1,
       });
     }
-    const pillarC = await makePillar(Assets.images['BEGIN.png'], 0xedcbbf);
+    const pillarC = await makePillar(
+      require("../assets/images/BEGIN.png"),
+      0xedcbbf
+    );
     titleGroup.add(pillarC);
 
     pillarC.position.y = -1100;
@@ -259,34 +262,13 @@ class Game extends GameObject {
     this.titleGroup = normalizer;
   };
 
-  createText = () => {
-    this.textMesh = new TextMesh();
-    // this.textMesh.rotation.y = Math.PI;
-    this.textMesh.position.y = -200;
-    this.textMesh.position.x = -150;
-    this.textMesh.position.z = -200;
-    this.gameGroup.add(this.textMesh);
-    this.textMesh.material = new THREE.MeshPhongMaterial({ color: 0xfac575 });
-    this.textMesh.update({
-      text: '1',
-      font: require('./neue_haas_unica_pro_black.json'), // This accepts json, THREE.Font, or a uri to remote THREE.Font json
-      size: 200, // Size of the text. Default is 100.
-      height: 20, // Thickness to extrude text. Default is 50.
-      curveSegments: 12, // — Integer. Number of points on the curves. Default is 12.
-      bevelEnabled: false, // — Boolean. Turn on bevel. Default is False.
-      bevelThickness: 1, // — Float. How deep into text bevel goes. Default is 10.
-      bevelSize: 0.8, // — Float. How far from text outline is bevel. Default is 8.
-      bevelSegments: 0.3, // — Integer. Number of bevel segments. Default is 3.
-    });
-  };
-
   loadGame = async () => {
     this.cachedRotationVelocity = Settings.rotationSpeed;
     this.steps = 0;
     this.generateDirection();
-    this.gameGroup = await this.add(new Group());
-    this.targetGroup = await this.gameGroup.add(new Group());
-    this.ballGroup = await this.gameGroup.add(new Group());
+    this.gameGroup = await this.add(new GameObject());
+    this.targetGroup = await this.gameGroup.add(new GameObject());
+    this.ballGroup = await this.gameGroup.add(new GameObject());
     const ballA = await this.ballGroup.add(new PlayerBall());
     ballA.x = 0;
     ballA.z = Settings.ballDistance;
@@ -307,7 +289,6 @@ class Game extends GameObject {
       await this.addTarget();
     }
     this.targets[0].becomeCurrent();
-    // this.createText();
   };
   score = 0;
 
@@ -360,30 +341,29 @@ class Game extends GameObject {
   };
 
   runHapticsWithValue = (perfection: number) => {
-    if (Settings.isIos) {
+    if (RNPlatform.OS === "ios") {
       if (perfection < 0.3) {
-        Haptic.impact(Haptic.ImpactStyles.Light);
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       } else if (perfection < 0.6) {
-        Haptic.impact(Haptic.ImpactStyles.Medium);
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
       } else {
-        Haptic.impact(Haptic.ImpactStyles.Heavy);
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
       }
     }
-  }
+  };
 
-  valueForPerfection = (perfection) => {
+  valueForAccuracy = (perfection) => {
     return Math.floor(perfection * 6);
-  }
-
+  };
 
   testCollisionWithGem = (gem) => {
     const distanceFromTarget = distance(
       this.balls[this.mainBall].position,
-      gem.position,
+      gem.position
     );
 
     return distanceFromTarget < 20;
-  }
+  };
 
   changeBall = async () => {
     this.taps += 1;
@@ -394,39 +374,38 @@ class Game extends GameObject {
       return;
     }
 
+    const targetPlatform = this.targets[1];
     const distanceFromTarget = distance(
       this.balls[this.mainBall].position,
-      this.targets[1].position,
+      targetPlatform.position
     );
 
-    if (distanceFromTarget < Settings.epsilon) {
-      const perfection = 1 - distanceFromTarget / Settings.epsilon;
+    if (distanceFromTarget < targetPlatform.radius) {
+      const accuracy = 1 - distanceFromTarget / targetPlatform.radius;
       dispatch.game.play();
       dispatch.score.increment();
       this.score += 1;
-      this.runHapticsWithValue(perfection);
-      
+      this.runHapticsWithValue(accuracy);
+
       if (this.particles) {
         this.particles.impulse();
       }
 
-      this.balls[this.mainBall].x = this.targets[1].x;
-      this.balls[this.mainBall].z = this.targets[1].z;
-
       this.generateDirection();
 
       const target = this.targets.shift();
-      if (this.currentTarget) this.currentTarget.updateDirection(this.direction);
+      if (this.currentTarget)
+        this.currentTarget.updateDirection(this.direction);
 
       target.animateOut();
       this.targets[0].becomeCurrent();
 
       if (this.score > 3) {
-        this.targets[0].showGems(this.valueForPerfection(perfection))
+        this.targets[0].showGems(this.valueForAccuracy(accuracy));
       }
       this.targets[1].becomeTarget();
 
-      this.balls[this.mainBall].landed(perfection);
+      this.balls[this.mainBall].landed(accuracy);
 
       this.mainBall = 1 - this.mainBall;
 
@@ -438,7 +417,7 @@ class Game extends GameObject {
         await this.addTarget();
       }
 
-      this.syncTargetsAlpha();
+      // this.syncTargetsAlpha();
     } else {
       this.gameOver();
     }
@@ -505,7 +484,7 @@ class Game extends GameObject {
     const target = await this.targetGroup.add(new Platform());
     const randomAngle = randomRange(
       Settings.angleRange[0] + 90,
-      Settings.angleRange[1] + 90,
+      Settings.angleRange[1] + 90
     );
 
     const radians = THREE.Math.degToRad(randomAngle);
@@ -535,7 +514,9 @@ class Game extends GameObject {
       }
       super.update(delta, time);
 
+      if (!this.targets[1] || !this.balls[this.mainBall]) return;
       const ballPosition = this.balls[this.mainBall].position;
+
       const targetPosition = this.targets[1].position;
       const distanceFromTarget = distance(ballPosition, targetPosition);
 
@@ -549,7 +530,7 @@ class Game extends GameObject {
         } else {
           const scale = Math.max(
             0.01,
-            this.balls[this.mainBall].scale.x - 0.3 * delta,
+            this.balls[this.mainBall].scale.x - 0.3 * delta
           );
           this.balls[this.mainBall].scale.set(scale, 1, scale);
         }
@@ -557,10 +538,9 @@ class Game extends GameObject {
 
       const speed = Math.min(
         this.cachedRotationVelocity + this.score * 0.05,
-        6,
+        6
       );
-      this.rotationAngle =
-        (this.rotationAngle + speed * this.direction) % 360;
+      this.rotationAngle = (this.rotationAngle + speed * this.direction) % 360;
 
       const radians = THREE.Math.degToRad(this.rotationAngle);
 
@@ -578,9 +558,14 @@ class Game extends GameObject {
       this.gameGroup.z -= (distanceZ - 0 + this.gameGroup.z) * easing;
       this.gameGroup.x -= (distanceX - 0 + this.gameGroup.x) * easing;
 
-
-      if (this.currentTarget && this.currentTarget.gems && this.currentTarget.gems.length) {
-        const collideGems = this.currentTarget.gems.filter(gem => gem.canBeCollected && gem._driftAngle !== undefined );
+      if (
+        this.currentTarget &&
+        this.currentTarget.gems &&
+        this.currentTarget.gems.length
+      ) {
+        const collideGems = this.currentTarget.gems.filter(
+          (gem) => gem.canBeCollected && gem._driftAngle !== undefined
+        );
         if (collideGems.length) {
           let _ballPosition = new THREE.Vector3();
           this.balls[this.mainBall].getWorldPosition(_ballPosition);

@@ -1,4 +1,3 @@
-// @flow
 import BoxCollisionObject from './BoxCollisionObject';
 import Particles from './Particles';
 

@@ -1,23 +1,29 @@
-// @flow
-import THREE from '../../../universal/THREE';
+import { Mesh, CylinderBufferGeometry, MeshPhongMaterial } from "three";
 
-import { Power2 as Cubic, TweenMax } from 'gsap';
+import { Power2 as Cubic, TweenMax } from "gsap";
 
-import Colors from '../../../constants/Colors';
-import Circle from '../../Circle';
-import GameObject from '../core/GameObject';
-import Settings from '../../../constants/Settings';
+import Colors from "../../../constants/Colors";
+import Circle from "../../Circle";
+import GameObject from "../core/GameObject";
+import Settings from "../../../constants/Settings";
 
 class PlayerBall extends GameObject {
   loadAsync = async (scene) => {
     const radius = 26.6666667 / 2;
 
-    global.PlayerBallGeom = global.PlayerBallGeom || new THREE.CylinderBufferGeometry(radius, radius, 9, 24);
+    global.PlayerBallGeom =
+      global.PlayerBallGeom ||
+      new CylinderBufferGeometry(radius, radius, 9, 24);
 
-    global.PlayerBallMaterial = global.PlayerBallMaterial = new THREE.MeshPhongMaterial({
-      color: Colors.gold,
-    });
-    const mesh = new THREE.Mesh(global.PlayerBallGeom.clone(), global.PlayerBallMaterial.clone());
+    global.PlayerBallMaterial = global.PlayerBallMaterial = new MeshPhongMaterial(
+      {
+        color: Colors.gold,
+      }
+    );
+    const mesh = new Mesh(
+      global.PlayerBallGeom.clone(),
+      global.PlayerBallMaterial.clone()
+    );
     mesh.position.y = 4.5;
     this.add(mesh);
 

@@ -1,17 +1,17 @@
 // @flow
-import THREE from '../universal/THREE';
+import * as THREE from 'three';
+import {EffectComposer} from 'three/examples/jsm/postprocessing/EffectComposer';
+import {RenderPass} from 'three/examples/jsm/postprocessing/RenderPass';
+import {ShaderPass} from 'three/examples/jsm/postprocessing/ShaderPass';
+import {VignetteShader} from 'three/examples/jsm/shaders/VignetteShader';
 
 export default (gl, renderer, scene, camera) => {
-  require('three/examples/js/postprocessing/EffectComposer');
-  require('three/examples/js/postprocessing/RenderPass');
-  require('three/examples/js/postprocessing/ShaderPass');
   require('three/examples/js/postprocessing/MaskPass');
   require('three/examples/js/shaders/CopyShader');
   require('three/examples/js/shaders/HorizontalBlurShader');
   require('three/examples/js/shaders/VerticalBlurShader');
   require('three/examples/js/shaders/DotScreenShader');
   require('three/examples/js/shaders/RGBShiftShader');
-  require('three/examples/js/shaders/VignetteShader');
 
   require('three/examples/js/shaders/ColorifyShader');
   require('three/examples/js/shaders/ConvolutionShader');
@@ -21,10 +21,10 @@ export default (gl, renderer, scene, camera) => {
   require('three/examples/js/postprocessing/BloomPass');
   require('three/examples/js/postprocessing/FilmPass');
 
-  const effectVignette = new THREE.ShaderPass(THREE.VignetteShader);
+  const effectVignette = new ShaderPass(VignetteShader);
   effectVignette.renderToScreen = true;
-  const composer = new THREE.EffectComposer(renderer);
-  composer.addPass(new THREE.RenderPass(scene, camera));
+  const composer = new EffectComposer(renderer);
+  composer.addPass(new RenderPass(scene, camera));
   composer.addPass(effectVignette);
   return composer;
 };

@@ -1,10 +1,9 @@
-// @flow
-import React, { Component } from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import * as React from "react";
+import { FlatList } from "react-native";
+import { useSafeArea } from "react-native-safe-area-context";
 
-import Settings from '../constants/Settings';
-import Data from '../licenses';
-import LicensesListItem from './LicensesListItem';
+import Data from "../constants/Licenses";
+import LicensesListItem from "./LicensesListItem";
 
 function extractNameFromGithubUrl(url) {
   if (!url) {
@@ -14,10 +13,12 @@ function extractNameFromGithubUrl(url) {
   const reg = /((https?:\/\/)?(www\.)?github\.com\/)?(@|#!\/)?([A-Za-z0-9_]{1,15})(\/([-a-z]{1,20}))?/i;
   const components = reg.exec(url);
 
-  if (components && components.length > 5) {
-    return components[5];
-  }
-  return null;
+  const { length, [length - 1]: last } = components;
+  return last;
+  // if (components && components.length > 5) {
+  //   return components[5];
+  // }
+  // return null;
 }
 
 function sortDataByKey(data, key) {
@@ -31,17 +32,30 @@ function capitalizeFirstLetter(string) {
 
 const licenses = Object.keys(Data).map((key) => {
   const { licenses, ...license } = Data[key];
-  const [name, version] = key.split('@');
+
+  let [name, version] = key.split("@");
+  if (key.startsWith("@")) {
+    const components = key.split("@");
+    name = `@${components[1]}`;
+    version = components[2];
+  }
 
   const reg = /((https?:\/\/)?(www\.)?github\.com\/)?(@|#!\/)?([A-Za-z0-9_]{1,15})(\/([-a-z]{1,20}))?/i;
-  let username = extractNameFromGithubUrl(license.repository) || extractNameFromGithubUrl(license.licenseUrl);
+
+  let username = (license.repository || license.licenseUrl)
+    .split("https://github.com/")
+    .pop()
+    .split("/")
+    .shift();
+  // extractNameFromGithubUrl(license.repository) ||
+  // extractNameFromGithubUrl(license.licenseUrl);
 
   let userUrl;
   let image;
   if (username) {
     username = capitalizeFirstLetter(username);
-    image = `http://github.com/${username}.png`;
-    userUrl = `http://github.com/${username}`;
+    image = `https://github.com/${username}.png`;
+    userUrl = `https://github.com/${username}`;
   }
 
   return {
@@ -56,30 +70,17 @@ const licenses = Object.keys(Data).map((key) => {
   };
 });
 
-sortDataByKey(licenses, 'username');
+sortDataByKey(licenses, "username");
 
-export default class Licenses extends Component {
-  static navigationOptions = {
-    title: 'Libraries',
-  };
-  renderItem = ({ item }) => <LicensesListItem {...item} />;
-  render() {
-    // const { licenses } = this.props;
-
-    return (
-      <FlatList
-        style={styles.list}
-        keyExtractor={({ key }) => key}
-        data={licenses}
-        contentContainerStyle={{ paddingBottom: Settings.bottomInset }}
-        renderItem={this.renderItem}
-      />
-    );
-  }
+export default function Licenses() {
+  const { bottom } = useSafeArea();
+  return (
+    <FlatList
+      style={{ flex: 1 }}
+      keyExtractor={({ key }) => key}
+      data={licenses}
+      contentContainerStyle={{ paddingBottom: bottom }}
+      renderItem={({ item }) => <LicensesListItem {...item} />}
+    />
+  );
 }
-
-const styles = StyleSheet.create({
-  list: {
-    flex: 1,
-  },
-});

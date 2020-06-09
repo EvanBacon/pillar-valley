@@ -1,22 +1,20 @@
-// @flow
-import { TweenMax } from 'gsap';
+import { TweenMax } from "gsap";
 
-import THREE from '../../../universal/THREE';
-import GameObject from '../core/GameObject';
-import flatMaterial from '../utils/flatMaterial';
-import randomRange from '../utils/randomRange';
-import Gem from './Gem';
-import Settings from '../../../constants/Settings';
-import DoubleGem from './DoubleGem';
+import { Color, Mesh, CylinderBufferGeometry, MeshPhongMaterial } from "three";
+import GameObject from "../core/GameObject";
+import FlatMaterial from "../utils/flatMaterial";
+import randomRange from "../utils/randomRange";
+import Gem from "./Gem";
+import Settings from "../../../constants/Settings";
+import DoubleGem from "./DoubleGem";
 
-const radius = 33.3333333;
+const radius = 33.3333333 / 2;
 
 const pointForGem = (r, a) => ({ x: r * Math.cos(a), y: r * Math.sin(a) });
 
-class PlatformMesh extends THREE.Mesh {
-  constructor(material) {
-    global.PlatformGeom = global.PlatformGeom || new THREE.BoxBufferGeometry(radius, 1000, radius);
-    super(global.PlatformGeom.clone(), material);
+class PlatformMesh extends Mesh {
+  constructor(size, material) {
+    super(new CylinderBufferGeometry(size, size * 0.2, 1000, 24), material);
   }
 
   set y(y) {
@@ -44,7 +42,7 @@ class PlatformMesh extends THREE.Mesh {
     }
 
     this.traverse((child) => {
-      if (child instanceof THREE.Mesh) {
+      if (child instanceof Mesh) {
         if (child.materials) {
           child.materials.map((material) => {
             material.transparent = transparent;
@@ -59,13 +57,16 @@ class PlatformMesh extends THREE.Mesh {
   }
 }
 
+const PlatformGeom = new CylinderBufferGeometry(radius, radius, 1000, 24);
+
 class Platform extends GameObject {
+  radius = 0;
+
   loadAsync = async (scene) => {
     const color = this.color;
-    global.PlatformGeom = global.PlatformGeom || new THREE.BoxBufferGeometry(radius, 1000, radius);
-
-    this._platformMaterial = flatMaterial({ color });
-    this.mesh = new PlatformMesh(this._platformMaterial);
+    this.radius = randomRange(radius, radius * 2);
+    this._platformMaterial = new MeshPhongMaterial({ color });
+    this.mesh = new PlatformMesh(this.radius, this._platformMaterial);
     this.mesh.y = -500;
     this.add(this.mesh);
 
@@ -134,7 +135,10 @@ class Platform extends GameObject {
     if (this.gems) {
       for (let i = 0; i < this.gems.length; i += 1) {
         const gem = this.gems[i];
-        const { x, y } = pointForGem(Settings.ballDistance * 1.5, gem._driftAngle);
+        const { x, y } = pointForGem(
+          Settings.ballDistance * 1.5,
+          gem._driftAngle
+        );
         TweenMax.to(gem, 0.4, {
           alpha: 0,
           // delay: i * 0.2, //randomRange(0, 0.2),
@@ -148,7 +152,7 @@ class Platform extends GameObject {
   sat = 0;
   hue = 19;
   get color() {
-    return new THREE.Color(`hsl(${this.hue}, ${Math.floor(this.sat)}%, 66%)`);
+    return new Color(`hsl(${this.hue}, ${Math.floor(this.sat)}%, 66%)`);
   }
 
   _animateColorTo = (s) => {

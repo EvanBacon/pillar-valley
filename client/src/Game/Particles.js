@@ -1,9 +1,8 @@
-// @flow
-import Proton from 'three.proton.js';
+import Proton from "three.proton.js";
 
-import ExpoTHREE from '../universal/ExpoThree';
-import THREE from '../universal/THREE';
-import GameObject from './engine/core/GameObject';
+import { TextureLoader } from "expo-three";
+import { Sprite, SpriteMaterial } from "three";
+import GameObject from "./engine/core/GameObject";
 
 class Snow extends GameObject {
   proton = new Proton();
@@ -12,7 +11,10 @@ class Snow extends GameObject {
     const { scene } = this.game;
     const size = 100;
     const emitter = new Proton.Emitter();
-    emitter.rate = new Proton.Rate(new Proton.Span(34, 48), new Proton.Span(0.2, 0.5));
+    emitter.rate = new Proton.Rate(
+      new Proton.Span(34, 48),
+      new Proton.Span(0.2, 0.5)
+    );
     emitter.addInitialize(new Proton.Mass(1));
     emitter.addInitialize(new Proton.Radius(new Proton.Span(1, 1.01)));
     const position = new Proton.Position();
@@ -21,11 +23,13 @@ class Snow extends GameObject {
     emitter.addInitialize(position);
     emitter.addInitialize(new Proton.Life(5, 10));
 
-    const sprite = await this.createSprite(require('./assets/snow.png'));
+    const sprite = await this.createSprite(require("./assets/snow.png"));
     emitter.addInitialize(new Proton.Body(sprite));
-    emitter.addInitialize(new Proton.Velocity(0, new Proton.Vector3D(0, -0.1, 0), 90));
+    emitter.addInitialize(
+      new Proton.Velocity(0, new Proton.Vector3D(0, -0.1, 0), 90)
+    );
     emitter.addBehaviour(new Proton.RandomDrift(1.0, 0.1, 1.0, 0.05));
-    emitter.addBehaviour(new Proton.Rotate('random', 'random'));
+    emitter.addBehaviour(new Proton.Rotate("random", "random"));
     emitter.addBehaviour(new Proton.Gravity(0.2));
     // const screenZone = new Proton.ScreenZone(camera, renderer, size, '1234');
     // const crossZone = new Proton.CrossZone(screenZone, 'dead');
@@ -50,14 +54,13 @@ class Snow extends GameObject {
   }
 
   createSprite = async (resource) => {
-    const map = await ExpoTHREE.loadAsync(resource);
-    const material = new THREE.SpriteMaterial({
-      map,
+    const material = new SpriteMaterial({
+      map: new TextureLoader().load(resource),
       transparent: true,
       opacity: 0.5,
       color: 0xffffff,
     });
-    this.sprite = new THREE.Sprite(material);
+    this.sprite = new Sprite(material);
     return this.sprite;
   };
 

@@ -1,9 +1,6 @@
-// @flow
-import PropTypes from 'prop-types';
+
 import React, { Component } from 'react';
 import { Animated, Dimensions, StyleSheet, Text, View } from 'react-native';
-
-const ViewPropTypes = View.propTypes;
 
 export const DURATION = {
   LENGTH_SHORT: 500,
@@ -129,16 +126,6 @@ const styles = StyleSheet.create({
     color: 'white',
   },
 });
-
-Toast.propTypes = {
-  style: ViewPropTypes.style,
-  position: PropTypes.oneOf(['top', 'center', 'bottom']),
-  textStyle: Text.propTypes.style,
-  positionValue: PropTypes.number,
-  fadeInDuration: PropTypes.number,
-  fadeOutDuration: PropTypes.number,
-  opacity: PropTypes.number,
-};
 
 Toast.defaultProps = {
   position: 'top',

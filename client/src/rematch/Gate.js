@@ -19,9 +19,6 @@ export const store = init({
   plugins: [persistPlugin],
 });
 class Gate extends React.Component {
-  static propTypes = {
-    children: View.propTypes.children.isRequired,
-  };
 
   render() {
     return (

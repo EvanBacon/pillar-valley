@@ -1,4 +1,3 @@
-// @flow
 import GameObject from './GameObject';
 
 class BoxCollisionObject extends GameObject {

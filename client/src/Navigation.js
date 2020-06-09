@@ -1,91 +1,153 @@
-import { Constants } from './universal/Expo';
-import { createStackNavigator } from 'react-navigation';
-import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import Constants from "expo-constants";
+import * as Linking from "expo-linking";
+import * as React from "react";
+import { Platform } from "react-native";
+import Licenses from "./components/Licenses";
+import Fire from "./ExpoParty/Fire";
+import GameScreen from "./screens/GameScreen";
+import LeaderboardScreen from "./screens/LeaderboardScreen";
+import ProfileScreen from "./screens/ProfileScreen";
+import ReportScreen from "./screens/ReportScreen";
 
-import Licenses from './components/Licenses';
-import tabBarIcon from './components/tabBarIcon';
-import GameScreen from './screens/GameScreen';
-import LeaderboardScreen from './screens/LeaderboardScreen';
-import ProfileScreen from './screens/ProfileScreen';
-import ReportScreen from './screens/ReportScreen';
+const AppTab = createMaterialTopTabNavigator();
 
-const themedHeaderProps = {
-  headerTintColor: 'white',
-  headerStyle: {
-    backgroundColor: Constants.manifest.primaryColor,
-  },
-  headerTitleStyle: { color: 'white' },
-};
-
-// const PartyTabNavigator = LeaderboardScreen;
-const PartyTabNavigator = createMaterialBottomTabNavigator(
-  {
-    Leaderboard: {
-      screen: LeaderboardScreen,
-      navigationOptions: () => ({
-        tabBarColor: '#2962ff',
-        tabBarIcon: tabBarIcon('podium'), // 'show-chart'),
-      }),
-    },
-    // Achievement: {
-    //   screen: AchievementScreen,
-    //   navigationOptions: () => ({
-    //     tabBarColor: '#9013FE',
-    //     tabBarIcon: tabBarIcon('star'),
-    //   }),
-    // },
-    ProfileScreen: {
-      screen: ProfileScreen,
-      navigationOptions: () => ({
-        title: 'Profile',
-        tabBarColor: '#40D8FF',
-        tabBarIcon: tabBarIcon('person'),
-      }),
-    },
-  },
-  {
-    shifting: true,
-
-    initialRouteName: 'Leaderboard',
-    activeTintColor: '#f0edf6',
-    inactiveTintColor: '#3e2465',
-    barStyle: {
-      backgroundColor: '#694fad',
-      alignItems: 'stretch',
-    },
-    mode: 'modal',
-    title: Constants.manifest.name,
-    cardStyle: {
-      backgroundColor: 'transparent',
-    },
-  },
+const tabBarIcon = (name) => ({ tintColor }) => (
+  <Ionicons
+    style={{ backgroundColor: "transparent" }}
+    name={`md-${name}`}
+    color={tintColor}
+    size={24}
+  />
 );
 
-const ModalStack = createStackNavigator(
-  {
-    Game: GameScreen,
-    Leaderboard: {
-      screen: PartyTabNavigator,
-      navigationOptions: {
-        title: `Expo ${Constants.manifest.name}`,
+const AppStack = createStackNavigator();
+
+const linking = {
+  prefixes: [Linking.makeUrl()],
+  config: {
+    Game: "/",
+    Licenses: "/credit",
+    Report: "/report",
+    Social: {
+      screens: {
+        Leaderboard: "/rank",
+        Profile: "/u",
       },
     },
-    Licenses,
-    Report: ReportScreen,
-    Profile: ProfileScreen,
   },
-  {
-    navigationOptions: {
-      ...themedHeaderProps,
-    },
-    initialRouteName: 'Game',
-    // initialRouteName: 'Leaderboard',
-    // mode: 'modal',
-    // headerMode: 'none',
-    cardStyle: {
-      backgroundColor: 'white',
-    },
-  },
+};
+
+export default () => (
+  <NavigationContainer linking={linking}>
+    <AppStack.Navigator
+      headerMode="screen"
+      screenOptions={{
+        headerTintColor: "white",
+        headerStyle: {
+          backgroundColor: Constants.manifest.primaryColor,
+        },
+        headerTitleStyle: { color: "white" },
+
+        headerTintColor: "#fff",
+        cardStyle: {
+          backgroundColor: "white",
+        },
+      }}
+      initialRouteName="Game"
+    >
+      <AppStack.Screen
+        name="Game"
+        component={GameScreen}
+        options={{ header: () => null }}
+      />
+      <AppStack.Screen
+        name="Licenses"
+        component={Licenses}
+        options={{ stackPresentation: "modal" }}
+      />
+      <AppStack.Screen
+        name="Social"
+        component={TabNavigation}
+        options={{ stackPresentation: "modal" }}
+        options={{
+          title: `Expo ${Constants.manifest.name}`,
+        }}
+      />
+      <AppStack.Screen
+        name="Report"
+        component={ReportScreen}
+        options={{ title: "Report" }}
+      />
+      <AppStack.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={({ navigation, route }) => {
+          const uid = route.uid || Fire.shared.uid;
+
+          let headerRight;
+          if (uid !== Fire.shared.uid) {
+            headerRight = (
+              <Text
+                onPress={() => {
+                  navigation.navigate("Report", route);
+                }}
+                style={styles.reportButton}
+              >
+                Report
+              </Text>
+            );
+          }
+
+          return {
+            title: "Player Profile",
+            headerRight,
+          };
+        }}
+      />
+    </AppStack.Navigator>
+  </NavigationContainer>
 );
 
-export default ModalStack;
+const TabNavigation = () => {
+  return (
+    <AppTab.Navigator
+      initialRouteName="Leaderboard"
+      tabBarOptions={{
+        shifting: true,
+        activeTintColor: "#f0edf6",
+        inactiveTintColor: "#3e2465",
+        barStyle: {
+          backgroundColor: "#694fad",
+          alignItems: "stretch",
+        },
+        mode: "modal",
+        title: Constants.manifest.name,
+        cardStyle: {
+          backgroundColor: "transparent",
+        },
+      }}
+    >
+      <AppTab.Screen
+        name="Leaderboard"
+        component={LeaderboardScreen}
+        options={{
+          tabBarColor: "#2962ff",
+          title: tabBarIcon("podium"), // 'show-chart'),
+        }}
+      />
+      <AppTab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          title: "Profile",
+          tabBarColor: "#40D8FF",
+          tabBarIcon: tabBarIcon("person"),
+        }}
+      />
+    </AppTab.Navigator>
+  );
+};

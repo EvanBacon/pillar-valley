@@ -1,16 +1,13 @@
-// @flow
-import Settings from '../constants/Settings';
-import ExpoTHREE from '../universal/ExpoThree';
-import Composer from './Composer';
-import Game from './Game';
+import Settings from "../constants/Settings";
+import { Renderer } from "expo-three";
+import Composer from "./Composer";
+import Game from "./Game";
 
 class Machine {
   time = 0;
 
-  onContextCreateAsync = async ({
-    gl, width, height, scale: pixelRatio,
-  }) => {
-    this.renderer = new ExpoTHREE.Renderer({
+  onContextCreateAsync = async ({ gl, width, height, scale: pixelRatio }) => {
+    this.renderer = new Renderer({
       gl,
       width,
       height,
@@ -21,11 +18,16 @@ class Machine {
     await this.game.loadAsync();
 
     if (Settings.isComposerEnabled) {
-      this.composer = Composer(gl, this.renderer, this.game.scene, this.game.camera);
+      this.composer = Composer(
+        gl,
+        this.renderer,
+        this.game.scene,
+        this.game.camera
+      );
     }
   };
 
-  onTouchesBegan = state => this.game.onTouchesBegan(state);
+  onTouchesBegan = (state) => this.game.onTouchesBegan(state);
 
   onResize = (layout) => {
     const { scale } = layout;
