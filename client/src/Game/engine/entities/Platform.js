@@ -1,6 +1,6 @@
 import { TweenMax } from "gsap";
 
-import { Color, Mesh, BoxBufferGeometry } from "three";
+import { Color, Mesh, CylinderBufferGeometry, MeshPhongMaterial } from "three";
 import GameObject from "../core/GameObject";
 import FlatMaterial from "../utils/flatMaterial";
 import randomRange from "../utils/randomRange";
@@ -8,15 +8,13 @@ import Gem from "./Gem";
 import Settings from "../../../constants/Settings";
 import DoubleGem from "./DoubleGem";
 
-const radius = 33.3333333;
+const radius = 33.3333333 / 2;
 
 const pointForGem = (r, a) => ({ x: r * Math.cos(a), y: r * Math.sin(a) });
 
 class PlatformMesh extends Mesh {
-  constructor(material) {
-    global.PlatformGeom =
-      global.PlatformGeom || new BoxBufferGeometry(radius, 1000, radius);
-    super(global.PlatformGeom.clone(), material);
+  constructor(size, material) {
+    super(new CylinderBufferGeometry(size, size * 0.2, 1000, 24), material);
   }
 
   set y(y) {
@@ -59,14 +57,16 @@ class PlatformMesh extends Mesh {
   }
 }
 
+const PlatformGeom = new CylinderBufferGeometry(radius, radius, 1000, 24);
+
 class Platform extends GameObject {
+  radius = 0;
+
   loadAsync = async (scene) => {
     const color = this.color;
-    global.PlatformGeom =
-      global.PlatformGeom || new BoxBufferGeometry(radius, 1000, radius);
-
-    this._platformMaterial = new FlatMaterial({ color });
-    this.mesh = new PlatformMesh(this._platformMaterial);
+    this.radius = randomRange(radius, radius * 2);
+    this._platformMaterial = new MeshPhongMaterial({ color });
+    this.mesh = new PlatformMesh(this.radius, this._platformMaterial);
     this.mesh.y = -500;
     this.add(this.mesh);
 

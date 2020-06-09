@@ -374,12 +374,13 @@ class Game extends GameObject {
       return;
     }
 
+    const targetPlatform = this.targets[1];
     const distanceFromTarget = distance(
       this.balls[this.mainBall].position,
-      this.targets[1].position
+      targetPlatform.position
     );
 
-    if (distanceFromTarget < Settings.epsilon) {
+    if (distanceFromTarget < targetPlatform.radius) {
       const perfection = 1 - distanceFromTarget / Settings.epsilon;
       dispatch.game.play();
       dispatch.score.increment();
@@ -390,8 +391,8 @@ class Game extends GameObject {
         this.particles.impulse();
       }
 
-      this.balls[this.mainBall].x = this.targets[1].x;
-      this.balls[this.mainBall].z = this.targets[1].z;
+      // this.balls[this.mainBall].x = targetPlatform.x;
+      // this.balls[this.mainBall].z = targetPlatform.z;
 
       this.generateDirection();
 
@@ -419,7 +420,7 @@ class Game extends GameObject {
         await this.addTarget();
       }
 
-      this.syncTargetsAlpha();
+      // this.syncTargetsAlpha();
     } else {
       this.gameOver();
     }
