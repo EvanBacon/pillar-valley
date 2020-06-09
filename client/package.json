@@ -13,6 +13,7 @@
     "prettier": "prettier --write '*.js'",
     "format-code": "yarn run prettier && yarn run lint:fix",
     "predeploy": "npm run build",
+    "licenses": "npx npm-license-crawler -onlyDirectDependencies -dependencies -json src/constants/Licenses.json",
     "deploy": "gh-pages -d public"
   },
   "homepage": "https://evanbacon.github.io/Expo-Pillar-Valley",
@@ -27,19 +28,14 @@
     "@react-navigation/native": "^5.4.0",
     "@react-navigation/stack": "^5.5.1",
     "react-native-gesture-handler": "~1.6.0",
-
     "react-native-reanimated": "~1.7.0",
     "react-native-safe-area-context": "0.7.3",
     "react-native-screens": "~2.2.0",
-
     "@expo/react-native-action-sheet": "^3.5.0",
-    "@expo/status-bar-height": "^0.0.1",
     "@expo/vector-icons": "10.0.6",
     "@rematch/core": "^0.6.0",
     "@rematch/persist": "^0.2.1",
-    "babel-eslint": "10.0.3",
     "expo": "^37.0.2",
-    "expo-asset-utils": "^1.2.0",
     "expo-av": "~8.1.0",
     "expo-constants": "9.0.0",
     "expo-facebook": "~8.1.0",
@@ -52,22 +48,18 @@
     "expo-three": "5.4.0",
     "firebase": "^5.1.0",
     "gsap": "^2.0.1",
-    "prop-types": "^15.6.0",
-    "query-string": "^5.1.0",
-    "randomcolor": "^0.5.3",
     "react": "16.12.0",
     "react-dom": "16.12.0",
     "react-native": "https://github.com/expo/react-native/archive/unstable/sdk-37.tar.gz",
     "react-native-animatable": "^1.3.3",
     "react-native-web": "~0.11.2",
-    "react-navigation": "^2.5.2",
-    "react-navigation-material-bottom-tabs": "^0.3.0",
     "react-redux": "^5.0.6",
     "redux-persist": "^5.6.9",
     "three": "^0.113.2",
     "three.proton.js": "^0.1.5"
   },
   "devDependencies": {
+    "babel-eslint": "10.0.3",
     "@babel/core": "7.9.0",
     "gh-pages": "^1.2.0"
   }

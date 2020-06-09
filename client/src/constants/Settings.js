@@ -1,7 +1,6 @@
 // @flow
 import Constants from "expo-constants";
 import { Dimensions, Platform } from "react-native";
-import sizeInfo from "../utils/whatAmI";
 
 const debug = __DEV__;
 const Settings = {
@@ -13,15 +12,6 @@ const Settings = {
     ],
   },
   circleEnabled: false,
-  isIos: Platform.OS === "ios",
-  osVersion: sizeInfo.osVersion,
-  loginBehavior: sizeInfo.loginBehavior,
-  isRunningInExpo: sizeInfo.isRunningInExpo,
-  isIPhone: sizeInfo.isIPhone,
-  isIPad: sizeInfo.isIPad,
-  isIPhoneX: sizeInfo.isIPhoneX,
-  bottomInset: sizeInfo.bottomInset,
-  topInset: sizeInfo.topInset,
   isSimulator: !Constants.isDevice,
   isFirebaseEnabled: false, // !debug || false,
   isAutoStartEnabled: false, //! debug && true,
@@ -34,7 +24,6 @@ const Settings = {
   epsilon: 15,
   angleRange: [25, 155],
   visibleTargets: 5,
-  ignoredYellowBox: ["Module ABI", "Audio doesn't exist"],
   slug: debug ? "crossy-road" : "users",
   isEveryScoreBest: debug && false,
   isCacheProfileUpdateActive: true, //!debug || false,

@@ -1,13 +1,13 @@
 import { FontAwesome } from "@expo/vector-icons";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { useSafeArea } from "react-native-safe-area-context";
 import { connect } from "react-redux";
 
-import Settings from "../constants/Settings";
-
 function ScoreMeta({ current, best, currency }) {
+  const { top } = useSafeArea();
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { top }]}>
       <View style={{ flexDirection: "row" }}>
         <Text style={[styles.text, styles.highScore]}>{best}</Text>
         <Text style={[styles.text, styles.score]}>{current}</Text>
@@ -38,7 +38,6 @@ export default connect(
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
-    top: Settings.topInset,
     left: 0,
     right: 0,
     paddingLeft: 12,

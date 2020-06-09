@@ -2,7 +2,7 @@ import * as React from "react";
 import { FlatList } from "react-native";
 import { useSafeArea } from "react-native-safe-area-context";
 
-import Data from "../licenses";
+import Data from "../constants/Licenses";
 import LicensesListItem from "./LicensesListItem";
 
 function extractNameFromGithubUrl(url) {
@@ -13,10 +13,12 @@ function extractNameFromGithubUrl(url) {
   const reg = /((https?:\/\/)?(www\.)?github\.com\/)?(@|#!\/)?([A-Za-z0-9_]{1,15})(\/([-a-z]{1,20}))?/i;
   const components = reg.exec(url);
 
-  if (components && components.length > 5) {
-    return components[5];
-  }
-  return null;
+  const { length, [length - 1]: last } = components;
+  return last;
+  // if (components && components.length > 5) {
+  //   return components[5];
+  // }
+  // return null;
 }
 
 function sortDataByKey(data, key) {
@@ -30,12 +32,23 @@ function capitalizeFirstLetter(string) {
 
 const licenses = Object.keys(Data).map((key) => {
   const { licenses, ...license } = Data[key];
-  const [name, version] = key.split("@");
+
+  let [name, version] = key.split("@");
+  if (key.startsWith("@")) {
+    const components = key.split("@");
+    name = `@${components[1]}`;
+    version = components[2];
+  }
 
   const reg = /((https?:\/\/)?(www\.)?github\.com\/)?(@|#!\/)?([A-Za-z0-9_]{1,15})(\/([-a-z]{1,20}))?/i;
-  let username =
-    extractNameFromGithubUrl(license.repository) ||
-    extractNameFromGithubUrl(license.licenseUrl);
+
+  let username = (license.repository || license.licenseUrl)
+    .split("https://github.com/")
+    .pop()
+    .split("/")
+    .shift();
+  // extractNameFromGithubUrl(license.repository) ||
+  // extractNameFromGithubUrl(license.licenseUrl);
 
   let userUrl;
   let image;

@@ -9,7 +9,6 @@ import * as THREE from "three";
 
 import Settings from "../constants/Settings";
 import GameObject from "./engine/core/GameObject";
-import Group from "./engine/core/Group";
 import Lighting from "./engine/entities/Lighting";
 import Platform from "./engine/entities/Platform";
 import PlayerBall from "./engine/entities/PlayerBall";
@@ -267,9 +266,9 @@ class Game extends GameObject {
     this.cachedRotationVelocity = Settings.rotationSpeed;
     this.steps = 0;
     this.generateDirection();
-    this.gameGroup = await this.add(new Group());
-    this.targetGroup = await this.gameGroup.add(new Group());
-    this.ballGroup = await this.gameGroup.add(new Group());
+    this.gameGroup = await this.add(new GameObject());
+    this.targetGroup = await this.gameGroup.add(new GameObject());
+    this.ballGroup = await this.gameGroup.add(new GameObject());
     const ballA = await this.ballGroup.add(new PlayerBall());
     ballA.x = 0;
     ballA.z = Settings.ballDistance;
@@ -342,7 +341,7 @@ class Game extends GameObject {
   };
 
   runHapticsWithValue = (perfection: number) => {
-    if (Settings.isIos) {
+    if (RNPlatform.OS === "ios") {
       if (perfection < 0.3) {
         Haptics.impact(Haptics.ImpactFeedbackStyle.Light);
       } else if (perfection < 0.6) {
