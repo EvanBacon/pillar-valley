@@ -1,6 +1,6 @@
 import * as Haptics from "expo-haptics";
 import { Platform } from "react-native";
-import * as THREE from "three";
+import { MeshPhongMaterial } from "three";
 
 import Colors from "../../../constants/Colors";
 import Gem from "./Gem";
@@ -21,7 +21,7 @@ export default class DoubleGem extends Gem {
   getMaterial() {
     global.DoubleGemMaterial =
       global.DoubleGemMaterial ||
-      new THREE.MeshPhongMaterial({
+      new MeshPhongMaterial({
         color: Colors.red,
       });
     return global.DoubleGemMaterial.clone();

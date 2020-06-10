@@ -1,4 +1,3 @@
-// @flow
 import { dispatch } from "@rematch/core";
 import * as Haptics from "expo-haptics";
 import { DeviceMotion } from "expo-sensors";
