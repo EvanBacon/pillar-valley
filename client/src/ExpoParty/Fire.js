@@ -1,5 +1,5 @@
 // @flow
-import { dispatch } from "../rematch/store";
+// import { dispatch } from "../rematch/store";
 import Constants from "expo-constants";
 import Settings from "../constants/Settings";
 import Secret from "./Secret";
@@ -20,11 +20,11 @@ class Fire {
 
     firebase.initializeApp(Secret);
     firebase.firestore().settings({ timestampsInSnapshots: true });
-    dispatch.user.observeAuth();
+    // dispatch.user.observeAuth();
 
     // DEBUG
     if (!Settings.debug) {
-      dispatch.leaders.clear();
+      // dispatch.leaders.clear();
     }
 
     // dispatch.players.clear();
@@ -56,7 +56,7 @@ class Fire {
     });
 
   upgradeAccount = async () => {
-    dispatch.facebook.upgradeAccount();
+    // dispatch.facebook.upgradeAccount();
   };
 
   submitComplaint = (targetUid, complaint) => {

@@ -1,9 +1,8 @@
 /* global Alert */
-import React from 'react';
-import { PanResponder, View } from 'react-native';
+import React from "react";
+import { PanResponder, View } from "react-native";
 
 export default class TouchableView extends React.Component {
-  
   static defaultProps = {
     onTouchesBegan: () => {},
     onTouchesMoved: () => {},
@@ -12,7 +11,8 @@ export default class TouchableView extends React.Component {
     onStartShouldSetPanResponderCapture: () => true,
   };
 
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this._panResponder = this.buildGestures();
   }
 
@@ -21,7 +21,8 @@ export default class TouchableView extends React.Component {
       // onResponderTerminate: this.props.onResponderTerminate ,
       // onStartShouldSetResponder: () => true,
       onResponderTerminationRequest: this.props.onResponderTerminationRequest,
-      onStartShouldSetPanResponderCapture: this.props.onStartShouldSetPanResponderCapture,
+      onStartShouldSetPanResponderCapture: this.props
+        .onStartShouldSetPanResponderCapture,
       // onMoveShouldSetPanResponder: (evt, gestureState) => true,
       onPanResponderGrant: ({ nativeEvent }, gestureState) =>
         this.props.onTouchesBegan({ ...nativeEvent, gestureState }),
@@ -30,17 +31,15 @@ export default class TouchableView extends React.Component {
       onPanResponderRelease: ({ nativeEvent }, gestureState) =>
         this.props.onTouchesEnded({ ...nativeEvent, gestureState }),
       onPanResponderTerminate: ({ nativeEvent }, gestureState) =>
-        (this.props.onTouchesCancelled
+        this.props.onTouchesCancelled
           ? this.props.onTouchesCancelled({ ...nativeEvent, gestureState })
-          : this.props.onTouchesEnded({ ...nativeEvent, gestureState })),
+          : this.props.onTouchesEnded({ ...nativeEvent, gestureState }),
     });
 
   render() {
-    const {
-      children, id, style, ...props
-    } = this.props;
+    const { children, id, ...props } = this.props;
     return (
-      <View {...props} style={[style]} {...this._panResponder.panHandlers}>
+      <View {...props} {...this._panResponder.panHandlers}>
         {children}
       </View>
     );
