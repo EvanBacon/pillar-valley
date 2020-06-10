@@ -9,6 +9,7 @@ import Constants from "expo-constants";
 import * as Facebook from "expo-facebook";
 import { takeSnapshotAsync } from "expo";
 import getDeviceInfo from "../utils/getUserInfo";
+import * as Analytics from "expo-firebase-analytics";
 
 export const skins = {
   state: {},
@@ -133,7 +134,10 @@ export const game = {
 export const muted = {
   state: false,
   reducers: {
-    toggle: (state) => !state,
+    toggle: (state) => {
+      Analytics.logEvent("toggle_music", { on: !state });
+      return !state;
+    },
   },
   effects: {},
 };

@@ -5,6 +5,7 @@ import { Alert, Linking } from "react-native";
 
 import useStoreReview from "../../hooks/useStoreReview";
 import Icon from "./Icon";
+import * as Analytics from "expo-firebase-analytics";
 
 const { name } = Constants.manifest;
 
@@ -28,6 +29,7 @@ function Rate() {
 
   const onPress = React.useMemo(
     () => () => {
+      Analytics.logEvent("store_review", { can_review: canReview });
       if (canReview) {
         StoreReview.requestReview();
       } else {

@@ -22,11 +22,10 @@ function Footer({ game, screenshot, navigation }) {
   const { bottom } = useSafeArea();
   const supportsStoreReview = useStoreReview();
   const animation = game === GameStates.Menu ? "zoomIn" : "zoomOut";
-  const views = [<SoundButton />, <LicensesButton onPress={onLicensesPress} />];
-
   const onLicensesPress = () => {
     navigation.navigate("Licenses");
   };
+  const views = [<SoundButton />, <LicensesButton onPress={onLicensesPress} />];
 
   const onLeaderboardPress = () => {
     if (Settings.isFirebaseEnabled) {

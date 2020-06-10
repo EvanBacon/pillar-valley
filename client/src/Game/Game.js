@@ -5,6 +5,7 @@ import { loadTextureAsync } from "expo-three";
 import { Back, Expo as ExpoEase, TweenMax } from "gsap";
 import { Dimensions, Platform as RNPlatform } from "react-native";
 import * as THREE from "three";
+import * as Analytics from "expo-firebase-analytics";
 
 import Settings from "../constants/Settings";
 import GameObject from "./engine/core/GameObject";
@@ -459,6 +460,9 @@ class Game extends GameObject {
     this.takeScreenshot();
     this.screenShotTaken = false;
     dispatch.score.reset();
+    Analytics.logEvent("game_over", {
+      score: this.score,
+    });
     this.score = 0;
     dispatch.game.menu();
 
