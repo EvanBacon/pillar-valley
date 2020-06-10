@@ -1,5 +1,5 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { dispatch } from "@rematch/core";
+import { dispatch } from "../rematch/store";
 import firebase from "firebase/app";
 import "firebase/auth";
 import React from "react";

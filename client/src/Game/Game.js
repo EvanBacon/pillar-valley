@@ -1,4 +1,4 @@
-import { dispatch } from "@rematch/core";
+import { dispatch } from "../rematch/store";
 import * as Haptics from "expo-haptics";
 import { DeviceMotion } from "expo-sensors";
 import { loadTextureAsync } from "expo-three";

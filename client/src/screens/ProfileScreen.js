@@ -1,4 +1,4 @@
-import { dispatch } from "@rematch/core";
+import { dispatch } from "../rematch/store";
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { connect } from "react-redux";

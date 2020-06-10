@@ -1,4 +1,4 @@
-import { dispatch } from "@rematch/core";
+import { dispatch } from "../rematch/store";
 import firebase from "firebase/app";
 import "firebase/auth";
 import React, { Component } from "react";

@@ -1,5 +1,5 @@
 // @flow
-import { dispatch } from "@rematch/core";
+import { dispatch } from "../rematch/store";
 import Constants from "expo-constants";
 import Settings from "../constants/Settings";
 import Secret from "./Secret";

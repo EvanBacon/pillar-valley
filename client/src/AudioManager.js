@@ -1,4 +1,4 @@
-import { store } from "./rematch/Gate";
+import { store } from "./rematch/store";
 import { Audio } from "expo-av";
 // eslint-disable-line
 class AudioManager {

@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, Platform, View } from "react-native";
 import * as Animatable from "react-native-animatable";
 import { useSafeArea } from "react-native-safe-area-context";
 import { connect } from "react-redux";
@@ -51,7 +51,7 @@ function Footer({ game, screenshot, navigation }) {
         const _delay = index * delay;
         return (
           <Animatable.View
-            useNativeDriver
+            useNativeDriver={Platform.select({ web: false, default: true })}
             key={index}
             duration={duration + _delay}
             delay={initialDelay + _delay}

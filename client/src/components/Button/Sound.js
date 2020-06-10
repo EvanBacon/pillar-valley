@@ -1,4 +1,4 @@
-import { dispatch } from "@rematch/core";
+import { dispatch } from "../../rematch/store";
 import * as React from "react";
 import { connect } from "react-redux";
 
