@@ -482,9 +482,10 @@ class Game extends GameObject {
     const startX = this.targets[this.targets.length - 1].x;
     const startZ = this.targets[this.targets.length - 1].z;
     const target = await this.targetGroup.add(new Platform());
+    const range = 90;
     const randomAngle = randomRange(
-      Settings.angleRange[0] + 90,
-      Settings.angleRange[1] + 90
+      Settings.angleRange[0] + range,
+      Settings.angleRange[1] + range
     );
 
     const radians = THREE.Math.degToRad(randomAngle);
@@ -544,12 +545,15 @@ class Game extends GameObject {
 
       const radians = THREE.Math.degToRad(this.rotationAngle);
 
+      const ballDistance = distance(
+        this.balls[1 - this.mainBall].position,
+        this.targets[1].position
+      );
+
       this.balls[this.mainBall].x =
-        this.balls[1 - this.mainBall].x -
-        Settings.ballDistance * Math.sin(radians);
+        this.balls[1 - this.mainBall].x - ballDistance * Math.sin(radians);
       this.balls[this.mainBall].z =
-        this.balls[1 - this.mainBall].z +
-        Settings.ballDistance * Math.cos(radians);
+        this.balls[1 - this.mainBall].z + ballDistance * Math.cos(radians);
 
       const distanceX = this.balls[1 - this.mainBall].position.x;
       const distanceZ = this.balls[1 - this.mainBall].position.z;
