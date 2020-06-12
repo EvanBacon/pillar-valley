@@ -25,7 +25,12 @@ function Footer({ game, screenshot, navigation }) {
   const onLicensesPress = () => {
     navigation.navigate("Licenses");
   };
-  const views = [<SoundButton />, <LicensesButton onPress={onLicensesPress} />];
+  const views = [];
+
+  if (Platform.OS !== "web") {
+    views.push(<SoundButton />);
+  }
+  views.push(<LicensesButton onPress={onLicensesPress} />);
 
   const onLeaderboardPress = () => {
     if (Settings.isFirebaseEnabled) {

@@ -1,11 +1,12 @@
 import { store } from "./rematch/store";
 import { Audio } from "expo-av";
+import { Platform } from "react-native";
 // eslint-disable-line
 class AudioManager {
   sounds = {};
 
   playAsync = async (name, isLooping) => {
-    if (store.getState().muted) {
+    if (store.getState().muted || Platform.OS === "web") {
       return;
     }
 

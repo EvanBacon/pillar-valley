@@ -9,3 +9,5 @@ release/builds
 *.sketch
 
 web-build
+
+.DS_Store

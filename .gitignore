@@ -2,3 +2,5 @@
 ios/fastlane/screenshots/en-US/preview.mp4
 *.sketch
 client/web-build/
+
+.DS_Store
