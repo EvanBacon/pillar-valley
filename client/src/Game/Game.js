@@ -1,75 +1,25 @@
 import * as Analytics from "expo-firebase-analytics";
 import * as Haptics from "expo-haptics";
-import { DeviceMotion } from "expo-sensors";
 import { Back, Expo as ExpoEase, TweenMax } from "gsap";
-import { Dimensions, Platform as RNPlatform } from "react-native";
+import { Platform } from "react-native";
 import * as THREE from "three";
 
 import Settings from "../constants/Settings";
 import { dispatch } from "../rematch/store";
 import GameObject from "./engine/core/GameObject";
 import Lighting from "./engine/entities/Lighting";
-import Platform from "./engine/entities/Platform";
+import PlatformObject from "./engine/entities/Platform";
 import PlayerBall from "./engine/entities/PlayerBall";
 import randomRange from "./engine/utils/randomRange";
 import GameStates from "./GameStates";
 import MenuObject from "./MenuObject";
+import MotionObserver from "./MotionObserver";
 
 function distance(p1, p2) {
   const a = p1.x - p2.x;
   const b = p1.z - p2.z;
 
   return Math.sqrt(a * a + b * b);
-}
-
-class MotionObserver {
-  offset = { z: 0, x: 0 };
-
-  start = () => {
-    if (!Settings.isMotionMenuEnabled) {
-      return;
-    }
-
-    if (RNPlatform.OS === "web") {
-      const last = { x: 0, y: 0 };
-      window.addEventListener("mousemove", ({ pageX: x, pageY: y }) => {
-        const _index = -0.1;
-
-        const { width, height } = Dimensions.get("window");
-        this.offset = {
-          x: (width / 2 - x) * _index,
-          z: (height / 2 - y) * _index,
-        };
-      });
-    } else {
-      // TODO(Bacon): Use device motion on mobile web
-      DeviceMotion.setUpdateInterval(30);
-
-      const _index = -4;
-
-      this._subscription = DeviceMotion.addListener(
-        ({ accelerationIncludingGravity = {} }) => {
-          this.offset = {
-            x: accelerationIncludingGravity.x * _index,
-            z: accelerationIncludingGravity.z * _index,
-          };
-        }
-      );
-    }
-  };
-
-  stop = () => {
-    if (!this._subscription) return;
-    this._subscription.remove();
-    this._subscription = null;
-  };
-
-  updateWithCamera = (camera) => {
-    const easing = 0.03;
-
-    camera.position.z -= (this.offset.z + camera.position.z) * easing;
-    camera.position.x -= (this.offset.x + camera.position.x) * easing;
-  };
 }
 
 class Game extends GameObject {
@@ -92,11 +42,6 @@ class Game extends GameObject {
       this.setGameState(GameStates.Playing);
     }
   }
-
-  _unsubscribe = () => {
-    this._subscription && this._subscription.remove();
-    this._subscription = null;
-  };
 
   createScene = () => {
     const scene = new THREE.Scene();
@@ -151,7 +96,7 @@ class Game extends GameObject {
       target.destroy();
     }
     this.targets = [];
-    const target = await this.targetGroup.add(new Platform());
+    const target = await this.targetGroup.add(new PlatformObject());
     if (target) {
       target.x = 0;
       target.z = this.balls[0].z;
@@ -223,7 +168,7 @@ class Game extends GameObject {
     this.mainBall = 1;
     this.balls[1 - this.mainBall].scale.set(1, 1, 1);
     this.balls[this.mainBall].scale.set(1, 1, 1);
-    const target = await this.targetGroup.add(new Platform());
+    const target = await this.targetGroup.add(new PlatformObject());
     target.x = 0;
     target.z = this.balls[0].z;
     this.targets.push(target);
@@ -283,15 +228,16 @@ class Game extends GameObject {
     });
   };
 
-  runHapticsWithValue = (perfection: number) => {
-    if (RNPlatform.OS === "ios") {
-      if (perfection < 0.3) {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-      } else if (perfection < 0.6) {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-      } else {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
-      }
+  runHapticsWithValue = (perfection) => {
+    if (Platform.OS !== "ios") {
+      return;
+    }
+    if (perfection < 0.3) {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    } else if (perfection < 0.6) {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    } else {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
     }
   };
 
@@ -427,7 +373,7 @@ class Game extends GameObject {
     this.steps++;
     const startX = this.targets[this.targets.length - 1].x;
     const startZ = this.targets[this.targets.length - 1].z;
-    const target = await this.targetGroup.add(new Platform());
+    const target = await this.targetGroup.add(new PlatformObject());
     const range = 90;
     const randomAngle = randomRange(
       Settings.angleRange[0] + range,
