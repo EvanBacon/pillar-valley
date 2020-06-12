@@ -9,8 +9,12 @@ import Footer from "../components/Footer";
 import ScoreMeta from "../components/ScoreMeta";
 import TouchableView from "../components/TouchableView";
 
+import useAppState from "../hooks/useAppState";
+import { BlurView } from "expo-blur";
+
 import Game from "../Game/Game";
 import { Renderer } from "expo-three";
+import Paused from "../components/Paused";
 class GameState {
   onContextCreateAsync = async ({ gl, width, height, pixelRatio }) => {
     this.renderer = new Renderer({
@@ -24,7 +28,11 @@ class GameState {
     await this.game.loadAsync();
   };
 
-  onTouchesBegan = (state) => this.game.onTouchesBegan(state);
+  onTouchesBegan = (state) => {
+    if (this.game) {
+      this.game.onTouchesBegan(state);
+    }
+  };
 
   onResize = (layout) => {
     const { scale } = layout;
@@ -47,7 +55,7 @@ class GameState {
 
 const InputGameView = Settings.isSimulator ? SkipGameViewInSimulator : GameView;
 
-function GameView({ onLoad }) {
+function GameView({ onLoad, isPaused }) {
   const machine = React.useMemo(() => {
     if (Settings.isSimulator) return null;
     return new GameState();
@@ -74,6 +82,7 @@ function GameView({ onLoad }) {
       <GraphicsView
         ref={(ref) => (global.gameRef = ref)}
         key="game"
+        isPaused={isPaused}
         onContextCreate={onContextCreate}
         onRender={machine.onRender}
         onResize={machine.onResize}
@@ -85,13 +94,16 @@ function GameView({ onLoad }) {
 export default function GameScreen({ navigation }) {
   const [loading, setLoading] = React.useState(true);
 
+  const appState = useAppState();
+  const isPaused = appState !== "active";
+
   return (
     <View style={styles.container} pointerEvents="box-none">
       <Song />
-
-      <InputGameView onLoad={() => setLoading(false)} />
+      <InputGameView onLoad={() => setLoading(false)} isPaused={isPaused} />
       <ScoreMeta />
       <Footer navigation={navigation} />
+      {isPaused && <Paused />}
 
       {loading && (
         <Image

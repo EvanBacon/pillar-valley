@@ -32,6 +32,7 @@
     "@rematch/persist": "^1.1.6",
     "expo": "~37.0.12",
     "expo-av": "~8.1.0",
+    "expo-blur": "^8.1.0",
     "expo-constants": "9.0.0",
     "expo-facebook": "~8.1.0",
     "expo-firebase-analytics": "~2.1.1",

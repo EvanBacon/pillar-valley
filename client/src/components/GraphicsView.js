@@ -1,6 +1,13 @@
 import invariant from "invariant";
 import React from "react";
-import { AppState, PixelRatio, StyleSheet, Text, View } from "react-native";
+import {
+  AppState,
+  PixelRatio,
+  StyleSheet,
+  Text,
+  View,
+  Platform,
+} from "react-native";
 import uuidv4 from "uuid/v4";
 
 import { GLView } from "expo-gl";
@@ -12,7 +19,9 @@ export default class GraphicsView extends React.Component {
   static defaultProps = {
     arRunningProps: {},
     arCameraProps: {},
+    onShouldReloadContext: Platform.OS !== "web",
     isShadowsEnabled: false,
+    isPaused: false,
   };
 
   state = {
@@ -20,13 +29,8 @@ export default class GraphicsView extends React.Component {
     id: uuidv4(),
   };
 
-  componentDidMount() {
-    AppState.addEventListener("change", this.handleAppStateChangeAsync);
-  }
-
   componentWillUnmount() {
     this.destroy();
-    AppState.removeEventListener("change", this.handleAppStateChangeAsync);
   }
 
   destroy = () => {
@@ -34,30 +38,8 @@ export default class GraphicsView extends React.Component {
     this.nativeRef = null;
     cancelAnimationFrame(this.rafID);
   };
-
-  handleAppStateChangeAsync = (nextAppState) => {
-    if (
-      this.state.appState.match(/inactive|background/) &&
-      nextAppState === "active"
-    ) {
-      // console.log('App has come to the foreground!')
-      const { onShouldReloadContext } = this.props;
-      if (onShouldReloadContext && onShouldReloadContext()) {
-        this.destroy();
-        this.setState({ appState: nextAppState, id: uuidv4() });
-        return;
-      }
-    }
-    this.setState({ appState: nextAppState });
-  };
-
   render() {
-    const {
-      isArEnabled,
-      shouldIgnoreSafeGuards,
-      style,
-      glviewStyle,
-    } = this.props;
+    const { glviewStyle } = this.props;
 
     return (
       <GLView
@@ -118,9 +100,11 @@ export default class GraphicsView extends React.Component {
           typeof lastFrameTime !== "undefined" ? now - lastFrameTime : 0.16666;
         this.rafID = requestAnimationFrame(render);
 
-        onRender(delta);
-        // NOTE: At the end of each frame, notify `Expo.GLView` with the below
-        gl.endFrameEXP();
+        if (!this.props.isPaused) {
+          onRender(delta);
+          // NOTE: At the end of each frame, notify `Expo.GLView` with the below
+          gl.endFrameEXP();
+        }
 
         lastFrameTime = now;
       }
