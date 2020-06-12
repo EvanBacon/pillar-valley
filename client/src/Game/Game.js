@@ -22,38 +22,14 @@ function distance(p1, p2) {
   return Math.sqrt(a * a + b * b);
 }
 
-class Game extends GameObject {
-  state = GameStates.Menu;
+class MotionObserver {
+  offset = { z: 0, x: 0 };
 
-  balls = [];
-  targets = [];
-  offset = { x: 0, z: 0 };
-  taps = 0;
-  hue = 19;
-
-  constructor(width, height, renderer) {
-    super();
-    this._game = this;
-    this.renderer = renderer;
-    this._width = width;
-    this._height = height;
-
-    if (Settings.isAutoStartEnabled) {
-      this.setGameState(GameStates.Playing);
-    }
-  }
-
-  observeMotion = () => {
+  start = () => {
     if (!Settings.isMotionMenuEnabled) {
       return;
     }
 
-    if (RNPlatform.OS !== "web") DeviceMotion.setUpdateInterval(30);
-
-    this._subscribe();
-  };
-
-  _subscribe = () => {
     if (RNPlatform.OS === "web") {
       const last = { x: 0, y: 0 };
       window.addEventListener("mousemove", ({ pageX: x, pageY: y }) => {
@@ -66,6 +42,9 @@ class Game extends GameObject {
         };
       });
     } else {
+      // TODO(Bacon): Use device motion on mobile web
+      DeviceMotion.setUpdateInterval(30);
+
       const _index = -4;
 
       this._subscription = DeviceMotion.addListener(
@@ -78,6 +57,41 @@ class Game extends GameObject {
       );
     }
   };
+
+  stop = () => {
+    if (!this._subscription) return;
+    this._subscription.remove();
+    this._subscription = null;
+  };
+
+  updateWithCamera = (camera) => {
+    const easing = 0.03;
+
+    camera.position.z -= (this.offset.z + camera.position.z) * easing;
+    camera.position.x -= (this.offset.x + camera.position.x) * easing;
+  };
+}
+
+class Game extends GameObject {
+  state = GameStates.Menu;
+
+  balls = [];
+  targets = [];
+  taps = 0;
+  hue = 19;
+  motionObserver = new MotionObserver();
+
+  constructor(width, height, renderer) {
+    super();
+    this._game = this;
+    this.renderer = renderer;
+    this._width = width;
+    this._height = height;
+
+    if (Settings.isAutoStartEnabled) {
+      this.setGameState(GameStates.Playing);
+    }
+  }
 
   _unsubscribe = () => {
     this._subscription && this._subscription.remove();
@@ -183,7 +197,7 @@ class Game extends GameObject {
   }
 
   loadMenu = async () => {
-    this.observeMotion();
+    this.motionObserver.start();
 
     this.titleGroup = new MenuObject();
     await this.titleGroup.loadAsync();
@@ -224,7 +238,8 @@ class Game extends GameObject {
     if (this.state === GameStates.playing) {
       return;
     }
-    this._unsubscribe();
+    this.motionObserver.stop();
+
     TweenMax.to(this.titleGroup.position, 1.0, {
       y: -1100,
       ease: ExpoEase.easeOut,
@@ -431,13 +446,8 @@ class Game extends GameObject {
   };
 
   update(delta, time) {
-    const easing = 0.03;
-
     if (this.state === GameStates.Menu) {
-      this.camera.position.z -=
-        (this.offset.z + this.camera.position.z) * easing;
-      this.camera.position.x -=
-        (this.offset.x + this.camera.position.x) * easing;
+      this.motionObserver.updateWithCamera(this.camera);
     } else {
       this.camera.position.z = this.camera.ogPosition.z;
       this.camera.position.x = this.camera.ogPosition.x;
