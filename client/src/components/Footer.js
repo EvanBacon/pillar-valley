@@ -12,7 +12,7 @@ import LicensesButton from "./Button/LicensesButton";
 import RateButton from "./Button/Rate";
 import ShareButton from "./Button/Share";
 import SoundButton from "./Button/Sound";
-import PWAButton, { canInstallPWA } from "./Button/PWAButton";
+import PWAButton, { usePWAInstallable } from "./Button/PWAButton";
 import SwapPlatformButton, {
   getOtherPlatform,
 } from "./Button/SwapPlatformButton";
@@ -25,6 +25,10 @@ const easing = "ease-out";
 function Footer({ game, screenshot, navigation }) {
   const { bottom } = useSafeArea();
   const supportsStoreReview = useStoreReview();
+  // Chrome devices can prompt the user to install the website as a PWA
+  const canInstallPwa = usePWAInstallable();
+  // This state toggles when the user installs so the button isn't rendered anymore
+  const [showPWA, setShowPWA] = React.useState(true);
   const animation = game === GameStates.Menu ? "zoomIn" : "zoomOut";
   const onLicensesPress = () => {
     navigation.navigate("Licenses");
@@ -39,8 +43,8 @@ function Footer({ game, screenshot, navigation }) {
     views.push(<SwapPlatformButton />);
   }
 
-  if (canInstallPWA()) {
-    views.push(<PWAButton />);
+  if (canInstallPwa && showPWA) {
+    views.push(<PWAButton onInstall={() => setShowPWA(false)} />);
   }
 
   views.push(<LicensesButton onPress={onLicensesPress} />);

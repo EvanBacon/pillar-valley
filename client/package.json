@@ -12,10 +12,8 @@
     "lint:fix": "eslint --ignore-path .gitignore . --fix",
     "prettier": "prettier --write '*.js'",
     "format-code": "yarn run prettier && yarn run lint:fix",
-    "predeploy": "npm run build",
     "licenses": "npx npm-license-crawler -onlyDirectDependencies -dependencies -json src/constants/Licenses.json",
-    "deploy": "gh-pages -d public",
-    "deploy:net": "netlify deploy --dir web-build --prod"
+    "publish:web": "netlify deploy --dir web-build --prod"
   },
   "jest": {
     "preset": "jest-expo"
