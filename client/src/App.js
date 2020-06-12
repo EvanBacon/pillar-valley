@@ -1,4 +1,5 @@
 import { AppLoading } from "expo";
+import { StatusBar } from "react-native";
 import * as Font from "expo-font";
 import React from "react";
 
@@ -14,6 +15,7 @@ export default function App() {
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
+    StatusBar.setBarStyle("light-content", true);
     Fire.shared.init();
     (async () => {
       console.time("Setup");
