@@ -21,6 +21,7 @@
     "preset": "jest-expo"
   },
   "dependencies": {
+    "@expo/html-elements": "^0.0.0-alpha.5",
     "@expo/react-native-action-sheet": "^3.5.0",
     "@expo/vector-icons": "10.0.6",
     "@react-native-community/masked-view": "0.1.6",
@@ -40,6 +41,7 @@
     "expo-graphics": "^1.1.0",
     "expo-haptics": "~8.1.0",
     "expo-image-picker": "~8.1.0",
+    "expo-linking": "^1.0.1",
     "expo-sensors": "~8.1.0",
     "expo-store-review": "~2.1.0",
     "expo-three": "5.4.0",

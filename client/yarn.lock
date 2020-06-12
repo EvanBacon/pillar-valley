@@ -1549,6 +1549,11 @@
     text-encoding "^0.7.0"
     xmldom-qsa "^1.0.3"
 
+"@expo/html-elements@^0.0.0-alpha.5":
+  version "0.0.0-alpha.5"
+  resolved "https://registry.yarnpkg.com/@expo/html-elements/-/html-elements-0.0.0-alpha.5.tgz#132ccfa5e9150fc510e484d3d9a26fc99adb1370"
+  integrity sha512-2b9iiWyWoiKJF/IOIQwmOusGyiRZsXVT1EVuHwEshNRDWOyfOqg9mpZMlZQBizQywm+l7sDwql4BcRC4o00rbg==
+
 "@expo/react-native-action-sheet@^3.5.0":
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/@expo/react-native-action-sheet/-/react-native-action-sheet-3.5.0.tgz#243ef101b47d9d438ba17883ff816252c5d5b7dc"
@@ -3501,7 +3506,7 @@ expo-linear-gradient@~8.1.0:
   resolved "https://registry.yarnpkg.com/expo-linear-gradient/-/expo-linear-gradient-8.1.0.tgz#6933765cf1e76ef2928fd8495e779929699ac4c6"
   integrity sha512-AIy2pOXQRcgk2XE5IgAzd1S2jTFLutiDfveNm6m3fPAk00Rw4qFe98qzte1ayNrGYLJvQ2xq/Y7C0BmBP051mg==
 
-expo-linking@~1.0.0:
+expo-linking@^1.0.1, expo-linking@~1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/expo-linking/-/expo-linking-1.0.1.tgz#2c1b6e68f8d5f4e54add5670290a4eacb263199d"
   integrity sha512-PZNT/1dJv7ZBAXxUFzcvQ5MN74E/yOPrk4UwnxvLoNOmo5fyXcP3BJJPQSIKFGLvVtzl71KJJxYtb+KsR4JvNQ==

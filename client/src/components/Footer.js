@@ -12,6 +12,9 @@ import LicensesButton from "./Button/LicensesButton";
 import RateButton from "./Button/Rate";
 import ShareButton from "./Button/Share";
 import SoundButton from "./Button/Sound";
+import SwapPlatformButton, {
+  getOtherPlatform,
+} from "./Button/SwapPlatformButton";
 
 const delay = 100;
 const initialDelay = 100;
@@ -30,6 +33,11 @@ function Footer({ game, screenshot, navigation }) {
   if (Platform.OS !== "web") {
     views.push(<SoundButton />);
   }
+
+  if (getOtherPlatform()) {
+    views.push(<SwapPlatformButton />);
+  }
+
   views.push(<LicensesButton onPress={onLicensesPress} />);
 
   const onLeaderboardPress = () => {
