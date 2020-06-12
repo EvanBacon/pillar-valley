@@ -1,20 +1,19 @@
-import { dispatch } from "../rematch/store";
+import * as Analytics from "expo-firebase-analytics";
 import * as Haptics from "expo-haptics";
 import { DeviceMotion } from "expo-sensors";
-import { loadTextureAsync } from "expo-three";
 import { Back, Expo as ExpoEase, TweenMax } from "gsap";
 import { Dimensions, Platform as RNPlatform } from "react-native";
 import * as THREE from "three";
-import * as Analytics from "expo-firebase-analytics";
 
 import Settings from "../constants/Settings";
+import { dispatch } from "../rematch/store";
 import GameObject from "./engine/core/GameObject";
 import Lighting from "./engine/entities/Lighting";
 import Platform from "./engine/entities/Platform";
 import PlayerBall from "./engine/entities/PlayerBall";
-import FlatMaterial from "./engine/utils/flatMaterial";
 import randomRange from "./engine/utils/randomRange";
 import GameStates from "./GameStates";
+import MenuObject from "./MenuObject";
 
 function distance(p1, p2) {
   const a = p1.x - p2.x;
@@ -42,8 +41,6 @@ class Game extends GameObject {
     if (Settings.isAutoStartEnabled) {
       this.setGameState(GameStates.Playing);
     }
-
-    this.observeMotion();
   }
 
   observeMotion = () => {
@@ -188,78 +185,9 @@ class Game extends GameObject {
   loadMenu = async () => {
     this.observeMotion();
 
-    const topMaterial = async (res, color) => {
-      const image = new THREE.MeshBasicMaterial({
-        map: await loadTextureAsync({ asset: res }),
-      });
-
-      const material = new FlatMaterial({ color });
-
-      return [material, material, image, material, material, material];
-    };
-
-    const makePillar = async (res, color = 0xdb7048) => {
-      const radius = 33.3333333;
-
-      const materials = await topMaterial(res, color);
-
-      const mesh = new THREE.Mesh(
-        new THREE.CubeGeometry(radius * 3, 1000, radius, 1, 1, 1),
-        materials
-      );
-      mesh.position.y = -500;
-      return mesh;
-    };
-
-    const titleGroup = new THREE.Object3D();
-    const offset = -30;
-    titleGroup.position.x = offset;
-    titleGroup.position.z = -200;
-
-    const pillar = await makePillar(require("../assets/images/PILLAR.png"));
-    titleGroup.add(pillar);
-
-    pillar.position.y = -1100;
-    TweenMax.to(pillar.position, 1.1, {
-      y: -500,
-      ease: Back.easeOut,
-      delay: 0,
-    });
-
-    const pillarB = await makePillar(require("../assets/images/VALLEY.png"));
-    titleGroup.add(pillarB);
-
-    if (pillarB.position) {
-      pillarB.position.y = -1100;
-      pillarB.position.x = 55;
-      pillarB.position.z = 55;
-      TweenMax.to(pillarB.position, 1.0, {
-        y: -530,
-        ease: Back.easeOut,
-        delay: 0.1,
-      });
-    }
-    const pillarC = await makePillar(
-      require("../assets/images/BEGIN.png"),
-      0xedcbbf
-    );
-    titleGroup.add(pillarC);
-
-    pillarC.position.y = -1100;
-    pillarC.position.x = 30;
-    pillarC.position.z = 105;
-    TweenMax.to(pillarC.position, 1.0, {
-      y: -540,
-      ease: ExpoEase.easeOut,
-      delay: 0.2,
-    });
-
-    const normalizer = new THREE.Object3D();
-    normalizer.add(titleGroup);
-    this.scene.add(normalizer);
-
-    this.pillars = [pillar, pillarB, pillarC];
-    this.titleGroup = normalizer;
+    this.titleGroup = new MenuObject();
+    await this.titleGroup.loadAsync();
+    this.scene.add(this.titleGroup);
   };
 
   loadGame = async () => {
