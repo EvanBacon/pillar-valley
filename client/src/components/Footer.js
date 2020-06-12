@@ -12,6 +12,7 @@ import LicensesButton from "./Button/LicensesButton";
 import RateButton from "./Button/Rate";
 import ShareButton from "./Button/Share";
 import SoundButton from "./Button/Sound";
+import PWAButton, { canInstallPWA } from "./Button/PWAButton";
 import SwapPlatformButton, {
   getOtherPlatform,
 } from "./Button/SwapPlatformButton";
@@ -36,6 +37,10 @@ function Footer({ game, screenshot, navigation }) {
 
   if (getOtherPlatform()) {
     views.push(<SwapPlatformButton />);
+  }
+
+  if (canInstallPWA()) {
+    views.push(<PWAButton />);
   }
 
   views.push(<LicensesButton onPress={onLicensesPress} />);
