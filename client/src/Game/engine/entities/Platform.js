@@ -58,7 +58,12 @@ class PlatformMesh extends Mesh {
   }
 }
 
+let pillarId = 0;
+function getNewPillarId() {
+  return pillarId++;
+}
 class Platform extends GameObject {
+  pillarId = getNewPillarId();
   radius = 0;
 
   loadAsync = async (scene) => {

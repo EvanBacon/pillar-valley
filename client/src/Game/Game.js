@@ -168,6 +168,14 @@ class PillarGroupObject extends GameObject {
     return this.pillars[1];
   }
 
+  async getPillarAtIndexAsync(index, score) {
+    // Ensure enough pillars exist
+    while (this.pillars.length < index + 1) {
+      await this.addPillarAsync(score);
+    }
+    return this.pillars[index];
+  }
+
   getLastPillar() {
     return this.pillars[this.pillars.length - 1];
   }
@@ -200,10 +208,6 @@ class PillarGroupObject extends GameObject {
       pillar.destroy();
     }
     this.pillars = [];
-    // const pillar = await this.add(new PlatformObject());
-    // pillar.x = 0;
-    // pillar.z = Settings.ballDistance;
-    // this.pillars.push(pillar);
     await this.ensureTargetsAreCreatedAsync();
     this.getCurrentPillar().becomeCurrent();
     this.getNextPillar().becomeTarget();
@@ -214,6 +218,7 @@ class PillarGroupObject extends GameObject {
     const target = await this.add(new PlatformObject());
     this.pillars.push(target);
 
+    const distance = Settings.ballDistance; // * 0.5;
     if (!lastPillar) {
       // is the first pillar
       target.z = Settings.ballDistance;
@@ -222,8 +227,8 @@ class PillarGroupObject extends GameObject {
       const startX = lastPillar.x;
       const startZ = lastPillar.z;
       const radians = this.generateRandomAngleForPillar();
-      target.x = startX + Settings.ballDistance * Math.sin(radians);
-      target.z = startZ + Settings.ballDistance * Math.cos(radians);
+      target.x = startX + distance * Math.sin(radians);
+      target.z = startZ + distance * Math.cos(radians);
       target.lastAngle = Math.atan2(startZ - target.z, startX - target.x);
       // This seems to cause lag
       // target.alpha = this.alphaForTarget(this.pillars.length, score);
@@ -258,6 +263,22 @@ class PillarGroupObject extends GameObject {
       await this.addPillarAsync(score);
     }
   };
+
+  getLandedPillarIndex = (playerObject) => {
+    // End before 0 to skip the current pillar that the player is standing on.
+    // Go in reverse order to ensure the player gets optimal skipping
+    for (let index = this.pillars.length - 1; index > 0; index--) {
+      const targetPlatform = this.pillars[index];
+      const distanceFromTarget = playerObject.getActiveItemsDistanceFromObject(
+        targetPlatform
+      );
+
+      if (distanceFromTarget < targetPlatform.radius)
+        return [index, distanceFromTarget];
+    }
+
+    return null;
+  };
 }
 
 class Game extends GameObject {
@@ -290,10 +311,11 @@ class Game extends GameObject {
   /**
    * Ensure the direction the play spins is the shortest route between pillars.
    */
-  generateDirection = () => {
+  generateDirection = (targetPosition) => {
     // Get the distance between the player and the next pillar
-    const ballDistance = this.playerObject.getStaticItemsDistanceFromObject(
-      this.pillarGroup.getNextPillar()
+    const ballDistance = distance(
+      this.playerObject.getStaticItem().position,
+      targetPosition
     );
 
     // Measure the distance between the player if it moved
@@ -308,14 +330,8 @@ class Game extends GameObject {
     );
 
     // Calculate the distances
-    const delta1 = distance(
-      { x: pos1[0], z: pos1[1] },
-      this.pillarGroup.getNextPillar().position
-    );
-    const delta2 = distance(
-      { x: pos2[0], z: pos2[1] },
-      this.pillarGroup.getNextPillar().position
-    );
+    const delta1 = distance({ x: pos1[0], z: pos1[1] }, targetPosition);
+    const delta2 = distance({ x: pos2[0], z: pos2[1] }, targetPosition);
     // If moving the player +1 is shorter then keep it
     if (delta1 > delta2) {
       this.direction = 1;
@@ -397,55 +413,73 @@ class Game extends GameObject {
   };
 
   changeBall = async () => {
-    this.taps += 1;
-    // Every three taps, change the background color
-    if (this.taps % 3 === 0) {
-      this.scene.animateBackgroundColor(this.taps);
-    }
+    // postpone to prevent lag during interactions
+    setTimeout(() => {
+      this.taps += 1;
+      // Every three taps, change the background color
+      if (this.taps % 3 === 0) {
+        this.scene.animateBackgroundColor(this.taps);
+      }
+    }, 0);
 
     if (!this.loaded) {
       return;
     }
 
-    const targetPlatform = this.pillarGroup.getNextPillar();
-    const distanceFromTarget = this.playerObject.getActiveItemsDistanceFromObject(
-      targetPlatform
+    const landedPillarInfo = this.pillarGroup.getLandedPillarIndex(
+      this.playerObject
     );
-
-    const landedPillarRadius = targetPlatform.radius;
-
-    if (distanceFromTarget > landedPillarRadius) {
-      // Missed the pillar
+    if (landedPillarInfo == null) {
+      // Missed the pillars
       this.gameOver();
       return;
     }
+    const [pillarIndex, distanceFromTarget] = landedPillarInfo;
+    const targetPlatform = this.pillarGroup.pillars[pillarIndex];
+    const landedPillarRadius = targetPlatform.radius;
 
     const accuracy = 1 - distanceFromTarget / landedPillarRadius;
-    dispatch.game.play();
-    dispatch.score.increment();
-    this.score += 1;
+
+    // maybe hide menu
+    if (this.score === 0) {
+      dispatch.game.play();
+    }
+    // Score for every pillar traversed
+    for (let i = pillarIndex; i > 0; i--) {
+      dispatch.score.increment();
+      this.score += 1;
+    }
+
     playHaptics(accuracy);
 
-    if (this.particles) {
-      this.particles.impulse();
+    // if (this.particles) {
+    //   this.particles.impulse();
+    // }
+
+    const nextPillar = await this.pillarGroup.getPillarAtIndexAsync(
+      pillarIndex + 1,
+      this.score
+    );
+    this.generateDirection(nextPillar.position);
+
+    targetPlatform.updateDirection(this.direction);
+
+    // Animate out all of the skipped pillars
+    while (
+      this.pillarGroup.pillars.length &&
+      this.pillarGroup.pillars[0].pillarId !== targetPlatform.pillarId
+    ) {
+      const previousPillar = this.pillarGroup.pillars.shift();
+      previousPillar.animateOut();
     }
 
-    const previousPillar = this.pillarGroup.pillars.shift();
-
-    this.generateDirection();
-
-    if (this.pillarGroup.getCurrentPillar()) {
-      this.pillarGroup.getCurrentPillar().updateDirection(this.direction);
-    }
-
-    previousPillar.animateOut();
-    this.pillarGroup.getCurrentPillar().becomeCurrent();
+    targetPlatform.becomeCurrent();
 
     if (Settings.gemsEnabled && this.score > 3) {
       const gemCount = Math.floor(accuracy * 6);
-      this.pillarGroup.getCurrentPillar().showGems(gemCount);
+      targetPlatform.showGems(gemCount);
     }
-    this.pillarGroup.getNextPillar().becomeTarget();
+    nextPillar.becomeTarget();
 
     this.playerObject.landed(accuracy, landedPillarRadius);
 
