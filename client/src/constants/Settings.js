@@ -20,7 +20,7 @@ const Settings = {
   ballDistance: 60,
   rotationSpeed: 4,
   angleRange: [25, 155],
-  visibleTargets: 5,
+  visiblePillars: 5,
   slug: debug ? "crossy-road" : "users",
   isEveryScoreBest: debug && false,
   isCacheProfileUpdateActive: true, //!debug || false,

@@ -76,6 +76,7 @@ class PlayerGroupObject extends GameObject {
     for (const ball of this.balls) {
       ball.x = 0;
       ball.z = 0;
+      ball.alpha = 1;
     }
 
     this.getStaticItem().z = Settings.ballDistance;
@@ -147,23 +148,25 @@ function playHaptics(impact) {
 }
 
 class PillarGroupObject extends GameObject {
-  targets = [];
-  steps = 0;
+  pillars = [];
 
-  getCurrentTarget() {
-    return this.targets[0];
+  getCurrentPillar() {
+    return this.pillars[0];
+  }
+  getLastPillar() {
+    return this.pillars[this.pillars.length - 1];
   }
 
-  getVisibleTargetsCount = (score = 0) => {
+  getVisiblePillarCount = (score = 0) => {
     const level = Math.floor(score / 10);
     if (level < 4) {
-      return Math.max(4, Settings.visibleTargets - level);
+      return Math.max(4, Settings.visiblePillars - level);
     }
-    return Math.max(3, Settings.visibleTargets - (score % 5));
+    return Math.max(3, Settings.visiblePillars - (score % 5));
   };
 
   playGameOverAnimation = () => {
-    for (const target of this.targets) {
+    for (const target of this.pillars) {
       target.animateOut();
     }
   };
@@ -172,38 +175,37 @@ class PillarGroupObject extends GameObject {
     const target = await this.add(new PlatformObject());
     target.x = 0;
     target.z = Settings.ballDistance;
-    this.targets.push(target);
-    for (let i = 0; i < this.getVisibleTargetsCount(); i++) {
+    this.pillars.push(target);
+    for (let i = 0; i < this.getVisiblePillarCount(); i++) {
       await this.addTarget();
     }
-    this.targets[0].becomeCurrent();
+    this.pillars[0].becomeCurrent();
     return super.loadAsync();
   }
 
   reset = async () => {
-    this.steps = 0;
-    for (const target of this.targets) {
+    for (const target of this.pillars) {
       target.destroy();
     }
-    this.targets = [];
+    this.pillars = [];
     const target = await this.add(new PlatformObject());
     if (target) {
       target.x = 0;
       target.z = Settings.ballDistance;
-      this.targets.push(target);
+      this.pillars.push(target);
     }
-    for (let i = 0; i < this.getVisibleTargetsCount(); i++) {
+    for (let i = 0; i < this.getVisiblePillarCount(); i++) {
       await this.addTarget();
     }
 
-    this.targets[0].becomeCurrent();
-    this.targets[1].becomeTarget();
+    this.pillars[0].becomeCurrent();
+    this.pillars[1].becomeTarget();
   };
 
   addTarget = async (score) => {
-    this.steps++;
-    const startX = this.targets[this.targets.length - 1].x;
-    const startZ = this.targets[this.targets.length - 1].z;
+    const lastPillar = this.getLastPillar();
+    const startX = lastPillar.x;
+    const startZ = lastPillar.z;
     const target = await this.add(new PlatformObject());
     const range = 90;
     const randomAngle = randomRange(
@@ -215,27 +217,30 @@ class PillarGroupObject extends GameObject {
     target.x = startX + Settings.ballDistance * Math.sin(radians);
     target.z = startZ + Settings.ballDistance * Math.cos(radians);
 
-    const last = this.targets[this.targets.length - 1];
-    this.targets.push(target);
-    target.lastAngle = Math.atan2(last.z - target.z, last.x - target.x);
-    target.alpha = this.alphaForTarget(this.targets.length, score);
+    this.pillars.push(target);
+    target.lastAngle = Math.atan2(
+      lastPillar.z - target.z,
+      lastPillar.x - target.x
+    );
+    // This seems to cause lag
+    // target.alpha = this.alphaForTarget(this.pillars.length, score);
     target.animateIn();
   };
 
   alphaForTarget = (i, score) => {
     const inverse = i - 1;
-    const alpha = inverse / this.getVisibleTargetsCount(score);
+    const alpha = inverse / this.getVisiblePillarCount(score);
     return 1 - alpha;
   };
 
   syncTargetsAlpha = (score) => {
-    for (let i = 0; i < this.targets.length; i++) {
-      this.targets[i].alpha = this.alphaForTarget(i, score);
+    for (let i = 0; i < this.pillars.length; i++) {
+      this.pillars[i].alpha = this.alphaForTarget(i, score);
     }
   };
 
   ensureTargetsAreCreatedAsync = async (score) => {
-    while (this.targets.length < this.getVisibleTargetsCount(score)) {
+    while (this.pillars.length < this.getVisiblePillarCount(score)) {
       await this.addTarget(score);
     }
   };
@@ -279,10 +284,9 @@ class Game extends GameObject {
       this.gameGroup.z = 0;
       this.gameGroup.x = 0;
     }
-    // this.steps = 0;
     this.generateDirection();
 
-    this.alpha = 1;
+    // this.alpha = 1;
     this.playerObject.reset();
     await this.targetGroup.reset();
   }
@@ -319,7 +323,6 @@ class Game extends GameObject {
   };
 
   loadGame = async () => {
-    this.steps = 0;
     this.generateDirection();
     this.gameGroup = await this.add(new GameObject());
     this.targetGroup = await this.gameGroup.add(new PillarGroupObject());
@@ -372,7 +375,7 @@ class Game extends GameObject {
       return;
     }
 
-    const targetPlatform = this.targetGroup.targets[1];
+    const targetPlatform = this.targetGroup.pillars[1];
     const distanceFromTarget = this.playerObject.getActiveItemsDistanceFromObject(
       targetPlatform
     );
@@ -390,19 +393,19 @@ class Game extends GameObject {
 
       this.generateDirection();
 
-      const target = this.targetGroup.targets.shift();
-      if (this.targetGroup.getCurrentTarget()) {
-        this.targetGroup.getCurrentTarget().updateDirection(this.direction);
+      const target = this.targetGroup.pillars.shift();
+      if (this.targetGroup.getCurrentPillar()) {
+        this.targetGroup.getCurrentPillar().updateDirection(this.direction);
       }
 
       target.animateOut();
-      this.targetGroup.targets[0].becomeCurrent();
+      this.targetGroup.pillars[0].becomeCurrent();
 
       if (Settings.gemsEnabled && this.score > 3) {
         const gemCount = Math.floor(accuracy * 6);
-        this.targetGroup.targets[0].showGems(gemCount);
+        this.targetGroup.pillars[0].showGems(gemCount);
       }
-      this.targetGroup.targets[1].becomeTarget();
+      this.targetGroup.pillars[1].becomeTarget();
 
       this.playerObject.landed(accuracy);
 
@@ -475,8 +478,8 @@ class Game extends GameObject {
         }
       }
 
-      // guard against race condition when targets are recycled
-      if (this.targetGroup.targets[1]) {
+      // guard against race condition when pillars are recycled
+      if (this.targetGroup.pillars[1]) {
         // move rotation angle
         this.playerObject.incrementRotationWithScoreAndDirection(
           this.score,
@@ -484,7 +487,7 @@ class Game extends GameObject {
         );
 
         const ballDistance = this.playerObject.getStaticItemsDistanceFromObject(
-          this.targetGroup.targets[1]
+          this.targetGroup.pillars[1]
         );
         this.playerObject.moveActiveItem(ballDistance);
       }
@@ -498,15 +501,15 @@ class Game extends GameObject {
       this.gameGroup.z -= (distanceZ - 0 + this.gameGroup.z) * easing;
       this.gameGroup.x -= (distanceX - 0 + this.gameGroup.x) * easing;
 
-      const currentTarget = this.targetGroup.getCurrentTarget();
+      const currentPillar = this.targetGroup.getCurrentPillar();
       // Collect gems
       if (
         Settings.gemsEnabled &&
-        currentTarget &&
-        currentTarget.gems &&
-        currentTarget.gems.length
+        currentPillar &&
+        currentPillar.gems &&
+        currentPillar.gems.length
       ) {
-        const collideGems = currentTarget.gems.filter(
+        const collideGems = currentPillar.gems.filter(
           (gem) => gem.canBeCollected && gem._driftAngle !== undefined
         );
         if (collideGems.length) {

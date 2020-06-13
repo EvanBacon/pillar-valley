@@ -185,10 +185,10 @@ class Platform extends GameObject {
   };
 
   animateIn = () => {
-    this.mesh.alpha = 0;
+    // this.mesh.alpha = 0;
     this.mesh.y = this.getEndPosition();
     TweenMax.to(this.mesh, randomRange(0.5, 0.7), {
-      alpha: 1,
+      // alpha: 1,
       // delay: randomRange(0, 0.2),
       y: -500,
     });
