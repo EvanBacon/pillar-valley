@@ -191,61 +191,55 @@ class PillarGroupObject extends GameObject {
   };
 
   async loadAsync() {
-    const target = await this.add(new PlatformObject());
-    target.x = 0;
-    target.z = Settings.ballDistance;
-    this.pillars.push(target);
-    for (let i = 0; i < this.getVisiblePillarCount(); i++) {
-      await this.addTarget();
-    }
-    this.getCurrentPillar().becomeCurrent();
+    await this.reset();
     return super.loadAsync();
   }
 
   reset = async () => {
-    for (const target of this.pillars) {
-      target.destroy();
+    for (const pillar of this.pillars) {
+      pillar.destroy();
     }
     this.pillars = [];
-    const target = await this.add(new PlatformObject());
-    if (target) {
-      target.x = 0;
-      target.z = Settings.ballDistance;
-      this.pillars.push(target);
-    }
-    for (let i = 0; i < this.getVisiblePillarCount(); i++) {
-      await this.addTarget();
-    }
-
+    // const pillar = await this.add(new PlatformObject());
+    // pillar.x = 0;
+    // pillar.z = Settings.ballDistance;
+    // this.pillars.push(pillar);
+    await this.ensureTargetsAreCreatedAsync();
     this.getCurrentPillar().becomeCurrent();
     this.getNextPillar().becomeTarget();
   };
 
-  addTarget = async (score) => {
+  addPillarAsync = async (score) => {
     const lastPillar = this.getLastPillar();
-    const startX = lastPillar.x;
-    const startZ = lastPillar.z;
     const target = await this.add(new PlatformObject());
+    this.pillars.push(target);
+
+    if (!lastPillar) {
+      // is the first pillar
+      target.z = Settings.ballDistance;
+    } else {
+      // find a random location relative to the last pillar
+      const startX = lastPillar.x;
+      const startZ = lastPillar.z;
+      const radians = this.generateRandomAngleForPillar();
+      target.x = startX + Settings.ballDistance * Math.sin(radians);
+      target.z = startZ + Settings.ballDistance * Math.cos(radians);
+      target.lastAngle = Math.atan2(startZ - target.z, startX - target.x);
+      // This seems to cause lag
+      // target.alpha = this.alphaForTarget(this.pillars.length, score);
+      target.animateIn();
+    }
+  };
+
+  generateRandomAngleForPillar() {
     const range = 90;
     const randomAngle = randomRange(
       Settings.angleRange[0] + range,
       Settings.angleRange[1] + range
     );
-
     const radians = THREE.Math.degToRad(randomAngle);
-    target.x = startX + Settings.ballDistance * Math.sin(radians);
-    target.z = startZ + Settings.ballDistance * Math.cos(radians);
-
-    this.pillars.push(target);
-
-    target.lastAngle = Math.atan2(
-      lastPillar.z - target.z,
-      lastPillar.x - target.x
-    );
-    // This seems to cause lag
-    // target.alpha = this.alphaForTarget(this.pillars.length, score);
-    target.animateIn();
-  };
+    return radians;
+  }
 
   alphaForTarget = (i, score) => {
     const inverse = i - 1;
@@ -261,7 +255,7 @@ class PillarGroupObject extends GameObject {
 
   ensureTargetsAreCreatedAsync = async (score) => {
     while (this.pillars.length < this.getVisiblePillarCount(score)) {
-      await this.addTarget(score);
+      await this.addPillarAsync(score);
     }
   };
 }
@@ -420,42 +414,44 @@ class Game extends GameObject {
 
     const landedPillarRadius = targetPlatform.radius;
 
-    if (distanceFromTarget < landedPillarRadius) {
-      const accuracy = 1 - distanceFromTarget / landedPillarRadius;
-      dispatch.game.play();
-      dispatch.score.increment();
-      this.score += 1;
-      playHaptics(accuracy);
-
-      if (this.particles) {
-        this.particles.impulse();
-      }
-
-      const previousPillar = this.pillarGroup.pillars.shift();
-
-      this.generateDirection();
-
-      if (this.pillarGroup.getCurrentPillar()) {
-        this.pillarGroup.getCurrentPillar().updateDirection(this.direction);
-      }
-
-      previousPillar.animateOut();
-      this.pillarGroup.getCurrentPillar().becomeCurrent();
-
-      if (Settings.gemsEnabled && this.score > 3) {
-        const gemCount = Math.floor(accuracy * 6);
-        this.pillarGroup.getCurrentPillar().showGems(gemCount);
-      }
-      this.pillarGroup.getNextPillar().becomeTarget();
-
-      this.playerObject.landed(accuracy, landedPillarRadius);
-
-      await this.pillarGroup.ensureTargetsAreCreatedAsync(this.score);
-
-      // this.pillarGroup.syncTargetsAlpha(this.score);
-    } else {
+    if (distanceFromTarget > landedPillarRadius) {
+      // Missed the pillar
       this.gameOver();
+      return;
     }
+
+    const accuracy = 1 - distanceFromTarget / landedPillarRadius;
+    dispatch.game.play();
+    dispatch.score.increment();
+    this.score += 1;
+    playHaptics(accuracy);
+
+    if (this.particles) {
+      this.particles.impulse();
+    }
+
+    const previousPillar = this.pillarGroup.pillars.shift();
+
+    this.generateDirection();
+
+    if (this.pillarGroup.getCurrentPillar()) {
+      this.pillarGroup.getCurrentPillar().updateDirection(this.direction);
+    }
+
+    previousPillar.animateOut();
+    this.pillarGroup.getCurrentPillar().becomeCurrent();
+
+    if (Settings.gemsEnabled && this.score > 3) {
+      const gemCount = Math.floor(accuracy * 6);
+      this.pillarGroup.getCurrentPillar().showGems(gemCount);
+    }
+    this.pillarGroup.getNextPillar().becomeTarget();
+
+    this.playerObject.landed(accuracy, landedPillarRadius);
+
+    await this.pillarGroup.ensureTargetsAreCreatedAsync(this.score);
+
+    // this.pillarGroup.syncTargetsAlpha(this.score);
   };
 
   takeScreenshot = async () => {

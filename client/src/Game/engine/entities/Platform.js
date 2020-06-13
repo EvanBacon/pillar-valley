@@ -2,7 +2,6 @@ import { TweenMax } from "gsap";
 
 import { Color, Mesh, CylinderBufferGeometry, MeshPhongMaterial } from "three";
 import GameObject from "../core/GameObject";
-import FlatMaterial from "../utils/flatMaterial";
 import randomRange from "../utils/randomRange";
 import Gem from "./Gem";
 import Settings from "../../../constants/Settings";
