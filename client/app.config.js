@@ -24,8 +24,13 @@ export default {
     icon: "./src/assets/icons/ios.png",
     supportsTablet: true,
     bundleIdentifier: "com.evanbacon.pillarvalley",
-    buildNumber: "4",
+    buildNumber: "5",
     googleServicesFile: "./GoogleService-Info.plist",
+    config: {
+      googleMobileAdsAppId: "ca-app-pub-2312569320461549~5287895909",
+      googleMobileAdsAutoInit: true,
+    },
+    associatedDomains: ["applinks:https://pillarvalley.netlify.app"],
   },
   android: {
     playStoreUrl:
@@ -34,6 +39,10 @@ export default {
     package: "com.evanbacon.pillarvalley",
     googleServicesFile: "./google-services.json",
     versionCode: 3,
+    config: {
+      googleMobileAdsAppId: "ca-app-pub-2312569320461549~8488774315",
+      googleMobileAdsAutoInit: true,
+    },
   },
   web: {
     favicon: "./src/assets/icons/expo.png",

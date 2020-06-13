@@ -10,7 +10,6 @@ import * as Facebook from "expo-facebook";
 import { takeSnapshotAsync } from "expo";
 import getDeviceInfo from "../utils/getUserInfo";
 import * as Analytics from "expo-firebase-analytics";
-import { dispatch } from "./store";
 import Challenges from "../constants/Achievements";
 
 export const skins = {

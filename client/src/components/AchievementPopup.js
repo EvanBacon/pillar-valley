@@ -11,6 +11,8 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { dispatch } from "../rematch/store";
+import { useSafeArea } from "react-native-safe-area-context";
+import AudioManager from "../AudioManager";
 
 const Colors = {
   darkerGreen: "#000A69",
@@ -151,7 +153,7 @@ class BouncingCircle extends React.Component {
 
   getAnimation = () => {
     const animations = this.circles.map((circle) => circle.getAnimation());
-    return Animated.stagger(100, animations);
+    return Animated.stagger(80, animations);
   };
 
   getReverseAnimation = () => {
@@ -324,8 +326,14 @@ class FirstText extends React.Component {
 class Popup extends React.Component {
   // parallel(animations, config?)
 
-  componentDidMount() {
-    this.open();
+  async componentDidMount() {
+    try {
+      await AudioManager.shared.playAsync("unlock");
+    } finally {
+      setTimeout(() => {
+        this.open();
+      }, 500);
+    }
   }
 
   reset = () => {
@@ -347,7 +355,7 @@ class Popup extends React.Component {
       delay,
     });
 
-  getReverseAnimation = () => this.getAnimation(0, 1000);
+  getReverseAnimation = () => this.getAnimation(0, 2500);
 
   animate = () => {
     Animated.sequence([
@@ -502,9 +510,13 @@ class Popup extends React.Component {
 }
 
 function PopupContainer({ navigation, presentAchievement }) {
+  const { top } = useSafeArea();
   return (
     <View
-      style={[StyleSheet.absoluteFill, { padding: 16, alignItems: "center" }]}
+      style={[
+        StyleSheet.absoluteFill,
+        { top, padding: 16, alignItems: "center" },
+      ]}
       pointerEvents="box-none"
     >
       {presentAchievement && (

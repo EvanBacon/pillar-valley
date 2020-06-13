@@ -441,7 +441,7 @@ class Game extends GameObject {
     const accuracy = 1 - distanceFromTarget / landedPillarRadius;
 
     // maybe hide menu
-    if (this.score === 0) {
+    if (this.score <= 1) {
       dispatch.game.play();
     }
     // Score for every pillar traversed

@@ -31,6 +31,7 @@
     "@rematch/core": "^1.4.0",
     "@rematch/persist": "^1.1.6",
     "expo": "~37.0.12",
+    "expo-ads-admob": "^8.1.0",
     "expo-av": "~8.1.0",
     "expo-blur": "^8.1.0",
     "expo-constants": "9.0.0",

@@ -3,12 +3,22 @@ import { AppLoading } from "expo";
 import * as Analytics from "expo-firebase-analytics";
 import * as Font from "expo-font";
 import React from "react";
-import { StatusBar } from "react-native";
+import { StatusBar, Platform } from "react-native";
 
 import AudioManager from "./AudioManager";
 import Fire from "./ExpoParty/Fire";
 import Navigation from "./Navigation";
 import Gate from "./rematch/Gate";
+import Constants from "expo-constants";
+import { setTestDeviceIDAsync } from "expo-ads-admob";
+
+if (Platform.OS !== "web") {
+  if (!Constants.isDevice) {
+    // Disable ads in the emulator / simulator
+    // https://docs.expo.io/versions/latest/sdk/admob/#settestdeviceidasynctestdeviceid
+    setTestDeviceIDAsync("EMULATOR");
+  }
+}
 
 const getNow = global.nativePerformanceNow || Date.now;
 

@@ -76,6 +76,7 @@ class AudioManager {
       "button_in.wav": require("./assets/audio/button_in.wav"),
       "button_out.wav": require("./assets/audio/button_out.wav"),
       "song.mp3": require("./assets/audio/song.mp3"),
+      "unlock.mp3": require("./assets/audio/unlock.mp3"),
     };
   }
 

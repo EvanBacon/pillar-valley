@@ -155,8 +155,11 @@ const styles = {
   avatarStyle: {
     justifyContent: "center",
     alignItems: "center",
-    width: 40,
-    height: 40,
+    minWidth: 40,
+    maxWidth: 40,
+    maxHeight: 40,
+    minHeight: 40,
+    aspectRatio: 1,
     flex: 1,
     borderRadius: 20,
   },
