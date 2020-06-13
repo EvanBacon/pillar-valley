@@ -43,7 +43,10 @@ class GameState {
       this.renderer.setSize(width, height);
     }
     if (this.game) {
-      this.game.onResize({ width, height });
+      if (this.game.camera) {
+        this.game.camera.aspect = width / height;
+        this.game.camera.updateProjectionMatrix();
+      }
     }
   };
 

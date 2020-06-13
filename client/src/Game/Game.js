@@ -525,11 +525,6 @@ class Game extends GameObject {
       }
     }
   }
-
-  onResize = ({ width, height }) => {
-    this.camera.aspect = width / height;
-    this.camera.updateProjectionMatrix();
-  };
 }
 
 export default Game;
