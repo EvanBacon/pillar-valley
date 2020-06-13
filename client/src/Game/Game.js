@@ -140,6 +140,19 @@ function getAbsolutePosition(gameObject) {
   return position;
 }
 
+function playHaptics(impact) {
+  if (Platform.OS !== "ios") {
+    return;
+  }
+  if (impact < 0.3) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+  } else if (impact < 0.6) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+  } else {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+  }
+}
+
 class GameScene extends THREE.Scene {
   hue = 19;
 
@@ -301,49 +314,25 @@ class Game extends GameObject {
     this.state = state;
   };
 
-  onTouchesBegan = async ({ pageX: x, pageY: y }) => {
+  onTouchesBegan = async () => {
     if (this.state === GameStates.Menu) {
       this.startGame();
     } else {
       this.changeBall();
 
-      if (Math.round(randomRange(0, 3)) === 0) {
-        this.takeScreenshot();
-      }
+      // if (Math.round(randomRange(0, 3)) === 0) {
+      //   this.takeScreenshot();
+      // }
     }
-  };
-
-  animateBackgroundColor = (input) => {
-    this.scene.animateBackgroundColor(input);
-    TweenMax.to(this.renderer, 1.0, {
-      y: -530,
-      ease: Back.easeOut,
-      delay: 0.1,
-    });
-  };
-
-  runHapticsWithValue = (perfection) => {
-    if (Platform.OS !== "ios") {
-      return;
-    }
-    if (perfection < 0.3) {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    } else if (perfection < 0.6) {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    } else {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
-    }
-  };
-
-  valueForAccuracy = (perfection) => {
-    return Math.floor(perfection * 6);
   };
 
   changeBall = async () => {
     this.taps += 1;
+    // Every three taps, change the background color
     if (this.taps % 3 === 0) {
-      this.animateBackgroundColor(this.taps);
+      this.scene.animateBackgroundColor(this.taps);
     }
+
     if (!this.loaded) {
       return;
     }
@@ -358,7 +347,7 @@ class Game extends GameObject {
       dispatch.game.play();
       dispatch.score.increment();
       this.score += 1;
-      this.runHapticsWithValue(accuracy);
+      playHaptics(accuracy);
 
       if (this.particles) {
         this.particles.impulse();
@@ -374,7 +363,8 @@ class Game extends GameObject {
       this.targets[0].becomeCurrent();
 
       if (this.score > 3) {
-        this.targets[0].showGems(this.valueForAccuracy(accuracy));
+        const gemCount = Math.floor(accuracy * 6);
+        this.targets[0].showGems(gemCount);
       }
       this.targets[1].becomeTarget();
 
