@@ -9,6 +9,7 @@ import * as React from "react";
 import Licenses from "./components/Licenses";
 // import Fire from "./ExpoParty/Fire";
 import GameScreen from "./screens/GameScreen";
+import ChallengesScreen from "./screens/AchievementScreen";
 // import LeaderboardScreen from "./screens/LeaderboardScreen";
 // import ProfileScreen from "./screens/ProfileScreen";
 // import ReportScreen from "./screens/ReportScreen";
@@ -33,6 +34,7 @@ const linking = {
     Game: "/",
     Licenses: "/credit",
     Report: "/report",
+    Challenges: "/challenges",
     Social: {
       screens: {
         Leaderboard: "/rank",
@@ -108,6 +110,11 @@ export default () => {
           name="Game"
           component={GameScreen}
           options={{ header: () => null }}
+        />
+        <AppStack.Screen
+          name="Challenges"
+          component={ChallengesScreen}
+          options={{ stackPresentation: "modal" }}
         />
         <AppStack.Screen
           name="Licenses"

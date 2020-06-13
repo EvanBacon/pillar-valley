@@ -4,19 +4,24 @@ import { StyleSheet, View } from "react-native";
 
 import AchievementsItem from "../components/AchievementsItem";
 import List from "../components/List";
-import Achievements from "../constants/Achievements";
-import connectAchievementToast from "../ExpoParty/connectAchievementToast";
+import Challenges from "../constants/Achievements";
 
-function AchievementScreen({ showActionSheetWithOptions }) {
+const challengesListData = Object.keys(Challenges).map((key) => ({
+  key,
+  ...Challenges[key],
+}));
+function AchievementScreen({ showActionSheetWithOptions, achievements }) {
   const [filter, setFilter] = React.useState("All");
 
   const _onOpenActionSheet = () => {
+    console.log("pressed");
     const options = ["All", "Completed", "Cancel"];
     const cancelButtonIndex = options.length - 1;
 
     showActionSheetWithOptions(
       {
         options,
+        destructiveButtonIndex: cancelButtonIndex,
         cancelButtonIndex,
       },
       (buttonIndex) => {
@@ -27,16 +32,31 @@ function AchievementScreen({ showActionSheetWithOptions }) {
     );
   };
 
+  const data = React.useMemo(() => {
+    if (filter.toLowerCase() === "completed") {
+      return challengesListData.filter(({ key }) => achievements[key]);
+    }
+    return challengesListData.sort((a, b) => {
+      if (achievements[b.key] || achievements[a.key]) return -1;
+      return 1;
+    });
+  }, [achievements, filter]);
+
   return (
     <View style={styles.container}>
       <List
         noMore
         renderItem={({ item, index }) => (
-          <AchievementsItem onPress={() => {}} {...item} index={index} />
+          <AchievementsItem
+            onPress={() => {}}
+            {...item}
+            index={index}
+            complete={achievements[item.key]}
+          />
         )}
-        title={`${Achievements.length} Achievements`}
-        headerButtonTitle={filter}
-        data={Achievements}
+        title={`${data.length} Challenges`}
+        headerButtonTitle={`Showing ${filter}`}
+        data={data}
         renderUserItem={(props) => null}
         onPress={() => {}}
         onPressHeader={_onOpenActionSheet}
@@ -53,4 +73,9 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connectActionSheet(connectAchievementToast(AchievementScreen));
+import { connect } from "react-redux";
+const ConnectedScreen = connect(({ achievements }) => ({ achievements }))(
+  AchievementScreen
+);
+
+export default connectActionSheet(ConnectedScreen);

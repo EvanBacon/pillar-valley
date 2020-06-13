@@ -15,6 +15,7 @@ import { BlurView } from "expo-blur";
 import Game from "../Game/Game";
 import { Renderer } from "expo-three";
 import Paused from "../components/Paused";
+import AchievementPopup from "../components/AchievementPopup";
 class GameState {
   onContextCreateAsync = async ({ gl, width, height, pixelRatio }) => {
     this.renderer = new Renderer({
@@ -114,6 +115,7 @@ export default function GameScreen({ navigation }) {
           source={require("../assets/icons/splash.png")}
         />
       )}
+      <AchievementPopup navigation={navigation} />
     </View>
   );
 }

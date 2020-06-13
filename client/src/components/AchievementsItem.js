@@ -24,7 +24,7 @@ export default class Item extends React.Component {
       <MaterialIcons
         style={style}
         size={24}
-        color="orange"
+        color="gray"
         name="hourglass-empty"
       />
     );
@@ -58,16 +58,21 @@ export default class Item extends React.Component {
               avatarStyle={{ marginRight: 16 }}
               name={name}
               avatar={image}
+              color={!this.props.complete && "gray"}
             />
-            <View>
+            <View style={{ justifyContent: "center" }}>
               <Text style={styles.text}>{name}</Text>
-              <Text style={styles.subtitle}>{this.description}</Text>
+              {this.description && (
+                <Text style={styles.subtitle}>{this.description}</Text>
+              )}
             </View>
           </View>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <ScoreBadge style={{}} color="white">
-              {points}
-            </ScoreBadge>
+            {points && (
+              <ScoreBadge style={{}} color="white">
+                {points}
+              </ScoreBadge>
+            )}
 
             {this.icon}
           </View>

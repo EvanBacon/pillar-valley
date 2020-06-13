@@ -10,6 +10,8 @@ import * as Facebook from "expo-facebook";
 import { takeSnapshotAsync } from "expo";
 import getDeviceInfo from "../utils/getUserInfo";
 import * as Analytics from "expo-firebase-analytics";
+import { dispatch } from "./store";
+import Challenges from "../constants/Achievements";
 
 export const skins = {
   state: {},
@@ -26,15 +28,69 @@ export const skins = {
   },
 };
 
+export const presentAchievement = {
+  state: null,
+  reducers: {
+    set: (state, val) => val,
+  },
+  effects: {},
+};
+
+export const achievements = {
+  state: {},
+  reducers: {
+    set: (state, val) => ({ ...state, ...val }),
+  },
+  effects: {
+    sync: () => {},
+    unlock: (key, { achievements }) => {
+      if (!achievements[key] && Challenges[key]) {
+        Analytics.logEvent("achievement_unlocked", {
+          id: [key],
+          ...Challenges[key],
+        });
+        dispatch.achievements.set({ [key]: true });
+        dispatch.presentAchievement.set({ id: key, ...Challenges[key] });
+      }
+    },
+  },
+};
+
+export const rounds = {
+  state: 0,
+  reducers: {
+    set: (state, rounds) => rounds,
+  },
+  effects: {
+    increment: (input, { rounds }) => {
+      const next = rounds + 1;
+      if (next === 10) {
+        dispatch.achievements.unlock("rounds-10");
+      } else if (next === 50) {
+        dispatch.achievements.unlock("rounds-50");
+      } else if (next === 100) {
+        dispatch.achievements.unlock("rounds-100");
+      } else if (next === 500) {
+        dispatch.achievements.unlock("rounds-500");
+      } else if (next === 1000) {
+        dispatch.achievements.unlock("rounds-1000");
+      }
+      dispatch.rounds.set(next);
+    },
+  },
+};
+
 export const score = {
   state: {
     current: 0,
     best: 0,
+    total: 0,
     last: null,
     isBest: false,
   },
   reducers: {
     setBest: (state, best) => ({ ...state, best }),
+    setTotal: (state, total) => ({ ...state, total }),
     increment: ({ current, best, isBest, ...props }) => {
       const nextScore = current + 1;
 
@@ -53,6 +109,19 @@ export const score = {
     }),
   },
   effects: {
+    updateTotal(current, { score }) {
+      const total = score.total + current;
+      if (total > 10000) {
+        dispatch.achievements.unlock("total-score-10000");
+      } else if (total > 5000) {
+        dispatch.achievements.unlock("total-score-5000");
+      } else if (total > 1000) {
+        dispatch.achievements.unlock("total-score-1000");
+      } else if (total > 500) {
+        dispatch.achievements.unlock("total-score-500");
+      }
+      dispatch.score.setTotal(total);
+    },
     reset: (props, { score }) => {
       if (Settings.isFirebaseEnabled) {
         if (Settings.isEveryScoreBest) {
@@ -61,7 +130,10 @@ export const score = {
           dispatch.score.setHighScore(score.best);
         }
       }
+
+      dispatch.score.updateTotal(score.current);
       dispatch.score._reset();
+      dispatch.rounds.increment();
     },
     setHighScore: async (highScore, { user: { displayName, photoURL } }) => {
       console.log("set High score", highScore);

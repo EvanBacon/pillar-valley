@@ -8,6 +8,7 @@ import Settings from "../constants/Settings";
 import GameStates from "../Game/GameStates";
 import useStoreReview from "../hooks/useStoreReview";
 import LeaderboardButton from "./Button/Leaderboard";
+import ChallengesButton from "./Button/Challenges";
 import LicensesButton from "./Button/LicensesButton";
 import RateButton from "./Button/Rate";
 import ShareButton from "./Button/Share";
@@ -16,6 +17,7 @@ import PWAButton, { usePWAInstallable } from "./Button/PWAButton";
 import SwapPlatformButton, {
   getOtherPlatform,
 } from "./Button/SwapPlatformButton";
+import { dispatch } from "../rematch/store";
 
 const delay = 100;
 const initialDelay = 100;
@@ -31,7 +33,11 @@ function Footer({ game, screenshot, navigation }) {
   const [showPWA, setShowPWA] = React.useState(true);
   const animation = game === GameStates.Menu ? "zoomIn" : "zoomOut";
   const onLicensesPress = () => {
+    // dispatch.presentAchievement.set({ name: "Nerdy boi", score: null });
     navigation.navigate("Licenses");
+  };
+  const onChallengesPress = () => {
+    navigation.navigate("Challenges");
   };
   const views = [];
 
@@ -47,6 +53,7 @@ function Footer({ game, screenshot, navigation }) {
     views.push(<PWAButton onInstall={() => setShowPWA(false)} />);
   }
 
+  views.push(<ChallengesButton onPress={onChallengesPress} />);
   views.push(<LicensesButton onPress={onLicensesPress} />);
 
   const onLeaderboardPress = () => {

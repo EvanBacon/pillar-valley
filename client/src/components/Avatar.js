@@ -140,7 +140,7 @@ export default class Avatar extends React.PureComponent {
         }}
         style={StyleSheet.flatten([
           styles.avatarStyle,
-          { backgroundColor: this.avatarColor },
+          { backgroundColor: this.props.color || this.avatarColor },
           this.props.avatarStyle,
         ])}
         accessibilityTraits="image"

@@ -1,17 +1,23 @@
-import React from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import React from "react";
+import { FlatList, StyleSheet, View } from "react-native";
 
-import Footer from './Footer';
-import Item from './Item';
-import Separator from './Separator';
-import UserCell from './UserCell';
-
+import Footer from "./Footer";
+import Item from "./Item";
+import Separator from "./Separator";
+import UserCell from "./UserCell";
+import Header from "./Header";
 class List extends React.Component {
   get userItem() {
     if (this.props.renderUserItem) {
       return this.props.renderUserItem();
     }
-    return <UserCell style={{ backgroundColor: 'white' }} item={this.props.userItem} onPress={this.props.onPress} />;
+    return (
+      <UserCell
+        style={{ backgroundColor: "white" }}
+        item={this.props.userItem}
+        onPress={this.props.onPress}
+      />
+    );
   }
 
   get footer() {
@@ -19,7 +25,13 @@ class List extends React.Component {
       return null;
     }
 
-    return footerProps => <Footer {...footerProps} item={this.props.userItem} onPress={this.props.onPressFooter} />;
+    return (footerProps) => (
+      <Footer
+        {...footerProps}
+        item={this.props.userItem}
+        onPress={this.props.onPressFooter}
+      />
+    );
   }
 
   keyExtractor = (item, index) => `item-${index}`;
@@ -52,6 +64,14 @@ class List extends React.Component {
           ListFooterComponent={this.footer}
           ItemSeparatorComponent={Separator}
           renderItem={this.renderItem}
+          ListHeaderComponent={(headerProps) => (
+            <Header
+              {...headerProps}
+              buttonTitle={headerButtonTitle}
+              onPress={onPressHeader}
+              title={title}
+            />
+          )}
           {...props}
         />
         {this.userItem}
@@ -72,15 +92,6 @@ class List extends React.Component {
 //     <Text style={{ fontSize: 24 }}>Coming Soon</Text>
 //   </View>
 // }
-
-// ListHeaderComponent={headerProps => (
-//             <Header
-//               {...headerProps}
-//               buttonTitle={headerButtonTitle}
-//               onPress={onPressHeader}
-//               title={title}
-//             />
-//           )}
 
 const styles = StyleSheet.create({
   container: {},

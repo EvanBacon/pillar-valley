@@ -1,6 +1,8 @@
 import * as React from "react";
-import { FlatList } from "react-native";
+import { Image, Platform, View, Text, FlatList } from "react-native";
+import { A } from "@expo/html-elements";
 import { useSafeArea } from "react-native-safe-area-context";
+import * as Animatable from "react-native-animatable";
 
 import Data from "../constants/Licenses";
 import LicensesListItem from "./LicensesListItem";
@@ -75,12 +77,43 @@ sortDataByKey(licenses, "username");
 export default function Licenses() {
   const { bottom } = useSafeArea();
   return (
-    <FlatList
-      style={{ flex: 1 }}
-      keyExtractor={({ key }) => key}
-      data={licenses}
-      contentContainerStyle={{ paddingBottom: bottom }}
-      renderItem={({ item }) => <LicensesListItem {...item} />}
-    />
+    <View style={{ flex: 1 }}>
+      <View
+        style={{ padding: 16, justifyContent: "center", alignItems: "center" }}
+      >
+        <A
+          style={{ fontSize: 36, textAlign: "center", fontWeight: "bold" }}
+          href="https://twitter.com/baconbrix"
+        >
+          Built by Evan Bacon
+        </A>
+        <A
+          style={{ fontSize: 36, textAlign: "center" }}
+          href="https://github.com/evanbacon/pillar-valley"
+        >
+          Made with Expo
+        </A>
+      </View>
+      <FlatList
+        style={{ flex: 1 }}
+        keyExtractor={({ key }) => key}
+        data={licenses}
+        contentContainerStyle={{ paddingBottom: bottom }}
+        renderItem={({ item }) => <LicensesListItem {...item} />}
+      />
+      <Animatable.Image
+        animation="slideInUp"
+        delay={500}
+        source={require("../assets/images/evan.png")}
+        style={{
+          position: Platform.select({ default: "absolute", web: "fixed" }),
+          width: "30%",
+          height: "30%",
+          bottom: 0,
+          right: 8,
+          resizeMode: "contain",
+        }}
+      />
+    </View>
   );
 }
