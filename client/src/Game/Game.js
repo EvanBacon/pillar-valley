@@ -140,12 +140,36 @@ function getAbsolutePosition(gameObject) {
   return position;
 }
 
+class GameScene extends THREE.Scene {
+  hue = 19;
+
+  get color() {
+    return new THREE.Color(`hsl(${this.hue}, 88%, 66%)`);
+  }
+
+  constructor() {
+    super();
+    this.background = this.color;
+    this.fog = new THREE.Fog(this.color, 100, 950);
+  }
+
+  animateBackgroundColor = (input) => {
+    TweenMax.to(this, 2, {
+      hue: (input * randomRange(3, 20)) % 50,
+      onUpdate: () => {
+        const color = this.color;
+        this.background = color;
+        this.fog = new THREE.Fog(color, 100, 950);
+      },
+    });
+  };
+}
+
 class Game extends GameObject {
   state = GameStates.Menu;
 
   targets = [];
   taps = 0;
-  hue = 19;
   motionObserver = new MotionObserver();
 
   constructor(width, height, renderer) {
@@ -159,16 +183,6 @@ class Game extends GameObject {
       this.setGameState(GameStates.Playing);
     }
   }
-
-  createScene = () => {
-    const scene = new THREE.Scene();
-    const color = this.color;
-    scene.background = color;
-    scene.fog = new THREE.Fog(color, 100, 950);
-
-    scene.add(this);
-    return scene;
-  };
 
   createCameraAsync = async (width, height) => {
     const camera = new THREE.PerspectiveCamera(70, width / height, 1, 10000);
@@ -213,13 +227,9 @@ class Game extends GameObject {
     this.targets[1].becomeTarget();
   }
 
-  get color() {
-    return new THREE.Color(`hsl(${this.hue}, 88%, 66%)`);
-  }
-
   async loadAsync() {
-    this.scene = this.createScene();
-
+    this.scene = new GameScene();
+    this.scene.add(this);
     this.camera = await this.createCameraAsync(this._width, this._height);
 
     const types = [
@@ -304,14 +314,7 @@ class Game extends GameObject {
   };
 
   animateBackgroundColor = (input) => {
-    TweenMax.to(this, 2, {
-      hue: (input * randomRange(3, 20)) % 50,
-      onUpdate: () => {
-        const color = this.color;
-        this.scene.background = color;
-        this.scene.fog = new THREE.Fog(color, 100, 950);
-      },
-    });
+    this.scene.animateBackgroundColor(input);
     TweenMax.to(this.renderer, 1.0, {
       y: -530,
       ease: Back.easeOut,
