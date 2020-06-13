@@ -28,6 +28,7 @@ const Settings = {
   isCacheProfileUpdateActive: true, //!debug || false,
   shouldDelayFirebaseProfileSyncInMinutes: 60,
 
+  minBallScale: 0.01,
   canEditPhoto: false,
   leaderPageSize: 25,
 };

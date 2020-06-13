@@ -22,10 +22,116 @@ function distance(p1, p2) {
   return Math.sqrt(a * a + b * b);
 }
 
+class PlayerGroupObject extends GameObject {
+  mainBall = 1;
+
+  async loadAsync() {
+    const ballA = await this.add(new PlayerBall());
+    ballA.x = 0;
+    ballA.z = Settings.ballDistance;
+    const ballB = await this.add(new PlayerBall());
+    ballB.x = 0;
+    ballB.z = 0;
+    this.balls = [ballA, ballB];
+
+    // TODO i don't think we need this
+    this.resetScale();
+  }
+
+  testCollisionWithGem = (gem) => {
+    const distanceFromTarget = distance(
+      this.getActiveItem().position,
+      gem.position
+    );
+
+    return distanceFromTarget < 20;
+  };
+
+  landed = (accuracy) => {
+    this.getActiveItem().landed(accuracy);
+
+    this.toggleActiveItem();
+
+    this.resetScale();
+  };
+
+  toggleActiveItem = () => {
+    this.mainBall = 1 - this.mainBall;
+  };
+
+  getActiveItem = () => {
+    return this.balls[this.mainBall];
+  };
+
+  getStaticItem = () => {
+    return this.balls[1 - this.mainBall];
+  };
+
+  getActiveItemsDistanceFromObject = (target) => {
+    return distance(this.getActiveItem().position, target.position);
+  };
+
+  getStaticItemsDistanceFromObject = (target) => {
+    return distance(this.getStaticItem().position, target.position);
+  };
+
+  reset = () => {
+    this.mainBall = 1;
+
+    for (const ball of this.balls) {
+      ball.x = 0;
+      ball.z = 0;
+    }
+
+    this.balls[0].z = Settings.ballDistance;
+
+    this.resetScale();
+  };
+
+  resetScale = () => {
+    for (const ball of this.balls) {
+      ball.scale.set(1, 1, 1);
+    }
+  };
+
+  playGameOverAnimation = (onComplete) => {
+    this.getActiveItem().hide({ onComplete });
+    this.getStaticItem().hide({ duration: 0.4 });
+  };
+
+  getActiveItemScale = () => {
+    return this.getActiveItem().scale.x;
+  };
+
+  shrinkActiveItemScale = (amount) => {
+    const scale = Math.max(
+      Settings.minBallScale,
+      this.getActiveItem().scale.x - amount
+    );
+    this.getActiveItem().scale.set(scale, 1, scale);
+  };
+
+  /**
+   * Given a distance and angle in degrees, sets the active item's position relative to the static item's position.
+   */
+  moveActiveItem = (distance, angle) => {
+    const radians = THREE.Math.degToRad(angle);
+    this.getActiveItem().x =
+      this.getStaticItem().x - distance * Math.sin(radians);
+    this.getActiveItem().z =
+      this.getStaticItem().z + distance * Math.cos(radians);
+  };
+}
+
+function getAbsolutePosition(gameObject) {
+  const position = new THREE.Vector3();
+  gameObject.getWorldPosition(position);
+  return position;
+}
+
 class Game extends GameObject {
   state = GameStates.Menu;
 
-  balls = [];
   targets = [];
   taps = 0;
   hue = 19;
@@ -78,20 +184,8 @@ class Game extends GameObject {
     this.generateDirection();
 
     this.rotationAngle = 0;
-    this.mainBall = 1;
-
-    if (this.balls[0]) {
-      this.balls[0].x = 0;
-      this.balls[0].z = Settings.ballDistance;
-    }
-    if (this.balls[1]) {
-      this.balls[1].x = 0;
-      this.balls[1].z = 0;
-    }
     this.alpha = 1;
-    this.balls[1 - this.mainBall].scale.set(1, 1, 1);
-    this.balls[this.mainBall].scale.set(1, 1, 1);
-
+    this.ballGroup.reset();
     for (const target of this.targets) {
       target.destroy();
     }
@@ -99,7 +193,7 @@ class Game extends GameObject {
     const target = await this.targetGroup.add(new PlatformObject());
     if (target) {
       target.x = 0;
-      target.z = this.balls[0].z;
+      target.z = this.ballGroup.getStaticItem().z;
       this.targets.push(target);
     }
     for (let i = 0; i < this.getVisibleTargetsCount(); i++) {
@@ -155,22 +249,12 @@ class Game extends GameObject {
     this.generateDirection();
     this.gameGroup = await this.add(new GameObject());
     this.targetGroup = await this.gameGroup.add(new GameObject());
-    this.ballGroup = await this.gameGroup.add(new GameObject());
-    const ballA = await this.ballGroup.add(new PlayerBall());
-    ballA.x = 0;
-    ballA.z = Settings.ballDistance;
-    const ballB = await this.ballGroup.add(new PlayerBall());
-    ballB.x = 0;
-    ballB.z = 0;
-    this.balls = [ballA, ballB];
+    this.ballGroup = await this.gameGroup.add(new PlayerGroupObject());
     this.alpha = 1;
     this.rotationAngle = 0;
-    this.mainBall = 1;
-    this.balls[1 - this.mainBall].scale.set(1, 1, 1);
-    this.balls[this.mainBall].scale.set(1, 1, 1);
     const target = await this.targetGroup.add(new PlatformObject());
     target.x = 0;
-    target.z = this.balls[0].z;
+    target.z = this.ballGroup.getStaticItem().z;
     this.targets.push(target);
     for (let i = 0; i < this.getVisibleTargetsCount(); i++) {
       await this.addTarget();
@@ -245,15 +329,6 @@ class Game extends GameObject {
     return Math.floor(perfection * 6);
   };
 
-  testCollisionWithGem = (gem) => {
-    const distanceFromTarget = distance(
-      this.balls[this.mainBall].position,
-      gem.position
-    );
-
-    return distanceFromTarget < 20;
-  };
-
   changeBall = async () => {
     this.taps += 1;
     if (this.taps % 3 === 0) {
@@ -264,9 +339,8 @@ class Game extends GameObject {
     }
 
     const targetPlatform = this.targets[1];
-    const distanceFromTarget = distance(
-      this.balls[this.mainBall].position,
-      targetPlatform.position
+    const distanceFromTarget = this.ballGroup.getActiveItemsDistanceFromObject(
+      targetPlatform
     );
 
     if (distanceFromTarget < targetPlatform.radius) {
@@ -294,12 +368,7 @@ class Game extends GameObject {
       }
       this.targets[1].becomeTarget();
 
-      this.balls[this.mainBall].landed(accuracy);
-
-      this.mainBall = 1 - this.mainBall;
-
-      this.balls[1 - this.mainBall].scale.set(1, 1, 1);
-      this.balls[this.mainBall].scale.set(1, 1, 1);
+      this.ballGroup.landed(accuracy);
       this.rotationAngle -= 180;
 
       while (this.targets.length < this.getVisibleTargetsCount()) {
@@ -358,8 +427,7 @@ class Game extends GameObject {
     this.cachedRotationVelocity = 0;
 
     if (animate) {
-      this.balls[this.mainBall].hide({ onComplete: () => this.reset() });
-      this.balls[1 - this.mainBall].hide({ duration: 0.4 });
+      this.ballGroup.playGameOverAnimation(() => this.reset());
 
       for (const target of this.targets) {
         target.animateOut();
@@ -402,53 +470,47 @@ class Game extends GameObject {
       }
       super.update(delta, time);
 
-      if (!this.targets[1] || !this.balls[this.mainBall]) return;
-      const ballPosition = this.balls[this.mainBall].position;
-
-      const targetPosition = this.targets[1].position;
-      const distanceFromTarget = distance(ballPosition, targetPosition);
+      if (!this.targets[1] || !this.ballGroup.getActiveItem()) return;
 
       const isFirst = this.steps <= this.getVisibleTargetsCount();
-      const minScale = this.balls[this.mainBall].scale.x <= 0.01;
+      const minScale =
+        this.ballGroup.getActiveItemScale() <= Settings.minBallScale;
 
       if (!isFirst) {
         if (minScale) {
-          this.balls[this.mainBall].scale.set(1, 1, 1);
+          this.ballGroup.resetScale();
           this.gameOver(false);
         } else {
-          const scale = Math.max(
-            0.01,
-            this.balls[this.mainBall].scale.x - 0.3 * delta
-          );
-          this.balls[this.mainBall].scale.set(scale, 1, scale);
+          // Currently the item shrinks at a fixed rate
+          this.ballGroup.shrinkActiveItemScale(0.3 * delta);
         }
       }
 
-      const speed = Math.min(
-        this.cachedRotationVelocity + this.score * 0.05,
-        6
-      );
-      this.rotationAngle = (this.rotationAngle + speed * this.direction) % 360;
+      // guard against race condition when targets are recycled
+      if (this.targets[1]) {
+        const speed = Math.min(
+          this.cachedRotationVelocity + this.score * 0.05,
+          6
+        );
+        this.rotationAngle =
+          (this.rotationAngle + speed * this.direction) % 360;
+        // console.log(this.targets[1]);
+        const ballDistance = this.ballGroup.getStaticItemsDistanceFromObject(
+          this.targets[1]
+        );
+        this.ballGroup.moveActiveItem(ballDistance, this.rotationAngle);
+      }
 
-      const radians = THREE.Math.degToRad(this.rotationAngle);
-
-      const ballDistance = distance(
-        this.balls[1 - this.mainBall].position,
-        this.targets[1].position
-      );
-
-      this.balls[this.mainBall].x =
-        this.balls[1 - this.mainBall].x - ballDistance * Math.sin(radians);
-      this.balls[this.mainBall].z =
-        this.balls[1 - this.mainBall].z + ballDistance * Math.cos(radians);
-
-      const distanceX = this.balls[1 - this.mainBall].position.x;
-      const distanceZ = this.balls[1 - this.mainBall].position.z;
+      // Ease the game to the static item position to make the scene move.
+      const distanceX = this.ballGroup.getStaticItem().position.x;
+      const distanceZ = this.ballGroup.getStaticItem().position.z;
 
       const easing = 0.03;
+
       this.gameGroup.z -= (distanceZ - 0 + this.gameGroup.z) * easing;
       this.gameGroup.x -= (distanceX - 0 + this.gameGroup.x) * easing;
 
+      // Collect gems
       if (
         this.currentTarget &&
         this.currentTarget.gems &&
@@ -458,11 +520,11 @@ class Game extends GameObject {
           (gem) => gem.canBeCollected && gem._driftAngle !== undefined
         );
         if (collideGems.length) {
-          let _ballPosition = new THREE.Vector3();
-          this.balls[this.mainBall].getWorldPosition(_ballPosition);
+          let _ballPosition = getAbsolutePosition(
+            this.ballGroup.getActiveItem()
+          );
           for (const gem of collideGems) {
-            let position = new THREE.Vector3();
-            gem.getWorldPosition(position);
+            let position = getAbsolutePosition(gem);
             const angleDist = distance(_ballPosition, position);
             if (angleDist < 15) {
               gem.pickup();
