@@ -4,6 +4,7 @@ import { StyleSheet, Platform, Text, View } from "react-native";
 import { useSafeArea } from "react-native-safe-area-context";
 import { connect } from "react-redux";
 import * as Animatable from "react-native-animatable";
+import Settings from "../constants/Settings";
 function ScoreMeta({ current, best, currency }) {
   const { top } = useSafeArea();
   return (
@@ -18,7 +19,7 @@ function ScoreMeta({ current, best, currency }) {
           {current}
         </Animatable.Text>
       </View>
-      {!currency && (
+      {Settings.gemsEnabled && (
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <Text style={[styles.text, styles.currency]}>{currency}</Text>
           <FontAwesome

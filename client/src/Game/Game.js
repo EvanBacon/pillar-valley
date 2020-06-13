@@ -37,15 +37,6 @@ class PlayerGroupObject extends GameObject {
     this.reset();
   }
 
-  testCollisionWithGem = (gem) => {
-    const distanceFromTarget = distance(
-      this.getActiveItem().position,
-      gem.position
-    );
-
-    return distanceFromTarget < 20;
-  };
-
   landed = (accuracy) => {
     this.getActiveItem().landed(accuracy);
 
@@ -362,7 +353,7 @@ class Game extends GameObject {
       target.animateOut();
       this.targets[0].becomeCurrent();
 
-      if (this.score > 3) {
+      if (Settings.gemsEnabled && this.score > 3) {
         const gemCount = Math.floor(accuracy * 6);
         this.targets[0].showGems(gemCount);
       }
@@ -511,6 +502,7 @@ class Game extends GameObject {
 
       // Collect gems
       if (
+        Settings.gemsEnabled &&
         this.currentTarget &&
         this.currentTarget.gems &&
         this.currentTarget.gems.length

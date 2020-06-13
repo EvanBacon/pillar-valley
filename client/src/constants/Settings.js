@@ -27,7 +27,7 @@ const Settings = {
   isEveryScoreBest: debug && false,
   isCacheProfileUpdateActive: true, //!debug || false,
   shouldDelayFirebaseProfileSyncInMinutes: 60,
-
+  gemsEnabled: false,
   maxRotationSpeed: 6,
   minBallScale: 0.01,
   canEditPhoto: false,
