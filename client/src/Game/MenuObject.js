@@ -4,6 +4,7 @@ import * as THREE from "three";
 
 import GameObject from "./engine/core/GameObject";
 import FlatMaterial from "./engine/utils/flatMaterial";
+import MotionObserver from "./MotionObserver";
 
 async function loadMenuMaterialAsync(asset, color) {
   const image = new THREE.MeshBasicMaterial({
@@ -29,7 +30,10 @@ async function makeMenuPillarAsync(asset, color = 0xdb7048) {
 }
 
 export default class MenuObject extends GameObject {
+  motionObserver = new MotionObserver();
+
   async loadAsync() {
+    this.motionObserver.start();
     const titleGroup = new THREE.Object3D();
     const offset = -30;
     titleGroup.position.x = offset;
@@ -81,4 +85,20 @@ export default class MenuObject extends GameObject {
 
     this.pillars = [pillar, pillarB, pillarC];
   }
+
+  animateHidden = (onComplete) => {
+    TweenMax.to(this.position, 1.0, {
+      y: -1100,
+      ease: ExpoEase.easeOut,
+      // delay: 0.2,
+      onComplete: async () => {
+        this.motionObserver.stop();
+        onComplete();
+      },
+    });
+  };
+
+  updateWithCamera = (camera) => {
+    this.motionObserver.updateWithCamera(camera);
+  };
 }

@@ -1,6 +1,5 @@
 import * as Analytics from "expo-firebase-analytics";
 import * as Haptics from "expo-haptics";
-import { Back, Expo as ExpoEase, TweenMax } from "gsap";
 import { Platform } from "react-native";
 import * as THREE from "three";
 
@@ -11,10 +10,9 @@ import Lighting from "./engine/entities/Lighting";
 import PlatformObject from "./engine/entities/Platform";
 import PlayerBall from "./engine/entities/PlayerBall";
 import randomRange from "./engine/utils/randomRange";
+import GameScene from "./GameScene";
 import GameStates from "./GameStates";
 import MenuObject from "./MenuObject";
-import MotionObserver from "./MotionObserver";
-import GameScene from "./GameScene";
 
 function distance(p1, p2) {
   const a = p1.x - p2.x;
@@ -153,12 +151,17 @@ class PillarGroupObject extends GameObject {
   getCurrentPillar() {
     return this.pillars[0];
   }
+
   getLastPillar() {
     return this.pillars[this.pillars.length - 1];
   }
 
+  getCurrentLevelForScore(score) {
+    return Math.floor(score / 10);
+  }
+
   getVisiblePillarCount = (score = 0) => {
-    const level = Math.floor(score / 10);
+    const level = this.getCurrentLevelForScore(score);
     if (level < 4) {
       return Math.max(4, Settings.visiblePillars - level);
     }
@@ -248,9 +251,8 @@ class PillarGroupObject extends GameObject {
 
 class Game extends GameObject {
   state = GameStates.Menu;
-
+  score = 0;
   taps = 0;
-  motionObserver = new MotionObserver();
 
   constructor(width, height, renderer) {
     super();
@@ -288,7 +290,7 @@ class Game extends GameObject {
 
     // this.alpha = 1;
     this.playerObject.reset();
-    await this.targetGroup.reset();
+    await this.pillarGroup.reset();
   }
 
   async loadAsync() {
@@ -301,7 +303,7 @@ class Game extends GameObject {
       //  new Particles()
     ];
     const promises = types.map((type) => this.add(type));
-    const [lighting, particles] = await Promise.all(promises);
+    const [, particles] = await Promise.all(promises);
     this.particles = particles;
     if (this.state === GameStates.Menu) {
       await this.loadMenu();
@@ -315,36 +317,24 @@ class Game extends GameObject {
   }
 
   loadMenu = async () => {
-    this.motionObserver.start();
-
-    this.titleGroup = new MenuObject();
-    await this.titleGroup.loadAsync();
-    this.scene.add(this.titleGroup);
+    this.titleGroup = await this.add(new MenuObject());
   };
 
   loadGame = async () => {
     this.generateDirection();
     this.gameGroup = await this.add(new GameObject());
-    this.targetGroup = await this.gameGroup.add(new PillarGroupObject());
+    this.pillarGroup = await this.gameGroup.add(new PillarGroupObject());
     this.playerObject = await this.gameGroup.add(new PlayerGroupObject());
     this.alpha = 1;
   };
-  score = 0;
 
   startGame = () => {
     if (this.state === GameStates.playing) {
       return;
     }
-    this.motionObserver.stop();
-
-    TweenMax.to(this.titleGroup.position, 1.0, {
-      y: -1100,
-      ease: ExpoEase.easeOut,
-      // delay: 0.2,
-      onComplete: async () => {
-        await this.loadGame();
-        this.setGameState(GameStates.playing);
-      },
+    this.titleGroup.animateHidden(async () => {
+      await this.loadGame();
+      this.setGameState(GameStates.playing);
     });
   };
 
@@ -375,7 +365,7 @@ class Game extends GameObject {
       return;
     }
 
-    const targetPlatform = this.targetGroup.pillars[1];
+    const targetPlatform = this.pillarGroup.pillars[1];
     const distanceFromTarget = this.playerObject.getActiveItemsDistanceFromObject(
       targetPlatform
     );
@@ -393,25 +383,25 @@ class Game extends GameObject {
 
       this.generateDirection();
 
-      const target = this.targetGroup.pillars.shift();
-      if (this.targetGroup.getCurrentPillar()) {
-        this.targetGroup.getCurrentPillar().updateDirection(this.direction);
+      const target = this.pillarGroup.pillars.shift();
+      if (this.pillarGroup.getCurrentPillar()) {
+        this.pillarGroup.getCurrentPillar().updateDirection(this.direction);
       }
 
       target.animateOut();
-      this.targetGroup.pillars[0].becomeCurrent();
+      this.pillarGroup.pillars[0].becomeCurrent();
 
       if (Settings.gemsEnabled && this.score > 3) {
         const gemCount = Math.floor(accuracy * 6);
-        this.targetGroup.pillars[0].showGems(gemCount);
+        this.pillarGroup.pillars[0].showGems(gemCount);
       }
-      this.targetGroup.pillars[1].becomeTarget();
+      this.pillarGroup.pillars[1].becomeTarget();
 
       this.playerObject.landed(accuracy);
 
-      await this.targetGroup.ensureTargetsAreCreatedAsync(this.score);
+      await this.pillarGroup.ensureTargetsAreCreatedAsync(this.score);
 
-      // this.targetGroup.syncTargetsAlpha(this.score);
+      // this.pillarGroup.syncTargetsAlpha(this.score);
     } else {
       this.gameOver();
     }
@@ -445,7 +435,7 @@ class Game extends GameObject {
 
     if (animate) {
       this.playerObject.playGameOverAnimation(() => this.reset());
-      this.targetGroup.playGameOverAnimation();
+      this.pillarGroup.playGameOverAnimation();
     } else {
       this.reset();
     }
@@ -453,7 +443,7 @@ class Game extends GameObject {
 
   update(delta, time) {
     if (this.state === GameStates.Menu) {
-      this.motionObserver.updateWithCamera(this.camera);
+      this.titleGroup.updateWithCamera(this.camera);
     } else {
       this.camera.position.z = this.camera.ogPosition.z;
       this.camera.position.x = this.camera.ogPosition.x;
@@ -479,7 +469,7 @@ class Game extends GameObject {
       }
 
       // guard against race condition when pillars are recycled
-      if (this.targetGroup.pillars[1]) {
+      if (this.pillarGroup.pillars[1]) {
         // move rotation angle
         this.playerObject.incrementRotationWithScoreAndDirection(
           this.score,
@@ -487,7 +477,7 @@ class Game extends GameObject {
         );
 
         const ballDistance = this.playerObject.getStaticItemsDistanceFromObject(
-          this.targetGroup.pillars[1]
+          this.pillarGroup.pillars[1]
         );
         this.playerObject.moveActiveItem(ballDistance);
       }
@@ -501,7 +491,7 @@ class Game extends GameObject {
       this.gameGroup.z -= (distanceZ - 0 + this.gameGroup.z) * easing;
       this.gameGroup.x -= (distanceX - 0 + this.gameGroup.x) * easing;
 
-      const currentPillar = this.targetGroup.getCurrentPillar();
+      const currentPillar = this.pillarGroup.getCurrentPillar();
       // Collect gems
       if (
         Settings.gemsEnabled &&
