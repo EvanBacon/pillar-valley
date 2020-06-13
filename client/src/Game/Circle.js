@@ -1,33 +1,15 @@
-import {
-  Shape,
-  Mesh,
-  DoubleSide,
-  ShapeBufferGeometry,
-  MeshPhongMaterial,
-} from "three";
-
-class Circle extends Shape {
-  constructor(radius) {
-    super();
-    this.moveTo(0, radius);
-    this.quadraticCurveTo(radius, radius, radius, 0);
-    this.quadraticCurveTo(radius, -radius, 0, -radius);
-    this.quadraticCurveTo(-radius, -radius, -radius, 0);
-    this.quadraticCurveTo(-radius, radius, 0, radius);
-  }
-}
+import { CircleGeometry, Mesh, MeshPhongMaterial } from "three";
 
 class CircleMesh extends Mesh {
   constructor({ radius, color }) {
-    const shape = new Circle(radius);
-    const geometry = new ShapeBufferGeometry(shape);
-    const mat = new MeshPhongMaterial({
+    const geometry = new CircleGeometry(radius, 32);
+    const material = new MeshPhongMaterial({
       color,
       transparent: true,
       // side: DoubleSide,
     });
-    super(geometry, mat);
-    this.mat = mat;
+    super(geometry, material);
+    this.mat = material;
   }
   _alpha = 1;
   set alpha(value) {

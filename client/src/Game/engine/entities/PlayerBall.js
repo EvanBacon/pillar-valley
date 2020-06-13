@@ -27,9 +27,9 @@ class PlayerBall extends GameObject {
     mesh.position.y = 4.5;
     this.add(mesh);
 
-    const circle = new Circle({ radius: 5, color: 0xffffff });
+    const circle = new Circle({ radius: 1, color: 0xffffff });
     circle.rotation.x = -Math.PI / 2;
-    circle.position.y = 10;
+    circle.position.y = 0.5;
     this.circle = circle;
     this.resetCircle();
     this.add(circle);
@@ -41,7 +41,7 @@ class PlayerBall extends GameObject {
     this.circle.visible = false;
     this.circle.scale.x = 0.001;
     this.circle.scale.y = 0.001;
-    this.circle.alpha = 0.5;
+    this.circle.alpha = 0.8;
   };
 
   hide = (props) => {
@@ -54,13 +54,14 @@ class PlayerBall extends GameObject {
     });
   };
 
-  landed = (perfection) => {
+  landed = (perfection, targetRadius) => {
     if (!Settings.circleEnabled) return;
 
     this.circle.visible = true;
 
     const duration = 0.7;
-    const scale = 5 + 15 * perfection; // randomRange(10, 20);
+
+    const scale = targetRadius * 2 * perfection;
 
     TweenMax.to(this.circle.scale, duration, {
       x: scale,

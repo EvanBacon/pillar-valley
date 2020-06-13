@@ -37,8 +37,8 @@ class PlayerGroupObject extends GameObject {
     return super.loadAsync();
   }
 
-  landed = (accuracy) => {
-    this.getActiveItem().landed(accuracy);
+  landed = (accuracy, radius) => {
+    this.getActiveItem().landed(accuracy, radius);
 
     this.toggleActiveItem();
 
@@ -418,8 +418,10 @@ class Game extends GameObject {
       targetPlatform
     );
 
-    if (distanceFromTarget < targetPlatform.radius) {
-      const accuracy = 1 - distanceFromTarget / targetPlatform.radius;
+    const landedPillarRadius = targetPlatform.radius;
+
+    if (distanceFromTarget < landedPillarRadius) {
+      const accuracy = 1 - distanceFromTarget / landedPillarRadius;
       dispatch.game.play();
       dispatch.score.increment();
       this.score += 1;
@@ -446,7 +448,7 @@ class Game extends GameObject {
       }
       this.pillarGroup.getNextPillar().becomeTarget();
 
-      this.playerObject.landed(accuracy);
+      this.playerObject.landed(accuracy, landedPillarRadius);
 
       await this.pillarGroup.ensureTargetsAreCreatedAsync(this.score);
 
