@@ -109,11 +109,12 @@ class PlayerGroupObject extends GameObject {
    * Given a distance and angle in degrees, sets the active item's position relative to the static item's position.
    */
   moveActiveItem = (distance) => {
-    const radians = THREE.Math.degToRad(this.rotationAngle);
-    this.getActiveItem().x =
-      this.getStaticItem().x - distance * Math.sin(radians);
-    this.getActiveItem().z =
-      this.getStaticItem().z + distance * Math.cos(radians);
+    const [x, z] = this.getPositionWithDistanceAndAngle(
+      distance,
+      this.rotationAngle
+    );
+    this.getActiveItem().x = x;
+    this.getActiveItem().z = z;
   };
 
   getRotationSpeedForScore = (score) => {
@@ -122,8 +123,20 @@ class PlayerGroupObject extends GameObject {
 
   incrementRotationWithScoreAndDirection = (score, direction) => {
     const speed = this.getRotationSpeedForScore(score);
-    this.rotationAngle = (this.rotationAngle + speed * direction) % 360;
+    this.rotationAngle = this.getRotationAngleForDirection(speed, direction);
   };
+
+  getRotationAngleForDirection(delta, direction) {
+    return (this.rotationAngle + delta * direction) % 360;
+  }
+
+  getPositionWithDistanceAndAngle(distance, angle) {
+    const radians = THREE.Math.degToRad(angle);
+    return [
+      this.getStaticItem().x - distance * Math.sin(radians),
+      this.getStaticItem().z + distance * Math.cos(radians),
+    ];
+  }
 }
 
 function getAbsolutePosition(gameObject) {
@@ -150,6 +163,9 @@ class PillarGroupObject extends GameObject {
 
   getCurrentPillar() {
     return this.pillars[0];
+  }
+  getNextPillar() {
+    return this.pillars[1];
   }
 
   getLastPillar() {
@@ -182,7 +198,7 @@ class PillarGroupObject extends GameObject {
     for (let i = 0; i < this.getVisiblePillarCount(); i++) {
       await this.addTarget();
     }
-    this.pillars[0].becomeCurrent();
+    this.getCurrentPillar().becomeCurrent();
     return super.loadAsync();
   }
 
@@ -201,8 +217,8 @@ class PillarGroupObject extends GameObject {
       await this.addTarget();
     }
 
-    this.pillars[0].becomeCurrent();
-    this.pillars[1].becomeTarget();
+    this.getCurrentPillar().becomeCurrent();
+    this.getNextPillar().becomeTarget();
   };
 
   addTarget = async (score) => {
@@ -221,6 +237,7 @@ class PillarGroupObject extends GameObject {
     target.z = startZ + Settings.ballDistance * Math.cos(radians);
 
     this.pillars.push(target);
+
     target.lastAngle = Math.atan2(
       lastPillar.z - target.z,
       lastPillar.x - target.x
@@ -253,6 +270,7 @@ class Game extends GameObject {
   state = GameStates.Menu;
   score = 0;
   taps = 0;
+  direction = 1;
 
   constructor(width, height, renderer) {
     super();
@@ -275,8 +293,41 @@ class Game extends GameObject {
     return camera;
   };
 
+  /**
+   * Ensure the direction the play spins is the shortest route between pillars.
+   */
   generateDirection = () => {
-    this.direction = Math.round(randomRange(0, 1)) * 2 - 1;
+    // Get the distance between the player and the next pillar
+    const ballDistance = this.playerObject.getStaticItemsDistanceFromObject(
+      this.pillarGroup.getNextPillar()
+    );
+
+    // Measure the distance between the player if it moved
+    const pos1 = this.playerObject.getPositionWithDistanceAndAngle(
+      ballDistance,
+      this.playerObject.getRotationAngleForDirection(1, 1)
+    );
+    // Measure the distance between the player if it didn't move
+    const pos2 = this.playerObject.getPositionWithDistanceAndAngle(
+      ballDistance,
+      this.playerObject.rotationAngle
+    );
+
+    // Calculate the distances
+    const delta1 = distance(
+      { x: pos1[0], z: pos1[1] },
+      this.pillarGroup.getNextPillar().position
+    );
+    const delta2 = distance(
+      { x: pos2[0], z: pos2[1] },
+      this.pillarGroup.getNextPillar().position
+    );
+    // If moving the player +1 is shorter then keep it
+    if (delta1 > delta2) {
+      this.direction = 1;
+    } else {
+      this.direction = -1;
+    }
   };
 
   async reset() {
@@ -286,9 +337,7 @@ class Game extends GameObject {
       this.gameGroup.z = 0;
       this.gameGroup.x = 0;
     }
-    this.generateDirection();
 
-    // this.alpha = 1;
     this.playerObject.reset();
     await this.pillarGroup.reset();
   }
@@ -321,7 +370,6 @@ class Game extends GameObject {
   };
 
   loadGame = async () => {
-    this.generateDirection();
     this.gameGroup = await this.add(new GameObject());
     this.pillarGroup = await this.gameGroup.add(new PillarGroupObject());
     this.playerObject = await this.gameGroup.add(new PlayerGroupObject());
@@ -365,7 +413,7 @@ class Game extends GameObject {
       return;
     }
 
-    const targetPlatform = this.pillarGroup.pillars[1];
+    const targetPlatform = this.pillarGroup.getNextPillar();
     const distanceFromTarget = this.playerObject.getActiveItemsDistanceFromObject(
       targetPlatform
     );
@@ -381,21 +429,22 @@ class Game extends GameObject {
         this.particles.impulse();
       }
 
+      const previousPillar = this.pillarGroup.pillars.shift();
+
       this.generateDirection();
 
-      const target = this.pillarGroup.pillars.shift();
       if (this.pillarGroup.getCurrentPillar()) {
         this.pillarGroup.getCurrentPillar().updateDirection(this.direction);
       }
 
-      target.animateOut();
-      this.pillarGroup.pillars[0].becomeCurrent();
+      previousPillar.animateOut();
+      this.pillarGroup.getCurrentPillar().becomeCurrent();
 
       if (Settings.gemsEnabled && this.score > 3) {
         const gemCount = Math.floor(accuracy * 6);
-        this.pillarGroup.pillars[0].showGems(gemCount);
+        this.pillarGroup.getCurrentPillar().showGems(gemCount);
       }
-      this.pillarGroup.pillars[1].becomeTarget();
+      this.pillarGroup.getNextPillar().becomeTarget();
 
       this.playerObject.landed(accuracy);
 
@@ -469,7 +518,7 @@ class Game extends GameObject {
       }
 
       // guard against race condition when pillars are recycled
-      if (this.pillarGroup.pillars[1]) {
+      if (this.pillarGroup.getNextPillar()) {
         // move rotation angle
         this.playerObject.incrementRotationWithScoreAndDirection(
           this.score,
@@ -477,7 +526,7 @@ class Game extends GameObject {
         );
 
         const ballDistance = this.playerObject.getStaticItemsDistanceFromObject(
-          this.pillarGroup.pillars[1]
+          this.pillarGroup.getNextPillar()
         );
         this.playerObject.moveActiveItem(ballDistance);
       }
