@@ -61,7 +61,7 @@ class PlayerBall extends GameObject {
 
     const duration = 0.7;
 
-    const scale = targetRadius * 2 * perfection;
+    const scale = targetRadius + targetRadius * 0.5 * perfection;
 
     TweenMax.to(this.circle.scale, duration, {
       x: scale,

@@ -12,6 +12,8 @@ const radius = 33.3333333 / 2;
 
 const pointForGem = (r, a) => ({ x: r * Math.cos(a), y: r * Math.sin(a) });
 
+// const PlatformGeom = new CylinderBufferGeometry(size, size * 0.2, 1000, 24)
+
 class PlatformMesh extends Mesh {
   constructor(size, material) {
     super(new CylinderBufferGeometry(size, size * 0.2, 1000, 24), material);
@@ -57,14 +59,12 @@ class PlatformMesh extends Mesh {
   }
 }
 
-const PlatformGeom = new CylinderBufferGeometry(radius, radius, 1000, 24);
-
 class Platform extends GameObject {
   radius = 0;
 
   loadAsync = async (scene) => {
     const color = this.color;
-    this.radius = randomRange(radius, radius * 2);
+    this.radius = randomRange(radius, radius * 1.9);
     this._platformMaterial = new MeshPhongMaterial({ color });
     this.mesh = new PlatformMesh(this.radius, this._platformMaterial);
     this.mesh.y = -500;
