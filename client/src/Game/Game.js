@@ -14,6 +14,7 @@ import randomRange from "./engine/utils/randomRange";
 import GameStates from "./GameStates";
 import MenuObject from "./MenuObject";
 import MotionObserver from "./MotionObserver";
+import GameScene from "./GameScene";
 
 function distance(p1, p2) {
   const a = p1.x - p2.x;
@@ -35,6 +36,7 @@ class PlayerGroupObject extends GameObject {
     this.balls = [new PlayerBall(), new PlayerBall()];
     await this.add(...this.balls);
     this.reset();
+    return super.loadAsync();
   }
 
   landed = (accuracy) => {
@@ -144,35 +146,104 @@ function playHaptics(impact) {
   }
 }
 
-class GameScene extends THREE.Scene {
-  hue = 19;
+class PillarGroupObject extends GameObject {
+  targets = [];
+  steps = 0;
 
-  get color() {
-    return new THREE.Color(`hsl(${this.hue}, 88%, 66%)`);
+  getCurrentTarget() {
+    return this.targets[0];
   }
 
-  constructor() {
-    super();
-    this.background = this.color;
-    this.fog = new THREE.Fog(this.color, 100, 950);
+  getVisibleTargetsCount = (score = 0) => {
+    const level = Math.floor(score / 10);
+    if (level < 4) {
+      return Math.max(4, Settings.visibleTargets - level);
+    }
+    return Math.max(3, Settings.visibleTargets - (score % 5));
+  };
+
+  playGameOverAnimation = () => {
+    for (const target of this.targets) {
+      target.animateOut();
+    }
+  };
+
+  async loadAsync() {
+    const target = await this.add(new PlatformObject());
+    target.x = 0;
+    target.z = Settings.ballDistance;
+    this.targets.push(target);
+    for (let i = 0; i < this.getVisibleTargetsCount(); i++) {
+      await this.addTarget();
+    }
+    this.targets[0].becomeCurrent();
+    return super.loadAsync();
   }
 
-  animateBackgroundColor = (input) => {
-    TweenMax.to(this, 2, {
-      hue: (input * randomRange(3, 20)) % 50,
-      onUpdate: () => {
-        const color = this.color;
-        this.background = color;
-        this.fog = new THREE.Fog(color, 100, 950);
-      },
-    });
+  reset = async () => {
+    this.steps = 0;
+    for (const target of this.targets) {
+      target.destroy();
+    }
+    this.targets = [];
+    const target = await this.add(new PlatformObject());
+    if (target) {
+      target.x = 0;
+      target.z = Settings.ballDistance;
+      this.targets.push(target);
+    }
+    for (let i = 0; i < this.getVisibleTargetsCount(); i++) {
+      await this.addTarget();
+    }
+
+    this.targets[0].becomeCurrent();
+    this.targets[1].becomeTarget();
+  };
+
+  addTarget = async (score) => {
+    this.steps++;
+    const startX = this.targets[this.targets.length - 1].x;
+    const startZ = this.targets[this.targets.length - 1].z;
+    const target = await this.add(new PlatformObject());
+    const range = 90;
+    const randomAngle = randomRange(
+      Settings.angleRange[0] + range,
+      Settings.angleRange[1] + range
+    );
+
+    const radians = THREE.Math.degToRad(randomAngle);
+    target.x = startX + Settings.ballDistance * Math.sin(radians);
+    target.z = startZ + Settings.ballDistance * Math.cos(radians);
+
+    const last = this.targets[this.targets.length - 1];
+    this.targets.push(target);
+    target.lastAngle = Math.atan2(last.z - target.z, last.x - target.x);
+    target.alpha = this.alphaForTarget(this.targets.length, score);
+    target.animateIn();
+  };
+
+  alphaForTarget = (i, score) => {
+    const inverse = i - 1;
+    const alpha = inverse / this.getVisibleTargetsCount(score);
+    return 1 - alpha;
+  };
+
+  syncTargetsAlpha = (score) => {
+    for (let i = 0; i < this.targets.length; i++) {
+      this.targets[i].alpha = this.alphaForTarget(i, score);
+    }
+  };
+
+  ensureTargetsAreCreatedAsync = async (score) => {
+    while (this.targets.length < this.getVisibleTargetsCount(score)) {
+      await this.addTarget(score);
+    }
   };
 }
 
 class Game extends GameObject {
   state = GameStates.Menu;
 
-  targets = [];
   taps = 0;
   motionObserver = new MotionObserver();
 
@@ -208,27 +279,12 @@ class Game extends GameObject {
       this.gameGroup.z = 0;
       this.gameGroup.x = 0;
     }
-    this.steps = 0;
+    // this.steps = 0;
     this.generateDirection();
 
     this.alpha = 1;
     this.playerObject.reset();
-    for (const target of this.targets) {
-      target.destroy();
-    }
-    this.targets = [];
-    const target = await this.targetGroup.add(new PlatformObject());
-    if (target) {
-      target.x = 0;
-      target.z = this.playerObject.getStaticItem().z;
-      this.targets.push(target);
-    }
-    for (let i = 0; i < this.getVisibleTargetsCount(); i++) {
-      await this.addTarget();
-    }
-
-    this.targets[0].becomeCurrent();
-    this.targets[1].becomeTarget();
+    await this.targetGroup.reset();
   }
 
   async loadAsync() {
@@ -254,10 +310,6 @@ class Game extends GameObject {
     await super.loadAsync(this.scene);
   }
 
-  get currentTarget() {
-    return this.targets[0];
-  }
-
   loadMenu = async () => {
     this.motionObserver.start();
 
@@ -270,17 +322,9 @@ class Game extends GameObject {
     this.steps = 0;
     this.generateDirection();
     this.gameGroup = await this.add(new GameObject());
-    this.targetGroup = await this.gameGroup.add(new GameObject());
+    this.targetGroup = await this.gameGroup.add(new PillarGroupObject());
     this.playerObject = await this.gameGroup.add(new PlayerGroupObject());
     this.alpha = 1;
-    const target = await this.targetGroup.add(new PlatformObject());
-    target.x = 0;
-    target.z = this.playerObject.getStaticItem().z;
-    this.targets.push(target);
-    for (let i = 0; i < this.getVisibleTargetsCount(); i++) {
-      await this.addTarget();
-    }
-    this.targets[0].becomeCurrent();
   };
   score = 0;
 
@@ -328,7 +372,7 @@ class Game extends GameObject {
       return;
     }
 
-    const targetPlatform = this.targets[1];
+    const targetPlatform = this.targetGroup.targets[1];
     const distanceFromTarget = this.playerObject.getActiveItemsDistanceFromObject(
       targetPlatform
     );
@@ -346,48 +390,27 @@ class Game extends GameObject {
 
       this.generateDirection();
 
-      const target = this.targets.shift();
-      if (this.currentTarget)
-        this.currentTarget.updateDirection(this.direction);
+      const target = this.targetGroup.targets.shift();
+      if (this.targetGroup.getCurrentTarget()) {
+        this.targetGroup.getCurrentTarget().updateDirection(this.direction);
+      }
 
       target.animateOut();
-      this.targets[0].becomeCurrent();
+      this.targetGroup.targets[0].becomeCurrent();
 
       if (Settings.gemsEnabled && this.score > 3) {
         const gemCount = Math.floor(accuracy * 6);
-        this.targets[0].showGems(gemCount);
+        this.targetGroup.targets[0].showGems(gemCount);
       }
-      this.targets[1].becomeTarget();
+      this.targetGroup.targets[1].becomeTarget();
 
       this.playerObject.landed(accuracy);
 
-      while (this.targets.length < this.getVisibleTargetsCount()) {
-        await this.addTarget();
-      }
+      await this.targetGroup.ensureTargetsAreCreatedAsync(this.score);
 
-      // this.syncTargetsAlpha();
+      // this.targetGroup.syncTargetsAlpha(this.score);
     } else {
       this.gameOver();
-    }
-  };
-
-  getVisibleTargetsCount = () => {
-    const level = Math.floor(this.score / 10);
-    if (level < 4) {
-      return Math.max(4, Settings.visibleTargets - level);
-    }
-    return Math.max(3, Settings.visibleTargets - (this.score % 5));
-  };
-
-  alphaForTarget = (i) => {
-    const inverse = i - 1;
-    const alpha = inverse / this.getVisibleTargetsCount();
-    return 1 - alpha;
-  };
-
-  syncTargetsAlpha = () => {
-    for (let i = 0; i < this.targets.length; i++) {
-      this.targets[i].alpha = this.alphaForTarget(i);
     }
   };
 
@@ -419,35 +442,10 @@ class Game extends GameObject {
 
     if (animate) {
       this.playerObject.playGameOverAnimation(() => this.reset());
-
-      for (const target of this.targets) {
-        target.animateOut();
-      }
+      this.targetGroup.playGameOverAnimation();
     } else {
       this.reset();
     }
-  };
-
-  addTarget = async () => {
-    this.steps++;
-    const startX = this.targets[this.targets.length - 1].x;
-    const startZ = this.targets[this.targets.length - 1].z;
-    const target = await this.targetGroup.add(new PlatformObject());
-    const range = 90;
-    const randomAngle = randomRange(
-      Settings.angleRange[0] + range,
-      Settings.angleRange[1] + range
-    );
-
-    const radians = THREE.Math.degToRad(randomAngle);
-    target.x = startX + Settings.ballDistance * Math.sin(radians);
-    target.z = startZ + Settings.ballDistance * Math.cos(radians);
-
-    const last = this.targets[this.targets.length - 1];
-    this.targets.push(target);
-    target.lastAngle = Math.atan2(last.z - target.z, last.x - target.x);
-    target.alpha = this.alphaForTarget(this.targets.length);
-    target.animateIn();
   };
 
   update(delta, time) {
@@ -461,9 +459,9 @@ class Game extends GameObject {
       }
       super.update(delta, time);
 
-      if (!this.targets[1] || !this.playerObject.getActiveItem()) return;
+      if (!this.playerObject.getActiveItem()) return;
 
-      const isFirst = this.steps <= this.getVisibleTargetsCount();
+      const isFirst = this.score === 0;
       const minScale =
         this.playerObject.getActiveItemScale() <= Settings.minBallScale;
 
@@ -478,7 +476,7 @@ class Game extends GameObject {
       }
 
       // guard against race condition when targets are recycled
-      if (this.targets[1]) {
+      if (this.targetGroup.targets[1]) {
         // move rotation angle
         this.playerObject.incrementRotationWithScoreAndDirection(
           this.score,
@@ -486,7 +484,7 @@ class Game extends GameObject {
         );
 
         const ballDistance = this.playerObject.getStaticItemsDistanceFromObject(
-          this.targets[1]
+          this.targetGroup.targets[1]
         );
         this.playerObject.moveActiveItem(ballDistance);
       }
@@ -500,14 +498,15 @@ class Game extends GameObject {
       this.gameGroup.z -= (distanceZ - 0 + this.gameGroup.z) * easing;
       this.gameGroup.x -= (distanceX - 0 + this.gameGroup.x) * easing;
 
+      const currentTarget = this.targetGroup.getCurrentTarget();
       // Collect gems
       if (
         Settings.gemsEnabled &&
-        this.currentTarget &&
-        this.currentTarget.gems &&
-        this.currentTarget.gems.length
+        currentTarget &&
+        currentTarget.gems &&
+        currentTarget.gems.length
       ) {
-        const collideGems = this.currentTarget.gems.filter(
+        const collideGems = currentTarget.gems.filter(
           (gem) => gem.canBeCollected && gem._driftAngle !== undefined
         );
         if (collideGems.length) {

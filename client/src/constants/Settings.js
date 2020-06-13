@@ -1,6 +1,4 @@
-// @flow
 import Constants from "expo-constants";
-import { Dimensions, Platform } from "react-native";
 
 const debug = __DEV__;
 const Settings = {
