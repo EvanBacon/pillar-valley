@@ -32,16 +32,9 @@ class PlayerGroupObject extends GameObject {
   velocity = Settings.rotationSpeed;
 
   async loadAsync() {
-    const ballA = await this.add(new PlayerBall());
-    ballA.x = 0;
-    ballA.z = Settings.ballDistance;
-    const ballB = await this.add(new PlayerBall());
-    ballB.x = 0;
-    ballB.z = 0;
-    this.balls = [ballA, ballB];
-
-    // TODO i don't think we need this
-    this.resetScale();
+    this.balls = [new PlayerBall(), new PlayerBall()];
+    await this.add(...this.balls);
+    this.reset();
   }
 
   testCollisionWithGem = (gem) => {
@@ -92,7 +85,7 @@ class PlayerGroupObject extends GameObject {
       ball.z = 0;
     }
 
-    this.balls[0].z = Settings.ballDistance;
+    this.getStaticItem().z = Settings.ballDistance;
 
     this.resetScale();
   };
