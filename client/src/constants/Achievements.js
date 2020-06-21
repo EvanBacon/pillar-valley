@@ -7,7 +7,7 @@ class Achievement {
     this.isSecret = isSecret;
     this.points = points;
     this.action = action;
-    this.image = require("../assets/icons/expo.png");
+    // this.image = require("../assets/icons/expo.png");
   }
 }
 

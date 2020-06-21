@@ -9,7 +9,7 @@ const Settings = {
       // 'user_friends'
     ],
   },
-  isPromo: true,
+  isPromo: false,
   circleEnabled: true,
   isSimulator: !Constants.isDevice,
   isFirebaseEnabled: false, // !debug || false,

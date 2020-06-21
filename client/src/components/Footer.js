@@ -95,9 +95,9 @@ function Footer({ game, screenshot, navigation }) {
   if (!Settings.isPromo && supportsStoreReview) {
     views.push(<RateButton />);
   }
-  if (!Settings.isPromo && Platform.OS !== "web") {
-    views.push(<AdButton />);
-  }
+  // if (!Settings.isPromo && Platform.OS !== "web") {
+  //   views.push(<AdButton />);
+  // }
   return (
     <View style={[styles.container, { marginBottom: bottom }]}>
       {views.map((view, index) => {

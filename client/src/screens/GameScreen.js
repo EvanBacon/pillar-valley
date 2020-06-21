@@ -112,7 +112,7 @@ export default function GameScreen({ navigation }) {
       {loading && (
         <Image
           style={StyleSheet.absoluteFill}
-          source={require("../assets/icons/splash.png")}
+          source={require("../../icons/splash.png")}
         />
       )}
       <AchievementPopup navigation={navigation} />
