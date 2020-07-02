@@ -12,8 +12,9 @@ const PlayerBallGeom = new CylinderBufferGeometry(radius, radius, 9, 24);
 const PlayerBallMaterial = new MeshPhongMaterial({
   color: Colors.gold,
 });
+
 class PlayerBall extends GameObject {
-  circle?: Circle;
+  private circle?: Circle;
 
   loadAsync = async (scene: any) => {
     const mesh = new Mesh(PlayerBallGeom.clone(), PlayerBallMaterial.clone());

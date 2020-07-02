@@ -2,11 +2,10 @@ import * as Analytics from "expo-firebase-analytics";
 import * as Haptics from "expo-haptics";
 import { Platform } from "react-native";
 import * as THREE from "three";
-
+import { DirectionalLight, HemisphereLight } from "three";
 import Settings from "../constants/Settings";
 import { dispatch } from "../rematch/store";
 import GameObject from "./GameObject";
-import Lighting from "./entities/Lighting";
 import PlatformObject from "./entities/Platform";
 import PlayerBall from "./entities/PlayerBall";
 import randomRange from "./utils/randomRange";
@@ -389,12 +388,10 @@ class Game extends GameObject {
     this.scene.add(this);
     this.camera = await this.createCameraAsync(this._width, this._height);
 
-    const types = [
-      new Lighting(),
-      //  new Particles()
-    ];
-    const promises = types.map((type) => this.add(type));
-    await Promise.all(promises);
+    const light = new DirectionalLight(0xffffff, 0.9);
+    light.position.set(0, 350, 350);
+    this.scene.add(new HemisphereLight(0xaaaaaa, 0x000000, 0.9), light);
+
     if (this.state === GameStates.Menu) {
       await this.loadMenu();
       dispatch.game.menu();
