@@ -611,8 +611,10 @@ class Game extends GameObject {
 
       const easing = 0.03;
 
-      this.gameGroup.z -= (distanceZ - 0 + this.gameGroup.z) * easing;
-      this.gameGroup.x -= (distanceX - 0 + this.gameGroup.x) * easing;
+      this.gameGroup.position.z -=
+        (distanceZ - 0 + this.gameGroup.position.z) * easing;
+      this.gameGroup.position.x -=
+        (distanceX - 0 + this.gameGroup.position.x) * easing;
 
       const currentPillar = this.pillarGroup.getCurrentPillar();
       // Collect gems
