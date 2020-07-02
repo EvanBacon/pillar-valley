@@ -5,7 +5,7 @@ import * as THREE from "three";
 
 import Settings from "../constants/Settings";
 import { dispatch } from "../rematch/store";
-import GameObject from "./engine/core/GameObject";
+import GameObject from "./GameObject";
 import Lighting from "./engine/entities/Lighting";
 import PlatformObject from "./engine/entities/Platform";
 import PlayerBall from "./engine/entities/PlayerBall";

@@ -2,7 +2,7 @@ import { loadTextureAsync } from "expo-three";
 import { Back, Expo as ExpoEase, TweenMax } from "gsap";
 import * as THREE from "three";
 
-import GameObject from "./engine/core/GameObject";
+import GameObject from "./GameObject";
 import FlatMaterial from "./engine/utils/FlatMaterial";
 import MotionObserver from "./MotionObserver";
 

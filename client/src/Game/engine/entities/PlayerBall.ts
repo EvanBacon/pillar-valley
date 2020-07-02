@@ -4,7 +4,7 @@ import { Power2 as Cubic, TweenMax } from "gsap";
 
 import Colors from "../../../constants/Colors";
 import Circle from "../../Circle";
-import GameObject from "../core/GameObject";
+import GameObject from "../../GameObject";
 import Settings from "../../../constants/Settings";
 
 const radius = 26.6666667 / 2;

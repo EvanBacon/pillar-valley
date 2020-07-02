@@ -1,6 +1,6 @@
-import { HemisphereLight, DirectionalLight } from 'three';
+import { HemisphereLight, DirectionalLight } from "three";
 
-import GameObject from '../core/GameObject';
+import GameObject from "../../GameObject";
 
 class Lighting extends GameObject {
   get hemisphere() {
