@@ -137,9 +137,9 @@ export const score = {
     setHighScore: async (highScore, { user: { displayName, photoURL } }) => {
       console.log("set High score", highScore);
       const _displayName = parseName(displayName);
-      const docRef = Fire.shared.doc;
+      const docRef = Fire.doc;
       try {
-        await Fire.shared.db.runTransaction((transaction) =>
+        await Fire.db.runTransaction((transaction) =>
           transaction.get(docRef).then((doc) => {
             if (!doc.exists) {
               throw new Error("Document does not exist!");
@@ -237,10 +237,10 @@ export const screenshot = {
 async function incrementDailyReward() {
   const timestamp = Date.now();
   return new Promise((res, rej) => {
-    Fire.shared.db
+    Fire.db
       .runTransaction((transaction) =>
-        transaction.get(Fire.shared.doc).then((userDoc) => {
-          console.log("Fire.shared.doc", Fire.shared.doc);
+        transaction.get(Fire.doc).then((userDoc) => {
+          console.log("Fire.doc", Fire.doc);
           if (!userDoc.exists) {
             throw new Error("Document does not exist!");
           }
@@ -255,7 +255,7 @@ async function incrementDailyReward() {
               // console.log('More than a day');
               // It has been more than 1 day since the last visit - break the streak
               const newDailyVisits = 0;
-              transaction.update(Fire.shared.doc, {
+              transaction.update(Fire.doc, {
                 dailyVisits: newDailyVisits,
                 lastRewardTimestamp: timestamp,
               });
@@ -268,7 +268,7 @@ async function incrementDailyReward() {
 
             const dailyVisits = data.dailyVisits || 0;
             const newDailyVisits = dailyVisits + 1;
-            transaction.update(Fire.shared.doc, {
+            transaction.update(Fire.doc, {
               dailyVisits: newDailyVisits,
               lastRewardTimestamp: timestamp,
             });
@@ -277,7 +277,7 @@ async function incrementDailyReward() {
             return newDailyVisits;
           }
           // console.log('Within day');
-          transaction.update(Fire.shared.doc, {
+          transaction.update(Fire.doc, {
             dailyVisits: data.dailyVisits || 0,
             lastRewardTimestamp: data.lastRewardTimestamp || Date.now(),
           });
@@ -457,7 +457,7 @@ export const leaders = {
         const ref = firebase.firestore().collection(Settings.slug).doc(uid);
         const doc = await ref.get();
         if (!doc.exists) {
-          if (uid === Fire.shared.uid) {
+          if (uid === Fire.uid) {
             const currentUser = firebase.auth().currentUser || {};
 
             const _displayName = parseName(
@@ -521,7 +521,7 @@ export const players = {
         const doc = await ref.get();
         if (!doc.exists) {
           console.log(`No document: players/${uid}`);
-          if (uid === Fire.shared.uid) {
+          if (uid === Fire.uid) {
             const currentUser = firebase.auth().currentUser || {};
             const _displayName = parseName(
               currentUser.displayName,
@@ -722,7 +722,7 @@ export const user = {
       const doc = await firebase
         .firestore()
         .collection("players")
-        .doc(Fire.shared.uid);
+        .doc(Fire.uid);
       const setWithMerge = doc.set(props, { merge: true });
     },
     syncLocalToFirebase: async (
@@ -733,11 +733,11 @@ export const user = {
       const doc = await firebase
         .firestore()
         .collection("players")
-        .doc(Fire.shared.uid);
+        .doc(Fire.uid);
       const setWithMerge = doc.set(otherUserProps, { merge: true });
     },
     setGameData: (props) => {
-      const { uid, doc } = Fire.shared;
+      const { uid, doc } = Fire;
       if (!uid) {
         // todo: add error
         return;
@@ -823,7 +823,7 @@ export const facebook = {
         if (code === "auth/credential-already-in-use") {
           // Delete current account while signed in
           // TODO: This wont work
-          const uid = Fire.shared.uid;
+          const uid = Fire.uid;
           if (uid) {
             console.log("Should delete:", uid);
             await deleteUserAsync(uid);

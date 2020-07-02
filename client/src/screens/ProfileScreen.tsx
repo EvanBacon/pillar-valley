@@ -16,7 +16,7 @@ function ProfileScreen({ user = {} }) {
   const canLogout = isSignedInWithFB;
   const name = user.displayName || user.deviceName;
   const createdAt = user.createdAt || user.lastRewardTimestamp;
-  const isUser = Fire.shared.uid === user.uid;
+  const isUser = Fire.uid === user.uid;
 
   const image = isSignedInWithFB
     ? `https://graph.facebook.com/${user.fbuid}/picture?type=large`
@@ -60,7 +60,7 @@ export default connect(
   ({ players }) => ({ players }),
   {},
   ({ players = {}, ...stateProps }, dispatchProps, ownProps) => {
-    const uid = ownProps.route.uid || Fire.shared.uid;
+    const uid = ownProps.route.uid || Fire.uid;
     const user = players[uid];
 
     return {

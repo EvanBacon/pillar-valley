@@ -5,33 +5,41 @@ import "firebase/auth";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-const LogoutButton = React.forwardRef((props, ref) => {
-  return (
-    <FontAwesome.Button
-      ref={ref}
-      name="sign-out"
-      backgroundColor="#CA5D6B"
-      children="Log Out"
-      onPress={() => firebase.auth().signOut()}
-      {...props}
-    />
-  );
-});
+const LogoutButton = React.forwardRef(
+  (props: React.ComponentProps<typeof FontAwesome.Button>, ref) => {
+    return (
+      <FontAwesome.Button
+        ref={ref}
+        name="sign-out"
+        backgroundColor="#CA5D6B"
+        children="Log Out"
+        onPress={() => firebase.auth().signOut()}
+        {...props}
+      />
+    );
+  }
+);
 
-const FacebookButton = React.forwardRef((props, ref) => {
-  return (
-    <FontAwesome.Button
-      ref={ref}
-      name="facebook"
-      backgroundColor="#3b5998"
-      children="Link with Facebook"
-      onPress={() => dispatch.facebook.upgradeAccount()}
-      {...props}
-    />
-  );
-});
+const FacebookButton = React.forwardRef(
+  (props: React.ComponentProps<typeof FontAwesome.Button>, ref) => {
+    return (
+      <FontAwesome.Button
+        ref={ref}
+        name="facebook"
+        backgroundColor="#3b5998"
+        children="Link with Facebook"
+        onPress={() => dispatch.facebook.upgradeAccount()}
+        {...props}
+      />
+    );
+  }
+);
 
-export default function UpgradeAccountView({ canLogout }) {
+export default function UpgradeAccountView({
+  canLogout,
+}: {
+  canLogout: boolean;
+}) {
   return (
     <View style={styles.container}>
       {!canLogout && (

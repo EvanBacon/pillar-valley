@@ -94,5 +94,4 @@ class Fire {
   }
 }
 
-Fire.shared = new Fire();
-export default Fire;
+export default new Fire();

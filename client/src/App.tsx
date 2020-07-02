@@ -28,7 +28,7 @@ export default function App() {
 
   React.useEffect(() => {
     StatusBar.setBarStyle("light-content", true);
-    Fire.shared.init();
+    Fire.init();
     (async () => {
       console.time("Setup");
       let time = getNow();

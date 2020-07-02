@@ -141,10 +141,10 @@ export default () => {
   //   name="Profile"
   //   component={ProfileScreen}
   //   options={({ navigation, route }) => {
-  //     const uid = route.uid || Fire.shared.uid;
+  //     const uid = route.uid || Fire.uid;
 
   //     let headerRight;
-  //     if (uid !== Fire.shared.uid) {
+  //     if (uid !== Fire.uid) {
   //       headerRight = (
   //         <Text
   //           onPress={() => {

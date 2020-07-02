@@ -1,17 +1,14 @@
+import { ExpoWebGLRenderingContext, GLView } from "expo-gl";
 import invariant from "invariant";
 import React from "react";
 import {
   AppState,
-  PixelRatio,
-  StyleSheet,
-  Text,
-  View,
-  Platform,
   LayoutChangeEvent,
+  PixelRatio,
+  Platform,
+  StyleSheet,
 } from "react-native";
 import uuidv4 from "uuid/v4";
-
-import { GLView, ExpoWebGLRenderingContext } from "expo-gl";
 
 export type ResizeEvent = {
   x: number;

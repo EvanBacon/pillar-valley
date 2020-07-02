@@ -76,8 +76,8 @@ function LeaderboardScreen({
   };
 
   const makeRemoteRequest = async () => {
-    // console.log('makeRemoteRequest', Object.keys(Fire.shared));
-    if (!Fire.shared.uid) {
+    // console.log('makeRemoteRequest', Object.keys(Fire));
+    if (!Fire.uid) {
       return;
     }
 

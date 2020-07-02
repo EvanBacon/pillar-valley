@@ -10,7 +10,7 @@ export default function ReportScreen({ navigation, route }) {
   const { username, uid } = route;
 
   const onPressItem = ({ name }) => {
-    Fire.shared.submitComplaint(uid, name);
+    Fire.submitComplaint(uid, name);
     navigation.goBack();
     alert("This user will be investigated with surgical precision.");
   };
