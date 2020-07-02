@@ -2,10 +2,10 @@ import { Mesh, CylinderBufferGeometry, MeshPhongMaterial } from "three";
 
 import { Power2 as Cubic, TweenMax } from "gsap";
 
-import Colors from "../../../constants/Colors";
-import Circle from "../../Circle";
-import GameObject from "../../GameObject";
-import Settings from "../../../constants/Settings";
+import Colors from "../../constants/Colors";
+import Circle from "../Circle";
+import GameObject from "../GameObject";
+import Settings from "../../constants/Settings";
 
 const radius = 26.6666667 / 2;
 const PlayerBallGeom = new CylinderBufferGeometry(radius, radius, 9, 24);
@@ -28,14 +28,6 @@ class PlayerBall extends GameObject {
     this.add(circle);
 
     await super.loadAsync(scene);
-  };
-
-  resetCircle = () => {
-    if (!this.circle) return;
-    this.circle.visible = false;
-    this.circle.scale.x = 0.001;
-    this.circle.scale.y = 0.001;
-    this.circle.alpha = 0.8;
   };
 
   hide = ({

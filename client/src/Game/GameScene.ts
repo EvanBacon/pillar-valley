@@ -1,7 +1,7 @@
 import { TweenMax } from "gsap";
 import * as THREE from "three";
 
-import randomRange from "./engine/utils/randomRange";
+import randomRange from "./utils/randomRange";
 
 export default class GameScene extends THREE.Scene {
   private hue: number = 19;

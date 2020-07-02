@@ -1,10 +1,10 @@
 import { TweenMax } from "gsap";
 
 import { Color, Mesh, CylinderBufferGeometry, MeshPhongMaterial } from "three";
-import GameObject from "../../GameObject";
+import GameObject from "../GameObject";
 import randomRange from "../utils/randomRange";
 import Gem from "./Gem";
-import Settings from "../../../constants/Settings";
+import Settings from "../../constants/Settings";
 import DoubleGem from "./DoubleGem";
 
 const radius = 33.3333333 / 2;

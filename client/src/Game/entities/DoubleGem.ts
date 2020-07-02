@@ -2,7 +2,7 @@ import * as Haptics from "expo-haptics";
 import { Platform } from "react-native";
 import { MeshPhongMaterial } from "three";
 
-import Colors from "../../../constants/Colors";
+import Colors from "../../constants/Colors";
 import Gem from "./Gem";
 
 const DoubleGemMaterial = new MeshPhongMaterial({

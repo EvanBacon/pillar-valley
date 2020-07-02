@@ -1,8 +1,32 @@
-import { CircleGeometry, Mesh, MeshPhongMaterial, Color } from "three";
+import { CircleGeometry, Color, Mesh, MeshPhongMaterial } from "three";
 
-class CircleMesh extends Mesh {
-  private _alpha = 1;
+class AlphaMesh extends Mesh {
+  private _alpha: number = 1;
 
+  get alpha(): number {
+    return this._alpha;
+  }
+
+  set alpha(value: number) {
+    this._alpha = value;
+    this.setAlpha(value);
+  }
+
+  private setAlpha(value: number) {
+    const transparent = value !== 1;
+    if (Array.isArray(this.material)) {
+      this.material.map((material) => {
+        material.transparent = transparent;
+        material.opacity = value;
+      });
+    } else if (this.material) {
+      this.material.transparent = transparent;
+      this.material.opacity = value;
+    }
+  }
+}
+
+class CircleMesh extends AlphaMesh {
   constructor({
     radius,
     color,
@@ -20,30 +44,12 @@ class CircleMesh extends Mesh {
     );
   }
 
-  set alpha(value) {
-    this._alpha = value;
-    const transparent = value !== 1;
-    if (Array.isArray(this.material)) {
-      this.material.map((material) => {
-        material.transparent = transparent;
-        material.opacity = value;
-      });
-    } else if (this.material) {
-      this.material.transparent = transparent;
-      this.material.opacity = value;
-    }
-  }
-
   reset = () => {
     this.visible = false;
     this.scale.x = 0.001;
     this.scale.y = 0.001;
     this.alpha = 0.8;
   };
-
-  get alpha() {
-    return this._alpha;
-  }
 
   explode = () => {
     // todo tween disapate animation
