@@ -13,7 +13,6 @@ import randomRange from "./engine/utils/randomRange";
 import GameScene from "./GameScene";
 import GameStates from "./GameStates";
 import MenuObject from "./MenuObject";
-import invariant from "invariant";
 
 function distance(
   p1: { x: number; z: number },

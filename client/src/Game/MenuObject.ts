@@ -20,12 +20,13 @@ async function loadMenuMaterialAsync(
 }
 
 async function makeMenuPillarAsync(asset: any, color = 0xdb7048) {
-  const radius = 33.3333333;
+  const width = 100;
+  const depth = width * 0.33;
 
   const materials = await loadMenuMaterialAsync(asset, color);
 
   const mesh = new THREE.Mesh(
-    new THREE.CubeGeometry(radius * 3, 1000, radius, 1, 1, 1),
+    new THREE.BoxBufferGeometry(100, 1000, depth, 1, 1, 1),
     materials
   );
   mesh.position.y = -500;

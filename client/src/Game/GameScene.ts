@@ -4,9 +4,9 @@ import * as THREE from "three";
 import randomRange from "./engine/utils/randomRange";
 
 export default class GameScene extends THREE.Scene {
-  hue: number = 19;
+  private hue: number = 19;
 
-  get color(): THREE.Color {
+  private get color(): THREE.Color {
     return new THREE.Color(`hsl(${this.hue}, 88%, 66%)`);
   }
 
