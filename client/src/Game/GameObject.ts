@@ -6,7 +6,7 @@ export type BoxSize = {
   depth: number;
 };
 
-function getMaterialsForNode(node: any): THREE.Material[] {
+export function getMaterialsForNode(node: any): THREE.Material[] {
   let materials: THREE.Material[] = [];
   if (node.materials) {
     materials = node.materials;
@@ -17,6 +17,25 @@ function getMaterialsForNode(node: any): THREE.Material[] {
   }
   return materials;
 }
+
+export function setMeshAlpha(mesh: THREE.Mesh, value: number) {
+  const transparent = value !== 1;
+  const materials = getMaterialsForNode(mesh);
+  materials.map((material) => {
+    material.transparent = transparent;
+    material.opacity = value;
+  });
+}
+
+export function setFullMeshAlpha(mesh: THREE.Mesh, value: number) {
+  setMeshAlpha(mesh, value);
+  mesh.traverse((child) => {
+    if (child instanceof THREE.Mesh) {
+      setMeshAlpha(child, value);
+    }
+  });
+}
+
 class GameObject extends THREE.Object3D {
   loaded = false;
 
@@ -27,38 +46,22 @@ class GameObject extends THREE.Object3D {
   }
 
   _alpha = 1;
+
   get alpha() {
     return this._alpha;
   }
+
   set alpha(value) {
     this._alpha = value;
-    const transparent = value !== 1;
-    const materials = getMaterialsForNode(this);
-    materials.map((material) => {
-      material.transparent = transparent;
-      material.opacity = value;
-    });
 
     this.setAll("alpha", value);
 
     this.traverse((child) => {
-      const materials = getMaterialsForNode(child);
-      materials.map((material) => {
-        material.transparent = transparent;
-        material.opacity = value;
-      });
+      if (child instanceof THREE.Mesh) {
+        setMeshAlpha(child, value);
+      }
     });
   }
-
-  // get objects() {
-  //   const out = [];
-  //   this.traverse(function(child) {
-  //     if (child instanceof GameObject) {
-  //       //   out.push(child);
-  //     }
-  //   });
-  //   return out;
-  // }
 
   setAll = (key: string, value: any) => {
     for (const object of this.objects) {
@@ -73,14 +76,6 @@ class GameObject extends THREE.Object3D {
 
   async loadAsync(scene?: any): Promise<void> {
     this.loaded = true;
-  }
-
-  get position() {
-    return this.position;
-  }
-
-  set position(value) {
-    this.position.set(value);
   }
 
   get x(): number {

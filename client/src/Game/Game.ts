@@ -24,7 +24,7 @@ function distance(
 }
 
 class PlayerGroupObject extends GameObject {
-  mainBall = 1;
+  private mainBall = 1;
   /**
    * Current angle in degrees
    */
@@ -76,8 +76,8 @@ class PlayerGroupObject extends GameObject {
     this.mainBall = 1;
 
     for (const ball of this.balls) {
-      ball.x = 0;
-      ball.z = 0;
+      ball.position.x = 0;
+      ball.position.z = 0;
       ball.alpha = 1;
     }
 
@@ -117,8 +117,8 @@ class PlayerGroupObject extends GameObject {
       distance,
       this.rotationAngle
     );
-    this.getActiveItem().x = x;
-    this.getActiveItem().z = z;
+    this.getActiveItem().position.x = x;
+    this.getActiveItem().position.z = z;
   };
 
   getRotationSpeedForScore = (score: number): number => {
@@ -241,8 +241,8 @@ class PillarGroupObject extends GameObject {
       const startX = lastPillar.x;
       const startZ = lastPillar.z;
       const radians = this.generateRandomAngleForPillar();
-      target.x = startX + distance * Math.sin(radians);
-      target.z = startZ + distance * Math.cos(radians);
+      target.position.x = startX + distance * Math.sin(radians);
+      target.position.z = startZ + distance * Math.cos(radians);
       target.lastAngle = Math.atan2(startZ - target.z, startX - target.x);
       // This seems to cause lag
       // target.alpha = this.alphaForTarget(this.pillars.length, score);
@@ -374,8 +374,8 @@ class Game extends GameObject {
     super.reset();
 
     if (this.gameGroup) {
-      this.gameGroup.z = 0;
-      this.gameGroup.x = 0;
+      this.gameGroup.position.z = 0;
+      this.gameGroup.position.x = 0;
     }
 
     this.playerObject?.reset();

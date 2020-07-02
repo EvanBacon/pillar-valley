@@ -58,7 +58,7 @@ export default class Gem extends GameObject {
     this.rotation.y += 4 * delta;
     // this.rotation.x += 2 * delta;
 
-    // this.x = Math.sin(time * this.speed) * 100;
+    // this.position.x = Math.sin(time * this.speed) * 100;
     super.update(delta, time);
   }
 

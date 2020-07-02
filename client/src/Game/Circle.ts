@@ -1,4 +1,5 @@
 import { CircleGeometry, Color, Mesh, MeshPhongMaterial } from "three";
+import { setFullMeshAlpha } from "./GameObject";
 
 class AlphaMesh extends Mesh {
   private _alpha: number = 1;
@@ -9,20 +10,7 @@ class AlphaMesh extends Mesh {
 
   set alpha(value: number) {
     this._alpha = value;
-    this.setAlpha(value);
-  }
-
-  private setAlpha(value: number) {
-    const transparent = value !== 1;
-    if (Array.isArray(this.material)) {
-      this.material.map((material) => {
-        material.transparent = transparent;
-        material.opacity = value;
-      });
-    } else if (this.material) {
-      this.material.transparent = transparent;
-      this.material.opacity = value;
-    }
+    setFullMeshAlpha(this, value);
   }
 }
 
