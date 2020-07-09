@@ -110,6 +110,15 @@ export const score = {
   effects: {
     updateTotal(current, { score }) {
       const total = score.total + current;
+
+      if (current > 100) {
+        dispatch.achievements.unlock("score-100");
+      } else if (current > 50) {
+        dispatch.achievements.unlock("score-50");
+      } else if (current > 20) {
+        dispatch.achievements.unlock("score-20");
+      }
+
       if (total > 10000) {
         dispatch.achievements.unlock("total-score-10000");
       } else if (total > 5000) {

@@ -21,6 +21,9 @@
 // }
 
 export default {
+  "score-20": {
+    name: "Scored 20 points in a single game",
+  },
   "score-50": {
     name: "Scored 50 points in a single game",
   },
