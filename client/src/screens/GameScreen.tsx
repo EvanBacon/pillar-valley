@@ -1,22 +1,24 @@
-import { AdMobBanner } from "expo-ads-admob";
 import { Renderer } from "expo-three";
 import React from "react";
 import {
+  Clipboard,
   GestureResponderEvent,
   Image,
+  Platform,
   StyleSheet,
   Text,
   View,
 } from "react-native";
+import { useSafeArea } from "react-native-safe-area-context";
 
 import AchievementPopup from "../components/AchievementPopup";
+import { AdMobBanner } from "../components/AdMob";
 import Footer from "../components/Footer";
 import GraphicsView, { GLEvent, ResizeEvent } from "../components/GraphicsView";
 import Paused from "../components/Paused";
 import ScoreMeta from "../components/ScoreMeta";
 import Song from "../components/Song";
 import TouchableView from "../components/TouchableView";
-import * as Ads from "../constants/Ads";
 import Settings from "../constants/Settings";
 import Game from "../Game/Game";
 import useAppState from "../hooks/useAppState";
@@ -109,27 +111,14 @@ function GameView({ onLoad, isPaused }) {
 
 export default function GameScreen({ navigation }) {
   const [loading, setLoading] = React.useState(true);
-  const [showAd, setShowAd] = React.useState<boolean>(!!Ads.adUnitId);
-
   const appState = useAppState();
   const isPaused = appState !== "active";
-
-  const onBannerError = React.useCallback((data) => {
-    console.log("Banner error: ", data);
-    setShowAd(false);
-  }, []);
 
   return (
     <View style={styles.container} pointerEvents="box-none">
       <Song />
       <InputGameView onLoad={() => setLoading(false)} isPaused={isPaused} />
-      {showAd && (
-        <AdMobBanner
-          bannerSize="fullBanner"
-          adUnitID={Ads.adUnitId} // Test ID, Replace with your-admob-unit-id
-          onDidFailToReceiveAdWithError={onBannerError}
-        />
-      )}
+      <BottomBannerAd />
       <ScoreMeta />
       <Footer navigation={navigation} />
       {isPaused && <Paused />}
@@ -145,6 +134,36 @@ export default function GameScreen({ navigation }) {
   );
 }
 
+function BottomBannerAd() {
+  const [showAd, setShowAd] = React.useState<boolean>(false);
+  const { bottom } = useSafeArea();
+
+  const onBannerError = React.useCallback((errorDescription: string) => {
+    console.log("Banner error: ", errorDescription);
+    setShowAd(false);
+  }, []);
+
+  Clipboard.setString("");
+
+  // Test ID, Replace with your-admob-unit-id
+  const adUnitID = Platform.select({
+    ios: "ca-app-pub-2312569320461549/6612342018",
+    android: "ca-app-pub-2312569320461549/6685058859",
+  });
+
+  const display = showAd ? "flex" : "none";
+  return (
+    <View style={{ display, position: "absolute", bottom, left: 0, right: 0 }}>
+      <AdMobBanner
+        onAdViewDidReceiveAd={() => setShowAd(true)}
+        bannerSize="smartBannerPortrait"
+        adUnitID={adUnitID}
+        servePersonalizedAds
+        onDidFailToReceiveAdWithError={onBannerError}
+      />
+    </View>
+  );
+}
 function SkipGameViewInSimulator({ onLoad }) {
   return (
     <View

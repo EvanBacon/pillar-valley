@@ -25,7 +25,6 @@ const getNow = global.nativePerformanceNow ?? Date.now;
 
 export default function App() {
   const [loading, setLoading] = React.useState(true);
-
   React.useEffect(() => {
     StatusBar.setBarStyle("light-content", true);
     Fire.init();

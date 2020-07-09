@@ -5,6 +5,7 @@ import * as Animatable from "react-native-animatable";
 import { useSafeArea } from "react-native-safe-area-context";
 import { connect } from "react-redux";
 
+import { rewardAdUnitId } from "../constants/Ads";
 import Settings from "../constants/Settings";
 import GameStates from "../Game/GameStates";
 import useStoreReview from "../hooks/useStoreReview";
@@ -24,20 +25,13 @@ const delay = 100;
 const initialDelay = 100;
 const duration = 500;
 const easing = "ease-out";
-
-const adUnitId = Platform.select<string | null>({
-  ios: "ca-app-pub-2312569320461549/2517428180",
-  android: null, // todo: android
-  default: null,
-});
-
 function AdButton() {
   return (
     <Icon
       name="money"
       onPress={async () => {
         // Display a rewarded ad
-        await AdMobRewarded.setAdUnitID(adUnitId!);
+        await AdMobRewarded.setAdUnitID(rewardAdUnitId!);
         await AdMobRewarded.requestAdAsync();
         await AdMobRewarded.showAdAsync();
       }}
@@ -97,11 +91,13 @@ function Footer({ game, screenshot, navigation }) {
   if (!Settings.isPromo && supportsStoreReview) {
     views.push(<RateButton />);
   }
-  if (!Settings.isPromo && adUnitId) {
+  let adMargin = 0;
+  if (!Settings.isPromo && rewardAdUnitId) {
     views.push(<AdButton />);
+    adMargin += 48;
   }
   return (
-    <View style={[styles.container, { marginBottom: bottom }]}>
+    <View style={[styles.container, { marginBottom: bottom + adMargin }]}>
       {views.map((view, index) => {
         const _delay = index * delay;
         return (
