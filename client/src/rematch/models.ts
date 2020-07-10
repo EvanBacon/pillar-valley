@@ -11,6 +11,7 @@ import { takeSnapshotAsync } from "expo";
 import getDeviceInfo from "../utils/getUserInfo";
 import * as Analytics from "expo-firebase-analytics";
 import Challenges from "../constants/Achievements";
+import * as StoreReview from "expo-store-review";
 
 export const skins = {
   state: {},
@@ -27,22 +28,38 @@ export const skins = {
   },
 };
 
+export type PresentAchievementShape = null | {
+  id: string;
+  name: string;
+};
+
 export const presentAchievement = {
   state: null,
   reducers: {
-    set: (state, val) => val,
+    set: (
+      state: PresentAchievementShape,
+      val: PresentAchievementShape
+    ): PresentAchievementShape => val,
   },
   effects: {},
 };
 
+export type AchievementsShape = Record<string, true>;
+
 export const achievements = {
   state: {},
   reducers: {
-    set: (state, val) => ({ ...state, ...val }),
+    set: (
+      state: AchievementsShape,
+      val: AchievementsShape
+    ): AchievementsShape => ({ ...state, ...val }),
   },
   effects: {
     sync: () => {},
-    unlock: (key, { achievements }) => {
+    unlock: (
+      key: string,
+      { achievements }: { achievements: AchievementsShape }
+    ) => {
       if (!achievements[key] && Challenges[key]) {
         Analytics.logEvent("achievement_unlocked", {
           id: [key],
@@ -55,13 +72,88 @@ export const achievements = {
   },
 };
 
+import { promptToReviewAsync } from "../utils/promptStoreReview";
+
+// A cached value that represents the amount of times a user has beaten their best score.
+// Logic for store review:
+// Since you can only prompt to review roughly once, we want to ensure that only users who like the game are prompted to rate it.
+// We can determine if they like the game based on if they keep playing it.
+export const bestRounds = {
+  state: 0,
+  reducers: {
+    set: (state: number, rounds: number): number => rounds,
+  },
+  effects: {
+    increment: (
+      input: unknown,
+      { score, bestRounds }: { score: ScoreShape; bestRounds: number }
+    ) => {
+      const next = bestRounds + 1;
+
+      Analytics.logEvent("had_best_round", {
+        count: bestRounds,
+        score: score.total,
+      });
+
+      // if the user ever beats their highscore twice after the first day of using the app, prompt them to rate the app.
+      if (bestRounds > 1) {
+        dispatch.storeReview.promptAsync();
+      }
+
+      dispatch.bestRounds.set(next);
+    },
+  },
+};
+
+function hasBeenAtLeastOneDaySinceTime(time: number): boolean {
+  // 1 Day after the last prompt time (or since the app was first opened).
+  const appropriateTimeToAskAgain = new Date(time);
+  // DEBUG: Wait 20 seconds
+  // appropriateTimeToAskAgain.setSeconds(
+  //   appropriateTimeToAskAgain.getSeconds() + 20
+  // );
+  // Wait 1 day
+  appropriateTimeToAskAgain.setDate(appropriateTimeToAskAgain.getDate() + 1);
+  const hasBeenAtLeastOneDay = new Date() > appropriateTimeToAskAgain;
+  return hasBeenAtLeastOneDay;
+}
+
+export type StoreReviewShape = {
+  promptTime: number;
+};
+
+export const storeReview = {
+  state: { promptTime: Date.now() },
+  reducers: {
+    set: (
+      state: StoreReviewShape,
+      value: Partial<StoreReviewShape>
+    ): StoreReviewShape => ({ ...state, ...value }),
+  },
+  effects: {
+    promptAsync: async (
+      input: unknown,
+      { storeReview }: { storeReview: StoreReviewShape }
+    ) => {
+      const isAvailable = await StoreReview.isAvailableAsync();
+      if (!isAvailable) return;
+      const isReady = hasBeenAtLeastOneDaySinceTime(storeReview.promptTime);
+      console.log("prompt async: ", storeReview.promptTime);
+      if (!isReady) return;
+
+      dispatch.storeReview.set({ promptTime: Date.now() });
+      await promptToReviewAsync();
+    },
+  },
+};
+
 export const rounds = {
   state: 0,
   reducers: {
-    set: (state, rounds) => rounds,
+    set: (state: number, rounds: number): number => rounds,
   },
   effects: {
-    increment: (input, { rounds }) => {
+    increment: (input: unknown, { rounds }: { rounds: number }) => {
       const next = rounds + 1;
       if (next === 10) {
         dispatch.achievements.unlock("rounds-10");
@@ -79,6 +171,14 @@ export const rounds = {
   },
 };
 
+export type ScoreShape = {
+  current: number;
+  best: number;
+  total: number;
+  last: number | null;
+  isBest: boolean;
+};
+
 export const score = {
   state: {
     current: 0,
@@ -88,9 +188,20 @@ export const score = {
     isBest: false,
   },
   reducers: {
-    setBest: (state, best) => ({ ...state, best }),
-    setTotal: (state, total) => ({ ...state, total }),
-    increment: ({ current, best, isBest, ...props }) => {
+    setBest: (state: ScoreShape, best: number): ScoreShape => ({
+      ...state,
+      best,
+    }),
+    setTotal: (state: ScoreShape, total: number): ScoreShape => ({
+      ...state,
+      total,
+    }),
+    increment: ({
+      current,
+      best,
+      isBest,
+      ...props
+    }: ScoreShape): ScoreShape => {
       const nextScore = current + 1;
 
       return {
@@ -100,7 +211,7 @@ export const score = {
         ...props,
       };
     },
-    _reset: (state) => ({
+    _reset: (state: ScoreShape): ScoreShape => ({
       ...state,
       current: 0,
       last: state.current,
@@ -108,7 +219,7 @@ export const score = {
     }),
   },
   effects: {
-    updateTotal(current, { score }) {
+    updateTotal(current: number, { score }: { score: ScoreShape }) {
       const total = score.total + current;
 
       if (current > 100) {
@@ -130,20 +241,25 @@ export const score = {
       }
       dispatch.score.setTotal(total);
     },
-    reset: (props, { score }) => {
-      if (Settings.isFirebaseEnabled) {
-        if (Settings.isEveryScoreBest) {
-          dispatch.score.setHighScore(score.current);
-        } else if (score.isBest) {
-          dispatch.score.setHighScore(score.best);
-        }
+    reset: (props: unknown, { score }: { score: ScoreShape }) => {
+      if (Settings.isEveryScoreBest) {
+        dispatch.score.setHighScore(score.current);
+      } else if (score.isBest) {
+        dispatch.score.setHighScore(score.best);
       }
 
       dispatch.score.updateTotal(score.current);
       dispatch.score._reset();
       dispatch.rounds.increment();
     },
-    setHighScore: async (highScore, { user: { displayName, photoURL } }) => {
+    setHighScore: async (highScore: number, { user }) => {
+      dispatch.bestRounds.increment();
+
+      if (!Settings.isFirebaseEnabled) {
+        return;
+      }
+      const { displayName, photoURL } = user;
+
       console.log("set High score", highScore);
       const _displayName = parseName(displayName);
       const docRef = Fire.doc;
@@ -214,7 +330,7 @@ export const game = {
 export const muted = {
   state: false,
   reducers: {
-    toggle: (state) => {
+    toggle: (state: boolean): boolean => {
       Analytics.logEvent("toggle_music", { on: !state });
       return !state;
     },

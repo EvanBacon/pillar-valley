@@ -20,6 +20,10 @@
 //   }
 // }
 
+export type AchievementType = {
+  name: string;
+};
+
 export default {
   "score-20": {
     name: "Scored 20 points in a single game",
@@ -43,7 +47,7 @@ export default {
   "rounds-100": { name: "Played 100 rounds" },
   "rounds-500": { name: "Played 500 rounds" },
   "rounds-1000": { name: "Played 1,000 rounds" },
-};
+} as Record<string, AchievementType>;
 
 const Achievements = [
   // new ScoreAchievements({
