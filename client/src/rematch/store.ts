@@ -5,7 +5,15 @@ import { AsyncStorage } from "react-native";
 import * as models from "./models";
 
 export const persistPlugin = createRematchPersist({
-  whiteList: ["score", "user", "currency", "achievements", "rounds"],
+  whiteList: [
+    "score",
+    "user",
+    "currency",
+    "achievements",
+    "rounds",
+    "bestRounds",
+    "storeReview",
+  ],
   //   throttle: 5000,
   version: 2,
   storage: AsyncStorage,

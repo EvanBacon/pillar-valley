@@ -8,13 +8,11 @@ import { connect } from "react-redux";
 import { rewardAdUnitId } from "../constants/Ads";
 import Settings from "../constants/Settings";
 import GameStates from "../Game/GameStates";
-import useStoreReview from "../hooks/useStoreReview";
 import ChallengesButton from "./Button/Challenges";
 import Icon from "./Button/Icon";
 import LeaderboardButton from "./Button/Leaderboard";
 import LicensesButton from "./Button/LicensesButton";
 import PWAButton, { usePWAInstallable } from "./Button/PWAButton";
-import RateButton from "./Button/Rate";
 import ShareButton from "./Button/Share";
 import SoundButton from "./Button/Sound";
 import SwapPlatformButton, {
@@ -41,7 +39,6 @@ function AdButton() {
 
 function Footer({ game, screenshot, navigation }) {
   const { bottom } = useSafeArea();
-  const supportsStoreReview = useStoreReview();
   // Chrome devices can prompt the user to install the website as a PWA
   const canInstallPwa = usePWAInstallable();
   // This state toggles when the user installs so the button isn't rendered anymore
@@ -88,9 +85,6 @@ function Footer({ game, screenshot, navigation }) {
     views.push(<ShareButton />);
   }
 
-  if (!Settings.isPromo && supportsStoreReview) {
-    views.push(<RateButton />);
-  }
   let adMargin = 0;
   if (!Settings.isPromo && rewardAdUnitId) {
     views.push(<AdButton />);
