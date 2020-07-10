@@ -15,6 +15,7 @@ import LicensesButton from "./Button/LicensesButton";
 import PWAButton, { usePWAInstallable } from "./Button/PWAButton";
 import ShareButton from "./Button/Share";
 import SoundButton from "./Button/Sound";
+import PreferencesButton from "./Button/PreferencesButton";
 import SwapPlatformButton, {
   getOtherPlatform,
 } from "./Button/SwapPlatformButton";
@@ -44,21 +45,17 @@ function Footer({ game, screenshot, navigation }) {
   // This state toggles when the user installs so the button isn't rendered anymore
   const [showPWA, setShowPWA] = React.useState(true);
   const animation = game === GameStates.Menu ? "zoomIn" : "zoomOut";
-  const onLicensesPress = () => {
-    // dispatch.presentAchievement.set({ name: "Nerdy boi", score: null });
-    navigation.navigate("Licenses");
-  };
+
   const onChallengesPress = () => {
     navigation.navigate("Challenges");
+  };
+  const onPreferencesPress = () => {
+    navigation.navigate("Preferences");
   };
   const views = [];
 
   if (Platform.OS !== "web") {
     views.push(<SoundButton />);
-  }
-
-  if (!Settings.isPromo && getOtherPlatform()) {
-    views.push(<SwapPlatformButton />);
   }
 
   if (canInstallPwa && showPWA) {
@@ -67,8 +64,8 @@ function Footer({ game, screenshot, navigation }) {
 
   if (!Settings.isPromo) {
     views.push(<ChallengesButton onPress={onChallengesPress} />);
-    views.push(<LicensesButton onPress={onLicensesPress} />);
   }
+  views.push(<PreferencesButton onPress={onPreferencesPress} />);
 
   const onLeaderboardPress = () => {
     if (Settings.isFirebaseEnabled) {

@@ -10,6 +10,7 @@ import Licenses from "./components/Licenses";
 // import Fire from "./ExpoParty/Fire";
 import GameScreen from "./screens/GameScreen";
 import ChallengesScreen from "./screens/AchievementScreen";
+import Preferences from "./screens/PreferencesScreen";
 // import LeaderboardScreen from "./screens/LeaderboardScreen";
 // import ProfileScreen from "./screens/ProfileScreen";
 // import ReportScreen from "./screens/ReportScreen";
@@ -35,6 +36,7 @@ const linking = {
     Licenses: "/credit",
     Report: "/report",
     Challenges: "/challenges",
+    Preferences: "/settings",
     Social: {
       screens: {
         Leaderboard: "/rank",
@@ -119,6 +121,11 @@ export default () => {
         <AppStack.Screen
           name="Licenses"
           component={Licenses}
+          options={{ stackPresentation: "modal" }}
+        />
+        <AppStack.Screen
+          name="Preferences"
+          component={Preferences}
           options={{ stackPresentation: "modal" }}
         />
       </AppStack.Navigator>

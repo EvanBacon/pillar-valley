@@ -150,7 +150,7 @@ export default class Avatar extends React.PureComponent<{
         }}
         style={[
           styles.avatarStyle,
-          { backgroundColor: this.props.color ?? this.avatarColor },
+          { backgroundColor: this.props.color || this.avatarColor },
           this.props.avatarStyle,
         ]}
         accessibilityTraits="image"

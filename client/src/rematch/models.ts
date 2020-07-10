@@ -49,6 +49,7 @@ export type AchievementsShape = Record<string, true>;
 export const achievements = {
   state: {},
   reducers: {
+    _reset: () => ({}),
     set: (
       state: AchievementsShape,
       val: AchievementsShape
@@ -81,6 +82,7 @@ import { promptToReviewAsync } from "../utils/promptStoreReview";
 export const bestRounds = {
   state: 0,
   reducers: {
+    _reset: () => 0,
     set: (state: number, rounds: number): number => rounds,
   },
   effects: {
@@ -105,6 +107,20 @@ export const bestRounds = {
   },
 };
 
+type DeveloperShape = {
+  isActive: boolean;
+};
+export const developer = {
+  state: { isActive: false },
+  reducers: {
+    set: (
+      state: DeveloperShape,
+      updates: Partial<DeveloperShape>
+    ): DeveloperShape => ({ ...state, ...updates }),
+  },
+  effects: {},
+};
+
 function hasBeenAtLeastOneDaySinceTime(time: number): boolean {
   // 1 Day after the last prompt time (or since the app was first opened).
   const appropriateTimeToAskAgain = new Date(time);
@@ -125,6 +141,7 @@ export type StoreReviewShape = {
 export const storeReview = {
   state: { promptTime: Date.now() },
   reducers: {
+    _reset: () => ({ promptTime: Date.now() }),
     set: (
       state: StoreReviewShape,
       value: Partial<StoreReviewShape>
@@ -150,6 +167,7 @@ export const storeReview = {
 export const rounds = {
   state: 0,
   reducers: {
+    _reset: () => 0,
     set: (state: number, rounds: number): number => rounds,
   },
   effects: {
@@ -179,15 +197,18 @@ export type ScoreShape = {
   isBest: boolean;
 };
 
+const initialScoreState: ScoreShape = {
+  current: 0,
+  best: 0,
+  total: 0,
+  last: null,
+  isBest: false,
+};
+
 export const score = {
-  state: {
-    current: 0,
-    best: 0,
-    total: 0,
-    last: null,
-    isBest: false,
-  },
+  state: { ...initialScoreState },
   reducers: {
+    _hardReset: () => ({ ...initialScoreState }),
     setBest: (state: ScoreShape, best: number): ScoreShape => ({
       ...state,
       best,

@@ -75,6 +75,10 @@ function openPlatformLink(platform) {
   }
 }
 
+export function openOtherPlatform() {
+  openPlatformLink(getOtherPlatform());
+}
+
 /**
  * This button recommends the other available platform on the device.
  * iOS -> website
