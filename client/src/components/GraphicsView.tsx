@@ -30,7 +30,7 @@ type Props = {
   isPaused: boolean;
   onShouldReloadContext: boolean;
   onContextCreate: (glEvent: GLEvent) => void;
-  onRender: (deltaTime: number) => void;
+  onRender: (deltaTime: number, time: number) => void;
 };
 
 export default class GraphicsView extends React.Component<Props> {
@@ -72,6 +72,8 @@ export default class GraphicsView extends React.Component<Props> {
     }
   };
 
+  time = 0;
+
   _onContextCreate = async (gl) => {
     this.gl = gl;
 
@@ -101,10 +103,11 @@ export default class GraphicsView extends React.Component<Props> {
         const now = 0.001 * getNow();
         const delta =
           typeof lastFrameTime !== "undefined" ? now - lastFrameTime : 0.16666;
+        this.time += delta;
         this.rafID = requestAnimationFrame(render);
 
         if (!this.props.isPaused) {
-          onRender(delta);
+          onRender(delta, this.time);
           // NOTE: At the end of each frame, notify `Expo.GLView` with the below
           gl.endFrameEXP();
         }

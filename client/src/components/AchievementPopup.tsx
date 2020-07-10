@@ -202,8 +202,6 @@ class BouncingCircle extends React.Component {
   ];
 
   _reset = () => {
-    console.log("tag");
-
     this.reset();
     this.animate();
   };

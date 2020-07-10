@@ -87,16 +87,15 @@ function areYouSureAsync(): Promise<boolean> {
   });
 }
 
-let developerModeTaps = 0;
 function PreferencesScreen({
   showActionSheetWithOptions,
   score,
   rounds,
   currency,
   bestRounds,
-  developer,
   navigation,
 }) {
+  const [taps, setTaps] = React.useState(0);
   const { bottom } = useSafeArea();
   const canReview = useStoreReview();
   const data = [
@@ -128,7 +127,7 @@ function PreferencesScreen({
             );
           },
         },
-        {
+        Platform.OS !== "web" && {
           title: "🎥 Watch an ad",
           onPress: async () => {
             // Display a rewarded ad
@@ -196,7 +195,7 @@ function PreferencesScreen({
             navigation.navigate("Licenses");
           },
         },
-        {
+        Platform.OS !== "web" && {
           title: "Deep Linking Scheme",
           value: `${Constants.manifest.scheme}://`,
         },
@@ -204,26 +203,23 @@ function PreferencesScreen({
           title: "Expo SDK",
           value: require("../../package.json").dependencies["expo"],
           onPress: () => {
-            developerModeTaps++;
-            if (developerModeTaps > 10) {
-              dispatch.developer.set({ isActive: true });
-            }
+            setTaps((taps) => taps + 1);
           },
         },
         Platform.select({
           web: null,
           ios: {
             title: "Bundle ID",
-            value: Constants.manifest.ios.bundleIdentifier,
+            value: Constants.manifest?.ios?.bundleIdentifier,
           },
           android: {
             title: "Package Name",
-            value: Constants.manifest.android["package"],
+            value: Constants.manifest?.android?.["package"],
           },
         }),
       ].filter(Boolean),
     },
-    developer.isActive && {
+    taps > 10 && {
       title: "Secret Menu",
       data: [
         {
@@ -276,14 +272,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const ConnectedScreen = connect(
-  ({ score, developer, rounds, bestRounds, currency }) => ({
-    score,
-    rounds,
-    developer,
-    bestRounds,
-    currency,
-  })
-)(PreferencesScreen);
+const ConnectedScreen = connect(({ score, rounds, bestRounds, currency }) => ({
+  score,
+  rounds,
+  bestRounds,
+  currency,
+}))(PreferencesScreen);
 
 export default connectActionSheet(ConnectedScreen);

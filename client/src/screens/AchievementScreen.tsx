@@ -14,7 +14,6 @@ function AchievementScreen({ showActionSheetWithOptions, achievements }) {
   const [filter, setFilter] = React.useState("All");
 
   const _onOpenActionSheet = () => {
-    console.log("pressed");
     const options = ["All", "Completed", "Cancel"];
     const cancelButtonIndex = options.length - 1;
 

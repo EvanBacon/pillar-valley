@@ -107,20 +107,6 @@ export const bestRounds = {
   },
 };
 
-type DeveloperShape = {
-  isActive: boolean;
-};
-export const developer = {
-  state: { isActive: false },
-  reducers: {
-    set: (
-      state: DeveloperShape,
-      updates: Partial<DeveloperShape>
-    ): DeveloperShape => ({ ...state, ...updates }),
-  },
-  effects: {},
-};
-
 function hasBeenAtLeastOneDaySinceTime(time: number): boolean {
   // 1 Day after the last prompt time (or since the app was first opened).
   const appropriateTimeToAskAgain = new Date(time);

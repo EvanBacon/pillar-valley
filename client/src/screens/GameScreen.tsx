@@ -1,8 +1,6 @@
-import { Renderer } from "expo-three";
 import React from "react";
 import {
   Clipboard,
-  GestureResponderEvent,
   Image,
   Platform,
   StyleSheet,
@@ -14,63 +12,16 @@ import { useSafeArea } from "react-native-safe-area-context";
 import AchievementPopup from "../components/AchievementPopup";
 import { AdMobBanner } from "../components/AdMob";
 import Footer from "../components/Footer";
-import GraphicsView, { GLEvent, ResizeEvent } from "../components/GraphicsView";
+import GraphicsView from "../components/GraphicsView";
 import Paused from "../components/Paused";
 import ScoreMeta from "../components/ScoreMeta";
 import Song from "../components/Song";
 import TouchableView from "../components/TouchableView";
 import Settings from "../constants/Settings";
-import Game from "../Game/Game";
+import GameState from "../Game/GameState";
 import useAppState from "../hooks/useAppState";
 
-class GameState {
-  game: Game | null = null;
-  renderer: Renderer | null = null;
-
-  onContextCreateAsync = async ({ gl, width, height, pixelRatio }: GLEvent) => {
-    this.renderer = new Renderer({
-      gl,
-      width,
-      height,
-      pixelRatio,
-    });
-
-    this.game = new Game(width, height, this.renderer);
-    await this.game.loadAsync();
-  };
-
-  onTouchesBegan = (state: GestureResponderEvent) => {
-    if (this.game) {
-      this.game.onTouchesBegan();
-    }
-  };
-
-  onResize = (layout: ResizeEvent) => {
-    const { scale } = layout;
-    const width = layout.width;
-    const height = layout.height;
-
-    if (this.renderer) {
-      this.renderer.setSize(width, height);
-    }
-    if (this.game) {
-      if (this.game.camera) {
-        this.game.camera.aspect = width / height;
-        this.game.camera.updateProjectionMatrix();
-      }
-    }
-  };
-
-  onRender = (delta: number, time: number) => {
-    if (this.game) {
-      this.game.update(delta, time);
-      if (this.renderer) {
-        this.renderer.render(this.game.scene, this.game.camera);
-      }
-    }
-  };
-}
-
+// import GameState from "../NitroRoll/GameState";
 const InputGameView = Settings.isSimulator ? SkipGameViewInSimulator : GameView;
 
 function GameView({ onLoad, isPaused }) {
