@@ -87,16 +87,15 @@ function areYouSureAsync(): Promise<boolean> {
   });
 }
 
-let developerModeTaps = 0;
 function PreferencesScreen({
   showActionSheetWithOptions,
   score,
   rounds,
   currency,
   bestRounds,
-  developer,
   navigation,
 }) {
+  const [taps, setTaps] = React.useState(0);
   const { bottom } = useSafeArea();
   const canReview = useStoreReview();
   const data = [
@@ -204,10 +203,7 @@ function PreferencesScreen({
           title: "Expo SDK",
           value: require("../../package.json").dependencies["expo"],
           onPress: () => {
-            developerModeTaps++;
-            if (developerModeTaps > 10) {
-              dispatch.developer.set({ isActive: true });
-            }
+            setTaps((taps) => taps + 1);
           },
         },
         Platform.select({
@@ -223,7 +219,7 @@ function PreferencesScreen({
         }),
       ].filter(Boolean),
     },
-    developer.isActive && {
+    taps > 10 && {
       title: "Secret Menu",
       data: [
         {
@@ -276,14 +272,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const ConnectedScreen = connect(
-  ({ score, developer, rounds, bestRounds, currency }) => ({
-    score,
-    rounds,
-    developer,
-    bestRounds,
-    currency,
-  })
-)(PreferencesScreen);
+const ConnectedScreen = connect(({ score, rounds, bestRounds, currency }) => ({
+  score,
+  rounds,
+  bestRounds,
+  currency,
+}))(PreferencesScreen);
 
 export default connectActionSheet(ConnectedScreen);
