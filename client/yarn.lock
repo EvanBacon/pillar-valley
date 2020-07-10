@@ -2135,12 +2135,17 @@
   resolved "https://registry.yarnpkg.com/@types/fbemitter/-/fbemitter-2.0.32.tgz#8ed204da0f54e9c8eaec31b1eec91e25132d082c"
   integrity sha1-jtIE2g9U6cjq7DGx7skeJRMtCCw=
 
+"@types/gsap@^1.20.2":
+  version "1.20.2"
+  resolved "https://registry.yarnpkg.com/@types/gsap/-/gsap-1.20.2.tgz#038d0e81a8dd50b9b6894f34f3cd4045f71c62b8"
+  integrity sha512-i9nUsnS32+VTgoX5IlaCYukJpCoB3c6h3bZvO67aIRdb3z8NFTWgeUDpQutLyb1ujowp6nw37qLQNvEowqq8yw==
+
 "@types/hammerjs@^2.0.36":
   version "2.0.36"
   resolved "https://registry.yarnpkg.com/@types/hammerjs/-/hammerjs-2.0.36.tgz#17ce0a235e9ffbcdcdf5095646b374c2bf615a4c"
   integrity sha512-7TUK/k2/QGpEAv/BCwSHlYu3NXZhQ9ZwBYpzr9tjlPIL2C5BeGhH3DmVavRx3ZNyELX5TLC91JTz/cen6AAtIQ==
 
-"@types/hoist-non-react-statics@^3.3.1":
+"@types/hoist-non-react-statics@^3.3.0", "@types/hoist-non-react-statics@^3.3.1":
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/@types/hoist-non-react-statics/-/hoist-non-react-statics-3.3.1.tgz#1124aafe5118cb591977aeb1ceaaed1070eb039f"
   integrity sha512-iMIqiko6ooLrTh1joXodJK5X9xeEALT1kM5G3ZLhD3hszxBdIEd5C75U834D9mLcINgD4OyZf5uQXjkuYydWvA==
@@ -2210,10 +2215,35 @@
   resolved "https://registry.yarnpkg.com/@types/qs/-/qs-6.5.2.tgz#7f347062655056662845ba4bb79dcbfdc382cd61"
   integrity sha512-47kAAs3yV/hROraCTQYDMh4p/6zI9+gtssjD0kq9OWsGdLcBge59rl49FnCuJ+iWxEKiqFz6KXzeGH5DRVjNJA==
 
+"@types/react-native@^0.62.13":
+  version "0.62.13"
+  resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.62.13.tgz#c688c5ae03e426f927f7e1fa1a59cd067f35d1c2"
+  integrity sha512-hs4/tSABhcJx+J8pZhVoXHrOQD89WFmbs8QiDLNSA9zNrD46pityAuBWuwk1aMjPk9I3vC5ewkJroVRHgRIfdg==
+  dependencies:
+    "@types/react" "*"
+
+"@types/react-redux@^7.1.9":
+  version "7.1.9"
+  resolved "https://registry.yarnpkg.com/@types/react-redux/-/react-redux-7.1.9.tgz#280c13565c9f13ceb727ec21e767abe0e9b4aec3"
+  integrity sha512-mpC0jqxhP4mhmOl3P4ipRsgTgbNofMRXJb08Ms6gekViLj61v1hOZEKWDCyWsdONr6EjEA6ZHXC446wdywDe0w==
+  dependencies:
+    "@types/hoist-non-react-statics" "^3.3.0"
+    "@types/react" "*"
+    hoist-non-react-statics "^3.3.0"
+    redux "^4.0.0"
+
 "@types/react@*":
   version "16.9.19"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.9.19.tgz#c842aa83ea490007d29938146ff2e4d9e4360c40"
   integrity sha512-LJV97//H+zqKWMms0kvxaKYJDG05U2TtQB3chRLF8MPNs+MQh/H1aGlyDUxjaHvu08EAGerdX2z4LTBc7ns77A==
+  dependencies:
+    "@types/prop-types" "*"
+    csstype "^2.2.0"
+
+"@types/react@^16.9.38":
+  version "16.9.38"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.9.38.tgz#868405dace93a4095d3e054f4c4a1de7a1ac0680"
+  integrity sha512-pHAeZbjjNRa/hxyNuLrvbxhhnKyKNiLC6I5fRF2Zr/t/S6zS41MiyzH4+c+1I9vVfvuRt1VS2Lodjr4ZWnxrdA==
   dependencies:
     "@types/prop-types" "*"
     csstype "^2.2.0"
@@ -6044,7 +6074,7 @@ redux-persist@^6.0.0:
   resolved "https://registry.yarnpkg.com/redux-persist/-/redux-persist-6.0.0.tgz#b4d2972f9859597c130d40d4b146fecdab51b3a8"
   integrity sha512-71LLMbUq2r02ng2We9S215LtPu3fY0KgaGE0k8WRgl6RkqxtGfl7HUozz1Dftwsb0D/5mZ8dwAaPbtnzfvbEwQ==
 
-redux@^4.0.5:
+redux@^4.0.0, redux@^4.0.5:
   version "4.0.5"
   resolved "https://registry.yarnpkg.com/redux/-/redux-4.0.5.tgz#4db5de5816e17891de8a80c424232d06f051d93f"
   integrity sha512-VSz1uMAH24DM6MF72vcojpYPtrTUu3ByVWfPL1nPfVRb5mZVTve5GnNCUV53QM/BZ66xfWrm0CTWoM+Xlz8V1w==
@@ -6836,6 +6866,11 @@ tslib@1.10.0:
 typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
+
+typescript@^3.9.5:
+  version "3.9.5"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.9.5.tgz#586f0dba300cde8be52dd1ac4f7e1009c1b13f36"
+  integrity sha512-hSAifV3k+i6lEoCJ2k6R2Z/rp/H3+8sdmcn5NrS3/3kE7+RyZXm9aqvxWqjEXHAd8b0pShatpcdMTvEdvAJltQ==
 
 ua-parser-js@^0.7.18:
   version "0.7.18"
