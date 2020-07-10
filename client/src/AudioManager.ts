@@ -1,6 +1,30 @@
 import { store } from "./rematch/store";
 import { Audio } from "expo-av";
 import { Platform } from "react-native";
+
+const audio = {
+  // Common
+  "button_in.wav": require("./assets/audio/button_in.wav"),
+  "button_out.wav": require("./assets/audio/button_out.wav"),
+  "unlock.mp3": require("./assets/audio/unlock.mp3"),
+  // Pillar Valley
+  "song.mp3": require("./assets/audio/song.mp3"),
+  // Nitro Roll
+  // "bass_00.mp3": require("./NitroRoll/audio/bass_00.mp3"),
+  // "bass_01.mp3": require("./NitroRoll/audio/bass_01.mp3"),
+  // "bass_02.mp3": require("./NitroRoll/audio/bass_02.mp3"),
+  // "bass_03.mp3": require("./NitroRoll/audio/bass_03.mp3"),
+  // "bass_04.mp3": require("./NitroRoll/audio/bass_04.mp3"),
+  // "bass_05.mp3": require("./NitroRoll/audio/bass_05.mp3"),
+  // "bass_06.mp3": require("./NitroRoll/audio/bass_06.mp3"),
+  // "bass_07.mp3": require("./NitroRoll/audio/bass_07.mp3"),
+  // "bass_08.mp3": require("./NitroRoll/audio/bass_08.mp3"),
+  // "pop_00.mp3": require("./NitroRoll/audio/pop_00.mp3"),
+  // "pop_00.wav": require("./NitroRoll/audio/pop_00.wav"),
+  // "pop_01.wav": require("./NitroRoll/audio/pop_01.wav"),
+  // "song.mp3": require("./NitroRoll/audio/song.mp3"),
+};
+
 // eslint-disable-line
 class AudioManager {
   sounds: Record<string, Audio.Sound> = {};
@@ -71,12 +95,7 @@ class AudioManager {
       interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
     });
 
-  assets: Record<string, number> = {
-    "button_in.wav": require("./assets/audio/button_in.wav"),
-    "button_out.wav": require("./assets/audio/button_out.wav"),
-    "song.mp3": require("./assets/audio/song.mp3"),
-    "unlock.mp3": require("./assets/audio/unlock.mp3"),
-  };
+  assets: Record<string, number> = audio;
 
   setupAudioAsync = async (): Promise<void> => {
     const keys = Object.keys(this.assets || {});
