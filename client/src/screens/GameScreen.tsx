@@ -1,8 +1,6 @@
-import { Renderer } from "expo-three";
 import React from "react";
 import {
   Clipboard,
-  GestureResponderEvent,
   Image,
   Platform,
   StyleSheet,
@@ -20,10 +18,10 @@ import ScoreMeta from "../components/ScoreMeta";
 import Song from "../components/Song";
 import TouchableView from "../components/TouchableView";
 import Settings from "../constants/Settings";
+import GameState from "../Game/GameState";
 import useAppState from "../hooks/useAppState";
-import GameState from "../NitroRoll/GameState";
-// import GameState from '../Game/GameState';
 
+// import GameState from "../NitroRoll/GameState";
 const InputGameView = Settings.isSimulator ? SkipGameViewInSimulator : GameView;
 
 function GameView({ onLoad, isPaused }) {
