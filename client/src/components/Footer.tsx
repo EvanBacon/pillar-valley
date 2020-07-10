@@ -65,7 +65,6 @@ function Footer({ game, screenshot, navigation }) {
   if (!Settings.isPromo) {
     views.push(<ChallengesButton onPress={onChallengesPress} />);
   }
-  views.push(<PreferencesButton onPress={onPreferencesPress} />);
 
   const onLeaderboardPress = () => {
     if (Settings.isFirebaseEnabled) {
@@ -87,6 +86,8 @@ function Footer({ game, screenshot, navigation }) {
     views.push(<AdButton />);
     adMargin += 48;
   }
+  views.push(<PreferencesButton onPress={onPreferencesPress} />);
+
   return (
     <View style={[styles.container, { marginBottom: bottom + adMargin }]}>
       {views.map((view, index) => {

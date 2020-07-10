@@ -127,7 +127,7 @@ function PreferencesScreen({
             );
           },
         },
-        {
+        Platform.OS !== "web" && {
           title: "🎥 Watch an ad",
           onPress: async () => {
             // Display a rewarded ad
@@ -195,7 +195,7 @@ function PreferencesScreen({
             navigation.navigate("Licenses");
           },
         },
-        {
+        Platform.OS !== "web" && {
           title: "Deep Linking Scheme",
           value: `${Constants.manifest.scheme}://`,
         },
@@ -210,11 +210,11 @@ function PreferencesScreen({
           web: null,
           ios: {
             title: "Bundle ID",
-            value: Constants.manifest.ios.bundleIdentifier,
+            value: Constants.manifest?.ios?.bundleIdentifier,
           },
           android: {
             title: "Package Name",
-            value: Constants.manifest.android["package"],
+            value: Constants.manifest?.android?.["package"],
           },
         }),
       ].filter(Boolean),
