@@ -1,9 +1,37 @@
 import { loadTextureAsync } from "expo-three";
 import { Back, Expo as ExpoEase, TweenMax } from "gsap";
 import * as THREE from "three";
-
+import * as FileSystem from "expo-file-system";
 import GameObject from "./GameObject";
 import MotionObserver from "./MotionObserver";
+import { Asset } from "expo-asset";
+import { Platform } from "react-native";
+// bundled asset uri's become `asset://...` in production build, but expo-gl
+// cannot handle them, https://github.com/expo/expo/issues/2693
+// this workaround copies them to a known path files so we can use a regular
+// `file://...` uri instead.
+async function copyAssetToCacheAsync(
+  assetModule: number,
+  localFilename: string
+): Promise<Asset> {
+  const asset = Asset.fromModule(assetModule);
+  await asset.downloadAsync();
+  if (Platform.OS !== "android") {
+    return asset;
+  }
+  const localUri = `${FileSystem.cacheDirectory}asset_${localFilename}`;
+  const fileInfo = await FileSystem.getInfoAsync(localUri, { size: false });
+  if (!fileInfo.exists) {
+    console.log(`copyAssetToCacheAsync ${asset.localUri} -> ${localUri}`);
+    await FileSystem.copyAsync({
+      from: asset.localUri!,
+      to: localUri,
+    });
+  }
+  asset.localUri = localUri;
+
+  return asset;
+}
 
 class FlatMaterial extends THREE.MeshPhongMaterial {
   constructor(props: any) {
@@ -52,7 +80,10 @@ export default class MenuObject extends GameObject {
     titleGroup.position.z = -200;
 
     const pillar = await makeMenuPillarAsync(
-      require("../assets/images/PILLAR.png")
+      await copyAssetToCacheAsync(
+        require("../assets/images/PILLAR.png"),
+        "pillar.png"
+      )
     );
     titleGroup.add(pillar);
 
@@ -64,7 +95,10 @@ export default class MenuObject extends GameObject {
     });
 
     const pillarB = await makeMenuPillarAsync(
-      require("../assets/images/VALLEY.png")
+      await copyAssetToCacheAsync(
+        require("../assets/images/VALLEY.png"),
+        "valley.png"
+      )
     );
     titleGroup.add(pillarB);
 
@@ -79,7 +113,10 @@ export default class MenuObject extends GameObject {
       });
     }
     const pillarC = await makeMenuPillarAsync(
-      require("../assets/images/BEGIN.png"),
+      await copyAssetToCacheAsync(
+        require("../assets/images/BEGIN.png"),
+        "begin.png"
+      ),
       0xedcbbf
     );
     titleGroup.add(pillarC);

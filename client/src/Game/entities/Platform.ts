@@ -1,6 +1,12 @@
 import { TweenMax } from "gsap";
 
-import { Color, Mesh, CylinderBufferGeometry, MeshPhongMaterial } from "three";
+import {
+  Color,
+  Mesh,
+  CylinderBufferGeometry,
+  Material,
+  MeshPhongMaterial,
+} from "three";
 import GameObject from "../GameObject";
 import randomRange from "../utils/randomRange";
 import Gem from "./Gem";
@@ -20,7 +26,7 @@ const pointForGem = (
 // const PlatformGeom = new CylinderBufferGeometry(size, size * 0.2, 1000, 24)
 
 class PlatformMesh extends Mesh {
-  constructor(size: number, material: THREE.Material) {
+  constructor(size: number, material: Material) {
     super(new CylinderBufferGeometry(size, size * 0.2, 1000, 24), material);
   }
 
