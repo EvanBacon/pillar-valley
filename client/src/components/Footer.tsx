@@ -83,7 +83,7 @@ function Footer({ game, screenshot, navigation }) {
 
   let adMargin = 0;
   if (!Settings.isPromo && rewardAdUnitId) {
-    views.push(<AdButton />);
+    // views.push(<AdButton />);
     adMargin += 48;
   }
   views.push(<PreferencesButton onPress={onPreferencesPress} />);

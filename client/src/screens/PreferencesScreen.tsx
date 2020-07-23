@@ -127,15 +127,15 @@ function PreferencesScreen({
             );
           },
         },
-        Platform.OS !== "web" && {
-          title: "🎥 Watch an ad",
-          onPress: async () => {
-            // Display a rewarded ad
-            await AdMobRewarded.setAdUnitID(rewardAdUnitId!);
-            await AdMobRewarded.requestAdAsync();
-            await AdMobRewarded.showAdAsync();
-          },
-        },
+        // Platform.OS !== "web" && {
+        //   title: "🎥 Watch an ad",
+        //   onPress: async () => {
+        //     // Display a rewarded ad
+        //     await AdMobRewarded.setAdUnitID(rewardAdUnitId!);
+        //     await AdMobRewarded.requestAdAsync();
+        //     await AdMobRewarded.showAdAsync();
+        //   },
+        // },
 
         {
           title: "🐛 Report a bug",
