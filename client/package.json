@@ -46,7 +46,7 @@
     "expo-store-review": "~2.1.0",
     "expo-three": "5.4.0",
     "firebase": "7.9.0",
-    "gsap": "^2.0.1",
+    "gsap": "^3.6.0",
     "react": "16.12.0",
     "react-dom": "16.12.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-37.0.1.tar.gz",
