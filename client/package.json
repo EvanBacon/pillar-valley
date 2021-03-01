@@ -59,7 +59,7 @@
     "react-native-web": "~0.11.2",
     "react-redux": "^7.2.0",
     "redux-persist": "^6.0.0",
-    "three": "^0.113.2",
+    "three": "^0.125.0",
     "three.proton.js": "^0.1.5"
   },
   "devDependencies": {
