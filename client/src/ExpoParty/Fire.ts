@@ -1,8 +1,6 @@
 // import { dispatch } from "../rematch/store";
 import Constants from "expo-constants";
 import Settings from "../constants/Settings";
-// @ts-ignore: Secret file
-import Secret from "./Secret";
 
 import firebase from "firebase/app";
 // Required for side-effects
@@ -18,7 +16,7 @@ class Fire {
       return;
     }
 
-    firebase.initializeApp(Secret);
+    firebase.initializeApp(Constants.manifest?.extra?.firebaseConfig);
     firebase.firestore().settings({ timestampsInSnapshots: true });
     // dispatch.user.observeAuth();
 

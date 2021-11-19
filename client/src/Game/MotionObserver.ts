@@ -1,4 +1,4 @@
-import { Subscription } from "@unimodules/core";
+import { Subscription } from "expo-modules-core";
 import { DeviceMotion } from "expo-sensors";
 import { Dimensions, Platform } from "react-native";
 

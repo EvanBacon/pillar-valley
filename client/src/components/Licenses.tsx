@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Image, Platform, View, Text, FlatList } from "react-native";
 import { A } from "@expo/html-elements";
-import { useSafeArea } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Animatable from "react-native-animatable";
 import Settings from "../constants/Settings";
 import Data from "../constants/Licenses";
@@ -75,7 +75,7 @@ const licenses = Object.keys(Data).map((key) => {
 sortDataByKey(licenses, "username");
 
 export default function Licenses() {
-  const { bottom } = useSafeArea();
+  const { bottom } = useSafeAreaInsets();
   return (
     <View style={{ flex: 1 }}>
       <View

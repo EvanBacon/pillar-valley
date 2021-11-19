@@ -2,7 +2,7 @@ import FontAwesome from "@expo/vector-icons/build/FontAwesome";
 import React from "react";
 import { Platform, StyleSheet, Text, View } from "react-native";
 import * as Animatable from "react-native-animatable";
-import { useSafeArea } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { connect } from "react-redux";
 
 import Settings from "../constants/Settings";
@@ -16,7 +16,7 @@ function ScoreMeta({
   best: number;
   currency: number;
 }) {
-  const { top } = useSafeArea();
+  const { top } = useSafeAreaInsets();
   return (
     <View style={[styles.container, { top }]}>
       <View style={{ flexDirection: "row" }}>

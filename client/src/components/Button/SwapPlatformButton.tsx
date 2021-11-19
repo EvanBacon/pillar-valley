@@ -2,7 +2,7 @@ import * as React from "react";
 
 import Icon from "./Icon";
 
-import { Platform } from "@unimodules/core";
+import { Platform } from "expo-modules-core";
 import * as Linking from "expo-linking";
 
 function isAndroidWeb() {

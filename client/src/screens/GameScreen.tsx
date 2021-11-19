@@ -1,14 +1,14 @@
 import React from "react";
 import {
-  Clipboard,
   Image,
   Platform,
   StyleSheet,
   Text,
   View,
 } from "react-native";
-import { useSafeArea } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import * as Clipboard from 'expo-clipboard';
 import AchievementPopup from "../components/AchievementPopup";
 import { AdMobBanner } from "../components/AdMob";
 import Footer from "../components/Footer";
@@ -87,7 +87,7 @@ export default function GameScreen({ navigation }) {
 
 function BottomBannerAd() {
   const [showAd, setShowAd] = React.useState<boolean>(false);
-  const { bottom } = useSafeArea();
+  const { bottom } = useSafeAreaInsets();
 
   const onBannerError = React.useCallback((errorDescription: string) => {
     console.log("Banner error: ", errorDescription);

@@ -1,6 +1,6 @@
 import { init } from "@rematch/core";
 import createRematchPersist from "@rematch/persist";
-import { AsyncStorage } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import * as models from "./models";
 

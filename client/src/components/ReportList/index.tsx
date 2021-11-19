@@ -1,6 +1,6 @@
 import React from "react";
 import { FlatList, StyleSheet } from "react-native";
-import { useSafeArea } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import Separator from "../List/Separator";
 import Header from "./Header";
@@ -17,7 +17,7 @@ function List({
   const keyExtractor = (item, index) => `item-${index}`;
   const renderItem = (props) => <Item {...props} onPress={onPress} />;
 
-  const { bottom } = useSafeArea();
+  const { bottom } = useSafeAreaInsets();
   return (
     <FlatList
       style={[style, styles.container]}
