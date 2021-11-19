@@ -1,11 +1,13 @@
-import * as React from "react";
-import { Image, Platform, View, Text, FlatList } from "react-native";
-import { A } from "@expo/html-elements";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import * as Animatable from "react-native-animatable";
-import Settings from "../constants/Settings";
-import Data from "../constants/Licenses";
-import LicensesListItem from "./LicensesListItem";
+import { A } from '@expo/html-elements';
+import * as React from 'react';
+import { FlatList, Platform, View } from 'react-native';
+import * as Animatable from 'react-native-animatable';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+import Settings from '../constants/Settings';
+import LicensesListItem from './LicensesListItem';
+
+const Data = require("../constants/Licenses");
 
 function extractNameFromGithubUrl(url) {
   if (!url) {
