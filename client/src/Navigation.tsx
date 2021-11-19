@@ -32,17 +32,19 @@ const AppStack = createStackNavigator();
 const linking = {
   prefixes: [Linking.makeUrl()],
   config: {
-    Game: "/",
-    Licenses: "/credit",
-    Report: "/report",
-    Challenges: "/challenges",
-    Preferences: "/settings",
-    Social: {
-      screens: {
-        Leaderboard: "/rank",
-        Profile: "/u",
+    screens: {
+      Game: "/",
+      Licenses: "/credit",
+      Report: "/report",
+      Challenges: "/challenges",
+      Preferences: "/settings",
+      Social: {
+        screens: {
+          Leaderboard: "/rank",
+          Profile: "/u",
+        },
       },
-    },
+    }
   },
 };
 
@@ -90,18 +92,17 @@ export default () => {
         // Save the current route name for later comparision
         routeNameRef.current = currentRouteName;
       }}
+
       linking={linking}
     >
       <AppStack.Navigator
-        headerMode="screen"
         screenOptions={{
+          headerMode: 'screen',
           headerTintColor: "white",
           headerStyle: {
-            backgroundColor: Constants.manifest.primaryColor,
+            backgroundColor: Constants.manifest!.primaryColor,
           },
           headerTitleStyle: { color: "white" },
-
-          headerTintColor: "#fff",
           cardStyle: {
             backgroundColor: "white",
           },
@@ -116,17 +117,18 @@ export default () => {
         <AppStack.Screen
           name="Challenges"
           component={ChallengesScreen}
-          options={{ stackPresentation: "modal" }}
+          options={{ presentation: "modal" }}
         />
         <AppStack.Screen
           name="Licenses"
           component={Licenses}
-          options={{ stackPresentation: "modal" }}
+
+          options={{ presentation: "modal" }}
         />
         <AppStack.Screen
           name="Preferences"
           component={Preferences}
-          options={{ stackPresentation: "modal" }}
+          options={{ presentation: "modal" }}
         />
       </AppStack.Navigator>
     </NavigationContainer>

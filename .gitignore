@@ -4,3 +4,4 @@ ios/fastlane/screenshots/en-US/preview.mp4
 client/web-build/
 
 .DS_Store
+client/yarn-error.log

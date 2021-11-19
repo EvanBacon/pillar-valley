@@ -1,13 +1,13 @@
 import { BlurView } from "expo-blur";
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
-import FontAwesome from "@expo/vector-icons/build/FontAwesome";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 import * as Animatable from "react-native-animatable";
-import { useSafeArea } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function Paused() {
   const color = "white";
-  const { left } = useSafeArea();
+  const { left } = useSafeAreaInsets();
   return (
     <BlurView
       intensity={95}

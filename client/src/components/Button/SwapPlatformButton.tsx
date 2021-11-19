@@ -2,7 +2,7 @@ import * as React from "react";
 
 import Icon from "./Icon";
 
-import { Platform } from "@unimodules/core";
+import { Platform } from "expo-modules-core";
 import * as Linking from "expo-linking";
 
 function isAndroidWeb() {
@@ -14,7 +14,7 @@ function isAndroidWeb() {
 function isAppleMobileWeb() {
   if (Platform.OS !== "web") return false;
   // iOS detection from: http://stackoverflow.com/a/9039885/177710
-  return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
 }
 
 // https://stackoverflow.com/a/27862868
@@ -35,7 +35,7 @@ const icons = {
   ios: "apple",
 };
 
-export function getOtherPlatform() {
+export function getOtherPlatform(): string | null {
   switch (Platform.OS) {
     case "ios":
     case "android":
@@ -58,7 +58,7 @@ export function getOtherPlatform() {
   }
 }
 
-function openPlatformLink(platform) {
+function openPlatformLink(platform: string | null) {
   switch (platform) {
     case "android":
       return Linking.openURL(

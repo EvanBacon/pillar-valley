@@ -11,9 +11,9 @@ import {
   Linking,
 } from "react-native";
 import { connect } from "react-redux";
-import FontAwesome from "@expo/vector-icons/build/FontAwesome";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Constants from "expo-constants";
-import { useSafeArea } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as StoreReview from "expo-store-review";
 import useStoreReview from "../hooks/useStoreReview";
 import {
@@ -88,7 +88,6 @@ function areYouSureAsync(): Promise<boolean> {
 }
 
 function PreferencesScreen({
-  showActionSheetWithOptions,
   score,
   rounds,
   currency,
@@ -96,7 +95,7 @@ function PreferencesScreen({
   navigation,
 }) {
   const [taps, setTaps] = React.useState(0);
-  const { bottom } = useSafeArea();
+  const { bottom } = useSafeAreaInsets();
   const canReview = useStoreReview();
   const data = [
     {

@@ -1,6 +1,6 @@
 import * as StoreReview from "expo-store-review";
 import React from "react";
-import { Platform } from "@unimodules/core";
+import { Platform } from "expo-modules-core";
 
 export default function useStoreReview(): boolean {
   const [supportsStoreReview, setStoreReview] = React.useState(false);

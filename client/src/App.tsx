@@ -1,9 +1,9 @@
 import { ActionSheetProvider } from "@expo/react-native-action-sheet";
-import { AppLoading } from "expo";
+import AppLoading from "expo-app-loading";
 import * as Analytics from "expo-firebase-analytics";
 import * as Font from "expo-font";
 import React from "react";
-import { StatusBar, Platform } from "react-native";
+import { StatusBar, LogBox, Platform } from "react-native";
 
 import AudioManager from "./AudioManager";
 import Fire from "./ExpoParty/Fire";
@@ -11,6 +11,8 @@ import Navigation from "./Navigation";
 import Gate from "./rematch/Gate";
 import Constants from "expo-constants";
 import { setTestDeviceIDAsync } from "expo-ads-admob";
+
+LogBox.ignoreLogs(["Constants.installationId"]);
 
 if (Platform.OS !== "web") {
   if (!Constants.isDevice) {

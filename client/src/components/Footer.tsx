@@ -2,7 +2,7 @@ import { AdMobRewarded } from "expo-ads-admob";
 import React from "react";
 import { Platform, StyleSheet, View } from "react-native";
 import * as Animatable from "react-native-animatable";
-import { useSafeArea } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { connect } from "react-redux";
 
 import { rewardAdUnitId } from "../constants/Ads";
@@ -39,7 +39,7 @@ function AdButton() {
 }
 
 function Footer({ game, screenshot, navigation }) {
-  const { bottom } = useSafeArea();
+  const { bottom } = useSafeAreaInsets();
   // Chrome devices can prompt the user to install the website as a PWA
   const canInstallPwa = usePWAInstallable();
   // This state toggles when the user installs so the button isn't rendered anymore

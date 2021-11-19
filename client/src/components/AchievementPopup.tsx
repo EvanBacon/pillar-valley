@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { dispatch } from "../rematch/store";
-import { useSafeArea } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import AudioManager from "../AudioManager";
 
 const Colors = {
@@ -508,7 +508,7 @@ class Popup extends React.Component {
 }
 
 function PopupContainer({ navigation, presentAchievement }) {
-  const { top } = useSafeArea();
+  const { top } = useSafeAreaInsets();
   return (
     <View
       style={[

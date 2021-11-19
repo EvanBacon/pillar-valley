@@ -1,13 +1,15 @@
 // import { dispatch } from "./store";
 import firebase from "firebase/app";
-import { Alert, AsyncStorage, Dimensions } from "react-native";
+import { Alert, Dimensions } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import Settings from "../constants/Settings";
 import Fire from "../ExpoParty/Fire";
 import GameStates from "../Game/GameStates";
 import Constants from "expo-constants";
 import * as Facebook from "expo-facebook";
-import { takeSnapshotAsync } from "expo";
+import { captureRef } from "react-native-view-shot";
+
 import getDeviceInfo from "../utils/getUserInfo";
 import * as Analytics from "expo-firebase-analytics";
 import Challenges from "../constants/Achievements";
@@ -353,14 +355,16 @@ export const screenshot = {
   effects: {
     updateAsync: async ({ ref }) => {
       const { width, height } = Dimensions.get("window");
-      const options = {
+
+      const uri = await captureRef(ref, {
         format: "jpg",
         quality: 0.3,
-        result: "file",
+        result: "tmpfile",
+        // result: "file",
         height,
         width,
-      };
-      const uri = await takeSnapshotAsync(ref, options);
+      });
+
       dispatch.screenshot.update(uri);
     },
   },
