@@ -1,4 +1,4 @@
-import MaterialIcons from "@expo/vector-icons/build/MaterialIcons";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import React from "react";
 import { TouchableOpacity, View } from "react-native";
 

@@ -13,8 +13,8 @@ function List({
   onPressHeader,
   headerButtonTitle,
   ...props
-}) {
-  const keyExtractor = (item, index) => `item-${index}`;
+}: { style: any, title: string, onPress: Function, onPressHeader: Function, headerButtonTitle: string }) {
+  const keyExtractor = (item: any, index: number) => `item-${index}`;
   const renderItem = (props) => <Item {...props} onPress={onPress} />;
 
   const { bottom } = useSafeAreaInsets();

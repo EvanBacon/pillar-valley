@@ -1,4 +1,4 @@
-import FontAwesome from "@expo/vector-icons/build/FontAwesome";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 import React from "react";
 import { Platform, StyleSheet, Text, View } from "react-native";
 import * as Animatable from "react-native-animatable";

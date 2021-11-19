@@ -1,4 +1,4 @@
-import FontAwesome from "@expo/vector-icons/build/FontAwesome";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 import React from "react";
 import { Platform, StyleSheet } from "react-native";
 
@@ -6,7 +6,7 @@ import AudioManager from "../../AudioManager";
 import TouchableBounce from "../TouchableBounce";
 
 export default function Icon({
-  onPress = () => {},
+  onPress = () => { },
   size = 24,
   color = "#fff",
   name,

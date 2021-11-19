@@ -11,7 +11,7 @@ import {
   Linking,
 } from "react-native";
 import { connect } from "react-redux";
-import FontAwesome from "@expo/vector-icons/build/FontAwesome";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Constants from "expo-constants";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as StoreReview from "expo-store-review";
