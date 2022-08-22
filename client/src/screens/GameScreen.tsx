@@ -1,7 +1,6 @@
 import React from "react";
 import {
   Image,
-  Platform,
   StyleSheet,
   Text,
   View,
@@ -23,7 +22,6 @@ const InputGameView = Settings.isSimulator ? SkipGameViewInSimulator : GameView;
 
 function GameView({ onLoad, isPaused }) {
   const machine = React.useMemo(() => {
-    if (Settings.isSimulator) return null;
     return new GameState();
   }, []);
 
@@ -36,6 +34,7 @@ function GameView({ onLoad, isPaused }) {
     },
     [onLoad, machine]
   );
+  // return null;
 
   return (
     <TouchableView
@@ -46,12 +45,14 @@ function GameView({ onLoad, isPaused }) {
       onTouchesBegan={machine?.onTouchesBegan}
     >
       <GraphicsView
-        ref={(ref) => (global.gameRef = ref)}
+        ref={(ref) => {
+          global.gameRef = ref
+        }}
         key="game"
         isPaused={isPaused}
         onContextCreate={onContextCreate}
-        onRender={machine?.onRender}
-        onResize={machine?.onResize}
+        onRender={machine.onRender}
+        onResize={machine.onResize}
       />
     </TouchableView>
   );
