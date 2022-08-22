@@ -19,7 +19,7 @@
     "preset": "jest-expo"
   },
   "dependencies": {
-    "@expo/html-elements": "^0.1.0",
+    "@expo/html-elements": "^0.2.0",
     "@expo/react-native-action-sheet": "^3.12.0",
     "@expo/vector-icons": "^13.0.0",
     "@react-native-async-storage/async-storage": "~1.17.3",
@@ -60,13 +60,14 @@
     "react-native-screens": "~3.15.0",
     "react-native-tab-view": "^2.14.4",
     "react-native-view-shot": "3.3.0",
-    "react-native-web": "~0.18.7",
+    "react-native-web": "^0.18.7",
     "react-redux": "^7.2.0",
     "redux-persist": "^6.0.0",
     "three": "^0.134.0",
     "three.proton.js": "^0.2.3"
   },
   "devDependencies": {
+    "@expo/webpack-config": "~0.17.2",
     "@types/gsap": "^1.20.2",
     "@types/react-native": "~0.64.12",
     "@types/react-redux": "^7.1.9",
