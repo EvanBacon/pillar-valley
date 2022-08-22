@@ -5,7 +5,7 @@
   "private": true,
   "main": "./index",
   "scripts": {
-    "metadata": "fastlane deliver --skip_binary_upload",
+    "metadata": "eas metadata:push",
     "fix": "rm -rf node_modules/gl-matrix/.babelrc",
     "test": "node_modules/.bin/jest",
     "eject": "react-scripts eject",
