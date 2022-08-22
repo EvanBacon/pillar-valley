@@ -3,6 +3,7 @@
   "version": "3.0.0",
   "author": "Evan Bacon",
   "private": true,
+  "main": "./index",
   "scripts": {
     "metadata": "fastlane deliver --skip_binary_upload",
     "fix": "rm -rf node_modules/gl-matrix/.babelrc",
@@ -32,16 +33,14 @@
     "@rematch/core": "^1.4.0",
     "@rematch/persist": "^1.1.6",
     "expo": "^46.0.8",
-    "expo-ads-admob": "~11.0.3",
     "expo-app-loading": "~2.1.0",
     "expo-av": "~12.0.4",
     "expo-blur": "~11.2.0",
     "expo-clipboard": "~3.1.0",
     "expo-constants": "~13.2.3",
-    "expo-facebook": "~12.0.3",
+    "expo-device": "~4.3.0",
     "expo-firebase-analytics": "~7.1.1",
     "expo-gl": "~11.4.0",
-    "expo-graphics": "^1.1.0",
     "expo-haptics": "~11.3.0",
     "expo-image-picker": "~13.3.1",
     "expo-linking": "~3.2.2",
@@ -71,6 +70,7 @@
     "@types/gsap": "^1.20.2",
     "@types/react-native": "~0.64.12",
     "@types/react-redux": "^7.1.9",
+    "@types/three": "^0.143.1",
     "babel-eslint": "10.0.3",
     "typescript": "~4.3.5"
   }

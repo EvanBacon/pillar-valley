@@ -12,7 +12,7 @@ function alertToReview() {
     [
       {
         text: "OK",
-        onPress: () => Linking.openURL(StoreReview.storeUrl()),
+        onPress: () => Linking.openURL(StoreReview.storeUrl()!),
       },
       { text: "Cancel", onPress: () => {}, style: "cancel" },
     ],

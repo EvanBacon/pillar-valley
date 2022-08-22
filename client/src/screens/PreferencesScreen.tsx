@@ -20,8 +20,8 @@ import {
   openOtherPlatform,
   getOtherPlatform,
 } from "../components/Button/SwapPlatformButton";
-import { AdMobRewarded } from "expo-ads-admob";
-import { rewardAdUnitId } from "../constants/Ads";
+// import { AdMobRewarded } from "expo-ads-admob";
+// import { rewardAdUnitId } from "../constants/Ads";
 import { dispatch } from "../rematch/store";
 
 function Item({

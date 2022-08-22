@@ -20,20 +20,20 @@ const LogoutButton = React.forwardRef(
   }
 );
 
-const FacebookButton = React.forwardRef(
-  (props: React.ComponentProps<typeof FontAwesome.Button>, ref) => {
-    return (
-      <FontAwesome.Button
-        ref={ref}
-        name="facebook"
-        backgroundColor="#3b5998"
-        children="Link with Facebook"
-        onPress={() => dispatch.facebook.upgradeAccount()}
-        {...props}
-      />
-    );
-  }
-);
+// const FacebookButton = React.forwardRef(
+//   (props: React.ComponentProps<typeof FontAwesome.Button>, ref) => {
+//     return (
+//       <FontAwesome.Button
+//         ref={ref}
+//         name="facebook"
+//         backgroundColor="#3b5998"
+//         children="Link with Facebook"
+//         onPress={() => dispatch.facebook.upgradeAccount()}
+//         {...props}
+//       />
+//     );
+//   }
+// );
 
 export default function UpgradeAccountView({
   canLogout,
@@ -49,7 +49,7 @@ export default function UpgradeAccountView({
         </Text>
       )}
       {canLogout && <LogoutButton />}
-      {!canLogout && <FacebookButton />}
+      {/* {!canLogout && <FacebookButton />} */}
     </View>
   );
 }

@@ -1,4 +1,3 @@
-import { AdMobRewarded } from "expo-ads-admob";
 import React from "react";
 import { Platform, StyleSheet, View } from "react-native";
 import * as Animatable from "react-native-animatable";
@@ -24,19 +23,6 @@ const delay = 100;
 const initialDelay = 100;
 const duration = 500;
 const easing = "ease-out";
-function AdButton() {
-  return (
-    <Icon
-      name="money"
-      onPress={async () => {
-        // Display a rewarded ad
-        await AdMobRewarded.setAdUnitID(rewardAdUnitId!);
-        await AdMobRewarded.requestAdAsync();
-        await AdMobRewarded.showAdAsync();
-      }}
-    />
-  );
-}
 
 function Footer({ game, screenshot, navigation }) {
   const { bottom } = useSafeAreaInsets();

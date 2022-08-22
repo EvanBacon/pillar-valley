@@ -1,29 +1,31 @@
 import { ActionSheetProvider } from "@expo/react-native-action-sheet";
-import AppLoading from "expo-app-loading";
 import * as Analytics from "expo-firebase-analytics";
 import * as Font from "expo-font";
 import React from "react";
-import { StatusBar, LogBox, Platform } from "react-native";
+import { StatusBar, Platform } from "react-native";
+import * as SplashScreen from 'expo-splash-screen';
 
 import AudioManager from "./AudioManager";
 import Fire from "./ExpoParty/Fire";
-import Navigation from "./Navigation";
 import Gate from "./rematch/Gate";
-import Constants from "expo-constants";
-import { setTestDeviceIDAsync } from "expo-ads-admob";
-
-LogBox.ignoreLogs(["Constants.installationId"]);
+// import { setTestDeviceIDAsync } from "expo-ads-admob";
+import * as Device from 'expo-device';
+import Navigation from "./Navigation";
 
 if (Platform.OS !== "web") {
-  if (!Constants.isDevice) {
+  if (!Device.isDevice) {
     // Disable ads in the emulator / simulator
     // https://docs.expo.io/versions/latest/sdk/admob/#settestdeviceidasynctestdeviceid
-    setTestDeviceIDAsync("EMULATOR");
+    // setTestDeviceIDAsync("EMULATOR");
   }
 }
 
 // @ts-ignore
 const getNow = global.nativePerformanceNow ?? Date.now;
+
+// Keep the splash screen visible while we fetch resources
+SplashScreen.preventAutoHideAsync();
+
 
 export default function App() {
   const [loading, setLoading] = React.useState(true);
@@ -31,7 +33,7 @@ export default function App() {
     StatusBar.setBarStyle("light-content", true);
     Fire.init();
     (async () => {
-      console.time("Setup");
+      // console.time("Setup");
       let time = getNow();
       try {
         await Promise.all([
@@ -47,13 +49,17 @@ export default function App() {
       } finally {
         const total = getNow() - time;
         Analytics.logEvent("assets_loaded", { milliseconds: total });
-        console.timeEnd("Setup");
+        // console.timeEnd("Setup");
       }
+
+      await SplashScreen.hideAsync();
       setLoading(false);
     })();
   }, []);
 
-  if (loading) return <AppLoading />;
+  if (loading) {
+    return null;
+  }
 
   return (
     <Gate>

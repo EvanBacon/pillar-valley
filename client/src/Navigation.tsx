@@ -73,7 +73,7 @@ export default () => {
   }, [navigationRef]);
 
   React.useEffect(() => {
-    Analytics.setCurrentScreen("Game");
+    Analytics.logEvent('screen_view', { currentScreen: "Game" });
   }, []);
   return (
     <NavigationContainer
@@ -86,7 +86,7 @@ export default () => {
           // The line below uses the expo-firebase-analytics tracker
           // https://docs.expo.io/versions/latest/sdk/firebase-analytics/
           // Change this line to use another Mobile analytics SDK
-          Analytics.setCurrentScreen(currentRouteName);
+          Analytics.logEvent('screen_view', { currentScreen: currentRouteName });
         }
 
         // Save the current route name for later comparision
