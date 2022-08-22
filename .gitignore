@@ -1,5 +1,5 @@
 node_modules/**/*
-.expo/**/*
+/.expo/
 src/ExpoParty/Secret.js
 release/builds
 .vscode
