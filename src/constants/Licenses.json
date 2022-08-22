@@ -88,12 +88,6 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "pillar-valley"
     },
-    "expo-clipboard@3.1.0": {
-        "licenses": "MIT",
-        "repository": "https://github.com/expo/expo",
-        "licenseUrl": "https://github.com/expo/expo",
-        "parents": "pillar-valley"
-    },
     "expo-constants@13.2.3": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
@@ -142,16 +136,34 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "pillar-valley"
     },
+    "expo-splash-screen@0.16.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/expo/expo",
+        "licenseUrl": "https://github.com/expo/expo",
+        "parents": "pillar-valley"
+    },
+    "expo-status-bar@1.4.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/expo/expo",
+        "licenseUrl": "https://github.com/expo/expo",
+        "parents": "pillar-valley"
+    },
     "expo-store-review@5.3.0": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "pillar-valley"
     },
-    "expo-three@6.0.1": {
+    "expo-three@6.1.0": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo-three",
         "licenseUrl": "https://github.com/expo/expo-three/raw/master/LICENSE",
+        "parents": "pillar-valley"
+    },
+    "expo-updates@0.14.4": {
+        "licenses": "MIT",
+        "repository": "https://github.com/expo/expo",
+        "licenseUrl": "https://github.com/expo/expo",
         "parents": "pillar-valley"
     },
     "expo@46.0.8": {
@@ -248,12 +260,6 @@
         "licenses": "MIT",
         "repository": "https://github.com/rt2zz/redux-persist",
         "licenseUrl": "https://github.com/rt2zz/redux-persist/raw/master/LICENSE",
-        "parents": "pillar-valley"
-    },
-    "three.proton.js@0.2.3": {
-        "licenses": "MIT",
-        "repository": "https://github.com/drawcall/three.proton",
-        "licenseUrl": "https://github.com/drawcall/three.proton",
         "parents": "pillar-valley"
     },
     "three@0.134.0": {

@@ -38,11 +38,10 @@
       "src/assets/**/*"
     ],
     "ios": {
-      "appStoreUrl": "https://itunes.apple.com/us/app/pillar-valley/id1336398804?ls=1&mt=8",
+      "appStoreUrl": "https://itunes.apple.com/us/app/pillar-valley/id1336398804",
       "icon": "./icons/ios.png",
       "supportsTablet": true,
       "bundleIdentifier": "com.evanbacon.pillarvalley",
-      "buildNumber": "5",
       "googleServicesFile": "./GoogleService-Info.plist",
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-2312569320461549~5287895909",
@@ -57,7 +56,6 @@
       "icon": "./icons/expo.png",
       "package": "com.evanbacon.pillarvalley",
       "googleServicesFile": "./google-services.json",
-      "versionCode": 4,
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-2312569320461549~8488774315",
         "googleMobileAdsAutoInit": true
