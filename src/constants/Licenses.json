@@ -29,12 +29,6 @@
         "licenseUrl": "https://github.com/react-native-community/react-native-masked-view",
         "parents": "pillar-valley"
     },
-    "@react-navigation/bottom-tabs@6.0.9": {
-        "licenses": "MIT",
-        "repository": "https://github.com/react-navigation/react-navigation",
-        "licenseUrl": "https://github.com/react-navigation/react-navigation/raw/master/LICENSE",
-        "parents": "pillar-valley"
-    },
     "@react-navigation/drawer@6.1.8": {
         "licenses": "MIT",
         "repository": "https://github.com/react-navigation/react-navigation",
@@ -68,12 +62,6 @@
     "@rematch/persist@1.1.6": {
         "licenses": "MIT",
         "licenseUrl": "https://github.com/rematch/rematch/tree/master/plugins/persist#readme",
-        "parents": "pillar-valley"
-    },
-    "expo-app-loading@2.1.0": {
-        "licenses": "MIT",
-        "repository": "https://github.com/expo/expo",
-        "licenseUrl": "https://github.com/expo/expo",
         "parents": "pillar-valley"
     },
     "expo-av@12.0.4": {
@@ -113,12 +101,6 @@
         "parents": "pillar-valley"
     },
     "expo-haptics@11.3.0": {
-        "licenses": "MIT",
-        "repository": "https://github.com/expo/expo",
-        "licenseUrl": "https://github.com/expo/expo",
-        "parents": "pillar-valley"
-    },
-    "expo-image-picker@13.3.1": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",

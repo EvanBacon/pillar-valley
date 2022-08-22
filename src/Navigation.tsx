@@ -1,31 +1,14 @@
-// import Ionicons from "@expo/vector-icons/build/Ionicons";
-// import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Constants from "expo-constants";
 import * as Linking from "expo-linking";
 import * as React from "react";
-// import { Platform } from "react-native";
 import Licenses from "./components/Licenses";
-// import Fire from "./ExpoParty/Fire";
 import GameScreen from "./screens/GameScreen";
 import ChallengesScreen from "./screens/AchievementScreen";
 import Preferences from "./screens/PreferencesScreen";
-// import LeaderboardScreen from "./screens/LeaderboardScreen";
-// import ProfileScreen from "./screens/ProfileScreen";
-// import ReportScreen from "./screens/ReportScreen";
 import * as Analytics from "expo-firebase-analytics";
-
-// const AppTab = createMaterialTopTabNavigator();
-
-// const tabBarIcon = (name) => ({ tintColor }) => (
-//   <Ionicons
-//     style={{ backgroundColor: "transparent" }}
-//     name={`md-${name}`}
-//     color={tintColor}
-//     size={24}
-//   />
-// );
 
 const AppStack = createStackNavigator();
 
@@ -133,83 +116,4 @@ export default () => {
       </AppStack.Navigator>
     </NavigationContainer>
   );
-  // <AppStack.Screen
-  //   name="Social"
-  //   component={TabNavigation}
-  //   options={{ stackPresentation: "modal" }}
-  //   options={{
-  //     title: `Expo ${Constants.manifest.name}`,
-  //   }}
-  // />
-  // <AppStack.Screen
-  //   name="Report"
-  //   component={ReportScreen}
-  //   options={{ title: "Report" }}
-  // />
-  // <AppStack.Screen
-  //   name="Profile"
-  //   component={ProfileScreen}
-  //   options={({ navigation, route }) => {
-  //     const uid = route.uid || Fire.uid;
-
-  //     let headerRight;
-  //     if (uid !== Fire.uid) {
-  //       headerRight = (
-  //         <Text
-  //           onPress={() => {
-  //             navigation.navigate("Report", route);
-  //           }}
-  //           style={styles.reportButton}
-  //         >
-  //           Report
-  //         </Text>
-  //       );
-  //     }
-
-  //     return {
-  //       title: "Player Profile",
-  //       headerRight,
-  //     };
-  //   }}
-  // />
 };
-
-// const TabNavigation = () => {
-//   return (
-//     <AppTab.Navigator
-//       initialRouteName="Leaderboard"
-//       tabBarOptions={{
-//         shifting: true,
-//         activeTintColor: "#f0edf6",
-//         inactiveTintColor: "#3e2465",
-//         barStyle: {
-//           backgroundColor: "#694fad",
-//           alignItems: "stretch",
-//         },
-//         mode: "modal",
-//         title: Constants.manifest.name,
-//         cardStyle: {
-//           backgroundColor: "transparent",
-//         },
-//       }}
-//     >
-//       <AppTab.Screen
-//         name="Leaderboard"
-//         component={LeaderboardScreen}
-//         options={{
-//           tabBarColor: "#2962ff",
-//           title: tabBarIcon("podium"), // 'show-chart'),
-//         }}
-//       />
-//       <AppTab.Screen
-//         name="Profile"
-//         component={ProfileScreen}
-//         options={{
-//           title: "Profile",
-//           tabBarColor: "#40D8FF",
-//           tabBarIcon: tabBarIcon("person"),
-//         }}
-//       />
-//     </AppTab.Navigator>
-//   );
-// };

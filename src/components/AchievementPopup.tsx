@@ -1,4 +1,3 @@
-import Constants from "expo-constants";
 import React from "react";
 import {
   Animated,
@@ -532,13 +531,3 @@ function PopupContainer({ navigation, presentAchievement }) {
 export default connect(({ presentAchievement }) => ({ presentAchievement }))(
   PopupContainer
 );
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingTop: Constants.statusBarHeight,
-    backgroundColor: "#ecf0f1",
-  },
-});

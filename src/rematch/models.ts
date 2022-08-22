@@ -1,4 +1,3 @@
-// import { dispatch } from "./store";
 import firebase from "firebase/app";
 import { Alert, Dimensions } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -7,7 +6,6 @@ import Settings from "../constants/Settings";
 import Fire from "../ExpoParty/Fire";
 import GameStates from "../Game/GameStates";
 import Constants from "expo-constants";
-// import * as Facebook from "expo-facebook";
 import { captureRef } from "react-native-view-shot";
 
 import getDeviceInfo from "../utils/getUserInfo";
@@ -836,23 +834,6 @@ export const user = {
       });
       // THIS IS DEV ONLY
       return;
-
-      if (Settings.isCacheProfileUpdateActive) {
-        const shouldUpdateKey = "@PillarValley/shouldUpdateProfile";
-        const something = await getItemWithExpiration(shouldUpdateKey);
-        if (!something) {
-          const some = await setItemWithExpiration(
-            shouldUpdateKey,
-            { update: true },
-            Settings.shouldDelayFirebaseProfileSyncInMinutes
-          );
-          dispatch.user.syncLocalToFirebase();
-        } else {
-          console.log("Prevent: syncLocalToFirebase");
-        }
-      } else {
-        dispatch.user.syncLocalToFirebase();
-      }
     },
     mergeDataWithFirebase: async (props) => {
       const doc = await firebase
@@ -882,166 +863,6 @@ export const user = {
     },
   },
 };
-
-const FacebookLoginTypes = {
-  Success: "success",
-  Cancel: "cancel",
-};
-
-function deleteUserAsync(uid) {
-  const db = firebase.firestore();
-
-  return Promise.all([
-    db.collection(Settings.slug).doc(uid).delete(),
-    db.collection("players").doc(uid).delete(),
-  ]);
-}
-
-// export const facebook = {
-//   state: null,
-//   reducers: {
-//     set: (state, props) => props,
-//     setAuth: (state, props) => ({ ...(state || {}), auth: props }),
-//     setGraphResults: (state = {}, props) => {
-//       const { graph = {}, ...otherState } = state;
-//       return {
-//         ...otherState,
-//         graph: {
-//           ...graph,
-//           ...props,
-//         },
-//       };
-//     },
-//   },
-//   effects: {
-//     upgradeAccount: () => {
-//       dispatch.facebook.getToken(dispatch.facebook.upgradeAccountWithToken);
-//     },
-//     login: () => {
-//       dispatch.facebook.getToken(dispatch.facebook.loginToFirebaseWithToken);
-//     },
-//     getToken: async (callback) => {
-//       let auth;
-//       try {
-//         auth = await Facebook.logInWithReadPermissionsAsync(
-//           Constants.manifest.facebookAppId,
-//           Settings.facebookLoginProps
-//         );
-//       } catch ({ message }) {
-//         alert("Facebook Login Error:", message);
-//       }
-//       if (auth) {
-//         const { type, expires, token } = auth;
-//         if (type === FacebookLoginTypes.Success) {
-//           dispatch.facebook.set({ expires, token });
-//         } else if (type === FacebookLoginTypes.Cancel) {
-//           // do nothing, user cancelled
-//         } else {
-//           // unknown type, this should never happen
-//           alert("Failed to authenticate", type);
-//         }
-//         if (callback) callback(token);
-//       }
-//     },
-//     upgradeAccountWithToken: async (token, { facebook }) => {
-//       if (!token && (!facebook || !facebook.token)) {
-//         console.warn(
-//           "upgradeAccountWithToken: Can't upgrade account without a token"
-//         );
-//         return;
-//       }
-//       const _token = token || facebook.token;
-//       try {
-//         const user = await linkAndRetrieveDataWithToken(_token);
-//         console.log("upgradeAccountWithToken: Upgraded Successful");
-//         dispatch.facebook.authorized(user);
-//       } catch ({ message, code, ...error }) {
-//         if (code === "auth/credential-already-in-use") {
-//           // Delete current account while signed in
-//           // TODO: This wont work
-//           const uid = Fire.uid;
-//           if (uid) {
-//             console.log("Should delete:", uid);
-//             await deleteUserAsync(uid);
-//             console.log("All deleted");
-//           } else {
-//             console.log("??? do something:", uid);
-//           }
-//           await dispatch.facebook.loginToFirebaseWithToken(_token);
-//         } else {
-//           // If the account is already linked this error will be thrown
-//           console.log("Error: upgradeAccountWithToken", message);
-//           console.log("error", code, error);
-//           Alert.alert(message);
-//         }
-//       }
-//     },
-//     loginToFirebaseWithToken: async (token, { facebook }) => {
-//       if (!token && (!facebook || !facebook.token)) {
-//         console.warn(
-//           "loginToFirebaseWithToken: Can't login to firebase without a token"
-//         );
-//         return;
-//       }
-//       const _token = token || facebook.token;
-//       try {
-//         const user = await signInWithToken(_token);
-//         dispatch.facebook.authorized(user);
-//       } catch ({ message }) {
-//         console.log("Error: loginToFirebase");
-//         Alert.alert(message);
-//       }
-//     },
-//     callGraphWithToken: async ({ token, params, callback }, { facebook }) => {
-//       if (!token && (!facebook || !facebook.token)) {
-//         console.warn(
-//           "callGraphWithToken: Can't call the Facebook graph API without a Facebook Auth token"
-//         );
-//         return;
-//       }
-//       const _token = token || facebook.token;
-
-//       const paramString = (params || ["id", "name", "email", "picture"]).join(
-//         ","
-//       );
-//       let results;
-//       try {
-//         const response = await fetch(
-//           `https://graph.facebook.com/me?access_token=${_token}&fields=${params.join(
-//             ","
-//           )}`
-//         );
-//         results = await response.json();
-//         dispatch.facebook.setGraphResults(results);
-//       } catch ({ message }) {
-//         console.log("Error: callGraphWithToken", message);
-//         alert(message);
-//       }
-//       if (callback) callback(results);
-//     },
-//     authorized: (user, {}) => {
-//       console.log("Authorized Facebook", user);
-//       // dispatch.facebook.setAuth(user);
-//       let _user = user;
-//       if (_user.toJSON) {
-//         _user = user.toJSON();
-//       }
-//       dispatch.user.update(_user);
-//     },
-//   },
-// };
-
-function linkAndRetrieveDataWithToken(token) {
-  const credential = firebase.auth.FacebookAuthProvider.credential(token);
-  return firebase
-    .auth()
-    .currentUser.linkAndRetrieveDataWithCredential(credential);
-}
-
-function signInWithToken(token) {
-  const credential = firebase.auth.FacebookAuthProvider.credential(token);
-  return firebase.auth().signInAndRetrieveDataWithCredential(credential);
-}
 
 /**
  *
