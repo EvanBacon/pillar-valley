@@ -10,10 +10,10 @@ export default function useAppState(): AppStateStatus {
   }
 
   useEffect(() => {
-    AppState.addEventListener("change", onChange);
+    const sub = AppState.addEventListener("change", onChange);
 
     return () => {
-      AppState.removeEventListener("change", onChange);
+      sub.remove();
     };
   });
 
