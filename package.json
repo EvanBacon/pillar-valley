@@ -1,6 +1,5 @@
 {
   "name": "pillar-valley",
-  "version": "3.0.0",
   "author": "Evan Bacon",
   "private": true,
   "main": "./index",
