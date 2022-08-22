@@ -63,7 +63,7 @@
     semver "^5.4.1"
     source-map "^0.5.0"
 
-"@babel/core@^7.13.16", "@babel/core@^7.14.0":
+"@babel/core@^7.12.9", "@babel/core@^7.13.16", "@babel/core@^7.14.0":
   version "7.18.10"
   resolved "https://registry.yarnpkg.com/@babel/core/-/core-7.18.10.tgz#39ad504991d77f1f3da91be0b8b949a5bc466fb8"
   integrity sha512-JQM6k6ENcBFKVtWvLavlvi/mPcpYZ3+R+2EySDEMSMbp7Mn4FexlbbJVrx2R7Ijhr01T8gyqrOaABWIOgxeUyw==
@@ -1411,12 +1411,12 @@
   dependencies:
     "@types/hammerjs" "^2.0.36"
 
-"@expo/browser-polyfill@^0.1.1":
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/@expo/browser-polyfill/-/browser-polyfill-0.1.1.tgz#1c4ee31744fa2f8e07a7ec0bfd47fbea80deba8f"
-  integrity sha512-PuG+1ZJUUACqWjyCe/pDq9YS8CsNsf08Ir1iftydvjCDqQjXmzQcZSffCeamTdHhIzFr9KA/ICg8+Z22+EeNvQ==
+"@expo/browser-polyfill@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@expo/browser-polyfill/-/browser-polyfill-1.0.0.tgz#2d93ae0feb3ccc90b78a98f277f8f8ed8bcbd37d"
+  integrity sha512-hwlfansWtt1F/ZUitu6vrGRF5Th2LhBn2HHPxvz3U/MFxKG5XI4TA6SM1bJW2Q2iR2bsIddzz1nNwcf0Sjg1hA==
   dependencies:
-    expo-2d-context "^0.0.2"
+    expo-2d-context "^0.0.3"
     fbemitter "^2.1.1"
     text-encoding "^0.7.0"
     uuid "^8.3.2"
@@ -5414,10 +5414,10 @@ expand-brackets@^2.1.4:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
-expo-2d-context@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/expo-2d-context/-/expo-2d-context-0.0.2.tgz#7aeea5b146b3f7091ca7d17fcf7a713024ef82f5"
-  integrity sha512-W4TCuTBXZgvAHhQ15u0fpQiBVw14u4vIDcUv/hk2PBA9a3HYav+1lQp2+dCXLM2DXUjV5T4POY+VlePBWBORhw==
+expo-2d-context@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/expo-2d-context/-/expo-2d-context-0.0.3.tgz#6b307c34993ad9d789ead37b6b5922c7fde8d458"
+  integrity sha512-loO/cIj5owNXv0GJxEQ7Sm1vlGOYoJwHCaf2uiPKG3BZm+gQw6GnDgxN+2WDisNZKLTjnMLUGP1HhBsNnElt6g==
   dependencies:
     adaptive-bezier-curve "1.0.3"
     adaptive-quadratic-curve "1.0.2"
@@ -5611,7 +5611,7 @@ expo-sensors@~11.4.0:
     "@expo/config-plugins" "~5.0.0"
     invariant "^2.2.4"
 
-expo-splash-screen@~0.16.0:
+expo-splash-screen@~0.16.0, expo-splash-screen@~0.16.1:
   version "0.16.1"
   resolved "https://registry.yarnpkg.com/expo-splash-screen/-/expo-splash-screen-0.16.1.tgz#d1e34a37d1e050831eea4988fbf7e75c166b4dc3"
   integrity sha512-R3EUV5OM4RO+tb5XHgx9TNjaKCpHULo2CrIPbfZGnIdef3MeQucg4dNGw+Kiub9oKGPeExQfwtWqW+VXZqa0vg==
@@ -5619,20 +5619,25 @@ expo-splash-screen@~0.16.0:
     "@expo/configure-splash-screen" "^0.6.0"
     "@expo/prebuild-config" "~5.0.0"
 
+expo-status-bar@~1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/expo-status-bar/-/expo-status-bar-1.4.0.tgz#c0317de2c53878340f4b4f00ff7e4ba14399a7fb"
+  integrity sha512-vh98g8qMIjig/2XTBsoAWS6Vo2dIIwDWjB3/GiuZ9Lazpxc9GO/APfJ4dar7MibzIDUKIrjotrcL6rLdPH13Ew==
+
 expo-store-review@~5.3.0:
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/expo-store-review/-/expo-store-review-5.3.0.tgz#f8b1253a607b13e548889a442d8ee7bb0fa025a3"
   integrity sha512-abWgsgXnfeJnAINOVGWxFC0HXizZxBoxNZoekswqW2AtsQ6DR5nvWj5VyovVjd8DktRG/ly1ZKJwP0KNXqWffw==
 
-expo-three@^6.0.1:
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/expo-three/-/expo-three-6.0.1.tgz#c79ca978e04830da065efb1f0bbd3db8d77ed3f3"
-  integrity sha512-RJld8p3IODpGQ0UNFsBLQGL9hCk5tTaCzrVVvgF1sEJIuzWgoN9RqeNFMF/N0I+pQAF/9vqhQHnP9SW8Bto6Tw==
+expo-three@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/expo-three/-/expo-three-6.1.0.tgz#e227b7c2b4f848a74a42274ef541cfa2430c4de1"
+  integrity sha512-MYAsK65pKyft8aAsvDkLguxnHHshBO9xX20wRmCQ0dGZMl8WEOZeZ5Ild93NJY9gkOTqkB83xboN69HxZkURqg==
   dependencies:
-    "@expo/browser-polyfill" "^0.1.1"
+    "@expo/browser-polyfill" "^1.0.0"
     expo-asset-utils "~3.0.0"
 
-expo@^46.0.8:
+expo@~46.0.8:
   version "46.0.8"
   resolved "https://registry.yarnpkg.com/expo/-/expo-46.0.8.tgz#0a0d10514fa7fa6e56bdb53a7a5e566f9383a195"
   integrity sha512-emhBCx+eE/9pJt9VX3QMj1tSwF/xstzQzNhjp4hPs0HYY7m1IQZElgN7DLnCQlBEM6xwtADSPVaqZBmSRzhaMQ==

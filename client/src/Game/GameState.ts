@@ -15,7 +15,6 @@ export default class GameState {
       height,
       pixelRatio,
     });
-
     this.game = new Game(width, height, this.renderer);
     await this.game.loadAsync();
   };

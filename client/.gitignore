@@ -11,3 +11,5 @@ release/builds
 web-build
 
 .DS_Store
+
+/ios
