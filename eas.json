@@ -17,6 +17,9 @@
       "distribution": "internal"
     },
     "production": {
+      "cache": {
+        "key": "this-kinda-sucks"
+      },
       "ios": {
         "autoIncrement": true
       },
