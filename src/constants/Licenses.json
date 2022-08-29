@@ -196,7 +196,7 @@
         "licenseUrl": "https://github.com/necolas/react-native-web/raw/master/LICENSE",
         "parents": "pillar-valley"
     },
-    "react-native@0.69.4": {
+    "react-native@0.69.5": {
         "licenses": "MIT",
         "repository": "github:facebook/react-native",
         "licenseUrl": "github:facebook/react-native",
