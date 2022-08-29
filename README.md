@@ -13,22 +13,7 @@
   <a href="https://blog.expo.io/@Baconbrix" aria-label="Follow Baconbrix on Medium">
     <img alt="Medium: baconbrix" src="https://img.shields.io/badge/BACON%20BLOG%20🥓-4630EB.svg?style=for-the-badge&logo=MEDIUM&labelColor=000&logoWidth=20" target="_blank" />
   </a>
-  <a href="/LICENSE">
-    <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge" target="_blank" />
-  </a>
 </p>
-
-### Immerse yourself in a suave world of zen
-
-<div>
-  
-<img src="https://github.com/EvanBacon/Expo-Pillar-Valley/blob/master/ios/fastlane/raw_screenshots/IMG_0494.PNG" width="281"  />
-
-<img src="https://github.com/EvanBacon/Expo-Pillar-Valley/blob/master/ios/fastlane/raw_screenshots/IMG_0496.PNG" width="281"  />
-
-<img src="https://github.com/EvanBacon/Expo-Pillar-Valley/blob/master/ios/fastlane/raw_screenshots/IMG_0497.PNG" width="281"  />
-
-</div>
 
 ### Play in the Browser
 
