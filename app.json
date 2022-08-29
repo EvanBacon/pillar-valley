@@ -48,7 +48,7 @@
         "googleMobileAdsAutoInit": true
       },
       "associatedDomains": [
-        "applinks:https://pillarvalley.netlify.app"
+        "applinks:pillarvalley.netlify.app"
       ]
     },
     "android": {
