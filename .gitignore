@@ -1,7 +1,15 @@
+node_modules/**/*
+/.expo/
+src/ExpoParty/Secret.js
+release/builds
+.vscode
 
-ios/fastlane/screenshots/en-US/preview.mp4
+*.ipa
+*.apk
 *.sketch
-client/web-build/
+
+web-build
 
 .DS_Store
-client/yarn-error.log
+
+/ios
