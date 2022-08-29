@@ -29,18 +29,6 @@
         "licenseUrl": "https://github.com/react-native-community/react-native-masked-view",
         "parents": "pillar-valley"
     },
-    "@react-navigation/drawer@6.1.8": {
-        "licenses": "MIT",
-        "repository": "https://github.com/react-navigation/react-navigation",
-        "licenseUrl": "https://github.com/react-navigation/react-navigation/raw/master/LICENSE",
-        "parents": "pillar-valley"
-    },
-    "@react-navigation/material-top-tabs@6.0.6": {
-        "licenses": "MIT",
-        "repository": "https://github.com/react-navigation/react-navigation",
-        "licenseUrl": "https://github.com/react-navigation/react-navigation/raw/master/LICENSE",
-        "parents": "pillar-valley"
-    },
     "@react-navigation/native@6.0.6": {
         "licenses": "MIT",
         "repository": "https://github.com/react-navigation/react-navigation",
@@ -142,7 +130,7 @@
         "licenseUrl": "https://github.com/expo/expo-three/raw/master/LICENSE",
         "parents": "pillar-valley"
     },
-    "expo-updates@0.14.4": {
+    "expo-updates@0.14.5": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
@@ -200,18 +188,6 @@
         "licenses": "MIT",
         "repository": "https://github.com/software-mansion/react-native-screens",
         "licenseUrl": "https://github.com/software-mansion/react-native-screens/raw/master/LICENSE",
-        "parents": "pillar-valley"
-    },
-    "react-native-tab-view@2.16.0": {
-        "licenses": "MIT",
-        "repository": "https://github.com/satya164/react-native-tab-view",
-        "licenseUrl": "https://github.com/satya164/react-native-tab-view/raw/master/LICENSE.md",
-        "parents": "pillar-valley"
-    },
-    "react-native-view-shot@3.3.0": {
-        "licenses": "MIT",
-        "repository": "https://github.com/gre/react-native-view-shot",
-        "licenseUrl": "https://github.com/gre/react-native-view-shot/raw/master/LICENSE",
         "parents": "pillar-valley"
     },
     "react-native-web@0.18.7": {

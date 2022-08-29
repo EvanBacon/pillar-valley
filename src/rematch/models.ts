@@ -6,7 +6,7 @@ import Settings from "../constants/Settings";
 import Fire from "../ExpoParty/Fire";
 import GameStates from "../Game/GameStates";
 import Constants from "expo-constants";
-import { captureRef } from "react-native-view-shot";
+// import { captureRef } from "react-native-view-shot";
 
 import getDeviceInfo from "../utils/getUserInfo";
 import * as Analytics from "expo-firebase-analytics";
@@ -352,18 +352,16 @@ export const screenshot = {
   },
   effects: {
     updateAsync: async ({ ref }) => {
-      const { width, height } = Dimensions.get("window");
-
-      const uri = await captureRef(ref, {
-        format: "jpg",
-        quality: 0.3,
-        result: "tmpfile",
-        // result: "file",
-        height,
-        width,
-      });
-
-      dispatch.screenshot.update(uri);
+      // const { width, height } = Dimensions.get("window");
+      // const uri = await captureRef(ref, {
+      //   format: "jpg",
+      //   quality: 0.3,
+      //   result: "tmpfile",
+      //   // result: "file",
+      //   height,
+      //   width,
+      // });
+      // dispatch.screenshot.update(uri);
     },
   },
 };

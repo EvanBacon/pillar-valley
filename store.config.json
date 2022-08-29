@@ -1,7 +1,7 @@
 {
   "configVersion": 0,
   "apple": {
-    "version": "5.1.0",
+    "version": "5.2.0",
     "copyright": "2022 Evan Bacon",
     "release": {
       "automaticRelease": true
@@ -21,7 +21,7 @@
           "monument",
           "retro",
           "ambient",
-          "candy",
+          "fyp",
           "clash"
         ],
         "releaseNotes": "Bug fixes and improved stability",

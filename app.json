@@ -76,6 +76,12 @@
           "measurementId": "G-3PJBNEEFP4"
         }
       }
+    },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/a1a81680-f84c-11e7-88a7-c74e9d068889"
     }
   }
 }
