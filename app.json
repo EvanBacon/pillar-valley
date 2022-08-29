@@ -10,9 +10,6 @@
     "jsEngine": "hermes",
     "scheme": "plrvly",
     "icon": "./icons/expo.png",
-    "facebookScheme": "fb270942376819196",
-    "facebookAppId": "270942376819196",
-    "facebookDisplayName": "Bacon Box",
     "githubUrl": "https://github.com/evanbacon/expo-pillar-valley",
     "splash": {
       "image": "./icons/splash.png",
