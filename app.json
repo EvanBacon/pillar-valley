@@ -35,6 +35,7 @@
       "src/assets/**/*"
     ],
     "ios": {
+      "jsEngine": "jsc",
       "appStoreUrl": "https://itunes.apple.com/us/app/pillar-valley/id1336398804",
       "icon": "./icons/ios.png",
       "supportsTablet": true,

@@ -29,7 +29,7 @@
     "@react-navigation/stack": "^6.0.11",
     "@rematch/core": "^1.4.0",
     "@rematch/persist": "^1.1.6",
-    "expo": "~46.0.8",
+    "expo": "~46.0.9",
     "expo-av": "~12.0.4",
     "expo-blur": "~11.2.0",
     "expo-constants": "~13.2.3",
@@ -39,7 +39,7 @@
     "expo-haptics": "~11.3.0",
     "expo-linking": "~3.2.2",
     "expo-sensors": "~11.4.0",
-    "expo-splash-screen": "~0.16.1",
+    "expo-splash-screen": "~0.16.2",
     "expo-status-bar": "~1.4.0",
     "expo-store-review": "~5.3.0",
     "expo-three": "^6.1.0",
@@ -69,5 +69,6 @@
     "babel-eslint": "10.0.3",
     "npm-license-crawler": "^0.2.1",
     "typescript": "~4.3.5"
-  }
+  },
+  "version": "1.0.0"
 }
