@@ -31,9 +31,7 @@
         "projectId": "a1a81680-f84c-11e7-88a7-c74e9d068889"
       }
     },
-    "assetBundlePatterns": [
-      "src/assets/**/*"
-    ],
+    "assetBundlePatterns": ["src/assets/**/*"],
     "ios": {
       "jsEngine": "jsc",
       "appStoreUrl": "https://itunes.apple.com/us/app/pillar-valley/id1336398804",
@@ -45,9 +43,7 @@
         "googleMobileAdsAppId": "ca-app-pub-2312569320461549~5287895909",
         "googleMobileAdsAutoInit": true
       },
-      "associatedDomains": [
-        "applinks:pillarvalley.netlify.app"
-      ]
+      "associatedDomains": ["applinks:pillarvalley.netlify.app"]
     },
     "android": {
       "playStoreUrl": "https://play.google.com/store/apps/details?id=com.evanbacon.pillarvalley",
@@ -61,6 +57,8 @@
       "permissions": []
     },
     "web": {
+      "bundler": "metro",
+      "output": "static",
       "favicon": "./icons/expo.png",
       "config": {
         "firebase": {
