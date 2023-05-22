@@ -73,6 +73,17 @@
         }
       }
     },
+    "plugins": [
+      [
+        "expo-router",
+        {
+          "origin": false
+        }
+      ]
+    ],
+    "experiments": {
+      "tsconfigPaths": true
+    },
     "runtimeVersion": {
       "policy": "sdkVersion"
     },

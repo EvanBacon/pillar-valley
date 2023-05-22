@@ -15,12 +15,12 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Constants from "expo-constants";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as StoreReview from "expo-store-review";
-import useStoreReview from "../hooks/useStoreReview";
+import useStoreReview from "@/src/hooks/useStoreReview";
 import {
   openOtherPlatform,
   getOtherPlatform,
-} from "../components/Button/SwapPlatformButton";
-import { dispatch } from "../rematch/store";
+} from "@/src/components/Button/SwapPlatformButton";
+import { dispatch } from "@/src/rematch/store";
 
 function Item({
   title,
@@ -198,7 +198,7 @@ function PreferencesScreen({
         },
         {
           title: "Expo SDK",
-          value: require("../../package.json").dependencies["expo"],
+          value: require("../package.json").dependencies["expo"],
           onPress: () => {
             setTaps((taps) => taps + 1);
           },

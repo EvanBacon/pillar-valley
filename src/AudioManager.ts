@@ -9,20 +9,6 @@ const audio = {
   "unlock.mp3": require("./assets/audio/unlock.mp3"),
   // Pillar Valley
   "song.mp3": require("./assets/audio/song.mp3"),
-  // Nitro Roll
-  // "bass_00.mp3": require("./NitroRoll/audio/bass_00.mp3"),
-  // "bass_01.mp3": require("./NitroRoll/audio/bass_01.mp3"),
-  // "bass_02.mp3": require("./NitroRoll/audio/bass_02.mp3"),
-  // "bass_03.mp3": require("./NitroRoll/audio/bass_03.mp3"),
-  // "bass_04.mp3": require("./NitroRoll/audio/bass_04.mp3"),
-  // "bass_05.mp3": require("./NitroRoll/audio/bass_05.mp3"),
-  // "bass_06.mp3": require("./NitroRoll/audio/bass_06.mp3"),
-  // "bass_07.mp3": require("./NitroRoll/audio/bass_07.mp3"),
-  // "bass_08.mp3": require("./NitroRoll/audio/bass_08.mp3"),
-  // "pop_00.mp3": require("./NitroRoll/audio/pop_00.mp3"),
-  // "pop_00.wav": require("./NitroRoll/audio/pop_00.wav"),
-  // "pop_01.wav": require("./NitroRoll/audio/pop_01.wav"),
-  // "song.mp3": require("./NitroRoll/audio/song.mp3"),
 };
 
 // eslint-disable-line

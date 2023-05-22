@@ -2,7 +2,7 @@
   "name": "pillar-valley",
   "author": "Evan Bacon",
   "private": true,
-  "main": "./index",
+  "main": "expo-router/entry",
   "scripts": {
     "metadata": "eas metadata:push",
     "test": "node_modules/.bin/jest",

@@ -2,9 +2,9 @@ import { connectActionSheet } from "@expo/react-native-action-sheet";
 import React from "react";
 import { StyleSheet, View } from "react-native";
 
-import AchievementsItem from "../components/AchievementsItem";
-import List from "../components/List";
-import Challenges from "../constants/Achievements";
+import AchievementsItem from "@/src/components/AchievementsItem";
+import List from "@/src/components/List";
+import Challenges from "@/src/constants/Achievements";
 
 const challengesListData = Object.keys(Challenges).map((key) => ({
   key,

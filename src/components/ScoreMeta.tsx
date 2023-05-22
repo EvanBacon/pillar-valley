@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { connect } from "react-redux";
 
 import Settings from "../constants/Settings";
+import { useFont } from "../hooks/useFont";
 
 function ScoreMeta({
   current,
@@ -17,21 +18,25 @@ function ScoreMeta({
   currency: number;
 }) {
   const { top } = useSafeAreaInsets();
+  const gothamNarrowBook = useFont("GothamNarrow-Book");
+  const fontStyle = { fontFamily: gothamNarrowBook };
   return (
     <View style={[styles.container, { top }]}>
       <View style={{ flexDirection: "row" }}>
-        <Text style={[styles.text, styles.highScore]}>{best}</Text>
+        <Text style={[styles.text, fontStyle, styles.highScore]}>{best}</Text>
         <Animatable.Text
           animation="rubberBand"
           key={current}
-          style={[styles.text, styles.score]}
+          style={[styles.text, fontStyle, styles.score]}
         >
           {current}
         </Animatable.Text>
       </View>
       {Settings.gemsEnabled && (
         <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <Text style={[styles.text, styles.currency]}>{currency}</Text>
+          <Text style={[styles.text, fontStyle, styles.currency]}>
+            {currency}
+          </Text>
           <FontAwesome
             name="diamond"
             size={20}
@@ -67,7 +72,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   text: {
-    fontFamily: "GothamNarrow-Book",
+    // fontFamily: "GothamNarrow-Book",
     opacity: 0.8,
     fontSize: 48,
     backgroundColor: "transparent",

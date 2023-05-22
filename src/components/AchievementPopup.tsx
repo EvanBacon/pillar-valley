@@ -12,6 +12,7 @@ import { connect } from "react-redux";
 import { dispatch } from "../rematch/store";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import AudioManager from "../AudioManager";
+import { useRouter } from "expo-router";
 
 const Colors = {
   darkerGreen: "#000A69",
@@ -92,13 +93,8 @@ class AnimatedCircle extends React.Component {
   }
 
   render() {
-    const {
-      innerColor,
-      outerColor,
-      style,
-      renderComponent,
-      ...props
-    } = this.props;
+    const { innerColor, outerColor, style, renderComponent, ...props } =
+      this.props;
 
     const finalProps = {
       style: [
@@ -428,7 +424,10 @@ class Popup extends React.Component {
     return (
       <TouchableWithoutFeedback
         onPress={() => {
-          this.props.navigation.navigate("Challenges", { id: this.props.id });
+          this.props.router.push({
+            pathname: "/challenges",
+            params: { id: this.props.id },
+          });
         }}
       >
         <Animated.View style={this.animatedContainerStyle}>
@@ -506,8 +505,9 @@ class Popup extends React.Component {
   }
 }
 
-function PopupContainer({ navigation, presentAchievement }) {
+function PopupContainer({ presentAchievement }) {
   const { top } = useSafeAreaInsets();
+  const router = useRouter();
   return (
     <View
       style={[
@@ -518,7 +518,7 @@ function PopupContainer({ navigation, presentAchievement }) {
     >
       {presentAchievement && (
         <Popup
-          navigation={navigation}
+          router={router}
           id={presentAchievement.id}
           name={presentAchievement.name}
           score={presentAchievement.score}

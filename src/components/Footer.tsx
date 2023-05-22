@@ -18,13 +18,14 @@ import PreferencesButton from "./Button/PreferencesButton";
 import SwapPlatformButton, {
   getOtherPlatform,
 } from "./Button/SwapPlatformButton";
+import { Link, useNavigation, useRouter } from "expo-router";
 
 const delay = 100;
 const initialDelay = 100;
 const duration = 500;
 const easing = "ease-out";
 
-function Footer({ game, screenshot, navigation }) {
+function Footer({ game, screenshot }) {
   const { bottom } = useSafeAreaInsets();
   // Chrome devices can prompt the user to install the website as a PWA
   const canInstallPwa = usePWAInstallable();
@@ -32,11 +33,14 @@ function Footer({ game, screenshot, navigation }) {
   const [showPWA, setShowPWA] = React.useState(true);
   const animation = game === GameStates.Menu ? "zoomIn" : "zoomOut";
 
+  const router = useRouter();
+  const navigation = useNavigation();
   const onChallengesPress = () => {
-    navigation.navigate("Challenges");
+    navigation.navigate("challenges");
+    // router.push("/challenges");
   };
   const onPreferencesPress = () => {
-    navigation.navigate("Preferences");
+    router.push("/settings");
   };
   const views = [];
 
@@ -54,7 +58,8 @@ function Footer({ game, screenshot, navigation }) {
 
   const onLeaderboardPress = () => {
     if (Settings.isFirebaseEnabled) {
-      navigation.navigate("Social");
+      router.push("/leaderboard");
+      // navigation.navigate("Social");
     } else {
       alert("Expo Online is disabled");
     }
@@ -72,7 +77,11 @@ function Footer({ game, screenshot, navigation }) {
     // views.push(<AdButton />);
     adMargin += 48;
   }
-  views.push(<PreferencesButton onPress={onPreferencesPress} />);
+  views.push(
+    <Link href="/settings" asChild>
+      <PreferencesButton />
+    </Link>
+  );
 
   return (
     <View style={[styles.container, { marginBottom: bottom + adMargin }]}>
