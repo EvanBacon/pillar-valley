@@ -43,7 +43,11 @@
         "googleMobileAdsAppId": "ca-app-pub-2312569320461549~5287895909",
         "googleMobileAdsAutoInit": true
       },
-      "associatedDomains": ["applinks:pillarvalley.netlify.app"]
+      "associatedDomains": [
+        "applinks:pillarvalley.netlify.app",
+        "webcredentials:pillarvalley.netlify.app",
+        "activitycontinuation:pillarvalley.netlify.app"
+      ]
     },
     "android": {
       "playStoreUrl": "https://play.google.com/store/apps/details?id=com.evanbacon.pillarvalley",

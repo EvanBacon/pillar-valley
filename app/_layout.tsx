@@ -1,4 +1,3 @@
-import { JsStack } from "@/src/navigator/js-stack";
 import { SplashScreen, Stack, usePathname, useRouter } from "expo-router";
 import { useEffect } from "react";
 import * as Analytics from "expo-firebase-analytics";
@@ -12,7 +11,6 @@ import Fire from "@/src/ExpoParty/Fire";
 import Gate from "@/src/rematch/Gate";
 // import { setTestDeviceIDAsync } from "expo-ads-admob";
 import * as Device from "expo-device";
-import Icon from "@/src/components/Button/Icon";
 import TouchableBounce from "@/src/components/TouchableBounce.native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
@@ -45,19 +43,19 @@ export default function Layout() {
               headerTitleStyle: { color: "white" },
             }}
           >
-            <JsStack.Screen name="index" options={{ header: () => null }} />
-            <JsStack.Screen
+            <Stack.Screen name="index" options={{ header: () => null }} />
+            <Stack.Screen
               name="challenges"
               options={{
                 headerRight: BackButton,
                 presentation: "modal",
               }}
             />
-            <JsStack.Screen
+            <Stack.Screen
               name="credit"
               options={{ headerRight: BackButton, presentation: "modal" }}
             />
-            <JsStack.Screen
+            <Stack.Screen
               name="settings"
               options={{ headerRight: BackButton, presentation: "modal" }}
             />
