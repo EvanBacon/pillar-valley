@@ -128,10 +128,10 @@ class AnimatedBadge extends React.Component {
     resizeMode: "contain",
   };
 
-  getReverseAnimation = (props) => this.circle.getReverseAnimation(props);
-  getAnimation = (toValue) => this.circle.getAnimation(toValue);
-  animate = () => this.circle.animate();
-  reset = () => this.circle.reset();
+  getReverseAnimation = (props) => this.circle?.getReverseAnimation(props);
+  getAnimation = (toValue) => this.circle?.getAnimation(toValue);
+  animate = () => this.circle?.animate();
+  reset = () => this.circle?.reset();
   render() {
     const { ...props } = this.props;
     return <AnimatedCircle ref={(ref) => (this.circle = ref)} {...props} />;
