@@ -13,3 +13,4 @@ web-build
 .DS_Store
 
 /ios
+/dist
