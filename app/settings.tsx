@@ -21,6 +21,7 @@ import {
   getOtherPlatform,
 } from "@/src/components/Button/SwapPlatformButton";
 import { dispatch } from "@/src/rematch/store";
+import { useRouter } from "expo-router";
 
 function Item({
   title,
@@ -85,13 +86,8 @@ function areYouSureAsync(): Promise<boolean> {
   });
 }
 
-function PreferencesScreen({
-  score,
-  rounds,
-  currency,
-  bestRounds,
-  navigation,
-}) {
+function PreferencesScreen({ score, rounds, currency, bestRounds }) {
+  const router = useRouter();
   const [taps, setTaps] = React.useState(0);
   const { bottom } = useSafeAreaInsets();
   const canReview = useStoreReview();
@@ -189,7 +185,7 @@ function PreferencesScreen({
         {
           title: "Licenses",
           onPress: () => {
-            navigation.navigate("Licenses");
+            router.push("/credit");
           },
         },
         Platform.OS !== "web" && {

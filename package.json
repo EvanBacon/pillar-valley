@@ -45,6 +45,7 @@
     "expo-store-review": "~6.3.0",
     "expo-system-ui": "~2.3.0",
     "expo-three": "^6.1.0",
+    "expo-updates": "~0.17.0",
     "firebase": "^9.4.1",
     "gsap": "^2.0.1",
     "react": "18.2.0",
