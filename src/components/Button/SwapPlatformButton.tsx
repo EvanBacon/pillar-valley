@@ -18,18 +18,6 @@ function isAppleMobileWeb() {
   );
 }
 
-// https://stackoverflow.com/a/27862868
-function isMacOSWeb() {
-  if (Platform.OS !== "web") return false;
-  return navigator.platform.includes("Mac");
-}
-
-// https://stackoverflow.com/a/27862868
-function isWindowsWeb() {
-  if (Platform.OS !== "web") return false;
-  return navigator.platform.includes("Win");
-}
-
 const icons = {
   web: "globe",
   android: "android",

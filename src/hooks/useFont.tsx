@@ -1,8 +1,4 @@
-import {
-  Text as UpstreamText,
-  StyleSheet,
-  TextProps,
-} from "@bacons/react-views";
+import { Text as UpstreamText, StyleSheet } from "@bacons/react-views";
 import * as Font from "expo-font";
 import React from "react";
 
