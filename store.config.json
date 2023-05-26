@@ -1,8 +1,8 @@
 {
   "configVersion": 0,
   "apple": {
-    "version": "5.2.0",
-    "copyright": "2022 Evan Bacon",
+    "version": "7.0.0",
+    "copyright": "2023 Evan Bacon",
     "release": {
       "automaticRelease": true
     },
@@ -65,7 +65,7 @@
       "firstName": "Evan",
       "lastName": "Bacon",
       "email": "bacon@expo.io",
-      "phone": "6505690456",
+      "phone": "5129171031",
       "demoRequired": false,
       "notes": "I <3 U"
     }
