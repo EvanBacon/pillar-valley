@@ -1,6 +1,5 @@
 import { connectActionSheet } from "@expo/react-native-action-sheet";
 import React from "react";
-import { StyleSheet, View } from "react-native";
 import { connect } from "react-redux";
 
 import AchievementsItem from "@/src/components/AchievementsItem";

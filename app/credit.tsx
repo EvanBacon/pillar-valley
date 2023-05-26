@@ -10,23 +10,6 @@ import Settings from "@/src/constants/Settings";
 
 const Data = require("@/src/constants/Licenses");
 
-function extractNameFromGithubUrl(url) {
-  if (!url) {
-    return null;
-  }
-
-  const reg =
-    /((https?:\/\/)?(www\.)?github\.com\/)?(@|#!\/)?([A-Za-z0-9_]{1,15})(\/([-a-z]{1,20}))?/i;
-  const components = reg.exec(url);
-
-  const { length, [length - 1]: last } = components;
-  return last;
-  // if (components && components.length > 5) {
-  //   return components[5];
-  // }
-  // return null;
-}
-
 function sortDataByKey(data, key) {
   data.sort((a, b) => (a[key] > b[key] ? 1 : b[key] > a[key] ? -1 : 0));
   return data;
@@ -45,9 +28,6 @@ const licenses = Object.keys(Data).map((key) => {
     name = `@${components[1]}`;
     version = components[2];
   }
-
-  const reg =
-    /((https?:\/\/)?(www\.)?github\.com\/)?(@|#!\/)?([A-Za-z0-9_]{1,15})(\/([-a-z]{1,20}))?/i;
 
   let username = (license.repository || license.licenseUrl)
     .split("https://github.com/")
