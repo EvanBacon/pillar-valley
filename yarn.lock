@@ -4415,10 +4415,10 @@ eslint-module-utils@^2.7.4:
   dependencies:
     debug "^3.2.7"
 
-eslint-plugin-bacon@^0.0.0:
-  version "0.0.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-bacon/-/eslint-plugin-bacon-0.0.0.tgz#1c8f7b4534d07ac720ff22f96b58937bf096dc2d"
-  integrity sha512-XqaIWJwiQfuA299GABqFJB8LBQaCXx7ShRHha+MFrWdaGRlhNJ9TNporSOrqFWY2nwtyrdEF+VKywZi8vbsHKQ==
+eslint-plugin-bacon@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-bacon/-/eslint-plugin-bacon-0.0.1.tgz#e398af615b8e14878221e5272750ba718174e789"
+  integrity sha512-ZmOSVuqLPOnyjYM7c6/eZFEH0N8nhdj7SsJnHCiLuEsYCP3grM0C6iUExto30p/2RX+++kTYwq6jtkYuVufVwg==
   dependencies:
     eslint-plugin-jsx-a11y "^6.7.1"
 

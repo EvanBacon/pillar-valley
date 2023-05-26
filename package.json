@@ -29,7 +29,7 @@
     "@react-navigation/stack": "^6.0.11",
     "@rematch/core": "^1.4.0",
     "@rematch/persist": "^1.1.6",
-    "eslint-plugin-bacon": "^0.0.0",
+    "eslint-plugin-bacon": "^0.0.1",
     "expo": "~49.0.0-alpha.1",
     "expo-av": "~13.3.0",
     "expo-blur": "~12.3.1",
