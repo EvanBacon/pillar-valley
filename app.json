@@ -10,6 +10,11 @@
     "backgroundColor": "#F09458",
     "jsEngine": "hermes",
     "scheme": "plrvly",
+    "locales": {
+      "es": {
+        "CFBundleName": "Valle de los Pilares"
+      }
+    },
     "icon": "./icons/expo.png",
     "githubUrl": "https://github.com/evanbacon/expo-pillar-valley",
     "splash": {
