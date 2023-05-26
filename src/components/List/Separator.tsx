@@ -10,6 +10,6 @@ const styles = StyleSheet.create({
     height: StyleSheet.hairlineWidth,
     width: "auto",
     marginLeft: 16,
-    backgroundColor: "#CED0CE",
+    backgroundColor: "#21222D",
   },
 });

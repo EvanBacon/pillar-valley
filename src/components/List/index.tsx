@@ -60,7 +60,7 @@ class List extends React.Component {
     return (
       <View style={{ flex: 1 }}>
         <FlatList
-          style={[style, styles.container]}
+          style={[style, { backgroundColor: "#282A37" }]}
           keyExtractor={this.keyExtractor}
           ListFooterComponent={this.footer}
           ItemSeparatorComponent={Separator}
@@ -93,9 +93,5 @@ class List extends React.Component {
 //     <Text style={{ fontSize: 24 }}>Coming Soon</Text>
 //   </View>
 // }
-
-const styles = StyleSheet.create({
-  container: {},
-});
 
 export default List;

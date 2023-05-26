@@ -81,22 +81,23 @@ sortDataByKey(licenses, "username");
 export default function Licenses() {
   const { bottom } = useSafeAreaInsets();
   return (
-    <View style={{ flex: 1 }}>
-      <View
-        style={{ padding: 16, justifyContent: "center", alignItems: "center" }}
-      >
+    <View style={{ flex: 1, backgroundColor: "#191A23" }}>
+      <View style={{ padding: 16 }}>
         <A
-          style={{ fontSize: 36, textAlign: "center", fontWeight: "bold" }}
+          style={{
+            fontSize: 24,
+            color: "white",
+          }}
           href="https://twitter.com/baconbrix"
         >
           Built by Evan Bacon
         </A>
         {!Settings.isPromo && (
           <A
-            style={{ fontSize: 36, textAlign: "center" }}
+            style={{ fontSize: 16, color: "white" }}
             href="https://github.com/evanbacon/pillar-valley"
           >
-            Made with Expo
+            Powered by Expo
           </A>
         )}
       </View>

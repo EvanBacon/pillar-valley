@@ -42,35 +42,26 @@ function AchievementScreen({ showActionSheetWithOptions, achievements }) {
   }, [achievements, filter]);
 
   return (
-    <View style={styles.container}>
-      <List
-        noMore
-        renderItem={({ item, index }) => (
-          <AchievementsItem
-            onPress={() => {}}
-            {...item}
-            index={index}
-            complete={achievements[item.key]}
-          />
-        )}
-        title={`${data.length} Challenges`}
-        headerButtonTitle={`Showing ${filter}`}
-        data={data}
-        renderUserItem={(props) => null}
-        onPress={() => {}}
-        onPressHeader={_onOpenActionSheet}
-        onPressFooter={() => {}}
-      />
-    </View>
+    <List
+      noMore
+      renderItem={({ item, index }) => (
+        <AchievementsItem
+          onPress={() => {}}
+          {...item}
+          index={index}
+          complete={achievements[item.key]}
+        />
+      )}
+      title={`${data.length} Challenges`}
+      headerButtonTitle={`Showing ${filter}`}
+      data={data}
+      renderUserItem={(props) => null}
+      onPress={() => {}}
+      onPressHeader={_onOpenActionSheet}
+      onPressFooter={() => {}}
+    />
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#ecf0f1",
-  },
-});
 
 const ConnectedScreen = connect(({ achievements }) => ({ achievements }))(
   AchievementScreen

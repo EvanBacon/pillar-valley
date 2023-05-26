@@ -66,8 +66,6 @@ function InnerLayout() {
     Analytics.logEvent("screen_view", { currentScreen: pathname });
   }, [pathname]);
 
-  console.log("path", pathname);
-
   const stack = React.useMemo(
     () => (
       <Stack
@@ -75,6 +73,7 @@ function InnerLayout() {
           headerTintColor: "white",
           headerStyle: {
             backgroundColor: "#E07C4C",
+            borderBottomWidth: 0,
           },
           headerTitleStyle: { color: "white" },
         }}

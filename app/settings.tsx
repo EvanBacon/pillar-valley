@@ -34,9 +34,9 @@ function Item({
 }) {
   const renderItem = () => {
     if (typeof value !== "undefined") {
-      return <Text style={{ fontSize: 16 }}>{value}</Text>;
+      return <Text style={{ fontSize: 16, color: "white" }}>{value}</Text>;
     } else if (onPress) {
-      return <FontAwesome name="chevron-right" />;
+      return <FontAwesome color={"#fff"} name="chevron-right" />;
     }
   };
 
@@ -53,7 +53,9 @@ function Item({
           padding: 24,
         }}
       >
-        <Text style={{ fontWeight: "bold", fontSize: 16 }}>{title}</Text>
+        <Text style={{ fontWeight: "bold", color: "white", fontSize: 16 }}>
+          {title}
+        </Text>
         {renderItem()}
       </View>
     </TouchableOpacity>
@@ -261,7 +263,7 @@ function PreferencesScreen({ score, rounds, currency, bestRounds }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ecf0f1",
+    backgroundColor: "#282A37",
   },
 });
 

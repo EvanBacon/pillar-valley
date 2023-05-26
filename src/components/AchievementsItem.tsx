@@ -24,7 +24,7 @@ export default class Item extends React.Component {
       <MaterialIcons
         style={style}
         size={24}
-        color="gray"
+        color="#D8DADE"
         name="hourglass-empty"
       />
     );
@@ -34,19 +34,11 @@ export default class Item extends React.Component {
     return this.props.isSecret ? "Secret Achievement" : this.props.description;
   }
   render() {
-    const {
-      name,
-      points,
-      isSecret,
-      image,
-      index,
-      onPress,
-      style,
-      ...props
-    } = this.props;
+    const { name, points, isSecret, image, index, onPress, style, ...props } =
+      this.props;
     return (
       <TouchableHighlight
-        underlayColor="#eeeeee"
+        underlayColor="#191A23"
         {...props}
         onPress={this.onPress}
         style={[styles.touchable, style]}
@@ -58,7 +50,7 @@ export default class Item extends React.Component {
               avatarStyle={{ marginRight: 16 }}
               name={name}
               avatar={image}
-              color={!this.props.complete && "gray"}
+              color={!this.props.complete && "#919497"}
             />
             <View style={{ justifyContent: "center" }}>
               <Text style={styles.text}>{name}</Text>
@@ -91,7 +83,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
-  text: { fontWeight: "bold" },
+  text: { fontWeight: "bold", color: "#fff" },
   subtitle: {
     opacity: 0.7,
   },

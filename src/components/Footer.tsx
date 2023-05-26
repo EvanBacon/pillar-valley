@@ -1,3 +1,4 @@
+import { useRouter } from "expo-router";
 import React from "react";
 import { Platform, StyleSheet, View } from "react-native";
 import * as Animatable from "react-native-animatable";
@@ -8,17 +9,11 @@ import { rewardAdUnitId } from "../constants/Ads";
 import Settings from "../constants/Settings";
 import GameStates from "../Game/GameStates";
 import ChallengesButton from "./Button/Challenges";
-import Icon from "./Button/Icon";
 import LeaderboardButton from "./Button/Leaderboard";
-import LicensesButton from "./Button/LicensesButton";
+import PreferencesButton from "./Button/PreferencesButton";
 import PWAButton, { usePWAInstallable } from "./Button/PWAButton";
 import ShareButton from "./Button/Share";
 import SoundButton from "./Button/Sound";
-import PreferencesButton from "./Button/PreferencesButton";
-import SwapPlatformButton, {
-  getOtherPlatform,
-} from "./Button/SwapPlatformButton";
-import { useRouter } from "expo-router";
 
 const delay = 100;
 const initialDelay = 100;

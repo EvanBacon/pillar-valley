@@ -12,17 +12,13 @@ export default function Header({
 }: any) {
   return (
     <TouchableHighlight
-      underlayColor="#eeeeee"
+      underlayColor="#191A23"
       {...props}
-      onPress={() => {
-        onPress(item, index);
-      }}
+      onPress={() => onPress(item, index)}
       style={[styles.touchable, style]}
     >
       <View style={styles.container}>
-        <View>
-          <Text style={styles.text}>{title}</Text>
-        </View>
+        <Text style={styles.text}>{title}</Text>
         <Text style={styles.link}>{buttonTitle}</Text>
       </View>
     </TouchableHighlight>
@@ -30,7 +26,7 @@ export default function Header({
 }
 
 const styles = StyleSheet.create({
-  touchable: {},
+  touchable: { flex: 1 },
   container: {
     flex: 1,
     paddingTop: 6,
@@ -43,10 +39,10 @@ const styles = StyleSheet.create({
     borderBottomColor: "rgba(0,0,0,0.3)",
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
-  text: { fontSize: 16, fontWeight: "bold", opacity: 0.7 },
+  text: { fontSize: 16, fontWeight: "bold", color: "#fff", opacity: 0.7 },
   link: {
     fontSize: 16,
-    color: "black",
+    color: "#fff",
     fontWeight: "bold",
   },
 });
