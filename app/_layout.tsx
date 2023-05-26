@@ -11,7 +11,7 @@ import Fire from "@/src/ExpoParty/Fire";
 import Gate from "@/src/rematch/Gate";
 // import { setTestDeviceIDAsync } from "expo-ads-admob";
 import * as Device from "expo-device";
-import TouchableBounce from "@/src/components/TouchableBounce.native";
+import TouchableBounce from "@/src/components/TouchableBounce";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 export const unstable_settings = {
@@ -47,17 +47,26 @@ export default function Layout() {
             <Stack.Screen
               name="challenges"
               options={{
+                title: "Challenges",
                 headerRight: BackButton,
                 presentation: "modal",
               }}
             />
             <Stack.Screen
               name="credit"
-              options={{ headerRight: BackButton, presentation: "modal" }}
+              options={{
+                title: "Licenses",
+                headerRight: BackButton,
+                presentation: "modal",
+              }}
             />
             <Stack.Screen
               name="settings"
-              options={{ headerRight: BackButton, presentation: "modal" }}
+              options={{
+                title: "Settings",
+                headerRight: BackButton,
+                presentation: "modal",
+              }}
             />
           </Stack>
         </ActionSheetProvider>
@@ -68,6 +77,9 @@ export default function Layout() {
 
 function BackButton() {
   const router = useRouter();
+  if (Platform.OS === "web") {
+    return null;
+  }
   return (
     <TouchableBounce name="close" onPress={() => router.back()}>
       <FontAwesome size={24} color={"white"} name={"angle-down"} />

@@ -62,7 +62,7 @@
     },
     "web": {
       "bundler": "metro",
-      "output": "static",
+      "output": "single",
       "favicon": "./icons/expo.png",
       "config": {
         "firebase": {

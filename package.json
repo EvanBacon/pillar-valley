@@ -67,5 +67,13 @@
     "npm-license-crawler": "^0.2.1",
     "typescript": "~4.3.5"
   },
+  "resolutions": {
+    "metro": "~0.76.4",
+    "metro-config": "~0.76.4",
+    "metro-file-map": "~0.76.4",
+    "metro-resolver": "~0.76.4",
+    "metro-runtime": "~0.76.4",
+    "metro-transform-worker": "~0.76.4"
+  },
   "version": "1.0.0"
 }

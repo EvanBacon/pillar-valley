@@ -36,8 +36,8 @@ function Footer({ game, screenshot }) {
   const router = useRouter();
   const navigation = useNavigation();
   const onChallengesPress = () => {
-    navigation.navigate("challenges");
-    // router.push("/challenges");
+    // navigation.navigate("challenges");
+    router.push("/challenges");
   };
   const onPreferencesPress = () => {
     router.push("/settings");
@@ -77,11 +77,7 @@ function Footer({ game, screenshot }) {
     // views.push(<AdButton />);
     adMargin += 48;
   }
-  views.push(
-    <Link href="/settings" asChild>
-      <PreferencesButton />
-    </Link>
-  );
+  views.push(<PreferencesButton onPress={onPreferencesPress} />);
 
   return (
     <View style={[styles.container, { marginBottom: bottom + adMargin }]}>
