@@ -1,10 +1,10 @@
-import { connectActionSheet } from "@expo/react-native-action-sheet";
-import React from "react";
-import { StyleSheet, View } from "react-native";
-
 import AchievementsItem from "@/src/components/AchievementsItem";
 import List from "@/src/components/List";
 import Challenges from "@/src/constants/Achievements";
+import { connectActionSheet } from "@expo/react-native-action-sheet";
+import React from "react";
+import { StyleSheet, View } from "react-native";
+import { connect } from "react-redux";
 
 const challengesListData = Object.keys(Challenges).map((key) => ({
   key,
@@ -72,7 +72,6 @@ const styles = StyleSheet.create({
   },
 });
 
-import { connect } from "react-redux";
 const ConnectedScreen = connect(({ achievements }) => ({ achievements }))(
   AchievementScreen
 );

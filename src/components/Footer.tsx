@@ -18,7 +18,7 @@ import PreferencesButton from "./Button/PreferencesButton";
 import SwapPlatformButton, {
   getOtherPlatform,
 } from "./Button/SwapPlatformButton";
-import { Link, useNavigation, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 
 const delay = 100;
 const initialDelay = 100;
@@ -34,9 +34,7 @@ function Footer({ game, screenshot }) {
   const animation = game === GameStates.Menu ? "zoomIn" : "zoomOut";
 
   const router = useRouter();
-  const navigation = useNavigation();
   const onChallengesPress = () => {
-    // navigation.navigate("challenges");
     router.push("/challenges");
   };
   const onPreferencesPress = () => {
@@ -59,7 +57,6 @@ function Footer({ game, screenshot }) {
   const onLeaderboardPress = () => {
     if (Settings.isFirebaseEnabled) {
       router.push("/leaderboard");
-      // navigation.navigate("Social");
     } else {
       alert("Expo Online is disabled");
     }

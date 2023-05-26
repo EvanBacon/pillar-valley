@@ -4249,6 +4249,14 @@ expo-store-review@~6.3.0:
   resolved "https://registry.yarnpkg.com/expo-store-review/-/expo-store-review-6.3.0.tgz#a94e857f48cd4d83a2df480aee42a0d320d47944"
   integrity sha512-OcHTnWyZaehZaAUwdAtRxOmVvZm+ZEt5F8vI30JsXzqkbp48si4vt6H6h+i2d5Y8n8CwIoI8LprC/EwSeW5ROQ==
 
+expo-system-ui@~2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/expo-system-ui/-/expo-system-ui-2.3.0.tgz#229883182090cf3a9341ebaba27a3ed0a85516f7"
+  integrity sha512-Wt9a3RMRVVNS2OfAIj3nsMNWrAOBpBxIogz5CzO/PTWkONzKFkiZB/hVP/6H82n/fza5OmHRKJyos7jLbAjvCg==
+  dependencies:
+    "@react-native/normalize-color" "^2.0.0"
+    debug "^4.3.2"
+
 expo-three@^6.1.0:
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/expo-three/-/expo-three-6.2.0.tgz#35319161d4706ed6f4f4fc63cb75c9ef4406bb5f"

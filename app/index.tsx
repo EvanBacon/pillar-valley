@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     flex: 1,
+    backgroundColor: "#FFC266",
   },
   image: {
     ...StyleSheet.absoluteFillObject,

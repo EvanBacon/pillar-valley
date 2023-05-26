@@ -7,6 +7,7 @@
     "version": "6.1.0",
     "orientation": "portrait",
     "primaryColor": "#E07C4C",
+    "backgroundColor": "#F09458",
     "jsEngine": "hermes",
     "scheme": "plrvly",
     "icon": "./icons/expo.png",
@@ -31,9 +32,8 @@
         "projectId": "a1a81680-f84c-11e7-88a7-c74e9d068889"
       }
     },
-    "assetBundlePatterns": ["src/assets/**/*"],
+    "assetBundlePatterns": ["src/assets/**/*", "icons/splash.png"],
     "ios": {
-      "jsEngine": "jsc",
       "appStoreUrl": "https://itunes.apple.com/us/app/pillar-valley/id1336398804",
       "icon": "./icons/ios.png",
       "supportsTablet": true,
@@ -81,7 +81,8 @@
       [
         "expo-router",
         {
-          "origin": false
+          "origin": false,
+          "headOrigin": "https://pillarvalley.netlify.app"
         }
       ]
     ],
