@@ -1,11 +1,12 @@
 import { A } from "@expo/html-elements";
 import * as React from "react";
-import { FlatList, Platform, View } from "react-native";
+import { Platform, View } from "react-native";
 import * as Animatable from "react-native-animatable";
+import { FlatList } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import Settings from "@/src/constants/Settings";
 import LicensesListItem from "@/src/components/LicensesListItem";
+import Settings from "@/src/constants/Settings";
 
 const Data = require("@/src/constants/Licenses");
 

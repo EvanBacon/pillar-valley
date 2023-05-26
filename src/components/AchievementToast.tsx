@@ -1,28 +1,31 @@
-
-import React, { Component } from 'react';
-import { Animated, Dimensions, StyleSheet, Text, View } from 'react-native';
+import React, { Component } from "react";
+import { Animated, Dimensions, StyleSheet, Text, View } from "react-native";
 
 export const DURATION = {
   LENGTH_SHORT: 500,
   FOREVER: 0,
 };
 
-const { height, width } = Dimensions.get('window');
+const { height, width } = Dimensions.get("window");
 
 export default class Toast extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isShow: false,
-      text: '',
+      text: "",
       opacityValue: new Animated.Value(this.props.opacity),
     };
   }
 
   showAchievementToastWithOptions = ({
-    title, subtitle, duration, callback,
+    title,
+    subtitle,
+    duration,
+    callback,
   }) => {
-    this.duration = typeof duration === 'number' ? duration : DURATION.LENGTH_SHORT;
+    this.duration =
+      typeof duration === "number" ? duration : DURATION.LENGTH_SHORT;
     this.callback = callback;
     this.setState({
       isShow: true,
@@ -39,7 +42,7 @@ export default class Toast extends Component {
   };
 
   close(duration) {
-    let delay = typeof duration === 'undefined' ? this.duration : duration;
+    let delay = typeof duration === "undefined" ? this.duration : duration;
 
     if (delay === DURATION.FOREVER) delay = this.props.defaultCloseDelay || 250;
 
@@ -54,7 +57,7 @@ export default class Toast extends Component {
           isShow: false,
         });
         this.isShow = false;
-        if (typeof this.callback === 'function') {
+        if (typeof this.callback === "function") {
           this.callback();
         }
       });
@@ -68,13 +71,13 @@ export default class Toast extends Component {
   get toast() {
     let pos;
     switch (this.props.position) {
-      case 'top':
+      case "top":
         pos = this.props.positionValue;
         break;
-      case 'center':
+      case "center":
         pos = height / 2;
         break;
-      case 'bottom':
+      case "bottom":
         pos = height - this.props.positionValue;
         break;
     }
@@ -85,8 +88,17 @@ export default class Toast extends Component {
     });
 
     const view = this.state.isShow ? (
-      <Animated.View style={[styles.container, { top: positionValue }]} pointerEvents="none">
-        <Animated.View style={[styles.content, { opacity: this.state.opacityValue }, this.props.style]}>
+      <Animated.View
+        style={[styles.container, { top: positionValue }]}
+        pointerEvents="none"
+      >
+        <Animated.View
+          style={[
+            styles.content,
+            { opacity: this.state.opacityValue },
+            this.props.style,
+          ]}
+        >
           {React.isValidElement(this.state.text) ? (
             this.state.text
           ) : (
@@ -110,25 +122,25 @@ export default class Toast extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
+    position: "absolute",
     left: 0,
     right: 0,
     elevation: 999,
-    alignItems: 'center',
+    alignItems: "center",
     zIndex: 10000,
   },
   content: {
-    backgroundColor: 'green',
+    backgroundColor: "green",
     borderRadius: 100,
     padding: 10,
   },
   text: {
-    color: 'white',
+    color: "white",
   },
 });
 
 Toast.defaultProps = {
-  position: 'top',
+  position: "top",
   textStyle: styles.text,
   positionValue: 24,
   fadeInDuration: 500,

@@ -1,8 +1,9 @@
 // import { dispatch } from "../rematch/store";
 import Constants from "expo-constants";
+import firebase from "firebase/app";
+
 import Settings from "../constants/Settings";
 
-import firebase from "firebase/app";
 // Required for side-effects
 import "firebase/firestore";
 

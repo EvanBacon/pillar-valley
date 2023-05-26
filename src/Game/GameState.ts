@@ -1,8 +1,8 @@
 import { Renderer } from "expo-three";
 import { GestureResponderEvent } from "react-native";
 
-import { GLEvent, ResizeEvent } from "../components/GraphicsView";
 import Game from "./Game";
+import { GLEvent, ResizeEvent } from "../components/GraphicsView";
 
 export default class GameState {
   game: Game | null = null;

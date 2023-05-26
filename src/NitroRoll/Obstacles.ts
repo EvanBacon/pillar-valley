@@ -1,7 +1,7 @@
+import Obstacle from "./Obstacle";
+import Settings from "./Settings";
 import GameObject from "../Game/GameObject";
 import randomRange from "../Game/utils/randomRange";
-import Settings from "./Settings";
-import Obstacle from "./Obstacle";
 
 class Obstacles extends GameObject {
   killed: Obstacle[] = [];
@@ -35,7 +35,7 @@ class Obstacles extends GameObject {
 
   recycle = async (index: number) => {
     this.index = index;
-    let obstacle = this.objects[0] as Obstacle;
+    const obstacle = this.objects[0] as Obstacle;
     /// Remove
     console.log("obstacles: add", obstacle.index, index);
 
@@ -81,7 +81,7 @@ class Obstacles extends GameObject {
   update(delta: number, time: number) {
     super.update(delta, time);
     const index = this.index; // + Settings.initialCube;
-    for (let object of this.objects) {
+    for (const object of this.objects) {
       if (index === object.index) {
         if (object.collidable) {
           if (this.onCollide) {

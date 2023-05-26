@@ -1,6 +1,6 @@
-import * as StoreReview from "expo-store-review";
-import * as Analytics from "expo-firebase-analytics";
 import Constants from "expo-constants";
+import * as Analytics from "expo-firebase-analytics";
+import * as StoreReview from "expo-store-review";
 import { Alert, Linking } from "react-native";
 
 const { name } = Constants.manifest;

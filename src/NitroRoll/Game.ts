@@ -1,19 +1,18 @@
 import * as Analytics from "expo-firebase-analytics";
-
+import { Expo as ExpoEase, Linear, TweenLite } from "gsap";
 import * as THREE from "three";
 import { DirectionalLight, HemisphereLight } from "three";
-import Settings from "./Settings";
-import { dispatch } from "../rematch/store";
-import GameObject from "../Game/GameObject";
-import Level from "./Level";
-import Cuboid from "./Cuboid";
 
-import randomRange from "../Game/utils/randomRange";
+import Cuboid from "./Cuboid";
 import GameScene from "./GameScene";
-import GameStates from "../Game/GameStates";
+import Level from "./Level";
+import Settings from "./Settings";
 import Stars from "./Stars";
-import { Expo as ExpoEase, Linear, TweenLite } from "gsap";
 import AudioManager from "../AudioManager";
+import GameObject from "../Game/GameObject";
+import GameStates from "../Game/GameStates";
+import randomRange from "../Game/utils/randomRange";
+import { dispatch } from "../rematch/store";
 
 class Game extends GameObject {
   state = GameStates.Playing;

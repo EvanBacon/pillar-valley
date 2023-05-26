@@ -1,5 +1,4 @@
 import { TweenMax } from "gsap";
-
 import {
   Color,
   Mesh,
@@ -7,11 +6,12 @@ import {
   Material,
   MeshPhongMaterial,
 } from "three";
-import GameObject from "../GameObject";
-import randomRange from "../utils/randomRange";
+
+import DoubleGem from "./DoubleGem";
 import Gem from "./Gem";
 import Settings from "../../constants/Settings";
-import DoubleGem from "./DoubleGem";
+import GameObject from "../GameObject";
+import randomRange from "../utils/randomRange";
 
 const radius = 33.3333333 / 2;
 
@@ -209,7 +209,7 @@ class Platform extends GameObject {
 
   private _animateColorTo = (saturation: number) => {
     TweenMax.to(this, 0.5, {
-      saturation: saturation,
+      saturation,
       onUpdate: () => {
         if (this.platformMaterial) this.platformMaterial.color = this.color;
       },

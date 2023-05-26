@@ -60,7 +60,7 @@ function PWAButton({ onInstall, ...props }) {
   }, []);
 
   // TODO(Bacon): Maybe a better icon
-  return <Icon {...props} onPress={onPress} name={"download"} />;
+  return <Icon {...props} onPress={onPress} name="download" />;
 }
 
 export default PWAButton;

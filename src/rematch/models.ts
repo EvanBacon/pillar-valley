@@ -1,17 +1,19 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Constants from "expo-constants";
+import * as Analytics from "expo-firebase-analytics";
+import * as StoreReview from "expo-store-review";
 import firebase from "firebase/app";
 import { Alert, Dimensions } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import Settings from "../constants/Settings";
 import Fire from "../ExpoParty/Fire";
 import GameStates from "../Game/GameStates";
-import Constants from "expo-constants";
+import Challenges from "../constants/Achievements";
+import Settings from "../constants/Settings";
+
 // import { captureRef } from "react-native-view-shot";
 
 import getDeviceInfo from "../utils/getUserInfo";
-import * as Analytics from "expo-firebase-analytics";
-import Challenges from "../constants/Achievements";
-import * as StoreReview from "expo-store-review";
+import { promptToReviewAsync } from "../utils/promptStoreReview";
 
 export const skins = {
   state: {},
@@ -72,8 +74,6 @@ export const achievements = {
     },
   },
 };
-
-import { promptToReviewAsync } from "../utils/promptStoreReview";
 
 // A cached value that represents the amount of times a user has beaten their best score.
 // Logic for store review:
@@ -831,7 +831,6 @@ export const user = {
         user: combinedUserData,
       });
       // THIS IS DEV ONLY
-      return;
     },
     mergeDataWithFirebase: async (props) => {
       const doc = await firebase

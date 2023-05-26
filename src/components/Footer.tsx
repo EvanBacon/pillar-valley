@@ -5,15 +5,15 @@ import * as Animatable from "react-native-animatable";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { connect } from "react-redux";
 
-import { rewardAdUnitId } from "../constants/Ads";
-import Settings from "../constants/Settings";
-import GameStates from "../Game/GameStates";
 import ChallengesButton from "./Button/Challenges";
 import LeaderboardButton from "./Button/Leaderboard";
-import PreferencesButton from "./Button/PreferencesButton";
 import PWAButton, { usePWAInstallable } from "./Button/PWAButton";
+import PreferencesButton from "./Button/PreferencesButton";
 import ShareButton from "./Button/Share";
 import SoundButton from "./Button/Sound";
+import GameStates from "../Game/GameStates";
+import { rewardAdUnitId } from "../constants/Ads";
+import Settings from "../constants/Settings";
 
 const delay = 100;
 const initialDelay = 100;

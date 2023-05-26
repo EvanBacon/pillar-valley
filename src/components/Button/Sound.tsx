@@ -1,8 +1,8 @@
-import { dispatch } from "../../rematch/store";
 import * as React from "react";
 import { connect } from "react-redux";
 
 import Icon from "./Icon";
+import { dispatch } from "../../rematch/store";
 
 function SoundButton({ muted }) {
   const onPress = React.useMemo(

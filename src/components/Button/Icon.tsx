@@ -6,7 +6,7 @@ import AudioManager from "../../AudioManager";
 import TouchableBounce from "../TouchableBounce";
 
 export default function Icon({
-  onPress = () => { },
+  onPress = () => {},
   size = 24,
   color = "#fff",
   name,

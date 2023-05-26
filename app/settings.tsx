@@ -1,4 +1,8 @@
 import { connectActionSheet } from "@expo/react-native-action-sheet";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import Constants from "expo-constants";
+import { useRouter } from "expo-router";
+import * as StoreReview from "expo-store-review";
 import React from "react";
 import {
   SectionList,
@@ -10,18 +14,15 @@ import {
   TouchableOpacity,
   Linking,
 } from "react-native";
-import { connect } from "react-redux";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import Constants from "expo-constants";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import * as StoreReview from "expo-store-review";
-import useStoreReview from "@/src/hooks/useStoreReview";
+import { connect } from "react-redux";
+
 import {
   openOtherPlatform,
   getOtherPlatform,
 } from "@/src/components/Button/SwapPlatformButton";
+import useStoreReview from "@/src/hooks/useStoreReview";
 import { dispatch } from "@/src/rematch/store";
-import { useRouter } from "expo-router";
 
 function Item({
   title,
@@ -36,7 +37,7 @@ function Item({
     if (typeof value !== "undefined") {
       return <Text style={{ fontSize: 16, color: "white" }}>{value}</Text>;
     } else if (onPress) {
-      return <FontAwesome color={"#fff"} name="chevron-right" />;
+      return <FontAwesome color="#fff" name="chevron-right" />;
     }
   };
 

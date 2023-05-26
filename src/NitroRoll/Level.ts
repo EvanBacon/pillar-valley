@@ -1,8 +1,8 @@
-import GameObject from "../Game/GameObject";
 import Obstacles from "./Obstacles";
-import Terrain from "./Terrain";
 import Settings from "./Settings";
+import Terrain from "./Terrain";
 import easeInQuad from "./easeInQuad";
+import GameObject from "../Game/GameObject";
 
 class Level extends GameObject {
   terrain: Terrain | null = null;

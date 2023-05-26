@@ -1,11 +1,12 @@
 import React from "react";
-import { FlatList, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
+import { FlatList } from "react-native-gesture-handler";
 
 import Footer from "./Footer";
+import Header from "./Header";
 import Item from "./Item";
 import Separator from "./Separator";
 import UserCell from "./UserCell";
-import Header from "./Header";
 
 class List extends React.Component {
   get userItem() {

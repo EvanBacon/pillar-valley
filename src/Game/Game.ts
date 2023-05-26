@@ -3,15 +3,16 @@ import * as Haptics from "expo-haptics";
 import { Platform } from "react-native";
 import * as THREE from "three";
 import { DirectionalLight, HemisphereLight } from "three";
-import Settings from "../constants/Settings";
-import { dispatch } from "../rematch/store";
+
 import GameObject from "./GameObject";
-import PlatformObject from "./entities/Platform";
-import PlayerBall from "./entities/PlayerBall";
-import randomRange from "./utils/randomRange";
 import GameScene from "./GameScene";
 import GameStates from "./GameStates";
 import MenuObject from "./MenuObject";
+import PlatformObject from "./entities/Platform";
+import PlayerBall from "./entities/PlayerBall";
+import randomRange from "./utils/randomRange";
+import Settings from "../constants/Settings";
+import { dispatch } from "../rematch/store";
 
 function distance(
   p1: { x: number; z: number },
@@ -284,9 +285,8 @@ class PillarGroupObject extends GameObject {
     // Go in reverse order to ensure the player gets optimal skipping
     for (let index = this.pillars.length - 1; index > 0; index--) {
       const targetPlatform = this.pillars[index];
-      const distanceFromTarget = playerObject.getActiveItemsDistanceFromObject(
-        targetPlatform
-      );
+      const distanceFromTarget =
+        playerObject.getActiveItemsDistanceFromObject(targetPlatform);
 
       if (distanceFromTarget < targetPlatform.radius)
         return [index, distanceFromTarget];
@@ -628,11 +628,11 @@ class Game extends GameObject {
           (gem) => gem.canBeCollected && gem.driftAngle !== undefined
         );
         if (collideGems.length) {
-          let _ballPosition = getAbsolutePosition(
+          const _ballPosition = getAbsolutePosition(
             this.playerObject.getActiveItem()
           );
           for (const gem of collideGems) {
-            let position = getAbsolutePosition(gem);
+            const position = getAbsolutePosition(gem);
             const angleDist = distance(_ballPosition, position);
             if (angleDist < 15) {
               gem.pickup();

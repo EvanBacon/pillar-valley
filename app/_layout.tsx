@@ -1,17 +1,18 @@
-import AudioManager from "@/src/AudioManager";
-import TouchableBounce from "@/src/components/TouchableBounce";
-import Fire from "@/src/ExpoParty/Fire";
-import Gate from "@/src/rematch/Gate";
 import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import * as Device from "expo-device";
 import * as Analytics from "expo-firebase-analytics";
 import * as Font from "expo-font";
 import { SplashScreen, Stack, usePathname, useRouter } from "expo-router";
-import { useEffect } from "react";
-import React from "react";
-import { Animated, Platform, StatusBar, StyleSheet } from "react-native";
 import Head from "expo-router/head";
+import { StatusBar } from "expo-status-bar";
+import React, { useEffect } from "react";
+import { Animated, Platform, StyleSheet } from "react-native";
+
+import AudioManager from "@/src/AudioManager";
+import Fire from "@/src/ExpoParty/Fire";
+import TouchableBounce from "@/src/components/TouchableBounce";
+import Gate from "@/src/rematch/Gate";
 
 // import { setTestDeviceIDAsync } from "expo-ads-admob";
 export const unstable_settings = {
@@ -122,7 +123,7 @@ function BackButton() {
   }
   return (
     <TouchableBounce onPress={() => router.back()}>
-      <FontAwesome size={24} color={"white"} name={"angle-down"} />
+      <FontAwesome size={24} color="white" name="angle-down" />
     </TouchableBounce>
   );
 }
@@ -134,7 +135,7 @@ function useLoadAssets() {
     Fire.init();
     (async () => {
       // console.time("Setup");
-      let time = getNow();
+      const time = getNow();
       try {
         await Promise.all([
           Font.loadAsync({

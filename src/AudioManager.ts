@@ -1,6 +1,7 @@
-import { store } from "./rematch/store";
 import { Audio } from "expo-av";
 import { Platform } from "react-native";
+
+import { store } from "./rematch/store";
 
 const audio = {
   // Common

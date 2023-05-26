@@ -1,12 +1,10 @@
-import React from "react";
-
 import {
   Text as UpstreamText,
   StyleSheet,
   TextProps,
 } from "@bacons/react-views";
-
 import * as Font from "expo-font";
+import React from "react";
 
 // const fontFamily = useFont('Inter_900Black');
 // undefined | 'Inter_900Black' depending on loaded or not.

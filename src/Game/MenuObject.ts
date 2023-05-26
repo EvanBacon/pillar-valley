@@ -1,11 +1,13 @@
+import { Asset } from "expo-asset";
+import * as FileSystem from "expo-file-system";
 import { loadTextureAsync } from "expo-three";
 import { Back, Expo as ExpoEase, TweenMax } from "gsap";
+import { Platform } from "react-native";
 import * as THREE from "three";
-import * as FileSystem from "expo-file-system";
+
 import GameObject from "./GameObject";
 import MotionObserver from "./MotionObserver";
-import { Asset } from "expo-asset";
-import { Platform } from "react-native";
+
 // bundled asset uri's become `asset://...` in production build, but expo-gl
 // cannot handle them, https://github.com/expo/expo/issues/2693
 // this workaround copies them to a known path files so we can use a regular

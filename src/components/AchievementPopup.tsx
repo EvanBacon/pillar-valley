@@ -1,3 +1,4 @@
+import { useRouter } from "expo-router";
 import React from "react";
 import {
   Animated,
@@ -8,11 +9,11 @@ import {
   View,
   Platform,
 } from "react-native";
-import { connect } from "react-redux";
-import { dispatch } from "../rematch/store";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { connect } from "react-redux";
+
 import AudioManager from "../AudioManager";
-import { useRouter } from "expo-router";
+import { dispatch } from "../rematch/store";
 
 const Colors = {
   darkerGreen: "#000A69",
@@ -44,7 +45,7 @@ class AnimatedCircle extends React.Component {
 
   getAnimation = (props = {}) => {
     const { reverse } = props;
-    let multiplier = reverse ? -1 : 1;
+    const multiplier = reverse ? -1 : 1;
     const {
       delay,
       toValue,
@@ -61,8 +62,8 @@ class AnimatedCircle extends React.Component {
       toValue,
       speed,
       bounciness,
-      tension: tension,
-      friction: friction,
+      tension,
+      friction,
       useNativeDriver: containerAnimation ? false : useNativeDriver,
       ...props,
     });
@@ -153,7 +154,7 @@ class BouncingCircle extends React.Component {
 
   getReverseAnimation = () => {
     const animations = this.circles.map((circle, index) => {
-      let inverseIndex = this.circles.length - index;
+      const inverseIndex = this.circles.length - index;
       let delay = 100 * index;
       if (index === this.circles.length - 1) {
         delay = 0;
@@ -364,7 +365,7 @@ class Popup extends React.Component {
   };
 
   circleConfig = (index) => {
-    let config = {
+    const config = {
       delay: 120 * index,
       friction: 3 + index * 5,
       tension: 2 + index * 2,
@@ -432,18 +433,16 @@ class Popup extends React.Component {
       >
         <Animated.View style={this.animatedContainerStyle}>
           <View
-            style={[
-              {
-                position: "absolute",
-                top: 0,
-                bottom: 0,
-                right: 0,
-                left: circleSize,
-                borderTopRightRadius: circleSize / 2,
-                borderBottomRightRadius: circleSize / 2,
-                overflow: "hidden",
-              },
-            ]}
+            style={{
+              position: "absolute",
+              top: 0,
+              bottom: 0,
+              right: 0,
+              left: circleSize,
+              borderTopRightRadius: circleSize / 2,
+              borderBottomRightRadius: circleSize / 2,
+              overflow: "hidden",
+            }}
           >
             <FirstText
               renderUpperContents={() => (

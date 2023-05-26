@@ -1,8 +1,8 @@
 import { BoxBufferGeometry, MeshLambertMaterial, Mesh, Group } from "three";
 
 import Settings from "./Settings";
-import GameObject from "../Game/GameObject";
 import easeInQuad from "./easeInQuad";
+import GameObject from "../Game/GameObject";
 
 const radius = Settings.cubeSize;
 const cuboidGeom = new BoxBufferGeometry(radius, radius, radius);

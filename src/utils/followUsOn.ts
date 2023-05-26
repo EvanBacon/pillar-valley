@@ -1,24 +1,27 @@
-import { AppState, Linking } from 'react-native';
+import { AppState, Linking } from "react-native";
 
 function followUsOn(urls, minimumElapsedSeconds = 5) {
   return new Promise(async (res, rej) => {
     const handleAppStateChange = async (nextAppState) => {
-      if (nextAppState === 'active') {
-        console.log('App has come to the foreground!'); // eslint-disable-line no-console
+      if (nextAppState === "active") {
+        console.log("App has come to the foreground!"); // eslint-disable-line no-console
 
         /*
         The user has returned from twitter
       */
-        AppState.removeEventListener('change', handleAppStateChange);
+        AppState.removeEventListener("change", handleAppStateChange);
 
-        const elapsedSeconds = Math.abs(this.timestamp.getTime(), new Date().getTime()) / 1000;
+        const elapsedSeconds =
+          Math.abs(this.timestamp.getTime(), new Date().getTime()) / 1000;
         if (elapsedSeconds > minimumElapsedSeconds) {
           res(true);
         } else {
-          rej(`User returned in under ${minimumElapsedSeconds} seconds, trust no one`);
+          rej(
+            `User returned in under ${minimumElapsedSeconds} seconds, trust no one`
+          );
         }
-      } else if (nextAppState === 'inactive') {
-        console.log('App has left foreground :/'); // eslint-disable-line no-console
+      } else if (nextAppState === "inactive") {
+        console.log("App has left foreground :/"); // eslint-disable-line no-console
         /*
         Once the app redirects we start the clock!
         The user must be outside the app for minimumElapsedSeconds (5) after invoking this function.
@@ -32,7 +35,7 @@ function followUsOn(urls, minimumElapsedSeconds = 5) {
       const canOpen = await Linking.canOpenURL(url);
       if (canOpen) {
         didAnyWork = true;
-        AppState.addEventListener('change', handleAppStateChange);
+        AppState.addEventListener("change", handleAppStateChange);
         Linking.openURL(url);
         break;
       } else {

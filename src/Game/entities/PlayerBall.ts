@@ -1,11 +1,10 @@
+import { Power2 as Cubic, TweenMax } from "gsap";
 import { Mesh, CylinderBufferGeometry, MeshPhongMaterial } from "three";
 
-import { Power2 as Cubic, TweenMax } from "gsap";
-
 import Colors from "../../constants/Colors";
+import Settings from "../../constants/Settings";
 import Circle from "../Circle";
 import GameObject from "../GameObject";
-import Settings from "../../constants/Settings";
 
 const radius = 26.6666667 / 2;
 const PlayerBallGeom = new CylinderBufferGeometry(radius, radius, 9, 24);

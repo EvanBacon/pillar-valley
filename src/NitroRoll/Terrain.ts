@@ -1,6 +1,6 @@
-import GameObject from "../Game/GameObject";
 import Platform from "./Platform";
 import Settings from "./Settings";
+import GameObject from "../Game/GameObject";
 
 const endOffset = Settings.cubesWide * Settings.cubeSize;
 

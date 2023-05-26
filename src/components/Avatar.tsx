@@ -1,3 +1,4 @@
+import { TextProps } from "@expo/html-elements/build/primitives/Text";
 import React from "react";
 import {
   Image,
@@ -7,7 +8,6 @@ import {
   View,
   ImageProps,
 } from "react-native";
-import { TextProps } from "@expo/html-elements/build/primitives/Text";
 
 // https://github.com/FaridSafi/react-native-gifted-chat/blob/master/src/GiftedAvatar.js
 const Color = {

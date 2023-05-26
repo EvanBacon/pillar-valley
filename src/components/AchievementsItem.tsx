@@ -1,5 +1,4 @@
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-
 import React from "react";
 import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
 
@@ -60,11 +59,7 @@ export default class Item extends React.Component {
             </View>
           </View>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
-            {points && (
-              <ScoreBadge style={{}} color="white">
-                {points}
-              </ScoreBadge>
-            )}
+            {points && <ScoreBadge color="white">{points}</ScoreBadge>}
 
             {this.icon}
           </View>

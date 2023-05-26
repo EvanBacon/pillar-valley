@@ -1,3 +1,4 @@
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 import * as React from "react";
 import {
   Image,
@@ -7,7 +8,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 // import { A } from '@expo/html-elements';
 

@@ -1,9 +1,8 @@
+import * as Linking from "expo-linking";
+import { Platform } from "expo-modules-core";
 import * as React from "react";
 
 import Icon from "./Icon";
-
-import { Platform } from "expo-modules-core";
-import * as Linking from "expo-linking";
 
 function isAndroidWeb() {
   if (Platform.OS !== "web") return false;
@@ -14,7 +13,9 @@ function isAndroidWeb() {
 function isAppleMobileWeb() {
   if (Platform.OS !== "web") return false;
   // iOS detection from: http://stackoverflow.com/a/9039885/177710
-  return /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
+  return (
+    /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream
+  );
 }
 
 // https://stackoverflow.com/a/27862868

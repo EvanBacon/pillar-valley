@@ -1,9 +1,10 @@
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { BlurView } from "expo-blur";
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
 import * as Animatable from "react-native-animatable";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+
 import { useFont } from "../hooks/useFont";
 
 export default function Paused() {
@@ -25,7 +26,7 @@ export default function Paused() {
           style={{
             fontFamily: gothamNarrowBook,
             textAlign: "center",
-            color: color,
+            color,
             fontSize: 48,
           }}
         >
@@ -37,7 +38,7 @@ export default function Paused() {
           style={{
             fontFamily: gothamNarrowBook,
             textAlign: "center",
-            color: color,
+            color,
             fontSize: 18,
           }}
         >
@@ -49,7 +50,7 @@ export default function Paused() {
         delay={1500}
         style={{
           fontFamily: gothamNarrowBook,
-          color: color,
+          color,
           fontSize: 18,
           textAlign: "center",
           paddingHorizontal: left,
