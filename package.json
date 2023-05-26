@@ -29,6 +29,7 @@
     "@react-navigation/stack": "^6.0.11",
     "@rematch/core": "^1.4.0",
     "@rematch/persist": "^1.1.6",
+    "eslint-plugin-bacon": "^0.0.0",
     "expo": "~49.0.0-alpha.1",
     "expo-av": "~13.3.0",
     "expo-blur": "~12.3.1",
@@ -67,10 +68,14 @@
     "@types/react-redux": "^7.1.9",
     "@types/three": "^0.143.1",
     "babel-eslint": "10.0.3",
+    "eslint": "^8.41.0",
+    "eslint-config-universe": "^11.2.0",
     "npm-license-crawler": "^0.2.1",
+    "prettier": "^2.8.8",
     "typescript": "~4.3.5"
   },
   "resolutions": {
+    "expo-updates-interface": "^0.9.3",
     "metro": "~0.76.4",
     "metro-config": "~0.76.4",
     "metro-file-map": "~0.76.4",

@@ -1,6 +1,7 @@
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 
+import GameState from "@/src/Game/GameState";
 import AchievementPopup from "@/src/components/AchievementPopup";
 import Footer from "@/src/components/Footer";
 import GraphicsView from "@/src/components/GraphicsView";
@@ -9,7 +10,6 @@ import ScoreMeta from "@/src/components/ScoreMeta";
 import Song from "@/src/components/Song";
 import TouchableView from "@/src/components/TouchableView";
 import Settings from "@/src/constants/Settings";
-import GameState from "@/src/Game/GameState";
 import useAppState from "@/src/hooks/useAppState";
 
 // import GameState from "../NitroRoll/GameState";
