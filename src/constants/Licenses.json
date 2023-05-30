@@ -35,15 +35,10 @@
         "licenseUrl": "https://github.com/react-navigation/react-navigation/raw/master/LICENSE",
         "parents": "pillar-valley"
     },
-    "@rematch/core@1.4.0": {
+    "eslint-plugin-bacon@0.0.3": {
         "licenses": "MIT",
-        "repository": "https://github.com/rematch/rematch",
-        "licenseUrl": "https://github.com/rematch/rematch/raw/master/LICENSE",
-        "parents": "pillar-valley"
-    },
-    "@rematch/persist@1.1.6": {
-        "licenses": "MIT",
-        "licenseUrl": "https://github.com/rematch/rematch/tree/master/plugins/persist#readme",
+        "repository": "https://github.com/expo/expo",
+        "licenseUrl": "https://github.com/expo/expo",
         "parents": "pillar-valley"
     },
     "expo-av@13.3.0": {
@@ -136,6 +131,12 @@
         "licenseUrl": "https://github.com/expo/expo-three/raw/master/LICENSE",
         "parents": "pillar-valley"
     },
+    "expo-updates@0.17.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/expo/expo",
+        "licenseUrl": "https://github.com/expo/expo",
+        "parents": "pillar-valley"
+    },
     "expo@49.0.0-alpha.3": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
@@ -202,28 +203,22 @@
         "licenseUrl": "github:facebook/react-native",
         "parents": "pillar-valley"
     },
-    "react-redux@7.2.9": {
-        "licenses": "MIT",
-        "repository": "github:reduxjs/react-redux",
-        "licenseUrl": "github:reduxjs/react-redux",
-        "parents": "pillar-valley"
-    },
     "react@18.2.0": {
         "licenses": "MIT",
         "repository": "https://github.com/facebook/react",
         "licenseUrl": "https://github.com/facebook/react/raw/master/LICENSE",
         "parents": "pillar-valley"
     },
-    "redux-persist@6.0.0": {
-        "licenses": "MIT",
-        "repository": "https://github.com/rt2zz/redux-persist",
-        "licenseUrl": "https://github.com/rt2zz/redux-persist/raw/master/LICENSE",
-        "parents": "pillar-valley"
-    },
     "three@0.134.0": {
         "licenses": "MIT",
         "repository": "https://github.com/mrdoob/three.js",
         "licenseUrl": "https://github.com/mrdoob/three.js/raw/master/LICENSE",
+        "parents": "pillar-valley"
+    },
+    "zustand@4.3.8": {
+        "licenses": "MIT",
+        "repository": "https://github.com/pmndrs/zustand",
+        "licenseUrl": "https://github.com/pmndrs/zustand/raw/master/LICENSE",
         "parents": "pillar-valley"
     }
 }

@@ -9,7 +9,10 @@ module.exports = {
   },
   rules: {
     "bacon/no-empty-styles": "error",
-    "bacon/modern-react-native": ["error", { preserve: ["Image"] }],
+    "bacon/modern-react-native": [
+      "error",
+      { preserve: ["Image", "StatusBar"] },
+    ],
     "bacon/no-vector-icon-barrel": "error",
     // "global-require": 0,
     // "no-console": 0,

@@ -1,3 +1,4 @@
+import { InstallBanner } from "@/src/components/InstallBanner";
 import { ScrollViewStyleReset } from "expo-router/html";
 import React from "react";
 
@@ -11,6 +12,7 @@ export default function Root({ children }: { children: React.ReactNode }) {
           name="viewport"
           content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1.00001,viewport-fit=cover"
         />
+        <InstallBanner id="1336398804" />
         <ScrollViewStyleReset />
       </head>
       <script

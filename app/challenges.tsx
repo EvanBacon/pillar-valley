@@ -1,16 +1,17 @@
 import { connectActionSheet } from "@expo/react-native-action-sheet";
 import React from "react";
-import { connect } from "react-redux";
 
 import AchievementsItem from "@/src/components/AchievementsItem";
 import List from "@/src/components/List";
 import Challenges from "@/src/constants/Achievements";
+import { useAchievements } from "@/src/rematch/models";
 
 const challengesListData = Object.keys(Challenges).map((key) => ({
   key,
   ...Challenges[key],
 }));
-function AchievementScreen({ showActionSheetWithOptions, achievements }) {
+function AchievementScreen({ showActionSheetWithOptions }) {
+  const { achievements } = useAchievements();
   const [filter, setFilter] = React.useState("All");
 
   const _onOpenActionSheet = () => {
@@ -63,8 +64,4 @@ function AchievementScreen({ showActionSheetWithOptions, achievements }) {
   );
 }
 
-const ConnectedScreen = connect(({ achievements }) => ({ achievements }))(
-  AchievementScreen
-);
-
-export default connectActionSheet(ConnectedScreen);
+export default connectActionSheet(AchievementScreen);

@@ -12,7 +12,12 @@ import PlatformObject from "./entities/Platform";
 import PlayerBall from "./entities/PlayerBall";
 import randomRange from "./utils/randomRange";
 import Settings from "../constants/Settings";
-import { dispatch } from "../rematch/store";
+import {
+  useCurrency,
+  useGameScreenshot,
+  useGameState,
+  useScore,
+} from "../rematch/models";
 
 function distance(
   p1: { x: number; z: number },
@@ -394,9 +399,9 @@ class Game extends GameObject {
 
     if (this.state === GameStates.Menu) {
       await this.loadMenu();
-      dispatch.game.menu();
+      useGameState.getState().menuGame();
     } else {
-      dispatch.game.play();
+      useGameState.getState().playGame();
       await this.loadGame();
     }
 
@@ -470,11 +475,12 @@ class Game extends GameObject {
 
     // maybe hide menu
     if (this.score <= 1) {
-      dispatch.game.play();
+      useGameState.getState().playGame();
     }
     // Score for every pillar traversed
     for (let i = pillarIndex; i > 0; i--) {
-      dispatch.score.increment();
+      // dispatch.score.increment();
+      useScore.getState().incrementScore();
       this.score += 1;
     }
 
@@ -524,8 +530,7 @@ class Game extends GameObject {
     }
     this.screenShotTaken = true;
 
-    // @ts-ignore
-    await dispatch.screenshot.updateAsync({
+    useGameScreenshot.getState().updateScreenshot({
       // @ts-ignore
       ref: global.gameRef,
       width: this._width,
@@ -536,12 +541,12 @@ class Game extends GameObject {
   gameOver = (animate = true) => {
     this.takeScreenshot();
     this.screenShotTaken = false;
-    dispatch.score.reset();
+    useScore.getState().resetScore();
     Analytics.logEvent("game_over", {
       score: this.score,
     });
     this.score = 0;
-    dispatch.game.menu();
+    useGameState.getState().menuGame();
 
     if (!this.playerObject)
       throw new Error("Player must be defined before invoking game over");
@@ -636,7 +641,8 @@ class Game extends GameObject {
             const angleDist = distance(_ballPosition, position);
             if (angleDist < 15) {
               gem.pickup();
-              dispatch.currency.change(gem.getValue());
+              useCurrency.getState().changeCurrency(gem.getValue());
+              // dispatch.currency.change(gem.getValue());
             }
           }
         }

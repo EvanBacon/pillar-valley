@@ -10,10 +10,9 @@ import {
   Platform,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { connect } from "react-redux";
 
 import AudioManager from "../AudioManager";
-import { dispatch } from "../rematch/store";
+import { usePresentAchievement } from "../rematch/models";
 
 const Colors = {
   darkerGreen: "#000A69",
@@ -359,7 +358,7 @@ class Popup extends React.Component {
       this.getReverseAnimation(),
       this.circle.getReverseAnimation(),
     ]).start(() => {
-      dispatch.presentAchievement.set(null);
+      this.props.setPresentAchievement(null);
     });
     // this.getAnimation().start();
   };
@@ -504,7 +503,8 @@ class Popup extends React.Component {
   }
 }
 
-function PopupContainer({ presentAchievement }) {
+function PopupContainer() {
+  const { presentAchievement, setPresentAchievement } = usePresentAchievement();
   const { top } = useSafeAreaInsets();
   const router = useRouter();
   return (
@@ -518,6 +518,7 @@ function PopupContainer({ presentAchievement }) {
       {presentAchievement && (
         <Popup
           router={router}
+          setPresentAchievement={setPresentAchievement}
           id={presentAchievement.id}
           name={presentAchievement.name}
           score={presentAchievement.score}
@@ -527,6 +528,4 @@ function PopupContainer({ presentAchievement }) {
   );
 }
 
-export default connect(({ presentAchievement }) => ({ presentAchievement }))(
-  PopupContainer
-);
+export default PopupContainer;

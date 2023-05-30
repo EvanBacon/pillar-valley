@@ -1,9 +1,9 @@
 import { useRouter } from "expo-router";
 import React from "react";
 import { Platform, StyleSheet, View } from "react-native";
+
 import * as Animatable from "react-native-animatable";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { connect } from "react-redux";
 
 import ChallengesButton from "./Button/Challenges";
 import LeaderboardButton from "./Button/Leaderboard";
@@ -14,13 +14,16 @@ import SoundButton from "./Button/Sound";
 import GameStates from "../Game/GameStates";
 import { rewardAdUnitId } from "../constants/Ads";
 import Settings from "../constants/Settings";
+import { useGameScreenshot, useGameState } from "../rematch/models";
 
 const delay = 100;
 const initialDelay = 100;
 const duration = 500;
 const easing = "ease-out";
 
-function Footer({ game, screenshot }) {
+function Footer() {
+  const { game } = useGameState();
+  const { screenshot } = useGameScreenshot();
   const { bottom } = useSafeAreaInsets();
   // Chrome devices can prompt the user to install the website as a PWA
   const canInstallPwa = usePWAInstallable();
@@ -109,6 +112,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(({ game, screenshot }) => ({ game, screenshot }))(
-  Footer
-);
+export default Footer;

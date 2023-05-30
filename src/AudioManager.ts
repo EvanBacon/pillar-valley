@@ -1,7 +1,6 @@
 import { Audio } from "expo-av";
 import { Platform } from "react-native";
-
-import { store } from "./rematch/store";
+import { useGlobalAudio } from "./rematch/models";
 
 const audio = {
   // Common
@@ -17,7 +16,7 @@ class AudioManager {
   sounds: Record<string, Audio.Sound> = {};
 
   playAsync = async (name: string, isLooping: boolean = false) => {
-    if (store.getState().muted || Platform.OS === "web") {
+    if (useGlobalAudio.getState().muted || Platform.OS === "web") {
       return;
     }
 

@@ -36,6 +36,9 @@ function canInstallPWA() {
   if (Platform.OS !== "web" || isPWA()) {
     return false;
   }
+  if (typeof window === "undefined") {
+    return false;
+  }
   return !!window.deferredPWAInstallPrompt;
 }
 

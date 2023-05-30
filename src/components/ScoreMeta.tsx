@@ -3,20 +3,25 @@ import React from "react";
 import { Platform, StyleSheet, Text, View } from "react-native";
 import * as Animatable from "react-native-animatable";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { connect } from "react-redux";
 
 import Settings from "../constants/Settings";
 import { useFont } from "../hooks/useFont";
+import { useCurrency, useScore } from "../rematch/models";
 
-function ScoreMeta({
-  current,
-  best,
-  currency,
-}: {
-  current: number;
-  best: number;
-  currency: number;
-}) {
+function ScoreMeta() {
+  // ({ score: { current, best }, currency: { current: currency } }) => ({
+  //   current,
+  //   best,
+  //   currency,
+  // })
+
+  const {
+    score: { current, best },
+  } = useScore();
+  const {
+    currency: { current: currency },
+  } = useCurrency();
+
   const { top } = useSafeAreaInsets();
   const gothamNarrowBook = useFont("GothamNarrow-Book");
   const fontStyle = { fontFamily: gothamNarrowBook };
@@ -52,13 +57,7 @@ function ScoreMeta({
   );
 }
 
-export default connect(
-  ({ score: { current, best }, currency: { current: currency } }) => ({
-    current,
-    best,
-    currency,
-  })
-)(ScoreMeta);
+export default ScoreMeta;
 
 const styles = StyleSheet.create({
   container: {

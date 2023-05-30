@@ -15,14 +15,18 @@ import {
   Linking,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { connect } from "react-redux";
 
 import {
   openOtherPlatform,
   getOtherPlatform,
 } from "@/src/components/Button/SwapPlatformButton";
 import useStoreReview from "@/src/hooks/useStoreReview";
-import { dispatch } from "@/src/rematch/store";
+import {
+  useAchievements,
+  useCurrency,
+  useRounds,
+  useScore,
+} from "@/src/rematch/models";
 
 function Item({
   title,
@@ -89,7 +93,15 @@ function areYouSureAsync(): Promise<boolean> {
   });
 }
 
-function PreferencesScreen({ score, rounds, currency, bestRounds }) {
+function PreferencesScreen() {
+  const { score, hardResetScore } = useScore();
+  const { rounds, bestRounds, resetBestRounds, resetRounds } = useRounds();
+  const { currency, resetCurrency } = useCurrency();
+  const achievements = useAchievements();
+  // score, rounds, bestRounds, currency
+  // score, rounds, bestRounds, currency
+  // score, rounds, bestRounds, currency
+
   const router = useRouter();
   const [taps, setTaps] = React.useState(0);
   const { bottom } = useSafeAreaInsets();
@@ -223,11 +235,11 @@ function PreferencesScreen({ score, rounds, currency, bestRounds }) {
           value: "This cannot be undone",
           onPress: async () => {
             if (await areYouSureAsync()) {
-              dispatch.score._hardReset();
-              dispatch.storeReview._reset();
-              dispatch.rounds._reset();
-              dispatch.bestRounds._reset();
-              dispatch.currency._reset();
+              hardResetScore();
+
+              resetBestRounds();
+              resetRounds();
+              resetCurrency();
             }
           },
         },
@@ -236,7 +248,8 @@ function PreferencesScreen({ score, rounds, currency, bestRounds }) {
           value: "This cannot be undone",
           onPress: async () => {
             if (await areYouSureAsync()) {
-              dispatch.achievements._reset();
+              achievements.resetAchievements();
+              // dispatch.achievements._reset();
             }
           },
         },
@@ -268,11 +281,4 @@ const styles = StyleSheet.create({
   },
 });
 
-const ConnectedScreen = connect(({ score, rounds, bestRounds, currency }) => ({
-  score,
-  rounds,
-  bestRounds,
-  currency,
-}))(PreferencesScreen);
-
-export default connectActionSheet(ConnectedScreen);
+export default connectActionSheet(PreferencesScreen);

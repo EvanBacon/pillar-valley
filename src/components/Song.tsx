@@ -1,9 +1,10 @@
 import * as React from "react";
-import { connect } from "react-redux";
 
 import AudioManager from "../AudioManager";
+import { useGlobalAudio } from "../rematch/models";
 
-function Song({ muted }: { muted: boolean }) {
+function Song() {
+  const { muted } = useGlobalAudio();
   React.useEffect(() => {
     if (muted) {
       AudioManager.pauseAsync("song");
@@ -18,4 +19,4 @@ function Song({ muted }: { muted: boolean }) {
   return null;
 }
 
-export default connect(({ muted }: { muted: boolean }) => ({ muted }))(Song);
+export default Song;

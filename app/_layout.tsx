@@ -5,14 +5,15 @@ import * as Analytics from "expo-firebase-analytics";
 import * as Font from "expo-font";
 import { SplashScreen, Stack, usePathname, useRouter } from "expo-router";
 import Head from "expo-router/head";
-import { StatusBar } from "expo-status-bar";
+
 import React, { useEffect } from "react";
-import { Animated, Platform, StyleSheet } from "react-native";
+import { Animated, StatusBar, Platform, StyleSheet, View } from "react-native";
 
 import AudioManager from "@/src/AudioManager";
 import Fire from "@/src/ExpoParty/Fire";
 import TouchableBounce from "@/src/components/TouchableBounce";
 import Gate from "@/src/rematch/Gate";
+import { InstallBanner } from "@/src/components/InstallBanner";
 
 // import { setTestDeviceIDAsync } from "expo-ads-admob";
 export const unstable_settings = {
@@ -21,6 +22,25 @@ export const unstable_settings = {
 
 // TODO: Customize this
 export { ErrorBoundary } from "expo-router";
+
+function CustomHead({ children }: { children: React.ReactNode }) {
+  // extracts meta from custom children
+  const meta = React.Children.toArray(children).filter(
+    (child) => React.isValidElement(child) && child.type === "meta"
+  );
+
+  // extracts title from custom children
+  const title = React.Children.toArray(children).filter(
+    (child) => React.isValidElement(child) && child.type === "title"
+  );
+
+  return (
+    <Head>
+      {meta}
+      {title}
+    </Head>
+  );
+}
 
 export default function Layout() {
   const loading = useLoadAssets();
@@ -111,7 +131,9 @@ function InnerLayout() {
 
   return (
     <Gate>
-      <ActionSheetProvider>{stack}</ActionSheetProvider>
+      <View style={{ backgroundColor: "blue", flex: 1 }}>
+        <ActionSheetProvider>{stack}</ActionSheetProvider>
+      </View>
     </Gate>
   );
 }
