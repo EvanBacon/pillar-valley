@@ -1,4 +1,5 @@
 import { isDevice } from "expo-device";
+import { Platform } from "react-native";
 
 const debug = __DEV__;
 const Settings = {
@@ -18,7 +19,7 @@ const Settings = {
   isMotionMenuEnabled: !debug || true,
   debug,
   ballDistance: 60,
-  rotationSpeed: 4,
+  rotationSpeed: Platform.select({ web: 2, default: 4 }),
   angleRange: [25, 155],
   visiblePillars: 5,
   slug: debug ? "crossy-road" : "users",

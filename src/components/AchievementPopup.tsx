@@ -264,11 +264,6 @@ class FirstText extends React.Component {
   get firstTextAnimatedStyle() {
     const inputRange = [0.5, 1];
 
-    const adjustedOpacity = Animated.add(
-      this.props.containerAnimation,
-      this.animation
-    );
-
     const opacity = this.props.containerAnimation.interpolate({
       inputRange: [0.5, 1],
       outputRange: [0, 1],
@@ -504,7 +499,7 @@ class Popup extends React.Component {
 }
 
 function PopupContainer() {
-  const { presentAchievement, setPresentAchievement } = usePresentAchievement();
+  const { presentAchievement, set } = usePresentAchievement();
   const { top } = useSafeAreaInsets();
   const router = useRouter();
   return (
@@ -518,7 +513,7 @@ function PopupContainer() {
       {presentAchievement && (
         <Popup
           router={router}
-          setPresentAchievement={setPresentAchievement}
+          setPresentAchievement={set}
           id={presentAchievement.id}
           name={presentAchievement.name}
           score={presentAchievement.score}

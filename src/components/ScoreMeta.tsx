@@ -9,18 +9,10 @@ import { useFont } from "../hooks/useFont";
 import { useCurrency, useScore } from "../rematch/models";
 
 function ScoreMeta() {
-  // ({ score: { current, best }, currency: { current: currency } }) => ({
-  //   current,
-  //   best,
-  //   currency,
-  // })
-
   const {
     score: { current, best },
   } = useScore();
-  const {
-    currency: { current: currency },
-  } = useCurrency();
+  const { currency } = useCurrency();
 
   const { top } = useSafeAreaInsets();
   const gothamNarrowBook = useFont("GothamNarrow-Book");

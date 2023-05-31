@@ -98,9 +98,6 @@ function PreferencesScreen() {
   const { rounds, bestRounds, resetBestRounds, resetRounds } = useRounds();
   const { currency, resetCurrency } = useCurrency();
   const achievements = useAchievements();
-  // score, rounds, bestRounds, currency
-  // score, rounds, bestRounds, currency
-  // score, rounds, bestRounds, currency
 
   const router = useRouter();
   const [taps, setTaps] = React.useState(0);
@@ -114,7 +111,7 @@ function PreferencesScreen() {
         { title: "Games Played", value: rounds },
         { title: "High score", value: score.best },
         { title: "High score beaten", value: bestRounds },
-        { title: "Gems collected", value: currency.current },
+        { title: "Gems collected", value: currency },
       ],
     },
 

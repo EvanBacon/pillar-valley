@@ -16,20 +16,15 @@ import useAppState from "@/src/hooks/useAppState";
 const InputGameView = Settings.isSimulator ? SkipGameViewInSimulator : GameView;
 
 function GameView({ onLoad, isPaused }) {
-  const machine = React.useMemo(() => {
-    return new GameState();
-  }, []);
+  const machine = React.useRef(new GameState());
 
   const onContextCreate = React.useCallback(
     async (props) => {
-      if (machine) {
-        await machine.onContextCreateAsync(props);
-      }
+      await machine.current.onContextCreateAsync(props);
       onLoad();
     },
-    [onLoad, machine]
+    [onLoad]
   );
-  // return null;
 
   return (
     <TouchableView
@@ -37,7 +32,7 @@ function GameView({ onLoad, isPaused }) {
         flex: 1,
         overflow: "hidden",
       }}
-      onTouchesBegan={machine?.onTouchesBegan}
+      onTouchesBegan={machine.current.onTouchesBegan}
     >
       <GraphicsView
         ref={(ref) => {
@@ -46,8 +41,8 @@ function GameView({ onLoad, isPaused }) {
         key="game"
         isPaused={isPaused}
         onContextCreate={onContextCreate}
-        onRender={machine.onRender}
-        onResize={machine.onResize}
+        onRender={machine.current.onRender}
+        onResize={machine.current.onResize}
       />
     </TouchableView>
   );

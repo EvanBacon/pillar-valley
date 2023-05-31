@@ -541,6 +541,7 @@ class Game extends GameObject {
   gameOver = (animate = true) => {
     this.takeScreenshot();
     this.screenShotTaken = false;
+    useScore.getState().updateTotal(this.score);
     useScore.getState().resetScore();
     Analytics.logEvent("game_over", {
       score: this.score,

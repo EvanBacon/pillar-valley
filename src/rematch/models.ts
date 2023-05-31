@@ -11,63 +11,6 @@ export type PresentAchievementShape = null | {
   name: string;
 };
 
-// A cached value that represents the amount of times a user has beaten their best score.
-// Logic for store review:
-// Since you can only prompt to review roughly once, we want to ensure that only users who like the game are prompted to rate it.
-// We can determine if they like the game based on if they keep playing it.
-export const bestRounds = {
-  state: 0,
-  reducers: {
-    _reset: () => 0,
-    set: (state: number, rounds: number): number => rounds,
-  },
-  effects: {
-    increment: (
-      input: unknown,
-      { score, bestRounds }: { score: ScoreShape; bestRounds: number }
-    ) => {
-      const next = bestRounds + 1;
-
-      Analytics.logEvent("had_best_round", {
-        count: bestRounds,
-        score: score.total,
-      });
-
-      // if the user ever beats their highscore twice after the first day of using the app, prompt them to rate the app.
-      if (bestRounds > 1) {
-        dispatch.storeReview.promptAsync();
-      }
-
-      dispatch.bestRounds.set(next);
-    },
-  },
-};
-
-export const rounds = {
-  state: 0,
-  reducers: {
-    _reset: () => 0,
-    set: (state: number, rounds: number): number => rounds,
-  },
-  effects: {
-    increment: (input: unknown, { rounds }: { rounds: number }) => {
-      const next = rounds + 1;
-      if (next === 10) {
-        dispatch.achievements.unlock("rounds-10");
-      } else if (next === 50) {
-        dispatch.achievements.unlock("rounds-50");
-      } else if (next === 100) {
-        dispatch.achievements.unlock("rounds-100");
-      } else if (next === 500) {
-        dispatch.achievements.unlock("rounds-500");
-      } else if (next === 1000) {
-        dispatch.achievements.unlock("rounds-1000");
-      }
-      dispatch.rounds.set(next);
-    },
-  },
-};
-
 export type ScoreShape = {
   current: number;
   best: number;
@@ -106,37 +49,35 @@ export const useGlobalAudio = create(
 
 export const usePresentAchievement = create<{
   presentAchievement: null | { id: string; name: string };
-  setPresentAchievement(val: null | { id: string; name: string }): void;
+  set(val: null | { id: string; name: string }): void;
 }>((set) => ({
   presentAchievement: null,
-  // Reducers
-  setPresentAchievement: (val) =>
-    set((state) => ({ ...state, presentAchievement: val })),
+  set: (val) => set((state) => ({ ...state, presentAchievement: val })),
 }));
 
 export const useCurrency = create(
   persist<{
-    currency: { current: number };
+    currency: number;
     resetCurrency(): void;
     changeCurrency(val: number): void;
   }>(
     (set) => ({
-      currency: { current: 0 },
+      currency: 0,
 
       // For `currency`
       changeCurrency: (value) =>
         set((state) => ({
           ...state,
-          currency: { current: state.currency.current + value },
+          currency: state.currency + value,
         })),
       resetCurrency: () =>
         set((state) => ({
           ...state,
-          currency: { ...state.currency, current: 0 },
+          currency: 0,
         })),
     }),
     {
-      name: "use-currency", // unique name
+      name: "useCurrency", // unique name
       storage: createJSONStorage(() => AsyncStorage),
     }
   )
@@ -184,10 +125,9 @@ export const useScore = create(
       isBest: boolean;
     };
     hardResetScore(): void;
-    setBestScore(val: number): void;
-    setTotalScore(val: number): void;
     incrementScore(): void;
     resetScore(): void;
+    updateTotal(current: number): void;
   }>(
     (set) => ({
       score: {
@@ -204,16 +144,7 @@ export const useScore = create(
           ...state,
           score: { ...initialScoreState },
         })),
-      setBestScore: (val) =>
-        set((state) => ({
-          ...state,
-          score: { ...state.score, best: val },
-        })),
-      setTotalScore: (val) =>
-        set((state) => ({
-          ...state,
-          score: { ...state.score, total: val },
-        })),
+
       incrementScore: () =>
         set((state) => {
           const nextScore = state.score.current + 1;
@@ -234,35 +165,35 @@ export const useScore = create(
           score: {
             ...state.score,
             current: 0,
+            total: 0,
             last: state.score.current,
             isBest: false,
           },
         })),
 
-      updateTotal(current: number, { score }: { score: ScoreShape }) {
-        const total = score.total + current;
-
-        if (current > 100) {
-          useAchievements.getState().unlock("score-100");
-        } else if (current > 50) {
-          useAchievements.getState().unlock("score-50");
-        } else if (current > 20) {
-          useAchievements.getState().unlock("score-20");
-        }
-
-        if (total > 10000) {
-          useAchievements.getState().unlock("total-score-10000");
-        } else if (total > 5000) {
-          useAchievements.getState().unlock("total-score-5000");
-        } else if (total > 1000) {
-          useAchievements.getState().unlock("total-score-1000");
-        } else if (total > 500) {
-          useAchievements.getState().unlock("total-score-500");
-        }
-
+      updateTotal(current: number) {
         set((state) => {
-          state.setTotalScore(total);
-          return state;
+          const total = state.score.total + current;
+
+          if (current > 100) {
+            useAchievements.getState().unlock("score-100");
+          } else if (current > 50) {
+            useAchievements.getState().unlock("score-50");
+          } else if (current > 20) {
+            useAchievements.getState().unlock("score-20");
+          }
+
+          if (total > 10000) {
+            useAchievements.getState().unlock("total-score-10000");
+          } else if (total > 5000) {
+            useAchievements.getState().unlock("total-score-5000");
+          } else if (total > 1000) {
+            useAchievements.getState().unlock("total-score-1000");
+          } else if (total > 500) {
+            useAchievements.getState().unlock("total-score-500");
+          }
+
+          return { ...state, score: { ...state.score, total } };
         });
       },
     }),
@@ -299,9 +230,7 @@ export const useAchievements = create(
             });
           }
 
-          usePresentAchievement
-            .getState()
-            .setPresentAchievement({ id: key, ...Challenges[key] });
+          usePresentAchievement.getState().set({ id: key, ...Challenges[key] });
 
           return {
             ...state,
