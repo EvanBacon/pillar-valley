@@ -13,7 +13,6 @@ import AudioManager from "@/src/AudioManager";
 import Fire from "@/src/ExpoParty/Fire";
 import TouchableBounce from "@/src/components/TouchableBounce";
 import Gate from "@/src/rematch/Gate";
-import { InstallBanner } from "@/src/components/InstallBanner";
 
 // import { setTestDeviceIDAsync } from "expo-ads-admob";
 export const unstable_settings = {
@@ -22,25 +21,6 @@ export const unstable_settings = {
 
 // TODO: Customize this
 export { ErrorBoundary } from "expo-router";
-
-function CustomHead({ children }: { children: React.ReactNode }) {
-  // extracts meta from custom children
-  const meta = React.Children.toArray(children).filter(
-    (child) => React.isValidElement(child) && child.type === "meta"
-  );
-
-  // extracts title from custom children
-  const title = React.Children.toArray(children).filter(
-    (child) => React.isValidElement(child) && child.type === "title"
-  );
-
-  return (
-    <Head>
-      {meta}
-      {title}
-    </Head>
-  );
-}
 
 export default function Layout() {
   const loading = useLoadAssets();
@@ -69,7 +49,7 @@ export default function Layout() {
           href="/favicon-16x16.png"
         />
         <link rel="manifest" href="/site.webmanifest" />
-        <meta name="msapplication-TileColor" content="#da532c" />
+        <meta name="msapplication-TileColor" content="#F09458" />
         <meta name="theme-color" content="#ffffff" />
       </Head>
       <AnimatedSplashScreen
@@ -93,7 +73,7 @@ function InnerLayout() {
         screenOptions={{
           headerTintColor: "white",
           headerStyle: {
-            backgroundColor: "#E07C4C",
+            backgroundColor: "#F09458",
             borderBottomWidth: 0,
           },
           headerTitleStyle: { color: "white" },

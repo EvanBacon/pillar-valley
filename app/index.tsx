@@ -15,7 +15,13 @@ import useAppState from "@/src/hooks/useAppState";
 // import GameState from "../NitroRoll/GameState";
 const InputGameView = Settings.isSimulator ? SkipGameViewInSimulator : GameView;
 
-function GameView({ onLoad, isPaused }) {
+function GameView({
+  onLoad,
+  isPaused,
+}: {
+  onLoad: () => void;
+  isPaused: boolean;
+}) {
   const machine = React.useRef(new GameState());
 
   const onContextCreate = React.useCallback(
@@ -48,7 +54,7 @@ function GameView({ onLoad, isPaused }) {
   );
 }
 
-function SkipGameViewInSimulator({ onLoad }) {
+function SkipGameViewInSimulator({ onLoad }: { onLoad: () => void }) {
   return (
     <View
       style={{
@@ -96,12 +102,12 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     flex: 1,
-    backgroundColor: "#FFC266",
+    backgroundColor: "#F09458",
   },
   image: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#FFC266",
+    backgroundColor: "#F09458",
   },
 });

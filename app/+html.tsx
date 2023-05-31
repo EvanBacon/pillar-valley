@@ -5,7 +5,7 @@ import React from "react";
 export default function Root({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <head>
+      <head style={{ backgroundColor: "#F09458" }}>
         <meta charSet="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta
@@ -14,6 +14,7 @@ export default function Root({ children }: { children: React.ReactNode }) {
         />
         <InstallBanner id="1336398804" />
         <ScrollViewStyleReset />
+        <meta name="theme-color" content="#F09458" />
       </head>
       <script
         dangerouslySetInnerHTML={{

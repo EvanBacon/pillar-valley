@@ -259,7 +259,7 @@ function PreferencesScreen() {
       <SectionList
         sections={data}
         renderSectionHeader={({ section: { title } }) => (
-          <View style={{ backgroundColor: "#E07C4C" }}>
+          <View style={{ backgroundColor: "#F09458" }}>
             <Text style={{ padding: 16, color: "white" }}>{title}</Text>
           </View>
         )}
