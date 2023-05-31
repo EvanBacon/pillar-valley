@@ -129,14 +129,15 @@ class PlayerGroupObject extends GameObject {
   };
 
   getRotationSpeedForScore = (score: number): number => {
-    return Math.min(this.velocity + score * 0.05, Settings.maxRotationSpeed);
+    return Math.min(this.velocity + score * 10, Settings.maxRotationSpeed);
   };
 
   incrementRotationWithScoreAndDirection = (
+    delta: number,
     score: number,
     direction: number
   ): void => {
-    const speed = this.getRotationSpeedForScore(score);
+    const speed = this.getRotationSpeedForScore(score) * delta;
     this.rotationAngle = this.getRotationAngleForDirection(speed, direction);
   };
 
@@ -608,6 +609,7 @@ class Game extends GameObject {
       if (this.pillarGroup.getNextPillar()) {
         // move rotation angle
         this.playerObject.incrementRotationWithScoreAndDirection(
+          delta,
           this.score,
           this.direction
         );
@@ -625,9 +627,9 @@ class Game extends GameObject {
       const easing = 0.03;
 
       this.gameGroup.position.z -=
-        (distanceZ - 0 + this.gameGroup.position.z) * easing;
+        (distanceZ - 0 + this.gameGroup.position.z) * easing * (delta * 100);
       this.gameGroup.position.x -=
-        (distanceX - 0 + this.gameGroup.position.x) * easing;
+        (distanceX - 0 + this.gameGroup.position.x) * easing * (delta * 100);
 
       const currentPillar = this.pillarGroup.getCurrentPillar();
       // Collect gems

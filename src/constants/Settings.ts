@@ -1,6 +1,6 @@
 import { isDevice } from "expo-device";
-import { Platform } from "react-native";
 
+const speed = 250;
 const debug = __DEV__;
 const Settings = {
   facebookLoginProps: {
@@ -19,7 +19,7 @@ const Settings = {
   isMotionMenuEnabled: !debug || true,
   debug,
   ballDistance: 60,
-  rotationSpeed: Platform.select({ web: 2, default: 4 }),
+  rotationSpeed: speed,
   angleRange: [25, 155],
   visiblePillars: 5,
   slug: debug ? "crossy-road" : "users",
@@ -27,7 +27,7 @@ const Settings = {
   isCacheProfileUpdateActive: true, //!debug || false,
   shouldDelayFirebaseProfileSyncInMinutes: 60,
   gemsEnabled: false,
-  maxRotationSpeed: 6,
+  maxRotationSpeed: speed * 2,
   minBallScale: 0.01,
   canEditPhoto: false,
   leaderPageSize: 25,

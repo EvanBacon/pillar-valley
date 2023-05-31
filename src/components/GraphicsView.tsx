@@ -9,6 +9,7 @@ import {
   StyleSheet,
 } from "react-native";
 import uuidv4 from "uuid/v4";
+import * as THREE from "three";
 
 export type ResizeEvent = {
   x: number;
@@ -97,22 +98,16 @@ export default class GraphicsView extends React.Component<Props> {
       pixelRatio: scale,
       // ...props,
     });
-    let lastFrameTime: number;
+    const clock = new THREE.Clock();
     const render = () => {
       if (this.gl) {
-        const now = 0.001 * getNow();
-        const delta =
-          typeof lastFrameTime !== "undefined" ? now - lastFrameTime : 0.16666;
-        this.time += delta;
         this.rafID = requestAnimationFrame(render);
 
         if (!this.props.isPaused) {
-          onRender(delta, this.time);
+          onRender(clock.getDelta(), clock.getElapsedTime());
           // NOTE: At the end of each frame, notify `Expo.GLView` with the below
           gl.endFrameEXP();
         }
-
-        lastFrameTime = now;
       }
     };
     render();
@@ -129,8 +124,6 @@ export default class GraphicsView extends React.Component<Props> {
     );
   }
 }
-
-const getNow = (global as any).nativePerformanceNow || Date.now;
 
 const styles = StyleSheet.create({
   container: {
