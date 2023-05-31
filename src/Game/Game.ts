@@ -16,6 +16,7 @@ import {
   useCurrency,
   useGameScreenshot,
   useGameState,
+  useRounds,
   useScore,
 } from "../rematch/models";
 
@@ -541,8 +542,14 @@ class Game extends GameObject {
   gameOver = (animate = true) => {
     this.takeScreenshot();
     this.screenShotTaken = false;
-    useScore.getState().updateTotal(this.score);
+    const scoreState = useScore.getState();
+    scoreState.updateTotal(this.score);
+    if (scoreState.score.isBest) {
+      scoreState.setHighScore(scoreState.score.current);
+    }
+
     useScore.getState().resetScore();
+    useRounds.getState().incrementRounds();
     Analytics.logEvent("game_over", {
       score: this.score,
     });

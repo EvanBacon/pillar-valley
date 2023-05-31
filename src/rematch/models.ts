@@ -128,6 +128,7 @@ export const useScore = create(
     incrementScore(): void;
     resetScore(): void;
     updateTotal(current: number): void;
+    setHighScore(score: number): void;
   }>(
     (set) => ({
       score: {
@@ -136,6 +137,10 @@ export const useScore = create(
         total: 0,
         last: null,
         isBest: false,
+      },
+
+      setHighScore(score: number) {
+        useRounds.getState().incrementBestRounds();
       },
 
       // For `score`
@@ -165,7 +170,6 @@ export const useScore = create(
           score: {
             ...state.score,
             current: 0,
-            total: 0,
             last: state.score.current,
             isBest: false,
           },
@@ -257,12 +261,34 @@ export const useRounds = create(
     setRounds(value: any): void;
 
     incrementRounds(): void;
+    incrementBestRounds(): void;
   }>(
     (set) => ({
       bestRounds: 0,
       rounds: 0,
 
       // Reducers
+
+      incrementBestRounds: () => {
+        set((state) => {
+          const next = state.bestRounds + 1;
+
+          Analytics.logEvent("had_best_round", {
+            count: state.bestRounds,
+            score: useScore.getState().score.total,
+          });
+
+          // if the user ever beats their highscore twice after the first day of using the app, prompt them to rate the app.
+          if (state.bestRounds > 1) {
+            // dispatch.storeReview.promptAsync();
+          }
+
+          return {
+            ...state,
+            bestRounds: next,
+          };
+        });
+      },
 
       // For `bestRounds`
       resetBestRounds: () => set((state) => ({ ...state, bestRounds: 0 })),

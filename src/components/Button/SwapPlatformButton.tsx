@@ -5,13 +5,13 @@ import * as React from "react";
 import Icon from "./Icon";
 
 function isAndroidWeb() {
-  if (Platform.OS !== "web") return false;
+  if (Platform.OS !== "web" || typeof window === "undefined") return false;
   const ua = navigator.userAgent.toLowerCase();
   return ua.includes("android");
 }
 
 function isAppleMobileWeb() {
-  if (Platform.OS !== "web") return false;
+  if (Platform.OS !== "web" || typeof window === "undefined") return false;
   // iOS detection from: http://stackoverflow.com/a/9039885/177710
   return (
     /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream
