@@ -28,8 +28,8 @@ export const InstallBanner = React.forwardRef(function InstallBanner(
         ? origin ?? "https://acme.com"
         : window.location.href
     );
-    url.searchParams.set("utm_medium", "banner");
-    url.searchParams.set("utm_content", "apple-itunes-app");
+    // url.searchParams.set("utm_medium", "banner");
+    // url.searchParams.set("utm_content", "apple-itunes-app");
     return url.toString();
   }, [pathname]);
 

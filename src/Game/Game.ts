@@ -129,7 +129,7 @@ class PlayerGroupObject extends GameObject {
   };
 
   getRotationSpeedForScore = (score: number): number => {
-    return Math.min(this.velocity + score * 10, Settings.maxRotationSpeed);
+    return Math.min(this.velocity + score * 5, Settings.maxRotationSpeed);
   };
 
   incrementRotationWithScoreAndDirection = (

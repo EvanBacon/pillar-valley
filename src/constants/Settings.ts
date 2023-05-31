@@ -1,6 +1,6 @@
 import { isDevice } from "expo-device";
 
-const speed = 250;
+const speed = 200;
 const debug = __DEV__;
 const Settings = {
   facebookLoginProps: {
