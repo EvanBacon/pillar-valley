@@ -21,8 +21,8 @@ export default class TouchableView extends React.Component {
       // onResponderTerminate: this.props.onResponderTerminate ,
       // onStartShouldSetResponder: () => true,
       onResponderTerminationRequest: this.props.onResponderTerminationRequest,
-      onStartShouldSetPanResponderCapture: this.props
-        .onStartShouldSetPanResponderCapture,
+      onStartShouldSetPanResponderCapture:
+        this.props.onStartShouldSetPanResponderCapture,
       // onMoveShouldSetPanResponder: (evt, gestureState) => true,
       onPanResponderGrant: ({ nativeEvent }, gestureState) =>
         this.props.onTouchesBegan({ ...nativeEvent, gestureState }),

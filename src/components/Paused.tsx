@@ -1,13 +1,18 @@
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { BlurView } from "expo-blur";
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
 import * as Animatable from "react-native-animatable";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import { useFont } from "../hooks/useFont";
 
 export default function Paused() {
   const color = "white";
   const { left } = useSafeAreaInsets();
+
+  // TODO: Remove with RN 72
+  const gothamNarrowBook = useFont("GothamNarrow-Book");
   return (
     <BlurView
       intensity={95}
@@ -19,9 +24,9 @@ export default function Paused() {
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <Text
           style={{
-            fontFamily: "GothamNarrow-Book",
+            fontFamily: gothamNarrowBook,
             textAlign: "center",
-            color: color,
+            color,
             fontSize: 48,
           }}
         >
@@ -31,9 +36,9 @@ export default function Paused() {
           animation="fadeIn"
           delay={1000}
           style={{
-            fontFamily: "GothamNarrow-Book",
+            fontFamily: gothamNarrowBook,
             textAlign: "center",
-            color: color,
+            color,
             fontSize: 18,
           }}
         >
@@ -44,8 +49,8 @@ export default function Paused() {
         animation="fadeIn"
         delay={1500}
         style={{
-          fontFamily: "GothamNarrow-Book",
-          color: color,
+          fontFamily: gothamNarrowBook,
+          color,
           fontSize: 18,
           textAlign: "center",
           paddingHorizontal: left,

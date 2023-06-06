@@ -26,7 +26,7 @@ export default class Item extends React.Component {
     const rank = _rankValue + addNth(_rankValue);
     return (
       <TouchableHighlight
-        underlayColor="#eeeeee"
+        underlayColor="#21222D"
         {...props}
         onPress={this.onPress}
         style={[styles.touchable, style]}
@@ -45,7 +45,7 @@ export default class Item extends React.Component {
               <Text style={styles.subtitle}>{score} Points</Text>
             </View>
           </View>
-          <Ionicons size={24} color="#CCCCCC" name="ios-arrow-forward" />
+          <Ionicons size={24} color="#D8DADE" name="ios-arrow-forward" />
         </View>
       </TouchableHighlight>
     );
@@ -66,9 +66,11 @@ const styles = StyleSheet.create({
     fontSize: 24,
     minWidth: 24,
     marginRight: 8,
+    color: "#fff",
   },
-  text: { fontWeight: "bold" },
+  text: { fontWeight: "bold", color: "#fff" },
   subtitle: {
     opacity: 0.7,
+    color: "#fff",
   },
 });

@@ -2,9 +2,7 @@ import * as React from "react";
 
 import Icon from "./Icon";
 
-const PreferencesButton = React.forwardRef(
-  (props: React.ComponentProps<typeof Icon>, ref) => {
-    return <Icon {...props} ref={ref} name="cog" />;
-  }
-);
+function PreferencesButton(props: React.ComponentProps<typeof Icon>) {
+  return <Icon {...props} name="cog" />;
+}
 export default PreferencesButton;

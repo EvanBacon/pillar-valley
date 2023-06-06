@@ -1,3 +1,4 @@
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 import * as React from "react";
 import {
   Image,
@@ -7,7 +8,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 // import { A } from '@expo/html-elements';
 
@@ -39,7 +39,7 @@ export default function LicensesListItem({
             </TouchableOpacity>
           )}
           <TouchableOpacity
-            underlayColor="#eeeeee"
+            underlayColor="#21222D"
             onPress={() => Linking.openURL(repository)}
             style={styles.item}
           >
@@ -52,7 +52,7 @@ export default function LicensesListItem({
             </View>
             <FontAwesome
               style={{ alignSelf: "center" }}
-              color="#34495e"
+              color="#E1E4E8"
               size={16}
               name="chevron-right"
             />
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     overflow: "hidden",
     flexDirection: "row",
-    backgroundColor: "white",
+    backgroundColor: "#282A37",
     alignItems: "center",
   },
   cardShadow: {
@@ -102,6 +102,7 @@ const styles = StyleSheet.create({
   name: {
     fontWeight: "bold",
     fontSize: 16,
+    color: "#fff",
   },
   image: {
     width: 96,
@@ -110,7 +111,7 @@ const styles = StyleSheet.create({
   },
 
   text: {
-    color: "#34495e",
+    color: "#E1E4E8",
     marginTop: 3,
   },
 });

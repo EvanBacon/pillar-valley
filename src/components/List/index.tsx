@@ -1,11 +1,12 @@
 import React from "react";
-import { FlatList, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
+import { FlatList } from "react-native-gesture-handler";
 
 import Footer from "./Footer";
+import Header from "./Header";
 import Item from "./Item";
 import Separator from "./Separator";
 import UserCell from "./UserCell";
-import Header from "./Header";
 
 class List extends React.Component {
   get userItem() {
@@ -60,7 +61,7 @@ class List extends React.Component {
     return (
       <View style={{ flex: 1 }}>
         <FlatList
-          style={[style, styles.container]}
+          style={[style, { backgroundColor: "#282A37" }]}
           keyExtractor={this.keyExtractor}
           ListFooterComponent={this.footer}
           ItemSeparatorComponent={Separator}
@@ -93,9 +94,5 @@ class List extends React.Component {
 //     <Text style={{ fontSize: 24 }}>Coming Soon</Text>
 //   </View>
 // }
-
-const styles = StyleSheet.create({
-  container: {},
-});
 
 export default List;

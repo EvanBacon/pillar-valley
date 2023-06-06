@@ -3,7 +3,7 @@ import { CylinderGeometry, Mesh, MeshPhongMaterial } from "three";
 import Colors from "../../constants/Colors";
 import GameObject from "../GameObject";
 
-let GemMaterial: MeshPhongMaterial = new MeshPhongMaterial({
+const GemMaterial: MeshPhongMaterial = new MeshPhongMaterial({
   color: Colors.blue,
 });
 

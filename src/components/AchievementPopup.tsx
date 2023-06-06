@@ -1,3 +1,4 @@
+import { useRouter } from "expo-router";
 import React from "react";
 import {
   Animated,
@@ -8,10 +9,10 @@ import {
   View,
   Platform,
 } from "react-native";
-import { connect } from "react-redux";
-import { dispatch } from "../rematch/store";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+
 import AudioManager from "../AudioManager";
+import { usePresentAchievement } from "../rematch/models";
 
 const Colors = {
   darkerGreen: "#000A69",
@@ -43,7 +44,7 @@ class AnimatedCircle extends React.Component {
 
   getAnimation = (props = {}) => {
     const { reverse } = props;
-    let multiplier = reverse ? -1 : 1;
+    const multiplier = reverse ? -1 : 1;
     const {
       delay,
       toValue,
@@ -60,8 +61,8 @@ class AnimatedCircle extends React.Component {
       toValue,
       speed,
       bounciness,
-      tension: tension,
-      friction: friction,
+      tension,
+      friction,
       useNativeDriver: containerAnimation ? false : useNativeDriver,
       ...props,
     });
@@ -92,13 +93,8 @@ class AnimatedCircle extends React.Component {
   }
 
   render() {
-    const {
-      innerColor,
-      outerColor,
-      style,
-      renderComponent,
-      ...props
-    } = this.props;
+    const { innerColor, outerColor, style, renderComponent, ...props } =
+      this.props;
 
     const finalProps = {
       style: [
@@ -132,10 +128,10 @@ class AnimatedBadge extends React.Component {
     resizeMode: "contain",
   };
 
-  getReverseAnimation = (props) => this.circle.getReverseAnimation(props);
-  getAnimation = (toValue) => this.circle.getAnimation(toValue);
-  animate = () => this.circle.animate();
-  reset = () => this.circle.reset();
+  getReverseAnimation = (props) => this.circle?.getReverseAnimation(props);
+  getAnimation = (toValue) => this.circle?.getAnimation(toValue);
+  animate = () => this.circle?.animate();
+  reset = () => this.circle?.reset();
   render() {
     const { ...props } = this.props;
     return <AnimatedCircle ref={(ref) => (this.circle = ref)} {...props} />;
@@ -157,7 +153,7 @@ class BouncingCircle extends React.Component {
 
   getReverseAnimation = () => {
     const animations = this.circles.map((circle, index) => {
-      let inverseIndex = this.circles.length - index;
+      const inverseIndex = this.circles.length - index;
       let delay = 100 * index;
       if (index === this.circles.length - 1) {
         delay = 0;
@@ -268,11 +264,6 @@ class FirstText extends React.Component {
   get firstTextAnimatedStyle() {
     const inputRange = [0.5, 1];
 
-    const adjustedOpacity = Animated.add(
-      this.props.containerAnimation,
-      this.animation
-    );
-
     const opacity = this.props.containerAnimation.interpolate({
       inputRange: [0.5, 1],
       outputRange: [0, 1],
@@ -362,13 +353,13 @@ class Popup extends React.Component {
       this.getReverseAnimation(),
       this.circle.getReverseAnimation(),
     ]).start(() => {
-      dispatch.presentAchievement.set(null);
+      this.props.setPresentAchievement(null);
     });
     // this.getAnimation().start();
   };
 
   circleConfig = (index) => {
-    let config = {
+    const config = {
       delay: 120 * index,
       friction: 3 + index * 5,
       tension: 2 + index * 2,
@@ -428,23 +419,24 @@ class Popup extends React.Component {
     return (
       <TouchableWithoutFeedback
         onPress={() => {
-          this.props.navigation.navigate("Challenges", { id: this.props.id });
+          this.props.router.push({
+            pathname: "/challenges",
+            params: { id: this.props.id },
+          });
         }}
       >
         <Animated.View style={this.animatedContainerStyle}>
           <View
-            style={[
-              {
-                position: "absolute",
-                top: 0,
-                bottom: 0,
-                right: 0,
-                left: circleSize,
-                borderTopRightRadius: circleSize / 2,
-                borderBottomRightRadius: circleSize / 2,
-                overflow: "hidden",
-              },
-            ]}
+            style={{
+              position: "absolute",
+              top: 0,
+              bottom: 0,
+              right: 0,
+              left: circleSize,
+              borderTopRightRadius: circleSize / 2,
+              borderBottomRightRadius: circleSize / 2,
+              overflow: "hidden",
+            }}
           >
             <FirstText
               renderUpperContents={() => (
@@ -506,8 +498,10 @@ class Popup extends React.Component {
   }
 }
 
-function PopupContainer({ navigation, presentAchievement }) {
+function PopupContainer() {
+  const { presentAchievement, set } = usePresentAchievement();
   const { top } = useSafeAreaInsets();
+  const router = useRouter();
   return (
     <View
       style={[
@@ -518,7 +512,8 @@ function PopupContainer({ navigation, presentAchievement }) {
     >
       {presentAchievement && (
         <Popup
-          navigation={navigation}
+          router={router}
+          setPresentAchievement={set}
           id={presentAchievement.id}
           name={presentAchievement.name}
           score={presentAchievement.score}
@@ -528,6 +523,4 @@ function PopupContainer({ navigation, presentAchievement }) {
   );
 }
 
-export default connect(({ presentAchievement }) => ({ presentAchievement }))(
-  PopupContainer
-);
+export default PopupContainer;

@@ -36,6 +36,9 @@ function canInstallPWA() {
   if (Platform.OS !== "web" || isPWA()) {
     return false;
   }
+  if (typeof window === "undefined") {
+    return false;
+  }
   return !!window.deferredPWAInstallPrompt;
 }
 
@@ -60,7 +63,7 @@ function PWAButton({ onInstall, ...props }) {
   }, []);
 
   // TODO(Bacon): Maybe a better icon
-  return <Icon {...props} onPress={onPress} name={"download"} />;
+  return <Icon {...props} onPress={onPress} name="download" />;
 }
 
 export default PWAButton;

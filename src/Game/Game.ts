@@ -3,15 +3,22 @@ import * as Haptics from "expo-haptics";
 import { Platform } from "react-native";
 import * as THREE from "three";
 import { DirectionalLight, HemisphereLight } from "three";
-import Settings from "../constants/Settings";
-import { dispatch } from "../rematch/store";
+
 import GameObject from "./GameObject";
-import PlatformObject from "./entities/Platform";
-import PlayerBall from "./entities/PlayerBall";
-import randomRange from "./utils/randomRange";
 import GameScene from "./GameScene";
 import GameStates from "./GameStates";
 import MenuObject from "./MenuObject";
+import PlatformObject from "./entities/Platform";
+import PlayerBall from "./entities/PlayerBall";
+import randomRange from "./utils/randomRange";
+import Settings from "../constants/Settings";
+import {
+  useCurrency,
+  useGameScreenshot,
+  useGameState,
+  useRounds,
+  useScore,
+} from "../rematch/models";
 
 function distance(
   p1: { x: number; z: number },
@@ -122,14 +129,15 @@ class PlayerGroupObject extends GameObject {
   };
 
   getRotationSpeedForScore = (score: number): number => {
-    return Math.min(this.velocity + score * 0.05, Settings.maxRotationSpeed);
+    return Math.min(this.velocity + score * 5, Settings.maxRotationSpeed);
   };
 
   incrementRotationWithScoreAndDirection = (
+    delta: number,
     score: number,
     direction: number
   ): void => {
-    const speed = this.getRotationSpeedForScore(score);
+    const speed = this.getRotationSpeedForScore(score) * delta;
     this.rotationAngle = this.getRotationAngleForDirection(speed, direction);
   };
 
@@ -284,9 +292,8 @@ class PillarGroupObject extends GameObject {
     // Go in reverse order to ensure the player gets optimal skipping
     for (let index = this.pillars.length - 1; index > 0; index--) {
       const targetPlatform = this.pillars[index];
-      const distanceFromTarget = playerObject.getActiveItemsDistanceFromObject(
-        targetPlatform
-      );
+      const distanceFromTarget =
+        playerObject.getActiveItemsDistanceFromObject(targetPlatform);
 
       if (distanceFromTarget < targetPlatform.radius)
         return [index, distanceFromTarget];
@@ -394,9 +401,9 @@ class Game extends GameObject {
 
     if (this.state === GameStates.Menu) {
       await this.loadMenu();
-      dispatch.game.menu();
+      useGameState.getState().menuGame();
     } else {
-      dispatch.game.play();
+      useGameState.getState().playGame();
       await this.loadGame();
     }
 
@@ -470,11 +477,12 @@ class Game extends GameObject {
 
     // maybe hide menu
     if (this.score <= 1) {
-      dispatch.game.play();
+      useGameState.getState().playGame();
     }
     // Score for every pillar traversed
     for (let i = pillarIndex; i > 0; i--) {
-      dispatch.score.increment();
+      // dispatch.score.increment();
+      useScore.getState().incrementScore();
       this.score += 1;
     }
 
@@ -524,8 +532,7 @@ class Game extends GameObject {
     }
     this.screenShotTaken = true;
 
-    // @ts-ignore
-    await dispatch.screenshot.updateAsync({
+    useGameScreenshot.getState().updateScreenshot({
       // @ts-ignore
       ref: global.gameRef,
       width: this._width,
@@ -536,12 +543,19 @@ class Game extends GameObject {
   gameOver = (animate = true) => {
     this.takeScreenshot();
     this.screenShotTaken = false;
-    dispatch.score.reset();
+    const scoreState = useScore.getState();
+    scoreState.updateTotal(this.score);
+    if (scoreState.score.isBest) {
+      scoreState.setHighScore(scoreState.score.current);
+    }
+
+    useScore.getState().resetScore();
+    useRounds.getState().incrementRounds();
     Analytics.logEvent("game_over", {
       score: this.score,
     });
     this.score = 0;
-    dispatch.game.menu();
+    useGameState.getState().menuGame();
 
     if (!this.playerObject)
       throw new Error("Player must be defined before invoking game over");
@@ -595,6 +609,7 @@ class Game extends GameObject {
       if (this.pillarGroup.getNextPillar()) {
         // move rotation angle
         this.playerObject.incrementRotationWithScoreAndDirection(
+          delta,
           this.score,
           this.direction
         );
@@ -612,9 +627,9 @@ class Game extends GameObject {
       const easing = 0.03;
 
       this.gameGroup.position.z -=
-        (distanceZ - 0 + this.gameGroup.position.z) * easing;
+        (distanceZ - 0 + this.gameGroup.position.z) * easing * (delta * 100);
       this.gameGroup.position.x -=
-        (distanceX - 0 + this.gameGroup.position.x) * easing;
+        (distanceX - 0 + this.gameGroup.position.x) * easing * (delta * 100);
 
       const currentPillar = this.pillarGroup.getCurrentPillar();
       // Collect gems
@@ -628,15 +643,16 @@ class Game extends GameObject {
           (gem) => gem.canBeCollected && gem.driftAngle !== undefined
         );
         if (collideGems.length) {
-          let _ballPosition = getAbsolutePosition(
+          const _ballPosition = getAbsolutePosition(
             this.playerObject.getActiveItem()
           );
           for (const gem of collideGems) {
-            let position = getAbsolutePosition(gem);
+            const position = getAbsolutePosition(gem);
             const angleDist = distance(_ballPosition, position);
             if (angleDist < 15) {
               gem.pickup();
-              dispatch.currency.change(gem.getValue());
+              useCurrency.getState().changeCurrency(gem.getValue());
+              // dispatch.currency.change(gem.getValue());
             }
           }
         }

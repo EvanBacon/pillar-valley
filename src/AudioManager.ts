@@ -1,6 +1,6 @@
-import { store } from "./rematch/store";
 import { Audio } from "expo-av";
 import { Platform } from "react-native";
+import { useGlobalAudio } from "./rematch/models";
 
 const audio = {
   // Common
@@ -9,20 +9,6 @@ const audio = {
   "unlock.mp3": require("./assets/audio/unlock.mp3"),
   // Pillar Valley
   "song.mp3": require("./assets/audio/song.mp3"),
-  // Nitro Roll
-  // "bass_00.mp3": require("./NitroRoll/audio/bass_00.mp3"),
-  // "bass_01.mp3": require("./NitroRoll/audio/bass_01.mp3"),
-  // "bass_02.mp3": require("./NitroRoll/audio/bass_02.mp3"),
-  // "bass_03.mp3": require("./NitroRoll/audio/bass_03.mp3"),
-  // "bass_04.mp3": require("./NitroRoll/audio/bass_04.mp3"),
-  // "bass_05.mp3": require("./NitroRoll/audio/bass_05.mp3"),
-  // "bass_06.mp3": require("./NitroRoll/audio/bass_06.mp3"),
-  // "bass_07.mp3": require("./NitroRoll/audio/bass_07.mp3"),
-  // "bass_08.mp3": require("./NitroRoll/audio/bass_08.mp3"),
-  // "pop_00.mp3": require("./NitroRoll/audio/pop_00.mp3"),
-  // "pop_00.wav": require("./NitroRoll/audio/pop_00.wav"),
-  // "pop_01.wav": require("./NitroRoll/audio/pop_01.wav"),
-  // "song.mp3": require("./NitroRoll/audio/song.mp3"),
 };
 
 // eslint-disable-line
@@ -30,9 +16,11 @@ class AudioManager {
   sounds: Record<string, Audio.Sound> = {};
 
   playAsync = async (name: string, isLooping: boolean = false) => {
-    if (store.getState().muted || Platform.OS === "web") {
+    if (useGlobalAudio.getState().muted || Platform.OS === "web") {
       return;
     }
+
+    await this.setupAsync();
 
     if (name in this.sounds) {
       const soundObject = this.sounds[name];
@@ -44,10 +32,15 @@ class AudioManager {
         console.warn("Error playing audio", { error });
       }
     } else {
-      console.warn("Audio doesn't exist", name);
+      console.warn(
+        `Audio "${name}" doesn't exist. Expected: ${Object.keys(
+          this.sounds
+        ).join(", ")}`
+      );
     }
   };
   stopAsync = async (name: string) => {
+    await this.setupAsync();
     if (name in this.sounds) {
       const soundObject = this.sounds[name];
       try {
@@ -60,6 +53,7 @@ class AudioManager {
     }
   };
   volumeAsync = async (name: string, volume: number) => {
+    await this.setupAsync();
     if (name in this.sounds) {
       const soundObject = this.sounds[name];
       try {
@@ -73,6 +67,7 @@ class AudioManager {
   };
 
   pauseAsync = async (name: string) => {
+    await this.setupAsync();
     if (name in this.sounds) {
       const soundObject = this.sounds[name];
       try {
@@ -85,8 +80,8 @@ class AudioManager {
     }
   };
 
-  configureExperienceAudioAsync = async () =>
-    Audio.setAudioModeAsync({
+  async configureExperienceAudioAsync() {
+    return Audio.setAudioModeAsync({
       playThroughEarpieceAndroid: false,
       allowsRecordingIOS: false,
       // interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
@@ -94,10 +89,11 @@ class AudioManager {
       shouldDuckAndroid: true,
       // interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
     });
+  }
 
-  assets: Record<string, number> = audio;
+  private assets: Record<string, number> = audio;
 
-  setupAudioAsync = async (): Promise<void> => {
+  private async setupAudioAsync(): Promise<void> {
     const keys = Object.keys(this.assets || {});
     for (const key of keys) {
       const item = this.assets[key];
@@ -106,11 +102,21 @@ class AudioManager {
       // console.log("Audio", soundName, sound);
       this.sounds[soundName] = sound;
     }
-  };
+  }
 
+  _isSetup = false;
+  setupPromise: Promise<void> | null = null;
   setupAsync = async () => {
-    await this.configureExperienceAudioAsync();
-    await this.setupAudioAsync();
+    if (this._isSetup) {
+      return this.setupPromise;
+    }
+    this._isSetup = true;
+    this.setupPromise = (async () => {
+      await this.configureExperienceAudioAsync();
+      await this.setupAudioAsync();
+      this.setupPromise = null;
+    })();
+    return this.setupPromise;
   };
 }
 

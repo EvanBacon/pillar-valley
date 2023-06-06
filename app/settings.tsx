@@ -1,4 +1,8 @@
 import { connectActionSheet } from "@expo/react-native-action-sheet";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import Constants from "expo-constants";
+import { useRouter } from "expo-router";
+import * as StoreReview from "expo-store-review";
 import React from "react";
 import {
   SectionList,
@@ -10,17 +14,19 @@ import {
   TouchableOpacity,
   Linking,
 } from "react-native";
-import { connect } from "react-redux";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import Constants from "expo-constants";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import * as StoreReview from "expo-store-review";
-import useStoreReview from "../hooks/useStoreReview";
+
 import {
   openOtherPlatform,
   getOtherPlatform,
-} from "../components/Button/SwapPlatformButton";
-import { dispatch } from "../rematch/store";
+} from "@/src/components/Button/SwapPlatformButton";
+import useStoreReview from "@/src/hooks/useStoreReview";
+import {
+  useAchievements,
+  useCurrency,
+  useRounds,
+  useScore,
+} from "@/src/rematch/models";
 
 function Item({
   title,
@@ -33,9 +39,9 @@ function Item({
 }) {
   const renderItem = () => {
     if (typeof value !== "undefined") {
-      return <Text style={{ fontSize: 16 }}>{value}</Text>;
+      return <Text style={{ fontSize: 16, color: "white" }}>{value}</Text>;
     } else if (onPress) {
-      return <FontAwesome name="chevron-right" />;
+      return <FontAwesome color="#fff" name="chevron-right" />;
     }
   };
 
@@ -52,7 +58,9 @@ function Item({
           padding: 24,
         }}
       >
-        <Text style={{ fontWeight: "bold", fontSize: 16 }}>{title}</Text>
+        <Text style={{ fontWeight: "bold", color: "white", fontSize: 16 }}>
+          {title}
+        </Text>
         {renderItem()}
       </View>
     </TouchableOpacity>
@@ -85,13 +93,13 @@ function areYouSureAsync(): Promise<boolean> {
   });
 }
 
-function PreferencesScreen({
-  score,
-  rounds,
-  currency,
-  bestRounds,
-  navigation,
-}) {
+function PreferencesScreen() {
+  const { score, hardResetScore } = useScore();
+  const { rounds, bestRounds, resetBestRounds, resetRounds } = useRounds();
+  const { currency, resetCurrency } = useCurrency();
+  const achievements = useAchievements();
+
+  const router = useRouter();
   const [taps, setTaps] = React.useState(0);
   const { bottom } = useSafeAreaInsets();
   const canReview = useStoreReview();
@@ -103,7 +111,7 @@ function PreferencesScreen({
         { title: "Games Played", value: rounds },
         { title: "High score", value: score.best },
         { title: "High score beaten", value: bestRounds },
-        { title: "Gems collected", value: currency.current },
+        { title: "Gems collected", value: currency },
       ],
     },
 
@@ -189,7 +197,7 @@ function PreferencesScreen({
         {
           title: "Licenses",
           onPress: () => {
-            navigation.navigate("Licenses");
+            router.push("/credit");
           },
         },
         Platform.OS !== "web" && {
@@ -198,7 +206,7 @@ function PreferencesScreen({
         },
         {
           title: "Expo SDK",
-          value: require("../../package.json").dependencies["expo"],
+          value: require("../package.json").dependencies["expo"],
           onPress: () => {
             setTaps((taps) => taps + 1);
           },
@@ -224,11 +232,11 @@ function PreferencesScreen({
           value: "This cannot be undone",
           onPress: async () => {
             if (await areYouSureAsync()) {
-              dispatch.score._hardReset();
-              dispatch.storeReview._reset();
-              dispatch.rounds._reset();
-              dispatch.bestRounds._reset();
-              dispatch.currency._reset();
+              hardResetScore();
+
+              resetBestRounds();
+              resetRounds();
+              resetCurrency();
             }
           },
         },
@@ -237,7 +245,8 @@ function PreferencesScreen({
           value: "This cannot be undone",
           onPress: async () => {
             if (await areYouSureAsync()) {
-              dispatch.achievements._reset();
+              achievements.resetAchievements();
+              // dispatch.achievements._reset();
             }
           },
         },
@@ -250,7 +259,7 @@ function PreferencesScreen({
       <SectionList
         sections={data}
         renderSectionHeader={({ section: { title } }) => (
-          <View style={{ backgroundColor: "#E07C4C" }}>
+          <View style={{ backgroundColor: "#F09458" }}>
             <Text style={{ padding: 16, color: "white" }}>{title}</Text>
           </View>
         )}
@@ -265,15 +274,8 @@ function PreferencesScreen({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ecf0f1",
+    backgroundColor: "#282A37",
   },
 });
 
-const ConnectedScreen = connect(({ score, rounds, bestRounds, currency }) => ({
-  score,
-  rounds,
-  bestRounds,
-  currency,
-}))(PreferencesScreen);
-
-export default connectActionSheet(ConnectedScreen);
+export default connectActionSheet(PreferencesScreen);

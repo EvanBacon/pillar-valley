@@ -1,29 +1,14 @@
-import { A } from '@expo/html-elements';
-import * as React from 'react';
-import { FlatList, Platform, View } from 'react-native';
-import * as Animatable from 'react-native-animatable';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { A } from "@expo/html-elements";
+import * as React from "react";
+import { Platform, View } from "react-native";
+import * as Animatable from "react-native-animatable";
+import { FlatList } from "react-native-gesture-handler";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import Settings from '../constants/Settings';
-import LicensesListItem from './LicensesListItem';
+import LicensesListItem from "@/src/components/LicensesListItem";
+import Settings from "@/src/constants/Settings";
 
-const Data = require("../constants/Licenses");
-
-function extractNameFromGithubUrl(url) {
-  if (!url) {
-    return null;
-  }
-
-  const reg = /((https?:\/\/)?(www\.)?github\.com\/)?(@|#!\/)?([A-Za-z0-9_]{1,15})(\/([-a-z]{1,20}))?/i;
-  const components = reg.exec(url);
-
-  const { length, [length - 1]: last } = components;
-  return last;
-  // if (components && components.length > 5) {
-  //   return components[5];
-  // }
-  // return null;
-}
+const Data = require("@/src/constants/Licenses");
 
 function sortDataByKey(data, key) {
   data.sort((a, b) => (a[key] > b[key] ? 1 : b[key] > a[key] ? -1 : 0));
@@ -43,8 +28,6 @@ const licenses = Object.keys(Data).map((key) => {
     name = `@${components[1]}`;
     version = components[2];
   }
-
-  const reg = /((https?:\/\/)?(www\.)?github\.com\/)?(@|#!\/)?([A-Za-z0-9_]{1,15})(\/([-a-z]{1,20}))?/i;
 
   let username = (license.repository || license.licenseUrl)
     .split("https://github.com/")
@@ -79,22 +62,23 @@ sortDataByKey(licenses, "username");
 export default function Licenses() {
   const { bottom } = useSafeAreaInsets();
   return (
-    <View style={{ flex: 1 }}>
-      <View
-        style={{ padding: 16, justifyContent: "center", alignItems: "center" }}
-      >
+    <View style={{ flex: 1, backgroundColor: "#191A23" }}>
+      <View style={{ padding: 16 }}>
         <A
-          style={{ fontSize: 36, textAlign: "center", fontWeight: "bold" }}
+          style={{
+            fontSize: 24,
+            color: "white",
+          }}
           href="https://twitter.com/baconbrix"
         >
           Built by Evan Bacon
         </A>
         {!Settings.isPromo && (
           <A
-            style={{ fontSize: 36, textAlign: "center" }}
+            style={{ fontSize: 16, color: "white" }}
             href="https://github.com/evanbacon/pillar-valley"
           >
-            Made with Expo
+            Powered by Expo
           </A>
         )}
       </View>
@@ -109,7 +93,7 @@ export default function Licenses() {
         <Animatable.Image
           animation="slideInUp"
           delay={500}
-          source={require("../assets/images/evan.png")}
+          source={require("@/src/assets/images/evan.png")}
           style={{
             position: Platform.select({ default: "absolute", web: "fixed" }),
             width: "30%",

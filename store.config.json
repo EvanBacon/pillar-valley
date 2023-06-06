@@ -1,8 +1,8 @@
 {
   "configVersion": 0,
   "apple": {
-    "version": "5.2.0",
-    "copyright": "2022 Evan Bacon",
+    "version": "7.0.1",
+    "copyright": "2023 Evan Bacon",
     "release": {
       "automaticRelease": true
     },
@@ -24,7 +24,7 @@
           "fyp",
           "clash"
         ],
-        "releaseNotes": "Bug fixes and improved stability",
+        "releaseNotes": "Fixed bug in settings page",
         "marketingUrl": "https://github.com/EvanBacon/Expo-Pillar-Valley/",
         "promoText": "Immerse yourself in a suave world of zen",
         "supportUrl": "https://github.com/EvanBacon/Expo-Pillar-Valley/issues",
@@ -65,7 +65,7 @@
       "firstName": "Evan",
       "lastName": "Bacon",
       "email": "bacon@expo.io",
-      "phone": "6505690456",
+      "phone": "2243030301",
       "demoRequired": false,
       "notes": "I <3 U"
     }

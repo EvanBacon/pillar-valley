@@ -1,18 +1,13 @@
-import { dispatch } from "../../rematch/store";
-import * as React from "react";
-import { connect } from "react-redux";
-
 import Icon from "./Icon";
 
-function SoundButton({ muted }) {
-  const onPress = React.useMemo(
-    () => () => {
-      dispatch.muted.toggle();
-    },
-    []
-  );
+import { useGlobalAudio } from "@/src/rematch/models";
 
-  return <Icon onPress={onPress} name={muted ? "volume-off" : "volume-up"} />;
+function SoundButton() {
+  const { muted, toggleMuted } = useGlobalAudio();
+
+  return (
+    <Icon onPress={toggleMuted} name={muted ? "volume-off" : "volume-up"} />
+  );
 }
 
-export default connect(({ muted }) => ({ muted }))(SoundButton);
+export default SoundButton;

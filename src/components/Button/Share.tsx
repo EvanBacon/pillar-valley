@@ -1,11 +1,11 @@
 import Constants from "expo-constants";
+import * as Analytics from "expo-firebase-analytics";
 import React from "react";
 import { Share } from "react-native";
-import { connect } from "react-redux";
 
-import storeUrl from "../../utils/storeUrl";
 import Icon from "./Icon";
-import * as Analytics from "expo-firebase-analytics";
+import storeUrl from "../../utils/storeUrl";
+import { useGameScreenshot, useScore } from "@/src/rematch/models";
 
 class ShareButton extends React.Component {
   onPress = async () => {
@@ -50,7 +50,12 @@ class ShareButton extends React.Component {
   }
 }
 
-export default connect(({ score: { last: score }, screenshot }) => ({
-  score,
-  screenshot,
-}))(ShareButton);
+function OuterShareButton(props) {
+  const { screenshot } = useGameScreenshot();
+  const {
+    score: { last: score },
+  } = useScore();
+  return <ShareButton {...props} score={score} screenshot={screenshot} />;
+}
+
+export default OuterShareButton;

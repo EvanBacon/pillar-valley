@@ -1,7 +1,7 @@
 import { BoxBufferGeometry, Mesh, MeshLambertMaterial } from "three";
 
-import GameObject from "../Game/GameObject";
 import Settings from "./Settings";
+import GameObject from "../Game/GameObject";
 
 const materials: Record<string, any> = {
   red: new MeshLambertMaterial({

@@ -1,4 +1,5 @@
 import { CircleGeometry, Color, Mesh, MeshPhongMaterial } from "three";
+
 import { setFullMeshAlpha } from "./GameObject";
 
 class AlphaMesh extends Mesh {

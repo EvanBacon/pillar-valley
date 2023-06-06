@@ -4,11 +4,18 @@
     "description": "Immerse yourself in a suave world of zen",
     "slug": "pillar-valley",
     "privacy": "public",
-    "version": "6.1.0",
+    "version": "7.0.1",
+    "sdkVersion": "48.0.0",
     "orientation": "portrait",
-    "primaryColor": "#E07C4C",
+    "primaryColor": "#F09458",
+    "backgroundColor": "#F09458",
     "jsEngine": "hermes",
     "scheme": "plrvly",
+    "locales": {
+      "es": {
+        "CFBundleName": "Valle de los Pilares"
+      }
+    },
     "icon": "./icons/expo.png",
     "githubUrl": "https://github.com/evanbacon/expo-pillar-valley",
     "splash": {
@@ -31,11 +38,8 @@
         "projectId": "a1a81680-f84c-11e7-88a7-c74e9d068889"
       }
     },
-    "assetBundlePatterns": [
-      "src/assets/**/*"
-    ],
+    "assetBundlePatterns": ["src/assets/**/*", "icons/splash.png"],
     "ios": {
-      "jsEngine": "jsc",
       "appStoreUrl": "https://itunes.apple.com/us/app/pillar-valley/id1336398804",
       "icon": "./icons/ios.png",
       "supportsTablet": true,
@@ -46,7 +50,9 @@
         "googleMobileAdsAutoInit": true
       },
       "associatedDomains": [
-        "applinks:pillarvalley.netlify.app"
+        "applinks:pillarvalley.netlify.app",
+        "webcredentials:pillarvalley.netlify.app",
+        "activitycontinuation:pillarvalley.netlify.app"
       ]
     },
     "android": {
@@ -61,6 +67,8 @@
       "permissions": []
     },
     "web": {
+      "bundler": "metro",
+      "output": "static",
       "favicon": "./icons/expo.png",
       "config": {
         "firebase": {
@@ -74,6 +82,18 @@
           "measurementId": "G-3PJBNEEFP4"
         }
       }
+    },
+    "plugins": [
+      [
+        "expo-router",
+        {
+          "origin": false,
+          "headOrigin": "https://pillarvalley.netlify.app"
+        }
+      ]
+    ],
+    "experiments": {
+      "tsconfigPaths": true
     },
     "runtimeVersion": {
       "policy": "sdkVersion"

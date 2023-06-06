@@ -1,8 +1,8 @@
 import { BoxBufferGeometry, Mesh, MeshLambertMaterial } from "three";
 
+import Settings from "./Settings";
 import GameObject from "../Game/GameObject";
 import randomRange from "../Game/utils/randomRange";
-import Settings from "./Settings";
 
 const radius = Settings.cubeSize;
 const height = radius * 5;
@@ -54,7 +54,7 @@ class Obstacle extends GameObject {
       const modulo = index % 3;
       // this.speed += (index % 3) * 0.2;
       let sin = (Math.sin(time * this.speed) + 1) / 2;
-      let alt = sin * height;
+      const alt = sin * height;
       this.y = radius + alt;
       this.bottom = alt;
 

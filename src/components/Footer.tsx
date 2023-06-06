@@ -1,30 +1,29 @@
+import { useRouter } from "expo-router";
 import React from "react";
 import { Platform, StyleSheet, View } from "react-native";
+
 import * as Animatable from "react-native-animatable";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { connect } from "react-redux";
 
-import { rewardAdUnitId } from "../constants/Ads";
-import Settings from "../constants/Settings";
-import GameStates from "../Game/GameStates";
 import ChallengesButton from "./Button/Challenges";
-import Icon from "./Button/Icon";
 import LeaderboardButton from "./Button/Leaderboard";
-import LicensesButton from "./Button/LicensesButton";
 import PWAButton, { usePWAInstallable } from "./Button/PWAButton";
+import PreferencesButton from "./Button/PreferencesButton";
 import ShareButton from "./Button/Share";
 import SoundButton from "./Button/Sound";
-import PreferencesButton from "./Button/PreferencesButton";
-import SwapPlatformButton, {
-  getOtherPlatform,
-} from "./Button/SwapPlatformButton";
+import GameStates from "../Game/GameStates";
+import { rewardAdUnitId } from "../constants/Ads";
+import Settings from "../constants/Settings";
+import { useGameScreenshot, useGameState } from "../rematch/models";
 
 const delay = 100;
 const initialDelay = 100;
 const duration = 500;
 const easing = "ease-out";
 
-function Footer({ game, screenshot, navigation }) {
+function Footer() {
+  const { game } = useGameState();
+  const { screenshot } = useGameScreenshot();
   const { bottom } = useSafeAreaInsets();
   // Chrome devices can prompt the user to install the website as a PWA
   const canInstallPwa = usePWAInstallable();
@@ -32,11 +31,12 @@ function Footer({ game, screenshot, navigation }) {
   const [showPWA, setShowPWA] = React.useState(true);
   const animation = game === GameStates.Menu ? "zoomIn" : "zoomOut";
 
+  const router = useRouter();
   const onChallengesPress = () => {
-    navigation.navigate("Challenges");
+    router.push("/challenges");
   };
   const onPreferencesPress = () => {
-    navigation.navigate("Preferences");
+    router.push("/settings");
   };
   const views = [];
 
@@ -54,7 +54,7 @@ function Footer({ game, screenshot, navigation }) {
 
   const onLeaderboardPress = () => {
     if (Settings.isFirebaseEnabled) {
-      navigation.navigate("Social");
+      router.push("/leaderboard");
     } else {
       alert("Expo Online is disabled");
     }
@@ -112,6 +112,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(({ game, screenshot }) => ({ game, screenshot }))(
-  Footer
-);
+export default Footer;

@@ -1,11 +1,11 @@
 {
-    "@expo/html-elements@0.2.0": {
+    "@expo/html-elements@0.4.2": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "pillar-valley"
     },
-    "@expo/react-native-action-sheet@3.12.0": {
+    "@expo/react-native-action-sheet@3.14.0": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/react-native-action-sheet",
         "licenseUrl": "https://github.com/expo/react-native-action-sheet/raw/master/LICENSE",
@@ -17,7 +17,7 @@
         "licenseUrl": "https://github.com/expo/vector-icons/raw/master/LICENSE",
         "parents": "pillar-valley"
     },
-    "@react-native-async-storage/async-storage@1.17.9": {
+    "@react-native-async-storage/async-storage@1.17.11": {
         "licenses": "MIT",
         "repository": "https://github.com/react-native-async-storage/async-storage",
         "licenseUrl": "https://github.com/react-native-async-storage/async-storage/raw/master/LICENSE",
@@ -29,48 +29,37 @@
         "licenseUrl": "https://github.com/react-native-community/react-native-masked-view",
         "parents": "pillar-valley"
     },
-    "@react-navigation/native@6.0.6": {
+    "@react-navigation/stack@6.3.16": {
         "licenses": "MIT",
         "repository": "https://github.com/react-navigation/react-navigation",
         "licenseUrl": "https://github.com/react-navigation/react-navigation/raw/master/LICENSE",
         "parents": "pillar-valley"
     },
-    "@react-navigation/stack@6.0.11": {
-        "licenses": "MIT",
-        "repository": "https://github.com/react-navigation/react-navigation",
-        "licenseUrl": "https://github.com/react-navigation/react-navigation/raw/master/LICENSE",
-        "parents": "pillar-valley"
-    },
-    "@rematch/core@1.4.0": {
-        "licenses": "MIT",
-        "repository": "https://github.com/rematch/rematch",
-        "licenseUrl": "https://github.com/rematch/rematch/raw/master/LICENSE",
-        "parents": "pillar-valley"
-    },
-    "@rematch/persist@1.1.6": {
-        "licenses": "MIT",
-        "licenseUrl": "https://github.com/rematch/rematch/tree/master/plugins/persist#readme",
-        "parents": "pillar-valley"
-    },
-    "expo-av@12.0.4": {
+    "eslint-plugin-bacon@0.0.3": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "pillar-valley"
     },
-    "expo-blur@11.2.0": {
+    "expo-av@13.3.0": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "pillar-valley"
     },
-    "expo-constants@13.2.3": {
+    "expo-blur@12.3.1": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "pillar-valley"
     },
-    "expo-device@4.3.0": {
+    "expo-constants@14.3.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/expo/expo",
+        "licenseUrl": "https://github.com/expo/expo",
+        "parents": "pillar-valley"
+    },
+    "expo-device@5.3.0": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
@@ -82,67 +71,79 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "pillar-valley"
     },
-    "expo-gl@11.4.0": {
+    "expo-gl@12.5.0": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "pillar-valley"
     },
-    "expo-haptics@11.3.0": {
+    "expo-haptics@12.3.0": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "pillar-valley"
     },
-    "expo-linking@3.2.2": {
+    "expo-linking@4.1.0": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "pillar-valley"
     },
-    "expo-sensors@11.4.0": {
+    "expo-router@1.7.2": {
+        "licenses": "UNKNOWN",
+        "repository": "https://github.com/expo/router",
+        "licenseUrl": "https://github.com/expo/router",
+        "parents": "pillar-valley"
+    },
+    "expo-sensors@12.2.0": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "pillar-valley"
     },
-    "expo-splash-screen@0.16.1": {
+    "expo-splash-screen@0.19.0": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "pillar-valley"
     },
-    "expo-status-bar@1.4.0": {
+    "expo-status-bar@1.5.0": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "pillar-valley"
     },
-    "expo-store-review@5.3.0": {
+    "expo-store-review@6.3.0": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "pillar-valley"
     },
-    "expo-three@6.1.0": {
+    "expo-system-ui@2.3.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/expo/expo",
+        "licenseUrl": "https://github.com/expo/expo",
+        "parents": "pillar-valley"
+    },
+    "expo-three@6.2.0": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo-three",
         "licenseUrl": "https://github.com/expo/expo-three/raw/master/LICENSE",
         "parents": "pillar-valley"
     },
-    "expo-updates@0.14.5": {
+    "expo-updates@0.17.0": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "pillar-valley"
     },
-    "expo@46.0.8": {
+    "expo@49.0.0-alpha.3": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "pillar-valley"
     },
-    "firebase@9.4.1": {
+    "firebase@9.22.0": {
         "licenses": "Apache-2.0",
         "repository": "https://github.com/firebase/firebase-js-sdk",
         "licenseUrl": "https://github.com/firebase/firebase-js-sdk",
@@ -154,7 +155,7 @@
         "licenseUrl": "https://github.com/greensock/GreenSock-JS",
         "parents": "pillar-valley"
     },
-    "react-dom@18.0.0": {
+    "react-dom@18.2.0": {
         "licenses": "MIT",
         "repository": "https://github.com/facebook/react",
         "licenseUrl": "https://github.com/facebook/react/raw/master/LICENSE",
@@ -166,64 +167,58 @@
         "licenseUrl": "https://github.com/oblador/react-native-animatable/raw/master/LICENSE",
         "parents": "pillar-valley"
     },
-    "react-native-gesture-handler@2.5.0": {
+    "react-native-gesture-handler@2.9.0": {
         "licenses": "MIT",
         "repository": "https://github.com/software-mansion/react-native-gesture-handler",
         "licenseUrl": "https://github.com/software-mansion/react-native-gesture-handler/raw/master/LICENSE",
         "parents": "pillar-valley"
     },
-    "react-native-reanimated@2.9.1": {
+    "react-native-reanimated@3.0.2": {
         "licenses": "MIT",
         "repository": "https://github.com/software-mansion/react-native-reanimated",
         "licenseUrl": "https://github.com/software-mansion/react-native-reanimated/raw/master/LICENSE",
         "parents": "pillar-valley"
     },
-    "react-native-safe-area-context@4.3.1": {
+    "react-native-safe-area-context@4.5.0": {
         "licenses": "MIT",
         "repository": "https://github.com/th3rdwave/react-native-safe-area-context",
         "licenseUrl": "https://github.com/th3rdwave/react-native-safe-area-context/raw/master/LICENSE",
         "parents": "pillar-valley"
     },
-    "react-native-screens@3.15.0": {
+    "react-native-screens@3.20.0": {
         "licenses": "MIT",
         "repository": "https://github.com/software-mansion/react-native-screens",
         "licenseUrl": "https://github.com/software-mansion/react-native-screens/raw/master/LICENSE",
         "parents": "pillar-valley"
     },
-    "react-native-web@0.18.7": {
+    "react-native-web@0.18.12": {
         "licenses": "MIT",
         "repository": "https://github.com/necolas/react-native-web",
         "licenseUrl": "https://github.com/necolas/react-native-web/raw/master/LICENSE",
         "parents": "pillar-valley"
     },
-    "react-native@0.69.5": {
+    "react-native@0.71.7": {
         "licenses": "MIT",
         "repository": "github:facebook/react-native",
         "licenseUrl": "github:facebook/react-native",
         "parents": "pillar-valley"
     },
-    "react-redux@7.2.6": {
-        "licenses": "MIT",
-        "repository": "github:reduxjs/react-redux",
-        "licenseUrl": "github:reduxjs/react-redux",
-        "parents": "pillar-valley"
-    },
-    "react@18.0.0": {
+    "react@18.2.0": {
         "licenses": "MIT",
         "repository": "https://github.com/facebook/react",
         "licenseUrl": "https://github.com/facebook/react/raw/master/LICENSE",
-        "parents": "pillar-valley"
-    },
-    "redux-persist@6.0.0": {
-        "licenses": "MIT",
-        "repository": "https://github.com/rt2zz/redux-persist",
-        "licenseUrl": "https://github.com/rt2zz/redux-persist/raw/master/LICENSE",
         "parents": "pillar-valley"
     },
     "three@0.134.0": {
         "licenses": "MIT",
         "repository": "https://github.com/mrdoob/three.js",
         "licenseUrl": "https://github.com/mrdoob/three.js/raw/master/LICENSE",
+        "parents": "pillar-valley"
+    },
+    "zustand@4.3.8": {
+        "licenses": "MIT",
+        "repository": "https://github.com/pmndrs/zustand",
+        "licenseUrl": "https://github.com/pmndrs/zustand/raw/master/LICENSE",
         "parents": "pillar-valley"
     }
 }

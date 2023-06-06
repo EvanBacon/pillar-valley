@@ -3,35 +3,37 @@ import React from "react";
 import { Platform, StyleSheet, Text, View } from "react-native";
 import * as Animatable from "react-native-animatable";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { connect } from "react-redux";
 
 import Settings from "../constants/Settings";
+import { useFont } from "../hooks/useFont";
+import { useCurrency, useScore } from "../rematch/models";
 
-function ScoreMeta({
-  current,
-  best,
-  currency,
-}: {
-  current: number;
-  best: number;
-  currency: number;
-}) {
+function ScoreMeta() {
+  const {
+    score: { current, best },
+  } = useScore();
+  const { currency } = useCurrency();
+
   const { top } = useSafeAreaInsets();
+  const gothamNarrowBook = useFont("GothamNarrow-Book");
+  const fontStyle = { fontFamily: gothamNarrowBook };
   return (
     <View style={[styles.container, { top }]}>
       <View style={{ flexDirection: "row" }}>
-        <Text style={[styles.text, styles.highScore]}>{best}</Text>
+        <Text style={[styles.text, fontStyle, styles.highScore]}>{best}</Text>
         <Animatable.Text
           animation="rubberBand"
           key={current}
-          style={[styles.text, styles.score]}
+          style={[styles.text, fontStyle, styles.score]}
         >
           {current}
         </Animatable.Text>
       </View>
       {Settings.gemsEnabled && (
         <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <Text style={[styles.text, styles.currency]}>{currency}</Text>
+          <Text style={[styles.text, fontStyle, styles.currency]}>
+            {currency}
+          </Text>
           <FontAwesome
             name="diamond"
             size={20}
@@ -47,13 +49,7 @@ function ScoreMeta({
   );
 }
 
-export default connect(
-  ({ score: { current, best }, currency: { current: currency } }) => ({
-    current,
-    best,
-    currency,
-  })
-)(ScoreMeta);
+export default ScoreMeta;
 
 const styles = StyleSheet.create({
   container: {
@@ -67,7 +63,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   text: {
-    fontFamily: "GothamNarrow-Book",
+    // fontFamily: "GothamNarrow-Book",
     opacity: 0.8,
     fontSize: 48,
     backgroundColor: "transparent",

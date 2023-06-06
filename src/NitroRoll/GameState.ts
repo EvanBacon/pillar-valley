@@ -6,8 +6,8 @@ import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
 import { SobelOperatorShader } from "three/examples/jsm/shaders/SobelOperatorShader";
 
-import { GLEvent, ResizeEvent } from "../components/GraphicsView";
 import Game from "./Game";
+import { GLEvent, ResizeEvent } from "../components/GraphicsView";
 
 class Composer extends EffectComposer {
   constructor(renderer: Renderer, scene: Scene, camera: Camera) {

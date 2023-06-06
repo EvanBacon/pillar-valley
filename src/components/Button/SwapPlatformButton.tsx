@@ -1,32 +1,21 @@
+import * as Linking from "expo-linking";
+import { Platform } from "expo-modules-core";
 import * as React from "react";
 
 import Icon from "./Icon";
 
-import { Platform } from "expo-modules-core";
-import * as Linking from "expo-linking";
-
 function isAndroidWeb() {
-  if (Platform.OS !== "web") return false;
+  if (Platform.OS !== "web" || typeof window === "undefined") return false;
   const ua = navigator.userAgent.toLowerCase();
   return ua.includes("android");
 }
 
 function isAppleMobileWeb() {
-  if (Platform.OS !== "web") return false;
+  if (Platform.OS !== "web" || typeof window === "undefined") return false;
   // iOS detection from: http://stackoverflow.com/a/9039885/177710
-  return /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
-}
-
-// https://stackoverflow.com/a/27862868
-function isMacOSWeb() {
-  if (Platform.OS !== "web") return false;
-  return navigator.platform.includes("Mac");
-}
-
-// https://stackoverflow.com/a/27862868
-function isWindowsWeb() {
-  if (Platform.OS !== "web") return false;
-  return navigator.platform.includes("Win");
+  return (
+    /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream
+  );
 }
 
 const icons = {
