@@ -14,6 +14,8 @@ export default function Root({ children }: { children: React.ReactNode }) {
         />
         <InstallBanner id="1336398804" />
         <ScrollViewStyleReset />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-title" content="Pillar Valley" />
         <meta name="theme-color" content="#F09458" />
       </head>
       <script
