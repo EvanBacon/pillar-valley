@@ -11,6 +11,7 @@ import Song from "@/src/components/Song";
 import TouchableView from "@/src/components/TouchableView";
 import Settings from "@/src/constants/Settings";
 import useAppState from "@/src/hooks/useAppState";
+import Head from "expo-router/head";
 
 // import GameState from "../NitroRoll/GameState";
 const InputGameView = Settings.isSimulator ? SkipGameViewInSimulator : GameView;
@@ -78,22 +79,27 @@ export default function GameScreen() {
   const isPaused = appState !== "active";
 
   return (
-    <View style={styles.container} pointerEvents="box-none">
-      <Song />
-      <InputGameView onLoad={() => setLoading(false)} isPaused={isPaused} />
-      {/* <BottomBannerAd /> */}
-      <ScoreMeta />
-      <Footer />
-      {isPaused && <Paused />}
+    <>
+      <Head>
+        <title>Play | Pillar Valley</title>
+      </Head>
+      <View style={styles.container} pointerEvents="box-none">
+        <Song />
+        <InputGameView onLoad={() => setLoading(false)} isPaused={isPaused} />
+        {/* <BottomBannerAd /> */}
+        <ScoreMeta />
+        <Footer />
+        {isPaused && <Paused />}
 
-      {loading && (
-        <Image
-          style={StyleSheet.absoluteFill}
-          source={require("../icons/splash.png")}
-        />
-      )}
-      <AchievementPopup />
-    </View>
+        {loading && (
+          <Image
+            style={StyleSheet.absoluteFill}
+            source={require("../icons/splash.png")}
+          />
+        )}
+        <AchievementPopup />
+      </View>
+    </>
   );
 }
 

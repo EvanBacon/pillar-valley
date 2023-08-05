@@ -27,6 +27,7 @@ import {
   useRounds,
   useScore,
 } from "@/src/rematch/models";
+import Head from "expo-router/head";
 
 function Item({
   title,
@@ -255,19 +256,25 @@ function PreferencesScreen() {
   ].filter(Boolean);
 
   return (
-    <View style={styles.container}>
-      <SectionList
-        sections={data}
-        renderSectionHeader={({ section: { title } }) => (
-          <View style={{ backgroundColor: "#F09458" }}>
-            <Text style={{ padding: 16, color: "white" }}>{title}</Text>
-          </View>
-        )}
-        contentContainerStyle={{ paddingBottom: bottom }}
-        keyExtractor={(item) => item.title}
-        renderItem={({ item, index }) => <Item {...item} />}
-      />
-    </View>
+    <>
+      <Head>
+        <title>Settings</title>
+        <meta property="og:title" content="Settings | Pillar Valley" />
+      </Head>
+      <View style={styles.container}>
+        <SectionList
+          sections={data}
+          renderSectionHeader={({ section: { title } }) => (
+            <View style={{ backgroundColor: "#F09458" }}>
+              <Text style={{ padding: 16, color: "white" }}>{title}</Text>
+            </View>
+          )}
+          contentContainerStyle={{ paddingBottom: bottom }}
+          keyExtractor={(item) => item.title}
+          renderItem={({ item, index }) => <Item {...item} />}
+        />
+      </View>
+    </>
   );
 }
 

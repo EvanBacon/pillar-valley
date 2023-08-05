@@ -5,6 +5,7 @@ import AchievementsItem from "@/src/components/AchievementsItem";
 import List from "@/src/components/List";
 import Challenges from "@/src/constants/Achievements";
 import { useAchievements } from "@/src/rematch/models";
+import Head from "expo-router/head";
 
 const challengesListData = Object.keys(Challenges).map((key) => ({
   key,
@@ -43,24 +44,30 @@ function AchievementScreen({ showActionSheetWithOptions }) {
   }, [achievements, filter]);
 
   return (
-    <List
-      noMore
-      renderItem={({ item, index }) => (
-        <AchievementsItem
-          onPress={() => {}}
-          {...item}
-          index={index}
-          complete={achievements[item.key]}
-        />
-      )}
-      title={`${data.length} Challenges`}
-      headerButtonTitle={`Showing ${filter}`}
-      data={data}
-      renderUserItem={(props) => null}
-      onPress={() => {}}
-      onPressHeader={_onOpenActionSheet}
-      onPressFooter={() => {}}
-    />
+    <>
+      <Head>
+        <title>Challenges</title>
+        <meta property="og:title" content="Challenges | Pillar Valley" />
+      </Head>
+      <List
+        noMore
+        renderItem={({ item, index }) => (
+          <AchievementsItem
+            onPress={() => {}}
+            {...item}
+            index={index}
+            complete={achievements[item.key]}
+          />
+        )}
+        title={`${data.length} Challenges`}
+        headerButtonTitle={`Showing ${filter}`}
+        data={data}
+        renderUserItem={(props) => null}
+        onPress={() => {}}
+        onPressHeader={_onOpenActionSheet}
+        onPressFooter={() => {}}
+      />
+    </>
   );
 }
 

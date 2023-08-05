@@ -7,6 +7,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import LicensesListItem from "@/src/components/LicensesListItem";
 import Settings from "@/src/constants/Settings";
+import Head from "expo-router/head";
 
 const Data = require("@/src/constants/Licenses");
 
@@ -62,48 +63,54 @@ sortDataByKey(licenses, "username");
 export default function Licenses() {
   const { bottom } = useSafeAreaInsets();
   return (
-    <View style={{ flex: 1, backgroundColor: "#191A23" }}>
-      <View style={{ padding: 16 }}>
-        <A
-          style={{
-            fontSize: 24,
-            color: "white",
-          }}
-          href="https://twitter.com/baconbrix"
-        >
-          Built by Evan Bacon
-        </A>
-        {!Settings.isPromo && (
+    <>
+      <Head>
+        <title>Credit</title>
+        <meta property="og:title" content="Credit | Pillar Valley" />
+      </Head>
+      <View style={{ flex: 1, backgroundColor: "#191A23" }}>
+        <View style={{ padding: 16 }}>
           <A
-            style={{ fontSize: 16, color: "white" }}
-            href="https://github.com/evanbacon/pillar-valley"
+            style={{
+              fontSize: 24,
+              color: "white",
+            }}
+            href="https://twitter.com/baconbrix"
           >
-            Powered by Expo
+            Built by Evan Bacon
           </A>
+          {!Settings.isPromo && (
+            <A
+              style={{ fontSize: 16, color: "white" }}
+              href="https://github.com/evanbacon/pillar-valley"
+            >
+              Powered by Expo
+            </A>
+          )}
+        </View>
+        <FlatList
+          style={{ flex: 1 }}
+          keyExtractor={({ key }) => key}
+          data={licenses}
+          contentContainerStyle={{ paddingBottom: bottom }}
+          renderItem={({ item }) => <LicensesListItem {...item} />}
+        />
+        {Platform.OS === "web" && (
+          <Animatable.Image
+            animation="slideInUp"
+            delay={500}
+            source={require("@/src/assets/images/evan.png")}
+            style={{
+              position: Platform.select({ default: "absolute", web: "fixed" }),
+              width: "30%",
+              height: "30%",
+              bottom: 0,
+              right: 8,
+              resizeMode: "contain",
+            }}
+          />
         )}
       </View>
-      <FlatList
-        style={{ flex: 1 }}
-        keyExtractor={({ key }) => key}
-        data={licenses}
-        contentContainerStyle={{ paddingBottom: bottom }}
-        renderItem={({ item }) => <LicensesListItem {...item} />}
-      />
-      {Platform.OS === "web" && (
-        <Animatable.Image
-          animation="slideInUp"
-          delay={500}
-          source={require("@/src/assets/images/evan.png")}
-          style={{
-            position: Platform.select({ default: "absolute", web: "fixed" }),
-            width: "30%",
-            height: "30%",
-            bottom: 0,
-            right: 8,
-            resizeMode: "contain",
-          }}
-        />
-      )}
-    </View>
+    </>
   );
 }
