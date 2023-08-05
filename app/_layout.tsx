@@ -22,6 +22,8 @@ export const unstable_settings = {
 // TODO: Customize this
 export { ErrorBoundary } from "expo-router";
 
+SplashScreen.preventAutoHideAsync();
+
 export default function Layout() {
   const loading = useLoadAssets();
 
