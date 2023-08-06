@@ -18,7 +18,7 @@ import {
   useGameState,
   useRounds,
   useScore,
-} from "../rematch/models";
+} from "../zustand/models";
 
 function distance(
   p1: { x: number; z: number },

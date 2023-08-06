@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import AudioManager from "../AudioManager";
-import { useGlobalAudio } from "../rematch/models";
+import { useGlobalAudio } from "../zustand/models";
 
 function Song() {
   const { enabled } = useGlobalAudio();

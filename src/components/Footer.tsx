@@ -14,7 +14,7 @@ import SoundButton from "./Button/Sound";
 import GameStates from "../Game/GameStates";
 import { rewardAdUnitId } from "../constants/Ads";
 import Settings from "../constants/Settings";
-import { useGameScreenshot, useGameState } from "../rematch/models";
+import { useGameScreenshot, useGameState } from "../zustand/models";
 
 const delay = 100;
 const initialDelay = 100;

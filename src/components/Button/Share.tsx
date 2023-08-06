@@ -5,7 +5,7 @@ import { Share } from "react-native";
 
 import Icon from "./Icon";
 import storeUrl from "../../utils/storeUrl";
-import { useGameScreenshot, useScore } from "@/src/rematch/models";
+import { useGameScreenshot, useScore } from "@/src/zustand/models";
 
 class ShareButton extends React.Component {
   onPress = async () => {

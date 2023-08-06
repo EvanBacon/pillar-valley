@@ -1,4 +1,4 @@
-import { useGlobalAudio } from "@/src/rematch/models";
+import { useGlobalAudio } from "@/src/zustand/models";
 
 import Icon from "./Icon";
 

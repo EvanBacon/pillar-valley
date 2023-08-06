@@ -12,7 +12,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import AudioManager from "../AudioManager";
-import { usePresentAchievement } from "../rematch/models";
+import { usePresentAchievement } from "../zustand/models";
 
 const Colors = {
   darkerGreen: "#000A69",

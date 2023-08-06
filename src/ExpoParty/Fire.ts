@@ -1,4 +1,3 @@
-// import { dispatch } from "../rematch/store";
 import Constants from "expo-constants";
 import firebase from "firebase/app";
 

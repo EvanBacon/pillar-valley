@@ -4,7 +4,7 @@ import React from "react";
 import AchievementsItem from "@/src/components/AchievementsItem";
 import List from "@/src/components/List";
 import Challenges from "@/src/constants/Achievements";
-import { useAchievements } from "@/src/rematch/models";
+import { useAchievements } from "@/src/zustand/models";
 import Head from "expo-router/head";
 
 const challengesListData = Object.keys(Challenges).map((key) => ({

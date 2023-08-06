@@ -19,7 +19,7 @@ import {
   useCurrency,
   useRounds,
   useScore,
-} from "@/src/rematch/models";
+} from "@/src/zustand/models";
 import { connectActionSheet } from "@expo/react-native-action-sheet";
 import Constants from "expo-constants";
 import Head from "expo-router/head";

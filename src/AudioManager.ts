@@ -1,6 +1,6 @@
 import { Audio } from "expo-av";
 import { Platform } from "react-native";
-import { useGlobalAudio } from "./rematch/models";
+import { useGlobalAudio } from "./zustand/models";
 
 const audio = {
   // Common

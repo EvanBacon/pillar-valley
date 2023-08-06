@@ -12,7 +12,7 @@ import AudioManager from "../AudioManager";
 import GameObject from "../Game/GameObject";
 import GameStates from "../Game/GameStates";
 import randomRange from "../Game/utils/randomRange";
-import { dispatch } from "../rematch/store";
+import { dispatch } from "../zustand/store";
 
 class Game extends GameObject {
   state = GameStates.Playing;

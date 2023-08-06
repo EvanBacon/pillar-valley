@@ -6,7 +6,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import Settings from "../constants/Settings";
 import { useFont } from "../hooks/useFont";
-import { useCurrency, useScore } from "../rematch/models";
+import { useCurrency, useScore } from "../zustand/models";
 
 function ScoreMeta() {
   const {
