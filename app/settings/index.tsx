@@ -14,7 +14,7 @@ import {
   TouchableOpacity,
   Linking,
 } from "react-native";
-import { TouchableHighlight } from "react-native-gesture-handler";
+import { TouchableHighlight, ScrollView } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import {
@@ -72,6 +72,7 @@ function Item({
 
   return (
     <TouchableHighlight
+      disabled={!onPress && !href}
       style={[
         {
           borderCurve: "continuous",
@@ -311,6 +312,7 @@ function PreferencesScreen() {
       </Head>
       <View style={styles.container}>
         <SectionList
+          renderScrollComponent={(props) => <ScrollView {...props} />}
           sections={data}
           initialNumToRender={30}
           contentContainerStyle={{
