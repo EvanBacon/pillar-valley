@@ -1,9 +1,8 @@
-import { TextProps } from "@expo/html-elements/build/primitives/Text";
 import React from "react";
 import {
   Image,
   Text,
-  StyleSheet,
+  TextProps,
   TouchableOpacity,
   View,
   ImageProps,

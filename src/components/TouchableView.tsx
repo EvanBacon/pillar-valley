@@ -1,6 +1,5 @@
-import { ViewProps } from "@expo/html-elements/build/primitives/View";
 import React from "react";
-import { View } from "react-native";
+import { ViewProps, View } from "react-native";
 
 export default function TouchableView({
   onTouchesBegan,
