@@ -247,7 +247,7 @@ function PreferencesScreen() {
       data: [
         {
           title: "Licenses",
-          href: "/credit",
+          href: "/settings/licenses",
         },
         Platform.OS !== "web" && {
           title: "Deep Linking Scheme",

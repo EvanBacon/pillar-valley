@@ -42,6 +42,7 @@ export default function Settings() {
     >
       <Stack.Screen name="index" options={{ title: "Settings" }} />
       <Stack.Screen name="icon" options={{ title: "App Icon" }} />
+      <Stack.Screen name="licenses" options={{ title: "Licenses" }} />
     </Stack>
   );
 }

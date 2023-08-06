@@ -102,14 +102,7 @@ function InnerLayout() {
                 presentation: "modal",
               }}
             />
-            <Stack.Screen
-              name="credit"
-              options={{
-                title: "Licenses",
-                headerRight: BackButton,
-                presentation: "modal",
-              }}
-            />
+
             <Stack.Screen
               name="settings"
               options={{
