@@ -5,6 +5,7 @@ import React from "react";
 import { SectionList, StyleSheet, Text, View } from "react-native";
 import { ScrollView, TouchableHighlight } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import * as Haptics from "expo-haptics";
 
 function ActionTypeIcon({ type }: { type: "internal" | "external" }) {
   if (type === "internal") {
@@ -68,6 +69,7 @@ function Item({
       ]}
       underlayColor={Slate[400]}
       onPress={() => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
         if (href) {
           router.push(href);
         }

@@ -38,10 +38,20 @@ export default function App() {
   );
 }
 
+import * as Haptics from "expo-haptics";
+
 function Item({ ...props }) {
   return (
     <TouchableBounce
-      onPress={props.onPress}
+      onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)}
+      onPress={() => {
+        props.onPress();
+        if (props.isSelected) {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        } else {
+          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+        }
+      }}
       style={{ marginVertical: 8, marginHorizontal: 24 }}
     >
       <View
