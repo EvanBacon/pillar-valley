@@ -59,8 +59,6 @@ export const useGlobalAudio = create(
       toggleMuted: () =>
         set((state) => {
           Analytics.logEvent("toggle_music", { on: state.enabled });
-          console.log("Toggle", state);
-
           return { ...state, enabled: !state.enabled };
         }),
     }),
@@ -70,11 +68,8 @@ export const useGlobalAudio = create(
         return {
           getItem(name) {
             if (Platform.OS === "ios") {
-              const v = Boolean(Settings.get(name));
-              console.log("Get", name, v, Settings.get(name));
-
               return JSON.stringify({
-                state: { enabled: v },
+                state: { enabled: Boolean(Settings.get(name)) },
                 version: 0,
               });
             } else {
@@ -84,7 +79,6 @@ export const useGlobalAudio = create(
           setItem(name, value) {
             if (Platform.OS === "ios") {
               const enabled = Boolean(JSON.parse(value).state.enabled);
-              console.log("set", name, enabled, value, typeof value);
               Settings.set({
                 [name]: enabled,
               });
