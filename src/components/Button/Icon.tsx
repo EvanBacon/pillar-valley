@@ -1,11 +1,13 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import React from "react";
 import { Platform, StyleSheet } from "react-native";
+import * as Haptics from "expo-haptics";
 
 import AudioManager from "../../AudioManager";
 import TouchableBounce from "../TouchableBounce";
 
 export default function Icon({
+  onPressIn,
   onPress = () => {},
   size = 24,
   color = "#fff",
@@ -18,7 +20,11 @@ export default function Icon({
   return (
     <TouchableBounce
       onPress={onPress}
-      onPressIn={() => AudioManager.playAsync(soundIn)}
+      onPressIn={() => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+        onPressIn?.();
+        AudioManager.playAsync(soundIn);
+      }}
       onPressOut={() => AudioManager.playAsync(soundOut)}
       style={[styles.container, style]}
     >

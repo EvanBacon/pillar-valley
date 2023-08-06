@@ -15,6 +15,7 @@ import GameStates from "../Game/GameStates";
 import { rewardAdUnitId } from "../constants/Ads";
 import Settings from "../constants/Settings";
 import { useGameScreenshot, useGameState } from "../zustand/models";
+import * as Haptics from "expo-haptics";
 
 const delay = 100;
 const initialDelay = 100;
@@ -34,9 +35,12 @@ function Footer() {
   const navigation = useNavigation();
   // const router = useRouter();
   const onChallengesPress = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+
     router.push("/challenges");
   };
   const onPreferencesPress = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     navigation.push("settings");
     // router.push("/settings");
   };

@@ -425,6 +425,7 @@ class Game extends GameObject {
     if (this.state === GameStates.Playing) {
       return;
     }
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     this.titleGroup?.animateHidden(async () => {
       await this.loadGame();
       this.setGameState(GameStates.Playing);
@@ -541,6 +542,8 @@ class Game extends GameObject {
   };
 
   gameOver = (animate = true) => {
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+
     this.takeScreenshot();
     this.screenShotTaken = false;
     const scoreState = useScore.getState();
