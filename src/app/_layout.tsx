@@ -16,6 +16,7 @@ import Gate from "@/src/rematch/Gate";
 import { useUpdatedUpdatesInfoInSettings } from "@/src/hooks/useUpdatesInAppleSettings";
 import { useSyncGlobalAudioWithSettings } from "@/src/rematch/models";
 import DynamicIconProvider from "@/src/components/DynamicIconContext";
+import { Slate } from "../constants/Colors";
 
 // import { setTestDeviceIDAsync } from "expo-ads-admob";
 export const unstable_settings = {
@@ -82,11 +83,15 @@ function InnerLayout() {
               screenOptions={{
                 headerTintColor: "white",
                 headerStyle: {
-                  backgroundColor: "#F09458",
+                  backgroundColor: "#21222B",
                   borderBottomWidth: 0,
                 },
                 headerBackTitleStyle: {
                   fontFamily: "Inter_500Medium",
+                },
+
+                contentStyle: {
+                  backgroundColor: Slate[900],
                 },
 
                 headerTitleStyle: {

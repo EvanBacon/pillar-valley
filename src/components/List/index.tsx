@@ -1,5 +1,6 @@
+import { Slate } from "@/src/constants/Colors";
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 
 import Footer from "./Footer";
@@ -61,7 +62,7 @@ class List extends React.Component {
     return (
       <View style={{ flex: 1 }}>
         <FlatList
-          style={[style, { backgroundColor: "#282A37" }]}
+          style={[style, { backgroundColor: Slate["800"] }]}
           keyExtractor={this.keyExtractor}
           ListFooterComponent={this.footer}
           ItemSeparatorComponent={Separator}
