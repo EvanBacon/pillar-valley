@@ -1,26 +1,17 @@
-import { connectActionSheet } from "@expo/react-native-action-sheet";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import Constants from "expo-constants";
-import { router, useRouter } from "expo-router";
-import * as StoreReview from "expo-store-review";
-import React from "react";
 import {
-  SectionList,
-  Text,
-  StyleSheet,
-  View,
-  Alert,
-  Platform,
-  TouchableOpacity,
-  Linking,
-} from "react-native";
-import { TouchableHighlight, ScrollView } from "react-native-gesture-handler";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-
-import {
-  openOtherPlatform,
   getOtherPlatform,
+  openOtherPlatform,
 } from "@/src/components/Button/SwapPlatformButton";
+import { useSelectedIconSource } from "@/src/components/DynamicIconContext";
+import Android from "@/src/components/svg/android";
+import AppStoreSvg from "@/src/components/svg/app-store";
+import Apple from "@/src/components/svg/apple";
+import BrowserSvg from "@/src/components/svg/browser";
+import ExpoSvg from "@/src/components/svg/expo";
+import GitHubSvg from "@/src/components/svg/github";
+import InstagramSvg from "@/src/components/svg/instagram";
+import XSvg from "@/src/components/svg/x";
+import { Slate } from "@/src/constants/Colors";
 import useStoreReview from "@/src/hooks/useStoreReview";
 import {
   useAchievements,
@@ -28,14 +19,33 @@ import {
   useRounds,
   useScore,
 } from "@/src/rematch/models";
+import { connectActionSheet } from "@expo/react-native-action-sheet";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import Constants from "expo-constants";
+import { router, useRouter } from "expo-router";
 import Head from "expo-router/head";
-import { Slate } from "@/src/constants/Colors";
+import * as StoreReview from "expo-store-review";
+import React from "react";
+import {
+  Alert,
+  Image,
+  Linking,
+  Platform,
+  SectionList,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import { ScrollView, TouchableHighlight } from "react-native-gesture-handler";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 function ActionTypeIcon({ type }: { type: "internal" | "external" }) {
   if (type === "internal") {
-    return <FontAwesome color={Slate[500]} size={20} name="angle-right" />;
+    return (
+      <Ionicons color={Slate[500]} size={20} name="chevron-forward-outline" />
+    );
   } else {
-    return <FontAwesome color={Slate[500]} size={20} name="external-link" />;
+    return <Ionicons color={Slate[500]} size={20} name="ios-open-outline" />;
   }
 }
 
@@ -154,13 +164,6 @@ function areYouSureAsync(): Promise<boolean> {
   });
 }
 
-import BrowserSvg from "@/src/components/svg/browser";
-import AppStoreSvg from "@/src/components/svg/app-store";
-import GitHubSvg from "@/src/components/svg/github";
-import InstagramSvg from "@/src/components/svg/instagram";
-import XSvg from "@/src/components/svg/x";
-import ExpoSvg from "@/src/components/svg/expo";
-
 function LeftIconWrapper({ children }: { children: React.ReactNode }) {
   return (
     <View
@@ -173,6 +176,26 @@ function LeftIconWrapper({ children }: { children: React.ReactNode }) {
     >
       {children}
     </View>
+  );
+}
+
+function CurrentIconBadge() {
+  const src = useSelectedIconSource();
+  console.log("src>>", src);
+  const size = 14 + 12;
+  return (
+    <Image
+      style={{
+        height: size,
+        width: size,
+        // borderCurve: "continuous",
+        borderRadius: 6,
+
+        backgroundColor: Slate["100"],
+      }}
+      resizeMode="cover"
+      source={src}
+    />
   );
 }
 
@@ -200,6 +223,11 @@ function PreferencesScreen() {
     {
       title: "",
       data: [
+        Platform.OS === "ios" && {
+          leftIcon: <CurrentIconBadge />,
+          title: "Customize App Icon",
+          href: "/settings/icon",
+        },
         canReview && {
           leftIcon: (
             <LeftIconWrapper>
@@ -218,10 +246,6 @@ function PreferencesScreen() {
             StoreReview.requestReview();
           },
         },
-        Platform.OS === "ios" && {
-          title: "Change App Icon",
-          href: "/settings/icon",
-        },
 
         // Platform.OS !== "web" && {
         //   title: "🎥 Watch an ad",
@@ -234,6 +258,14 @@ function PreferencesScreen() {
         // },
 
         Platform.OS !== "web" && {
+          leftIcon: (
+            <LeftIconWrapper>
+              {Platform.select({
+                ios: <Apple height={14} width={14} />,
+                android: <Android height={14} width={14} />,
+              })}
+            </LeftIconWrapper>
+          ),
           title: "Open System Settings",
           actionType: "external",
           onPress: () => {

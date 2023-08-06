@@ -1,68 +1,13 @@
 import Entypo from "@expo/vector-icons/Entypo";
 import React from "react";
 import { Image, Text, View } from "react-native";
-import AppIcon from "react-native-dynamic-app-icon";
 import TouchableBounce from "react-native/Libraries/Components/Touchable/TouchableBounce";
 import { Slate } from "@/src/constants/Colors";
 
-function useIconName() {
-  const [icon, _setIcon] = React.useState(null);
-
-  React.useEffect(() => {
-    let isMounted = true;
-    AppIcon.getIconName((result) => {
-      if (isMounted) _setIcon(result.iconName);
-    });
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
-  const setIcon = React.useCallback(
-    (icon) => {
-      AppIcon.setAppIcon(icon);
-      _setIcon(icon || null);
-    },
-    [_setIcon]
-  );
-  return [icon === "default" ? null : icon, setIcon];
-}
-
-const icons = [
-  {
-    name: "Auto",
-    source: require("@/icons/pillars/default.png"),
-    iconId: null,
-  },
-  {
-    name: "Spring",
-    source: require("@/icons/pillars/spring.png"),
-    iconId: "spring",
-  },
-  {
-    name: "Autumn",
-    source: require("@/icons/pillars/autumn.png"),
-    iconId: "autumn",
-  },
-  {
-    name: "Solstice",
-    source: require("@/icons/pillars/solstice.png"),
-    iconId: "solstice",
-  },
-  {
-    name: "Winter",
-    source: require("@/icons/pillars/winter.png"),
-    iconId: "winter",
-  },
-  {
-    name: "Bacon",
-    source: require("@/icons/pillars/special.png"),
-    iconId: "special",
-  },
-];
+import { icons, useDynamicAppIcon } from "./DynamicIconContext";
 
 export default function App() {
-  const [_icon, setIcon] = useIconName();
+  const [_icon, setIcon] = useDynamicAppIcon();
 
   return (
     <View

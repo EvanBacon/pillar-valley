@@ -15,6 +15,7 @@ import TouchableBounce from "@/src/components/TouchableBounce";
 import Gate from "@/src/rematch/Gate";
 import { useUpdatedUpdatesInfoInSettings } from "@/src/hooks/useUpdatesInAppleSettings";
 import { useSyncGlobalAudioWithSettings } from "@/src/rematch/models";
+import DynamicIconProvider from "@/src/components/DynamicIconContext";
 
 // import { setTestDeviceIDAsync } from "expo-ads-admob";
 export const unstable_settings = {
@@ -75,52 +76,54 @@ function InnerLayout() {
   return (
     <Gate>
       <View style={{ backgroundColor: "blue", flex: 1 }}>
-        <ActionSheetProvider>
-          <Stack
-            screenOptions={{
-              headerTintColor: "white",
-              headerStyle: {
-                backgroundColor: "#F09458",
-                borderBottomWidth: 0,
-              },
-              headerBackTitleStyle: {
-                fontFamily: "Inter_500Medium",
-              },
+        <DynamicIconProvider>
+          <ActionSheetProvider>
+            <Stack
+              screenOptions={{
+                headerTintColor: "white",
+                headerStyle: {
+                  backgroundColor: "#F09458",
+                  borderBottomWidth: 0,
+                },
+                headerBackTitleStyle: {
+                  fontFamily: "Inter_500Medium",
+                },
 
-              headerTitleStyle: {
-                color: "white",
-                fontFamily: "Inter_500Medium",
-              },
-            }}
-          >
-            <Stack.Screen name="index" options={{ header: () => null }} />
-            <Stack.Screen
-              name="challenges"
-              options={{
-                title: "Challenges",
-                headerRight: BackButton,
-                presentation: "modal",
+                headerTitleStyle: {
+                  color: "white",
+                  fontFamily: "Inter_500Medium",
+                },
               }}
-            />
+            >
+              <Stack.Screen name="index" options={{ header: () => null }} />
+              <Stack.Screen
+                name="challenges"
+                options={{
+                  title: "Challenges",
+                  headerRight: BackButton,
+                  presentation: "modal",
+                }}
+              />
 
-            <Stack.Screen
-              name="settings"
-              options={{
-                title: "Settings",
-                headerShown: false,
-                presentation: "modal",
-              }}
-            />
-            <Stack.Screen
-              name="privacy"
-              options={{
-                title: "Privacy",
-                headerRight: BackButton,
-                presentation: "modal",
-              }}
-            />
-          </Stack>
-        </ActionSheetProvider>
+              <Stack.Screen
+                name="settings"
+                options={{
+                  title: "Settings",
+                  headerShown: false,
+                  presentation: "modal",
+                }}
+              />
+              <Stack.Screen
+                name="privacy"
+                options={{
+                  title: "Privacy",
+                  headerRight: BackButton,
+                  presentation: "modal",
+                }}
+              />
+            </Stack>
+          </ActionSheetProvider>
+        </DynamicIconProvider>
       </View>
     </Gate>
   );
