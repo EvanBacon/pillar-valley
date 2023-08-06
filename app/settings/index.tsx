@@ -47,6 +47,7 @@ function Item({
   bottom,
   href,
   actionType,
+  leftIcon,
 }: {
   href?: string;
   title: string;
@@ -54,6 +55,7 @@ function Item({
   onPress?: () => void;
   top?: boolean;
   bottom?: boolean;
+  leftIcon?: React.ReactNode;
   actionType?: "external" | "internal";
 }) {
   const renderItem = () => {
@@ -106,15 +108,20 @@ function Item({
           // fontSize: 18,
         }}
       >
-        <Text
-          style={{
-            fontFamily: "Inter_500Medium",
-            color: Slate[100],
-            fontSize: 16,
-          }}
-        >
-          {title}
-        </Text>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+          {leftIcon}
+          {title && (
+            <Text
+              style={{
+                fontFamily: "Inter_500Medium",
+                color: Slate[100],
+                fontSize: 16,
+              }}
+            >
+              {title}
+            </Text>
+          )}
+        </View>
         {renderItem()}
       </View>
     </TouchableHighlight>
@@ -147,6 +154,28 @@ function areYouSureAsync(): Promise<boolean> {
   });
 }
 
+import BrowserSvg from "@/src/components/svg/browser";
+import AppStoreSvg from "@/src/components/svg/app-store";
+import GitHubSvg from "@/src/components/svg/github";
+import InstagramSvg from "@/src/components/svg/instagram";
+import XSvg from "@/src/components/svg/x";
+import ExpoSvg from "@/src/components/svg/expo";
+
+function LeftIconWrapper({ children }: { children: React.ReactNode }) {
+  return (
+    <View
+      style={{
+        borderCurve: "continuous",
+        borderRadius: 6,
+        padding: 6,
+        backgroundColor: Slate["100"],
+      }}
+    >
+      {children}
+    </View>
+  );
+}
+
 function PreferencesScreen() {
   const { score, hardResetScore } = useScore();
   const { rounds, bestRounds, resetBestRounds, resetRounds } = useRounds();
@@ -172,6 +201,18 @@ function PreferencesScreen() {
       title: "",
       data: [
         canReview && {
+          leftIcon: (
+            <LeftIconWrapper>
+              <AppStoreSvg
+                height={14}
+                width={14}
+                fill={Platform.select({
+                  android: "#414141",
+                  default: "#0D96F6",
+                })}
+              />
+            </LeftIconWrapper>
+          ),
           title: "Write a review",
           onPress: () => {
             StoreReview.requestReview();
@@ -181,10 +222,7 @@ function PreferencesScreen() {
           title: "Change App Icon",
           href: "/settings/icon",
         },
-        {
-          title: "Star the project on Github",
-          href: "https://github.com/EvanBacon/pillar-valley/stargazers",
-        },
+
         // Platform.OS !== "web" && {
         //   title: "🎥 Watch an ad",
         //   onPress: async () => {
@@ -202,16 +240,36 @@ function PreferencesScreen() {
             Linking.openSettings();
           },
         },
-        {
-          title: "Report a bug",
-          href: "https://github.com/EvanBacon/pillar-valley/issues/new",
-        },
+
         getOtherPlatform() && {
+          leftIcon: (
+            <LeftIconWrapper>
+              <BrowserSvg height={14} width={14} />
+            </LeftIconWrapper>
+          ),
           title: "Play on another platform",
           actionType: "external",
           onPress: () => {
             openOtherPlatform();
           },
+        },
+        {
+          leftIcon: (
+            <LeftIconWrapper>
+              <GitHubSvg height={14} width={14} />
+            </LeftIconWrapper>
+          ),
+          title: "Star the project on Github",
+          href: "https://github.com/EvanBacon/pillar-valley/stargazers",
+        },
+        {
+          leftIcon: (
+            <LeftIconWrapper>
+              <GitHubSvg height={14} width={14} />
+            </LeftIconWrapper>
+          ),
+          title: "Report a bug",
+          href: "https://github.com/EvanBacon/pillar-valley/issues/new",
         },
       ].filter(Boolean),
     },
@@ -226,17 +284,32 @@ function PreferencesScreen() {
         //   },
         // },
         {
+          leftIcon: (
+            <LeftIconWrapper>
+              <XSvg height={14} width={14} />
+            </LeftIconWrapper>
+          ),
           title: "X",
           value: "@baconbrix",
           href: "https://x.com/baconbrix",
         },
         {
+          leftIcon: (
+            <LeftIconWrapper>
+              <InstagramSvg height={14} width={14} />
+            </LeftIconWrapper>
+          ),
           title: "Instagram",
           value: "@baconbrix",
           href: "https://www.instagram.com/baconbrix",
         },
 
         {
+          leftIcon: (
+            <LeftIconWrapper>
+              <GitHubSvg height={14} width={14} />
+            </LeftIconWrapper>
+          ),
           title: "Github",
           value: "EvanBacon",
           href: "https://github.com/evanbacon",
@@ -254,13 +327,7 @@ function PreferencesScreen() {
           title: "Deep Linking Scheme",
           value: `${Constants.expoConfig?.scheme}://`,
         },
-        {
-          title: "Expo SDK",
-          value: require("@/package.json").dependencies["expo"],
-          onPress: () => {
-            setTaps((taps) => taps + 1);
-          },
-        },
+
         Platform.select({
           web: null,
           ios: {
@@ -272,6 +339,18 @@ function PreferencesScreen() {
             value: Constants.expoConfig?.android?.["package"],
           },
         }),
+        {
+          leftIcon: (
+            <LeftIconWrapper>
+              <ExpoSvg height={14} width={14} />
+            </LeftIconWrapper>
+          ),
+          title: "Expo SDK",
+          value: require("@/package.json").dependencies["expo"],
+          onPress: () => {
+            setTaps((taps) => taps + 1);
+          },
+        },
       ].filter(Boolean),
     },
     taps > 10 && {
