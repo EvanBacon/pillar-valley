@@ -1,4 +1,5 @@
 import TouchableBounce from "@/src/components/TouchableBounce";
+import { Slate } from "@/src/constants/Colors";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { router, Stack } from "expo-router";
 import { Platform } from "react-native";
@@ -36,6 +37,9 @@ export default function Settings() {
           fontFamily: "Inter_500Medium",
         },
 
+        contentStyle: {
+          backgroundColor: Slate[900],
+        },
         headerTitleStyle: { color: "white", fontFamily: "Inter_500Medium" },
         headerRight: BackButton,
       }}

@@ -1,13 +1,6 @@
-import { A } from "@expo/html-elements";
-import * as React from "react";
-import { Platform, View } from "react-native";
-import * as Animatable from "react-native-animatable";
-import { FlatList } from "react-native-gesture-handler";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-
-import LicensesListItem from "@/src/components/LicensesListItem";
-import Settings from "@/src/constants/Settings";
+import { CustomList } from "@/src/components/CustomList";
 import Head from "expo-router/head";
+import * as React from "react";
 
 const Data = require("@/src/constants/Licenses");
 
@@ -34,7 +27,9 @@ const licenses = Object.keys(Data).map((key) => {
     .split("https://github.com/")
     .pop()
     .split("/")
-    .shift();
+    .shift()
+    .replace(/^github:/gi, "");
+
   // extractNameFromGithubUrl(license.repository) ||
   // extractNameFromGithubUrl(license.licenseUrl);
 
@@ -61,56 +56,47 @@ const licenses = Object.keys(Data).map((key) => {
 sortDataByKey(licenses, "username");
 
 export default function Licenses() {
-  const { bottom } = useSafeAreaInsets();
   return (
     <>
       <Head>
         <title>Credit</title>
         <meta property="og:title" content="Credit | Pillar Valley" />
       </Head>
-      <View style={{ flex: 1, backgroundColor: "#191A23" }}>
-        <View style={{ padding: 16 }}>
-          <A
-            style={{
-              fontSize: 24,
-              color: "white",
-            }}
-            href="https://twitter.com/baconbrix"
-          >
-            Built by Evan Bacon
-          </A>
-          {!Settings.isPromo && (
-            <A
-              style={{ fontSize: 16, color: "white" }}
-              href="https://github.com/evanbacon/pillar-valley"
-            >
-              Powered by Expo
-            </A>
-          )}
-        </View>
-        <FlatList
-          style={{ flex: 1 }}
-          keyExtractor={({ key }) => key}
-          data={licenses}
-          contentContainerStyle={{ paddingBottom: bottom }}
-          renderItem={({ item }) => <LicensesListItem {...item} />}
-        />
-        {Platform.OS === "web" && (
-          <Animatable.Image
-            animation="slideInUp"
-            delay={500}
-            source={require("@/src/assets/images/evan.png")}
-            style={{
-              position: Platform.select({ default: "absolute", web: "fixed" }),
-              width: "30%",
-              height: "30%",
-              bottom: 0,
-              right: 8,
-              resizeMode: "contain",
-            }}
-          />
-        )}
-      </View>
+      <CustomList
+        sections={[
+          ...licenses.reduce((prev, curr) => {
+            const { username } = curr;
+            const item = {
+              title: curr.name,
+              href: curr.licenseUrl.startsWith("http")
+                ? curr.licenseUrl
+                : "https://github.com/" +
+                  curr.licenseUrl.replace(/^github:/gi, ""),
+            };
+
+            const section = prev.find((section) => section.title === username);
+            if (section) {
+              section.data.push(item);
+            } else {
+              prev.push({
+                title: username,
+                data: [item],
+              });
+            }
+
+            return prev;
+          }, []),
+          {
+            title: "Built by Evan Bacon",
+            data: [
+              {
+                title: "Powered by Expo",
+                href: "https://expo.dev",
+              },
+            ],
+          },
+        ]}
+      />
     </>
   );
 }
