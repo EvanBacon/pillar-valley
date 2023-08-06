@@ -1,0 +1,14 @@
+diff --git a/node_modules/@expo/cli/build/src/run/ios/codeSigning/xcodeCodeSigning.js b/node_modules/@expo/cli/build/src/run/ios/codeSigning/xcodeCodeSigning.js
+index f2f8e76..29b369e 100644
+--- a/node_modules/@expo/cli/build/src/run/ios/codeSigning/xcodeCodeSigning.js
++++ b/node_modules/@expo/cli/build/src/run/ios/codeSigning/xcodeCodeSigning.js
+@@ -49,6 +49,9 @@ function mutateXcodeProjectWithAutoCodeSigningInfo({ project , appleTeamId  }) {
+             item.buildSettings.CODE_SIGN_STYLE = "Automatic";
+         });
+         Object.entries(_configPlugins.IOSConfig.XcodeUtils.getProjectSection(project)).filter(_configPlugins.IOSConfig.XcodeUtils.isNotComment).forEach(([, item])=>{
++            if (!item.attributes.TargetAttributes) {
++                item.attributes.TargetAttributes = {};
++            }
+             if (!item.attributes.TargetAttributes[nativeTargetId]) {
+                 item.attributes.TargetAttributes[nativeTargetId] = {};
+             }

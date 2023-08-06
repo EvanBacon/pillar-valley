@@ -13,6 +13,7 @@ import AudioManager from "@/src/AudioManager";
 import Fire from "@/src/ExpoParty/Fire";
 import TouchableBounce from "@/src/components/TouchableBounce";
 import Gate from "@/src/rematch/Gate";
+import { useUpdatedUpdatesInfoInSettings } from "@/src/hooks/useUpdatesInAppleSettings";
 
 // import { setTestDeviceIDAsync } from "expo-ads-admob";
 export const unstable_settings = {
@@ -25,6 +26,7 @@ export { ErrorBoundary } from "expo-router";
 SplashScreen.preventAutoHideAsync();
 
 export default function Layout() {
+  useUpdatedUpdatesInfoInSettings();
   const loading = useLoadAssets();
 
   return (

@@ -8,6 +8,7 @@ import withAppleSettings, {
   Title,
   MultiValue,
 } from "@config-plugins/apple-settings";
+import { UPDATES_API_KEYS } from "./src/apple-settings-x/shared";
 import { ConfigContext, ExpoConfig } from "expo/config";
 
 module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
@@ -24,9 +25,13 @@ module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
             title: "Developer Info",
             file: "info",
           }),
+          ChildPane({
+            title: "Runtime",
+            file: "runtime",
+          }),
           Group({
             title: "About",
-            footerText: "Built by Evan Bacon 🥓\n\nPowered by Expo 𝝠",
+            footerText: "Built by Evan Bacon 🥓\nPowered by Expo 𝝠",
           }),
         ],
       },
@@ -44,6 +49,56 @@ module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
             title: "Expo SDK",
             value: config.sdkVersion ?? "???",
             key: "info_2_pref",
+          }),
+          Title({
+            title: "Scheme",
+            value: Array.isArray(config.scheme)
+              ? config.scheme.join(", ")
+              : config.scheme!,
+            key: "info_3_pref",
+          }),
+        ],
+      },
+    },
+    runtime: {
+      page: {
+        PreferenceSpecifiers: [
+          Group({
+            // idk but this seems like a better name than "Updates" in case it shows in search.
+            title: "Runtime",
+            footerText: "Based on the last successful launch of the app",
+          }),
+          ...UPDATES_API_KEYS.map(({ setting, name }) =>
+            Title({
+              title: name,
+              value: "[Pending]",
+              key: setting,
+            })
+          ),
+          Title({
+            title: "Updated",
+            key: "p_exupdates__updatedAt",
+            value: "[Pending]",
+          }),
+
+          Group({
+            title: "Latest",
+            footerText: "Based on the running instance of the app",
+          }),
+          Title({
+            title: "Status",
+            key: "p_exupdates_live_type",
+            value: "[Pending]",
+          }),
+          Title({
+            title: "Details",
+            key: "p_exupdates_live_message",
+            value: "[Pending]",
+          }),
+          Title({
+            title: "Updated",
+            key: "p_exupdates_live__updatedAt",
+            value: "[Pending]",
           }),
         ],
       },
