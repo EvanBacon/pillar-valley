@@ -1,25 +1,7 @@
-import Constants from "expo-constants";
 import * as StoreReview from "expo-store-review";
 import { Alert, Linking } from "react-native";
 
 import { logEvent } from "@/src/lib/Analytics";
-
-const { name } = Constants.expoConfig!;
-
-function alertToReview() {
-  Alert.alert(
-    `Do you like ${name}?`,
-    `Would you like to rate this app in the app store? It help's others discover ${name} too!`,
-    [
-      {
-        text: "OK",
-        onPress: () => Linking.openURL(StoreReview.storeUrl()!),
-      },
-      { text: "Cancel", onPress: () => {}, style: "cancel" },
-    ],
-    { cancelable: true }
-  );
-}
 
 // Use an unintrusive prompt to ask the user if they like pillar valley,
 // nothing happens if they say no.
