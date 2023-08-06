@@ -1,0 +1,26 @@
+diff --git a/node_modules/expo-system-ui/ios/ExpoSystemUI/ExpoSystemUIModule.swift b/node_modules/expo-system-ui/ios/ExpoSystemUI/ExpoSystemUIModule.swift
+index cc4af8b..c7c4394 100644
+--- a/node_modules/expo-system-ui/ios/ExpoSystemUI/ExpoSystemUIModule.swift
++++ b/node_modules/expo-system-ui/ios/ExpoSystemUI/ExpoSystemUIModule.swift
+@@ -10,13 +10,15 @@ public class ExpoSystemUIModule: Module {
+     OnCreate {
+       // TODO: Maybe read from the app manifest instead of from Info.plist.
+       // Set / reset the initial color on reload and app start.
+-      let color = UserDefaults.standard.integer(forKey: Self.colorKey)
++      // let color = UserDefaults.standard.integer(forKey: Self.colorKey)
++      let color = Bundle.main.object(forInfoDictionaryKey: "RCTRootViewBackgroundColor") as? Int
++      Self.setBackgroundColorAsync(color: color)
+ 
+-      if color > 0 {
+-        Self.setBackgroundColorAsync(color: color)
+-      } else {
+-        Self.setBackgroundColorAsync(color: nil)
+-      }
++      // if color > 0 {
++      //   Self.setBackgroundColorAsync(color: color)
++      // } else {
++      //   Self.setBackgroundColorAsync(color: nil)
++      // }
+     }
+ 
+     AsyncFunction("getBackgroundColorAsync") { () -> String? in
