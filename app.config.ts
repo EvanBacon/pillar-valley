@@ -21,14 +21,13 @@ module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
         // The `PreferenceSpecifiers` defines the UI elements to generate.
         PreferenceSpecifiers: [
           // Child panes can be used to create nested pages.
-          ChildPane({
-            title: "Developer Info",
-            file: "info",
+
+          Switch({
+            title: "Music and Sound ♫",
+            key: "p_inapp_audio",
+            value: true,
           }),
-          ChildPane({
-            title: "Runtime",
-            file: "runtime",
-          }),
+
           Group({
             title: "About",
             footerText: "Built by Evan Bacon 🥓\nPowered by Expo 𝝠",
@@ -41,6 +40,14 @@ module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
           ChildPane({
             title: "Licenses",
             file: "licenses",
+          }),
+          ChildPane({
+            title: "Developer Info",
+            file: "info",
+          }),
+          ChildPane({
+            title: "Runtime",
+            file: "runtime",
           }),
         ],
       },

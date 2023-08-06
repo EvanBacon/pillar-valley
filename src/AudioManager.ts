@@ -16,7 +16,7 @@ class AudioManager {
   sounds: Record<string, Audio.Sound> = {};
 
   playAsync = async (name: string, isLooping: boolean = false) => {
-    if (useGlobalAudio.getState().muted || Platform.OS === "web") {
+    if (!useGlobalAudio.getState().enabled || Platform.OS === "web") {
       return;
     }
 

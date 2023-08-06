@@ -1,12 +1,11 @@
-import Icon from "./Icon";
-
 import { useGlobalAudio } from "@/src/rematch/models";
 
-function SoundButton() {
-  const { muted, toggleMuted } = useGlobalAudio();
+import Icon from "./Icon";
 
+function SoundButton() {
+  const { enabled, toggleMuted } = useGlobalAudio();
   return (
-    <Icon onPress={toggleMuted} name={muted ? "volume-off" : "volume-up"} />
+    <Icon onPress={toggleMuted} name={enabled ? "volume-up" : "volume-off"} />
   );
 }
 

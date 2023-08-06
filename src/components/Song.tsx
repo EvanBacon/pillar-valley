@@ -4,17 +4,18 @@ import AudioManager from "../AudioManager";
 import { useGlobalAudio } from "../rematch/models";
 
 function Song() {
-  const { muted } = useGlobalAudio();
+  const { enabled } = useGlobalAudio();
+  console.log("Song", enabled);
   React.useEffect(() => {
-    if (muted) {
-      AudioManager.pauseAsync("song");
-    } else {
+    if (enabled) {
       AudioManager.playAsync("song", true);
+    } else {
+      AudioManager.pauseAsync("song");
     }
     return () => {
       AudioManager.stopAsync("song");
     };
-  }, [muted]);
+  }, [enabled]);
 
   return null;
 }

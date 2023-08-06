@@ -1,5 +1,8 @@
+import { useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Analytics from "expo-firebase-analytics";
+import { Platform } from "expo-modules-core";
+import { Settings } from "react-native";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
@@ -27,22 +30,77 @@ const initialScoreState: ScoreShape = {
   isBest: false,
 };
 
+export function useSyncGlobalAudioWithSettings() {
+  const glob = useGlobalAudio();
+  const key = "p_inapp_audio";
+  useEffect(() => {
+    let isMounted = true;
+    const callback = Settings.watchKeys(key, () => {
+      if (isMounted) {
+        glob._syncEnabled(!!Settings.get(key));
+      }
+    });
+    return () => {
+      Settings.clearWatch(callback);
+      isMounted = false;
+    };
+  }, []);
+}
+
 export const useGlobalAudio = create(
   persist<{
-    muted: boolean;
+    enabled: boolean;
     toggleMuted(): void;
+    _syncEnabled(enabled: boolean): void;
   }>(
     (set) => ({
-      muted: false,
+      enabled: true,
+      _syncEnabled: (enabled) => set((state) => ({ ...state, enabled })),
       toggleMuted: () =>
         set((state) => {
-          Analytics.logEvent("toggle_music", { on: !state.muted });
-          return { ...state, muted: !state.muted };
+          Analytics.logEvent("toggle_music", { on: state.enabled });
+          console.log("Toggle", state);
+
+          return { ...state, enabled: !state.enabled };
         }),
     }),
     {
-      name: "useGlobalAudio",
-      storage: createJSONStorage(() => AsyncStorage),
+      name: "p_inapp_audio",
+      storage: createJSONStorage(() => {
+        return {
+          getItem(name) {
+            if (Platform.OS === "ios") {
+              const v = Boolean(Settings.get(name));
+              console.log("Get", name, v, Settings.get(name));
+
+              return JSON.stringify({
+                state: { enabled: v },
+                version: 0,
+              });
+            } else {
+              return AsyncStorage.getItem(name);
+            }
+          },
+          setItem(name, value) {
+            if (Platform.OS === "ios") {
+              const enabled = Boolean(JSON.parse(value).state.enabled);
+              console.log("set", name, enabled, value, typeof value);
+              Settings.set({
+                [name]: enabled,
+              });
+            } else {
+              return AsyncStorage.setItem(name, value);
+            }
+          },
+          removeItem(name) {
+            if (Platform.OS === "ios") {
+              Settings.set({ [name]: undefined });
+            } else {
+              return AsyncStorage.removeItem(name);
+            }
+          },
+        };
+      }),
     }
   )
 );

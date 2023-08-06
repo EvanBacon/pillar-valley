@@ -143,6 +143,12 @@ function PreferencesScreen() {
         //   },
         // },
 
+        Platform.OS !== "web" && {
+          title: "Open System Settings",
+          onPress: () => {
+            Linking.openSettings();
+          },
+        },
         {
           title: "🐛 Report a bug",
           onPress: () => {
