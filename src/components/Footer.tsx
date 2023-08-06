@@ -1,4 +1,4 @@
-import { router } from "expo-router";
+import { router, useNavigation } from "expo-router";
 import React from "react";
 import { Platform, StyleSheet, View } from "react-native";
 
@@ -31,12 +31,14 @@ function Footer() {
   const [showPWA, setShowPWA] = React.useState(true);
   const animation = game === GameStates.Menu ? "zoomIn" : "zoomOut";
 
+  const navigation = useNavigation();
   // const router = useRouter();
   const onChallengesPress = () => {
     router.push("/challenges");
   };
   const onPreferencesPress = () => {
-    router.push("/settings");
+    navigation.push("settings");
+    // router.push("/settings");
   };
   const views = [];
 
