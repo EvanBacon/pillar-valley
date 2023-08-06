@@ -1,7 +1,7 @@
 import { connectActionSheet } from "@expo/react-native-action-sheet";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Constants from "expo-constants";
-import { useRouter } from "expo-router";
+import { router, useRouter } from "expo-router";
 import * as StoreReview from "expo-store-review";
 import React from "react";
 import {
@@ -31,24 +31,42 @@ import {
 import Head from "expo-router/head";
 import { Slate } from "@/src/constants/Colors";
 
+function ActionTypeIcon({ type }: { type: "internal" | "external" }) {
+  if (type === "internal") {
+    return <FontAwesome color={Slate[500]} size={20} name="angle-right" />;
+  } else {
+    return <FontAwesome color={Slate[500]} size={20} name="external-link" />;
+  }
+}
+
 function Item({
   title,
   value,
   onPress,
   top,
   bottom,
+  href,
+  actionType,
 }: {
+  href?: string;
   title: string;
   value?: string;
   onPress?: () => void;
   top?: boolean;
   bottom?: boolean;
+  actionType?: "external" | "internal";
 }) {
   const renderItem = () => {
     if (typeof value !== "undefined") {
       return <Text style={{ fontSize: 16, color: Slate[500] }}>{value}</Text>;
     } else if (onPress) {
-      return <FontAwesome color={Slate[500]} size={20} name="angle-right" />;
+      return <ActionTypeIcon type={actionType ?? "internal"} />;
+    } else if (href) {
+      if (href.startsWith("http")) {
+        return <ActionTypeIcon type="external" />;
+      } else {
+        return <ActionTypeIcon type={actionType ?? "internal"} />;
+      }
     }
   };
 
@@ -70,6 +88,9 @@ function Item({
       ]}
       underlayColor={Slate[400]}
       onPress={() => {
+        if (href) {
+          router.push(href);
+        }
         if (onPress) onPress();
       }}
     >
@@ -155,13 +176,13 @@ function PreferencesScreen() {
             StoreReview.requestReview();
           },
         },
+        Platform.OS === "ios" && {
+          title: "🌸 Change App Icon",
+          href: "/settings/icon",
+        },
         {
           title: "⭐️ Star the project on Github",
-          onPress: () => {
-            Linking.openURL(
-              "https://github.com/EvanBacon/pillar-valley/stargazers"
-            );
-          },
+          href: "https://github.com/EvanBacon/pillar-valley/stargazers",
         },
         // Platform.OS !== "web" && {
         //   title: "🎥 Watch an ad",
@@ -173,28 +194,20 @@ function PreferencesScreen() {
         //   },
         // },
 
-        Platform.OS === "ios" && {
-          title: "🌸 Change App Icon",
-          onPress: () => {
-            router.push("/settings/icon");
-          },
-        },
         Platform.OS !== "web" && {
           title: "⚙️ Open System Settings",
+          actionType: "external",
           onPress: () => {
             Linking.openSettings();
           },
         },
         {
           title: "🐛 Report a bug",
-          onPress: () => {
-            Linking.openURL(
-              "https://github.com/EvanBacon/pillar-valley/issues/new"
-            );
-          },
+          href: "https://github.com/EvanBacon/pillar-valley/issues/new",
         },
         getOtherPlatform() && {
           title: "🌐 Play on another platform",
+          actionType: "external",
           onPress: () => {
             openOtherPlatform();
           },
@@ -214,24 +227,18 @@ function PreferencesScreen() {
         {
           title: "X",
           value: "@baconbrix",
-          onPress: () => {
-            Linking.openURL("https://x.com/baconbrix");
-          },
+          href: "https://x.com/baconbrix",
         },
         {
           title: "Instagram",
           value: "@baconbrix",
-          onPress: () => {
-            Linking.openURL("https://www.instagram.com/baconbrix");
-          },
+          href: "https://www.instagram.com/baconbrix",
         },
 
         {
           title: "Github",
           value: "EvanBacon",
-          onPress: () => {
-            Linking.openURL("https://github.com/evanbacon");
-          },
+          href: "https://github.com/evanbacon",
         },
       ].filter(Boolean),
     },
@@ -240,9 +247,7 @@ function PreferencesScreen() {
       data: [
         {
           title: "Licenses",
-          onPress: () => {
-            router.push("/credit");
-          },
+          href: "/credit",
         },
         Platform.OS !== "web" && {
           title: "Deep Linking Scheme",
