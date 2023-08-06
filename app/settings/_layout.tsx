@@ -29,10 +29,14 @@ export default function Settings() {
       screenOptions={{
         headerTintColor: "white",
         headerStyle: {
-          backgroundColor: "#F09458",
+          backgroundColor: "#21222B",
           borderBottomWidth: 0,
         },
-        headerTitleStyle: { color: "white" },
+        headerBackTitleStyle: {
+          fontFamily: "Inter_500Medium",
+        },
+
+        headerTitleStyle: { color: "white", fontFamily: "Inter_500Medium" },
         headerRight: BackButton,
       }}
     >

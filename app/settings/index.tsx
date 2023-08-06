@@ -14,6 +14,7 @@ import {
   TouchableOpacity,
   Linking,
 } from "react-native";
+import { TouchableHighlight } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import {
@@ -28,26 +29,46 @@ import {
   useScore,
 } from "@/src/rematch/models";
 import Head from "expo-router/head";
+import { Slate } from "@/src/constants/Colors";
 
 function Item({
   title,
   value,
   onPress,
+  top,
+  bottom,
 }: {
   title: string;
   value?: string;
   onPress?: () => void;
+  top?: boolean;
+  bottom?: boolean;
 }) {
   const renderItem = () => {
     if (typeof value !== "undefined") {
-      return <Text style={{ fontSize: 16, color: "white" }}>{value}</Text>;
+      return <Text style={{ fontSize: 16, color: Slate[500] }}>{value}</Text>;
     } else if (onPress) {
-      return <FontAwesome color="#fff" name="chevron-right" />;
+      return <FontAwesome color={Slate[500]} size={20} name="angle-right" />;
     }
   };
 
   return (
-    <TouchableOpacity
+    <TouchableHighlight
+      style={[
+        {
+          borderCurve: "continuous",
+          backgroundColor: Slate[800],
+        },
+        top && {
+          borderTopLeftRadius: 10,
+          borderTopRightRadius: 10,
+        },
+        bottom && {
+          borderBottomLeftRadius: 10,
+          borderBottomRightRadius: 10,
+        },
+      ]}
+      underlayColor={Slate[400]}
       onPress={() => {
         if (onPress) onPress();
       }}
@@ -55,16 +76,26 @@ function Item({
       <View
         style={{
           flexDirection: "row",
+          alignItems: "center",
           justifyContent: "space-between",
-          padding: 24,
+          // padding: 24,
+          paddingHorizontal: 16,
+          paddingVertical: 14,
+          // fontSize: 18,
         }}
       >
-        <Text style={{ fontWeight: "bold", color: "white", fontSize: 16 }}>
+        <Text
+          style={{
+            fontFamily: "Inter_500Medium",
+            color: Slate[100],
+            fontSize: 16,
+          }}
+        >
           {title}
         </Text>
         {renderItem()}
       </View>
-    </TouchableOpacity>
+    </TouchableHighlight>
   );
 }
 
@@ -171,13 +202,20 @@ function PreferencesScreen() {
       ].filter(Boolean),
     },
     {
-      title: "Follow Me 😁",
+      title: "Follow",
       data: [
+        // {
+        //   title: "YouTube",
+        //   value: "Evan Bacon",
+        //   onPress: () => {
+        //     Linking.openURL("https://www.youtube.com/baconbrix");
+        //   },
+        // },
         {
-          title: "YouTube",
-          value: "Evan Bacon",
+          title: "X",
+          value: "@baconbrix",
           onPress: () => {
-            Linking.openURL("https://www.youtube.com/baconbrix");
+            Linking.openURL("https://x.com/baconbrix");
           },
         },
         {
@@ -187,13 +225,7 @@ function PreferencesScreen() {
             Linking.openURL("https://www.instagram.com/baconbrix");
           },
         },
-        {
-          title: "Twitter",
-          value: "@baconbrix",
-          onPress: () => {
-            Linking.openURL("https://twitter.com/baconbrix");
-          },
-        },
+
         {
           title: "Github",
           value: "EvanBacon",
@@ -275,14 +307,65 @@ function PreferencesScreen() {
       <View style={styles.container}>
         <SectionList
           sections={data}
-          renderSectionHeader={({ section: { title } }) => (
-            <View style={{ backgroundColor: "#F09458" }}>
-              <Text style={{ padding: 16, color: "white" }}>{title}</Text>
-            </View>
-          )}
-          contentContainerStyle={{ paddingBottom: bottom }}
+          initialNumToRender={30}
+          contentContainerStyle={{
+            paddingHorizontal: 20,
+            // paddingVertical: 40,
+            paddingBottom: bottom + 40,
+          }}
+          stickySectionHeadersEnabled={false}
+          // SectionSeparatorComponent={CupertinoItemSeparatorComponent}
+          renderSectionHeader={({ section: { title } }) => {
+            if (!title) {
+              return null;
+            }
+            return (
+              <View
+                style={{
+                  justifyContent: "flex-end",
+                  paddingTop: 32,
+                  paddingBottom: 12,
+                  paddingLeft: 16,
+                }}
+              >
+                <Text
+                  style={{
+                    fontFamily: "Inter_500Medium",
+                    textTransform: "uppercase",
+                    color: Slate[500],
+                    fontWeight: "bold",
+                    fontSize: 12,
+                    letterSpacing: 1.1,
+                  }}
+                >
+                  {title}
+                </Text>
+              </View>
+            );
+          }}
+          // renderSectionHeader={({ section: { title } }) => (
+          //   <View style={{ backgroundColor: "#282A37" }}>
+          //     <Text
+          //       style={{
+          //         fontFamily: "Inter_500Medium",
+          //         padding: 8,
+          //         paddingHorizontal: 24,
+          //         color: "white",
+          //         textTransform: "uppercase",
+          //       }}
+          //     >
+          //       {title}
+          //     </Text>
+          //   </View>
+          // )}
           keyExtractor={(item) => item.title}
-          renderItem={({ item, index }) => <Item {...item} />}
+          renderItem={({ item, index, section }) => (
+            <Item
+              {...item}
+              top={index === 0}
+              bottom={index === section.data.length - 1}
+            />
+          )}
         />
       </View>
     </>
@@ -292,8 +375,30 @@ function PreferencesScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#282A37",
+    backgroundColor: Slate[900],
   },
 });
+
+export function CupertinoItemSeparatorComponent() {
+  return (
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: Slate[100],
+      }}
+    >
+      <View
+        style={{
+          marginLeft: ITEM_START_WIDTH,
+          height: StyleSheet.hairlineWidth,
+          backgroundColor: "#C6C6C8",
+        }}
+      />
+    </View>
+  );
+}
+const ITEM_START_WIDTH = 60;
+
+const BORDER_RADIUS = 10;
 
 export default connectActionSheet(PreferencesScreen);

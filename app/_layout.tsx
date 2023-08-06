@@ -83,7 +83,14 @@ function InnerLayout() {
                 backgroundColor: "#F09458",
                 borderBottomWidth: 0,
               },
-              headerTitleStyle: { color: "white" },
+              headerBackTitleStyle: {
+                fontFamily: "Inter_500Medium",
+              },
+
+              headerTitleStyle: {
+                color: "white",
+                fontFamily: "Inter_500Medium",
+              },
             }}
           >
             <Stack.Screen name="index" options={{ header: () => null }} />
@@ -149,7 +156,8 @@ function useLoadAssets() {
       try {
         await Promise.all([
           Font.loadAsync({
-            "GothamNarrow-Book": require("@/src/assets/fonts/GothamNarrow-Book.ttf"),
+            Inter_400Regular: require("@/src/assets/fonts/Inter_400Regular.ttf"),
+            Inter_500Medium: require("@/src/assets/fonts/Inter_500Medium.ttf"),
           }),
           AudioManager.setupAsync(),
         ]);

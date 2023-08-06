@@ -15,7 +15,7 @@ function ScoreMeta() {
   const { currency } = useCurrency();
 
   const { top } = useSafeAreaInsets();
-  const gothamNarrowBook = useFont("GothamNarrow-Book");
+  const gothamNarrowBook = useFont("Inter_400Regular");
   const fontStyle = { fontFamily: gothamNarrowBook };
   return (
     <View style={[styles.container, { top }]}>
@@ -63,7 +63,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   text: {
-    // fontFamily: "GothamNarrow-Book",
     opacity: 0.8,
     fontSize: 48,
     backgroundColor: "transparent",

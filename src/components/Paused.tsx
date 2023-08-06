@@ -12,7 +12,7 @@ export default function Paused() {
   const { left } = useSafeAreaInsets();
 
   // TODO: Remove with RN 72
-  const gothamNarrowBook = useFont("GothamNarrow-Book");
+  const gothamNarrowBook = useFont("Inter_400Regular");
   return (
     <BlurView
       intensity={95}

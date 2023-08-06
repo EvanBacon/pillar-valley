@@ -14,3 +14,12 @@ const Colors = {
 };
 
 export default Colors;
+
+export const Slate = {
+  "900": "#191A20",
+  "800": "#282A35",
+  "500": "#64719E",
+  "400": "#3d4051",
+  "200": "#F1F1F1",
+  "100": "#ffffff",
+};

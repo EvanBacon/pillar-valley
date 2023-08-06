@@ -3,6 +3,7 @@ import React from "react";
 import { Image, Text, View } from "react-native";
 import AppIcon from "react-native-dynamic-app-icon";
 import TouchableBounce from "react-native/Libraries/Components/Touchable/TouchableBounce";
+import { Slate } from "@/src/constants/Colors";
 
 function useIconName() {
   const [icon, _setIcon] = React.useState(null);
@@ -67,7 +68,7 @@ export default function App() {
     <View
       style={{
         flex: 1,
-        backgroundColor: DARK,
+        backgroundColor: Slate[900],
         justifyContent: "center",
         alignItems: "center",
       }}
@@ -110,7 +111,7 @@ function Item({ ...props }) {
           shadowOpacity: props.isSelected ? 0.4 : 0.3,
           shadowRadius: 8.46,
 
-          backgroundColor: props.isSelected ? LIGHT : DARK,
+          backgroundColor: props.isSelected ? Slate["200"] : Slate["800"],
           elevation: 9,
           paddingHorizontal: 12,
           paddingVertical: 12,
@@ -144,8 +145,8 @@ function Item({ ...props }) {
               style={{
                 marginLeft: 20,
                 fontSize: 18,
-                fontWeight: "700",
-                color: props.isSelected ? DARK : LIGHT,
+                fontFamily: "Inter_500Medium",
+                color: props.isSelected ? Slate["800"] : Slate["200"],
               }}
             >
               {props.name}
@@ -156,7 +157,7 @@ function Item({ ...props }) {
               style={{ marginRight: 8 }}
               name="check"
               size={20}
-              color={DARK}
+              color={Slate["800"]}
             />
           )}
         </View>
@@ -164,6 +165,3 @@ function Item({ ...props }) {
     </TouchableBounce>
   );
 }
-
-const LIGHT = "#F1F1F1";
-const DARK = "#282A37";
