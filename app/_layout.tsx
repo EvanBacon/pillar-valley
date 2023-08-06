@@ -18,7 +18,7 @@ import { useSyncGlobalAudioWithSettings } from "@/src/rematch/models";
 
 // import { setTestDeviceIDAsync } from "expo-ads-admob";
 export const unstable_settings = {
-  initialRouteName: "index",
+  // initialRouteName: "index",
 };
 
 // TODO: Customize this
@@ -72,60 +72,55 @@ function InnerLayout() {
     Analytics.logEvent("screen_view", { currentScreen: pathname });
   }, [pathname]);
 
-  const stack = React.useMemo(
-    () => (
-      <Stack
-        screenOptions={{
-          headerTintColor: "white",
-          headerStyle: {
-            backgroundColor: "#F09458",
-            borderBottomWidth: 0,
-          },
-          headerTitleStyle: { color: "white" },
-        }}
-      >
-        <Stack.Screen name="index" options={{ header: () => null }} />
-        <Stack.Screen
-          name="challenges"
-          options={{
-            title: "Challenges",
-            headerRight: BackButton,
-            presentation: "modal",
-          }}
-        />
-        <Stack.Screen
-          name="credit"
-          options={{
-            title: "Licenses",
-            headerRight: BackButton,
-            presentation: "modal",
-          }}
-        />
-        <Stack.Screen
-          name="settings"
-          options={{
-            title: "Settings",
-            headerRight: BackButton,
-            presentation: "modal",
-          }}
-        />
-        <Stack.Screen
-          name="privacy"
-          options={{
-            title: "Privacy",
-            headerRight: BackButton,
-            presentation: "modal",
-          }}
-        />
-      </Stack>
-    ),
-    []
-  );
-
   return (
     <Gate>
       <View style={{ backgroundColor: "blue", flex: 1 }}>
-        <ActionSheetProvider>{stack}</ActionSheetProvider>
+        <ActionSheetProvider>
+          <Stack
+            screenOptions={{
+              headerTintColor: "white",
+              headerStyle: {
+                backgroundColor: "#F09458",
+                borderBottomWidth: 0,
+              },
+              headerTitleStyle: { color: "white" },
+            }}
+          >
+            <Stack.Screen name="index" options={{ header: () => null }} />
+            <Stack.Screen
+              name="challenges"
+              options={{
+                title: "Challenges",
+                headerRight: BackButton,
+                presentation: "modal",
+              }}
+            />
+            <Stack.Screen
+              name="credit"
+              options={{
+                title: "Licenses",
+                headerRight: BackButton,
+                presentation: "modal",
+              }}
+            />
+            <Stack.Screen
+              name="settings"
+              options={{
+                title: "Settings",
+                headerShown: false,
+                presentation: "modal",
+              }}
+            />
+            <Stack.Screen
+              name="privacy"
+              options={{
+                title: "Privacy",
+                headerRight: BackButton,
+                presentation: "modal",
+              }}
+            />
+          </Stack>
+        </ActionSheetProvider>
       </View>
     </Gate>
   );

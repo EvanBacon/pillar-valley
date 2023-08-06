@@ -115,7 +115,6 @@ function PreferencesScreen() {
         { title: "Gems collected", value: currency },
       ],
     },
-
     {
       title: "Improve Pillar Valley",
       data: [
@@ -143,8 +142,14 @@ function PreferencesScreen() {
         //   },
         // },
 
+        Platform.OS === "ios" && {
+          title: "🌸 Change App Icon",
+          onPress: () => {
+            router.push("/settings/icon");
+          },
+        },
         Platform.OS !== "web" && {
-          title: "Open System Settings",
+          title: "⚙️ Open System Settings",
           onPress: () => {
             Linking.openSettings();
           },

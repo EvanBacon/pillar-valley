@@ -1,5 +1,5 @@
 {
-    "@config-plugins/apple-settings@0.0.3": {
+    "@config-plugins/apple-settings@0.0.5": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/config-plugins",
         "licenseUrl": "https://github.com/expo/config-plugins",

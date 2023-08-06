@@ -1220,24 +1220,31 @@
   resolved "https://registry.yarnpkg.com/@bacons/react-views/-/react-views-1.1.3.tgz#06e7ae8803cc363d13d6fd06b828e10ad8bb3910"
   integrity sha512-aLipQAkQKRzG64e28XHBpByyBPfANz0A6POqYHGyryHizG9vLCLNQwLe8gwFANEMBWW2Mx5YdQ7RkNdQMQ+CXQ==
 
-"@bacons/xcode@^1.0.0-alpha.5":
-  version "1.0.0-alpha.5"
-  resolved "https://registry.yarnpkg.com/@bacons/xcode/-/xcode-1.0.0-alpha.5.tgz#18247f4e402071a8a320d914df3a329cf2b1363c"
-  integrity sha512-YgK5a83iCV37OK8GLac3Z0Ibwv61/RSmB9CYVGe5Z6d/g8ayC8wQrxe/XDT448fiGxLNcY3p48R1NdNbtwbrzQ==
+"@bacons/xcode@^1.0.0-alpha.6":
+  version "1.0.0-alpha.6"
+  resolved "https://registry.yarnpkg.com/@bacons/xcode/-/xcode-1.0.0-alpha.6.tgz#a4c2d1ef7894e452d25328a10432ee7052593b53"
+  integrity sha512-PRZS5gABunNJJvaxtHkOQvW63zS2zcZNWDxpsO4zRPR65usEWl2D1SPZ/3LZUuBmvcbQUOoCQjAw7hC3/kufWQ==
   dependencies:
     "@expo/plist" "^0.0.18"
     debug "^4.3.4"
     uuid "^8.3.2"
 
-"@config-plugins/apple-settings@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@config-plugins/apple-settings/-/apple-settings-0.0.3.tgz#832ab6ca0ba6d90d2145cadf2825e776f5072842"
-  integrity sha512-vsleVXnZROmYeyueMzhhOAoqL2fJb/uAR72Y0UpCOwqXk786rCvVHLJfJv21+AgjzFUGR/l68bgudlZII1o5qA==
+"@config-plugins/apple-settings@^0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@config-plugins/apple-settings/-/apple-settings-0.0.5.tgz#078eb6702a02633a62bee5bbb46f5abc3e62f4ea"
+  integrity sha512-psQMXkUlySJnMSCMP5TwCYZbP6VhT87ioZdzMTmaGtb1QxfqZAmwzYh8HUa8HqGDA0UHzX27DzTKc+XrtIWBTA==
   dependencies:
-    "@bacons/xcode" "^1.0.0-alpha.5"
+    "@bacons/xcode" "^1.0.0-alpha.6"
     "@expo/plist" "^0.0.20"
     iconv-lite "^0.6.3"
     schema-utils "^4.2.0"
+
+"@config-plugins/react-native-dynamic-app-icon@^6.0.0":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/@config-plugins/react-native-dynamic-app-icon/-/react-native-dynamic-app-icon-6.0.0.tgz#aae5ebab72b316fc861214af8c406d50f86ada16"
+  integrity sha512-Qnf39Kj9GQnB21xoVK153ADWJC2yifAV6qyM/wdJ8FCNTLN9O6Xb4NFSQ/s1YN1qwH1+YT9oPshaCtc3vzlcdQ==
+  dependencies:
+    xcode "^3.0.1"
 
 "@egjs/hammerjs@^2.0.17":
   version "2.0.17"
@@ -7893,6 +7900,11 @@ react-native-animatable@^1.3.3:
   integrity sha512-2ckIxZQAsvWn25Ho+DK3d1mXIgj7tITkrS4pYDvx96WyOttSvzzFeQnM2od0+FUMzILbdHDsDEqZvnz1DYNQ1w==
   dependencies:
     prop-types "^15.7.2"
+
+react-native-dynamic-app-icon@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-dynamic-app-icon/-/react-native-dynamic-app-icon-1.1.0.tgz#c7722289f9705c24fea257c9722f8d976a14cd13"
+  integrity sha512-NJFQNelgA/VZfw2ZbMErUrIFv+DxV8lTX7ZEkU8ys+oZE2yA9EDNZp9KmeAufKZ4VvtFlRuyaR6OHAEfM7CNaw==
 
 react-native-gesture-handler@~2.12.0:
   version "2.12.1"

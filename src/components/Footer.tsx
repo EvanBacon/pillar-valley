@@ -1,4 +1,4 @@
-import { useRouter } from "expo-router";
+import { router } from "expo-router";
 import React from "react";
 import { Platform, StyleSheet, View } from "react-native";
 
@@ -31,7 +31,7 @@ function Footer() {
   const [showPWA, setShowPWA] = React.useState(true);
   const animation = game === GameStates.Menu ? "zoomIn" : "zoomOut";
 
-  const router = useRouter();
+  // const router = useRouter();
   const onChallengesPress = () => {
     router.push("/challenges");
   };

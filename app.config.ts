@@ -1,15 +1,12 @@
 import withAppleSettings, {
   ChildPane,
   Group,
-  RadioGroup,
-  Slider,
   Switch,
-  TextField,
   Title,
-  MultiValue,
 } from "@config-plugins/apple-settings";
-import { UPDATES_API_KEYS } from "./src/apple-settings-x/shared";
 import { ConfigContext, ExpoConfig } from "expo/config";
+
+import { UPDATES_API_KEYS } from "./src/apple-settings-x/shared";
 
 module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
   config = withAppleSettings(config as ExpoConfig, {
