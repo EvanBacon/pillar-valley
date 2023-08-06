@@ -1,10 +1,11 @@
 import Entypo from "@expo/vector-icons/Entypo";
 import React from "react";
 import { Image, Text, View } from "react-native";
-import TouchableBounce from "react-native/Libraries/Components/Touchable/TouchableBounce";
+
 import { Slate } from "@/src/constants/Colors";
 
 import { icons, useDynamicAppIcon } from "./DynamicIconContext";
+import TouchableBounce from "./TouchableBounce.native";
 
 export default function App() {
   const [_icon, setIcon] = useDynamicAppIcon();
