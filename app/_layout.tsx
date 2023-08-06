@@ -18,7 +18,7 @@ import { useSyncGlobalAudioWithSettings } from "@/src/rematch/models";
 
 // import { setTestDeviceIDAsync } from "expo-ads-admob";
 export const unstable_settings = {
-  // initialRouteName: "index",
+  initialRouteName: "index",
 };
 
 // TODO: Customize this

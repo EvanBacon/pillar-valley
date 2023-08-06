@@ -4,11 +4,31 @@ import withAppleSettings, {
   Switch,
   Title,
 } from "@config-plugins/apple-settings";
+import path from "node:path";
+import fs from "node:fs";
 import { ConfigContext, ExpoConfig } from "expo/config";
 
 import { UPDATES_API_KEYS } from "./src/apple-settings-x/shared";
 
 module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
+  if (!config.plugins) config.plugins = [];
+
+  config.plugins.push([
+    "@config-plugins/react-native-dynamic-app-icon",
+    fs
+      .readdirSync(path.resolve(__dirname, "./icons/pillars"))
+      .sort()
+      .reduce<Record<string, { image: string }>>((acc, file) => {
+        if (!file.startsWith("default.png") && file.endsWith(".png")) {
+          acc[file.replace(/\.[\w]+/, "")] = {
+            image: `./icons/pillars/${file}`,
+          };
+        }
+
+        return acc;
+      }, {}),
+  ]);
+
   config = withAppleSettings(config as ExpoConfig, {
     // The name of the .plist file to generate. Root is the default and must be provided.
     Root: {
@@ -36,21 +56,21 @@ module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
           }),
           ChildPane({
             title: "Licenses",
-            file: "licenses",
+            file: "Licenses",
           }),
           ChildPane({
             title: "Developer Info",
-            file: "info",
+            file: "Developer",
           }),
           ChildPane({
             title: "Runtime",
-            file: "runtime",
+            file: "Runtime",
           }),
         ],
       },
     },
     // Build-time info
-    info: {
+    Developer: {
       page: {
         PreferenceSpecifiers: [
           Title({
@@ -73,7 +93,7 @@ module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
         ],
       },
     },
-    runtime: {
+    Runtime: {
       page: {
         PreferenceSpecifiers: [
           Group({
@@ -115,7 +135,7 @@ module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
         ],
       },
     },
-    licenses: {
+    Licenses: {
       page: {
         // src/constants/Licenses.json
         PreferenceSpecifiers: [

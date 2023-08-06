@@ -1,6 +1,6 @@
-import { router, Stack } from "expo-router";
 import TouchableBounce from "@/src/components/TouchableBounce";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { router, Stack } from "expo-router";
 import { Platform } from "react-native";
 
 export const unstable_settings = {
@@ -12,7 +12,12 @@ function BackButton() {
     return null;
   }
   return (
-    <TouchableBounce onPress={() => router.back()}>
+    <TouchableBounce
+      onPress={() => {
+        // TODO: Fix going back multiple times when nested.
+        router.back();
+      }}
+    >
       <FontAwesome size={24} color="white" name="angle-down" />
     </TouchableBounce>
   );

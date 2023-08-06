@@ -40,13 +40,16 @@
     "assetBundlePatterns": ["src/assets/**/*", "icons/splash.png"],
     "ios": {
       "appStoreUrl": "https://itunes.apple.com/us/app/pillar-valley/id1336398804",
-      "icon": "./icons/pillars/1.png",
+      "icon": "./icons/pillars/default.png",
       "supportsTablet": true,
       "bundleIdentifier": "com.evanbacon.pillarvalley",
       "googleServicesFile": "./GoogleService-Info.plist",
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-2312569320461549~5287895909",
         "googleMobileAdsAutoInit": true
+      },
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": true
       },
       "associatedDomains": [
         "applinks:pillarvalley.netlify.app",
@@ -83,14 +86,6 @@
       }
     },
     "plugins": [
-      [
-        "@config-plugins/react-native-dynamic-app-icon",
-        [
-          "./icons/pillars/2.png",
-          "./icons/pillars/3.png",
-          "./icons/pillars/4.png"
-        ]
-      ],
       [
         "expo-router",
         {

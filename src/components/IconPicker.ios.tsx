@@ -30,23 +30,33 @@ function useIconName() {
 const icons = [
   {
     name: "Auto",
-    source: require("@/icons/pillars/1.png"),
+    source: require("@/icons/pillars/default.png"),
     iconId: null,
   },
   {
     name: "Spring",
-    source: require("@/icons/pillars/2.png"),
-    iconId: "0",
+    source: require("@/icons/pillars/spring.png"),
+    iconId: "spring",
   },
   {
     name: "Autumn",
-    source: require("@/icons/pillars/3.png"),
-    iconId: "1",
+    source: require("@/icons/pillars/autumn.png"),
+    iconId: "autumn",
+  },
+  {
+    name: "Solstice",
+    source: require("@/icons/pillars/solstice.png"),
+    iconId: "solstice",
+  },
+  {
+    name: "Winter",
+    source: require("@/icons/pillars/winter.png"),
+    iconId: "winter",
   },
   {
     name: "Bacon",
-    source: require("@/icons/pillars/4.png"),
-    iconId: "2",
+    source: require("@/icons/pillars/special.png"),
+    iconId: "special",
   },
 ];
 
