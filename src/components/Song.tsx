@@ -5,7 +5,7 @@ import { useGlobalAudio } from "../rematch/models";
 
 function Song() {
   const { enabled } = useGlobalAudio();
-  console.log("Song", enabled);
+
   React.useEffect(() => {
     if (enabled) {
       AudioManager.playAsync("song", true);

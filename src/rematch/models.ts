@@ -34,16 +34,18 @@ export function useSyncGlobalAudioWithSettings() {
   const glob = useGlobalAudio();
   const key = "p_inapp_audio";
   useEffect(() => {
-    let isMounted = true;
-    const callback = Settings.watchKeys(key, () => {
-      if (isMounted) {
-        glob._syncEnabled(!!Settings.get(key));
-      }
-    });
-    return () => {
-      Settings.clearWatch(callback);
-      isMounted = false;
-    };
+    if (Platform.OS === "ios") {
+      let isMounted = true;
+      const callback = Settings.watchKeys(key, () => {
+        if (isMounted) {
+          glob._syncEnabled(!!Settings.get(key));
+        }
+      });
+      return () => {
+        Settings.clearWatch(callback);
+        isMounted = false;
+      };
+    }
   }, []);
 }
 
