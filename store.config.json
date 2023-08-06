@@ -1,7 +1,7 @@
 {
   "configVersion": 0,
   "apple": {
-    "version": "8.0.1",
+    "version": "8.0.2",
     "copyright": "2023 Evan Bacon",
     "release": {
       "automaticRelease": true
@@ -24,13 +24,13 @@
           "fyp",
           "clash"
         ],
-        "releaseNotes": "Fixed bug in settings page",
+        "releaseNotes": "Fixed bugs when navigating",
         "marketingUrl": "https://github.com/EvanBacon/Expo-Pillar-Valley/",
         "promoText": "Immerse yourself in a suave world of zen",
         "supportUrl": "https://github.com/EvanBacon/Expo-Pillar-Valley/issues",
         "title": "Pillar Valley",
         "subtitle": "The Finest of Gaming",
-        "privacyPolicyUrl": "https://github.com/EvanBacon/Expo-Pillar-Valley/blob/master/PRIVACY.md",
+        "privacyPolicyUrl": "https://pillarvalley.netlify.app/privacy",
         "privacyChoicesUrl": "https://github.com/EvanBacon/Expo-Pillar-Valley/blob/master/PRIVACY-FOOBAR.md"
       }
     },

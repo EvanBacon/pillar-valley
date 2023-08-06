@@ -8,7 +8,7 @@ export default function Privacy() {
         <title>Privacy | Pillar Valley</title>
       </Head>
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Text>Welcome privacy lovers</Text>
+        <Text style={{ color: "white" }}>Welcome privacy lovers</Text>
       </View>
     </>
   );
