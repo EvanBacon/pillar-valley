@@ -213,7 +213,7 @@ function PreferencesScreen() {
         },
         {
           title: "Expo SDK",
-          value: require("../package.json").dependencies["expo"],
+          value: require("@/package.json").dependencies["expo"],
           onPress: () => {
             setTaps((taps) => taps + 1);
           },

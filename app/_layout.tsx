@@ -27,10 +27,9 @@ export { ErrorBoundary } from "expo-router";
 SplashScreen.preventAutoHideAsync();
 
 export default function Layout() {
+  const loading = useLoadAssets();
   useUpdatedUpdatesInfoInSettings();
   useSyncGlobalAudioWithSettings();
-  const loading = useLoadAssets();
-
   return (
     <>
       <Head>
@@ -60,7 +59,7 @@ export default function Layout() {
       </Head>
       <AnimatedSplashScreen
         loading={loading}
-        image={require("../icons/splash.png")}
+        image={require("@/icons/splash.png")}
       >
         <InnerLayout />
       </AnimatedSplashScreen>
@@ -110,6 +109,14 @@ function InnerLayout() {
             presentation: "modal",
           }}
         />
+        <Stack.Screen
+          name="privacy"
+          options={{
+            title: "Privacy",
+            headerRight: BackButton,
+            presentation: "modal",
+          }}
+        />
       </Stack>
     ),
     []
@@ -147,7 +154,7 @@ function useLoadAssets() {
       try {
         await Promise.all([
           Font.loadAsync({
-            "GothamNarrow-Book": require("../src/assets/fonts/GothamNarrow-Book.ttf"),
+            "GothamNarrow-Book": require("@/src/assets/fonts/GothamNarrow-Book.ttf"),
           }),
           AudioManager.setupAsync(),
         ]);
