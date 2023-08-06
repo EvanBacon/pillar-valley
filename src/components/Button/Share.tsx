@@ -11,7 +11,7 @@ class ShareButton extends React.Component {
   onPress = async () => {
     const { score, screenshot: url } = this.props;
     // const url = await AssetUtils.uriAsync(image);
-    const appName = Constants.manifest.name;
+    const appName = Constants.expoConfig?.name;
     const title = `${appName}`;
     const message = `OMG! I got ${score} points in @baconbrix ${appName}. ${
       storeUrl() || ""
@@ -24,7 +24,7 @@ class ShareButton extends React.Component {
         url,
       },
       {
-        tintColor: Constants.manifest.tintColor,
+        tintColor: "#F09458",
         excludedActivityTypes: [
           "com.apple.UIKit.activity.Print",
           "com.apple.UIKit.activity.AssignToContact",

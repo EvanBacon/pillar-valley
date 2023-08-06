@@ -248,6 +248,7 @@ class FirstText extends React.Component {
   getAnimation = (toValue = 1, delay = 500) =>
     Animated.timing(this.animation, {
       toValue,
+      useNativeDriver: false,
       easing: Easing.inOut(Easing.cubic),
       duration: 600,
       delay,
@@ -338,6 +339,7 @@ class Popup extends React.Component {
   getAnimation = (toValue = 1, delay = 0) =>
     Animated.timing(this.animation, {
       toValue,
+      useNativeDriver: false,
       easing: Easing.out(Easing.cubic),
       duration: 800,
       delay,

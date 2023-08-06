@@ -34,6 +34,7 @@ export default class Toast extends Component {
 
     Animated.timing(this.state.opacityValue, {
       toValue: this.props.opacity,
+      useNativeDriver: true,
       duration: this.props.fadeInDuration,
     }).start(() => {
       this.isShow = true;
@@ -51,6 +52,7 @@ export default class Toast extends Component {
     this.timer = setTimeout(() => {
       Animated.timing(this.state.opacityValue, {
         toValue: 0.0,
+        useNativeDriver: true,
         duration: this.props.fadeOutDuration,
       }).start(() => {
         this.setState({

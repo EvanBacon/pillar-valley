@@ -60,7 +60,7 @@ class Fire {
 
   submitComplaint = (targetUid, complaint) => {
     this.db.collection("complaints").add({
-      slug: Constants.manifest.slug,
+      slug: Constants.expoConfig?.slug,
       uid: this.uid,
       targetUid,
       complaint,

@@ -3,7 +3,7 @@ import * as Analytics from "expo-firebase-analytics";
 import * as StoreReview from "expo-store-review";
 import { Alert, Linking } from "react-native";
 
-const { name } = Constants.manifest;
+const { name } = Constants.expoConfig!;
 
 function alertToReview() {
   Alert.alert(

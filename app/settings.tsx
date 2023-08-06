@@ -203,7 +203,7 @@ function PreferencesScreen() {
         },
         Platform.OS !== "web" && {
           title: "Deep Linking Scheme",
-          value: `${Constants.manifest.scheme}://`,
+          value: `${Constants.expoConfig?.scheme}://`,
         },
         {
           title: "Expo SDK",
@@ -216,11 +216,11 @@ function PreferencesScreen() {
           web: null,
           ios: {
             title: "Bundle ID",
-            value: Constants.manifest?.ios?.bundleIdentifier,
+            value: Constants.expoConfig?.ios?.bundleIdentifier,
           },
           android: {
             title: "Package Name",
-            value: Constants.manifest?.android?.["package"],
+            value: Constants.expoConfig?.android?.["package"],
           },
         }),
       ].filter(Boolean),
