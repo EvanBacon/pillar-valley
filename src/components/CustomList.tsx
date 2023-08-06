@@ -1,11 +1,12 @@
-import { Slate } from "@/src/constants/Colors";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import * as Haptics from "expo-haptics";
 import { router } from "expo-router";
 import React from "react";
 import { SectionList, StyleSheet, Text, View } from "react-native";
 import { ScrollView, TouchableHighlight } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import * as Haptics from "expo-haptics";
+
+import { Slate } from "@/src/constants/Colors";
 
 function ActionTypeIcon({ type }: { type: "internal" | "external" }) {
   if (type === "internal") {

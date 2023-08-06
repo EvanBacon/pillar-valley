@@ -1,7 +1,7 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import * as Haptics from "expo-haptics";
 import React from "react";
 import { Platform, StyleSheet } from "react-native";
-import * as Haptics from "expo-haptics";
 
 import AudioManager from "../../AudioManager";
 import TouchableBounce from "../TouchableBounce";

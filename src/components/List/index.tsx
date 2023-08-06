@@ -1,4 +1,3 @@
-import { Slate } from "@/src/constants/Colors";
 import React from "react";
 import { View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
@@ -8,6 +7,8 @@ import Header from "./Header";
 import Item from "./Item";
 import Separator from "./Separator";
 import UserCell from "./UserCell";
+
+import { Slate } from "@/src/constants/Colors";
 
 class List extends React.Component {
   get userItem() {

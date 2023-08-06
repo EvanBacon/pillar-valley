@@ -1,6 +1,7 @@
-import { InstallBanner } from "@/src/components/InstallBanner";
 import { ScrollViewStyleReset } from "expo-router/html";
 import React from "react";
+
+import { InstallBanner } from "@/src/components/InstallBanner";
 
 export default function Root({ children }: { children: React.ReactNode }) {
   return (

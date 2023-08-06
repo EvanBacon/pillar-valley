@@ -1,7 +1,7 @@
+import * as Haptics from "expo-haptics";
 import { router, useNavigation } from "expo-router";
 import React from "react";
 import { Platform, StyleSheet, View } from "react-native";
-
 import * as Animatable from "react-native-animatable";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -15,7 +15,6 @@ import GameStates from "../Game/GameStates";
 import { rewardAdUnitId } from "../constants/Ads";
 import Settings from "../constants/Settings";
 import { useGameScreenshot, useGameState } from "../zustand/models";
-import * as Haptics from "expo-haptics";
 
 const delay = 100;
 const initialDelay = 100;

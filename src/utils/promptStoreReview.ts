@@ -1,7 +1,8 @@
 import Constants from "expo-constants";
-import { logEvent } from "@/src/lib/Analytics";
 import * as StoreReview from "expo-store-review";
 import { Alert, Linking } from "react-native";
+
+import { logEvent } from "@/src/lib/Analytics";
 
 const { name } = Constants.expoConfig!;
 

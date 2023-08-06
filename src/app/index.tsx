@@ -1,3 +1,4 @@
+import Head from "expo-router/head";
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 
@@ -11,7 +12,6 @@ import Song from "@/src/components/Song";
 import TouchableView from "@/src/components/TouchableView";
 import Settings from "@/src/constants/Settings";
 import useAppState from "@/src/hooks/useAppState";
-import Head from "expo-router/head";
 
 // import GameState from "../NitroRoll/GameState";
 const InputGameView = Settings.isSimulator ? SkipGameViewInSimulator : GameView;

@@ -4,9 +4,9 @@ import withAppleSettings, {
   Switch,
   Title,
 } from "@config-plugins/apple-settings";
-import path from "node:path";
-import fs from "node:fs";
 import { ConfigContext, ExpoConfig } from "expo/config";
+import fs from "node:fs";
+import path from "node:path";
 
 import { UPDATES_API_KEYS } from "./src/apple-settings-x/shared";
 

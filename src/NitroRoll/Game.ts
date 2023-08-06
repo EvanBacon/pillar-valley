@@ -1,4 +1,3 @@
-import { logEvent } from "@/src/lib/Analytics";
 import { Expo as ExpoEase, Linear, TweenLite } from "gsap";
 import * as THREE from "three";
 import { DirectionalLight, HemisphereLight } from "three";
@@ -13,6 +12,8 @@ import GameObject from "../Game/GameObject";
 import GameStates from "../Game/GameStates";
 import randomRange from "../Game/utils/randomRange";
 import { dispatch } from "../zustand/store";
+
+import { logEvent } from "@/src/lib/Analytics";
 
 class Game extends GameObject {
   state = GameStates.Playing;

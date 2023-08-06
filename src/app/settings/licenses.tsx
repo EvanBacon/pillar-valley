@@ -1,6 +1,7 @@
-import { CustomList } from "@/src/components/CustomList";
 import Head from "expo-router/head";
 import * as React from "react";
+
+import { CustomList } from "@/src/components/CustomList";
 
 const Data = require("@/src/constants/Licenses");
 

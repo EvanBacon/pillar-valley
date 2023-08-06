@@ -1,4 +1,3 @@
-import { logEvent } from "@/src/lib/Analytics";
 import * as Haptics from "expo-haptics";
 import { Platform } from "react-native";
 import * as THREE from "three";
@@ -19,6 +18,8 @@ import {
   useRounds,
   useScore,
 } from "../zustand/models";
+
+import { logEvent } from "@/src/lib/Analytics";
 
 function distance(
   p1: { x: number; z: number },

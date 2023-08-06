@@ -1,8 +1,9 @@
+import * as Application from "expo-application";
 import * as Updates from "expo-updates";
 import React from "react";
-import { Settings } from "@/src/lib/Settings";
+
 import { UPDATES_API_KEYS } from "@/src/apple-settings-x/shared";
-import * as Application from "expo-application";
+import { Settings } from "@/src/lib/Settings";
 
 function displayDate() {
   return new Date().toLocaleString("en-US", {

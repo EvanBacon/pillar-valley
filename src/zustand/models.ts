@@ -1,13 +1,14 @@
-import { useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { logEvent } from "@/src/lib/Analytics";
 import { Platform } from "expo-modules-core";
+import { useEffect } from "react";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import { Settings } from "@/src/lib/Settings";
 
-import Challenges from "../constants/Achievements";
 import GameStates from "../Game/GameStates";
+import Challenges from "../constants/Achievements";
+
+import { logEvent } from "@/src/lib/Analytics";
+import { Settings } from "@/src/lib/Settings";
 
 export type PresentAchievementShape = null | {
   id: string;

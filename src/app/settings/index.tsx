@@ -1,3 +1,17 @@
+import { connectActionSheet } from "@expo/react-native-action-sheet";
+import Constants from "expo-constants";
+import Head from "expo-router/head";
+import * as StoreReview from "expo-store-review";
+import React from "react";
+import {
+  Alert,
+  Image,
+  Linking,
+  Platform,
+  StyleSheet,
+  View,
+} from "react-native";
+
 import {
   getOtherPlatform,
   openOtherPlatform,
@@ -20,19 +34,6 @@ import {
   useRounds,
   useScore,
 } from "@/src/zustand/models";
-import { connectActionSheet } from "@expo/react-native-action-sheet";
-import Constants from "expo-constants";
-import Head from "expo-router/head";
-import * as StoreReview from "expo-store-review";
-import React from "react";
-import {
-  Alert,
-  Image,
-  Linking,
-  Platform,
-  StyleSheet,
-  View,
-} from "react-native";
 
 function areYouSureAsync(): Promise<boolean> {
   return new Promise((resolve) => {

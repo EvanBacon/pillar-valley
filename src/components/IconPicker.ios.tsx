@@ -1,11 +1,12 @@
 import Entypo from "@expo/vector-icons/Entypo";
+import * as Haptics from "expo-haptics";
 import React from "react";
 import { Image, Text, View } from "react-native";
 
-import { Slate } from "@/src/constants/Colors";
-
 import { icons, useDynamicAppIcon } from "./DynamicIconContext";
 import TouchableBounce from "./TouchableBounce.native";
+
+import { Slate } from "@/src/constants/Colors";
 
 export default function App() {
   const [_icon, setIcon] = useDynamicAppIcon();
@@ -37,8 +38,6 @@ export default function App() {
     </View>
   );
 }
-
-import * as Haptics from "expo-haptics";
 
 function Item({ ...props }) {
   return (

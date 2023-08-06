@@ -8,8 +8,8 @@ import {
   Platform,
   StyleSheet,
 } from "react-native";
-import uuidv4 from "uuid/v4";
 import * as THREE from "three";
+import uuidv4 from "uuid/v4";
 
 export type ResizeEvent = {
   x: number;

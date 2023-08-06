@@ -1,6 +1,6 @@
+import Constants from "expo-constants";
 import { usePathname } from "expo-router";
 import React from "react";
-import Constants from "expo-constants";
 
 const manifest =
   Constants.expoConfig || Constants.manifest2 || Constants.manifest;

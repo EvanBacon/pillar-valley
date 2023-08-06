@@ -1,6 +1,6 @@
+import Constants, { ExecutionEnvironment } from "expo-constants";
 import React from "react";
 import AppIcon from "react-native-dynamic-app-icon";
-import Constants, { ExecutionEnvironment } from "expo-constants";
 export const icons = [
   {
     name: "Auto",

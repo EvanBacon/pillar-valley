@@ -4,18 +4,18 @@ import * as Device from "expo-device";
 import * as Font from "expo-font";
 import { SplashScreen, Stack, usePathname, useRouter } from "expo-router";
 import Head from "expo-router/head";
-
 import React, { useEffect } from "react";
 import { Animated, StatusBar, Platform, StyleSheet, View } from "react-native";
 
+import { Slate } from "../constants/Colors";
+
 import AudioManager from "@/src/AudioManager";
 import Fire from "@/src/ExpoParty/Fire";
+import DynamicIconProvider from "@/src/components/DynamicIconContext";
 import TouchableBounce from "@/src/components/TouchableBounce";
 import { useUpdatedUpdatesInfoInSettings } from "@/src/hooks/useUpdatesInAppleSettings";
-import { useSyncGlobalAudioWithSettings } from "@/src/zustand/models";
-import DynamicIconProvider from "@/src/components/DynamicIconContext";
-import { Slate } from "../constants/Colors";
 import { logEvent } from "@/src/lib/Analytics";
+import { useSyncGlobalAudioWithSettings } from "@/src/zustand/models";
 
 // import { setTestDeviceIDAsync } from "expo-ads-admob";
 export const unstable_settings = {

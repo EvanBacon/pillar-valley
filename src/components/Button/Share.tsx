@@ -1,10 +1,11 @@
 import Constants from "expo-constants";
-import { logEvent } from "@/src/lib/Analytics";
 import React from "react";
 import { Share } from "react-native";
 
 import Icon from "./Icon";
 import storeUrl from "../../utils/storeUrl";
+
+import { logEvent } from "@/src/lib/Analytics";
 import { useGameScreenshot, useScore } from "@/src/zustand/models";
 
 class ShareButton extends React.Component {

@@ -1,9 +1,10 @@
-import TouchableBounce from "@/src/components/TouchableBounce";
-import { Slate } from "@/src/constants/Colors";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { router, SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
 import { Platform } from "react-native";
+
+import TouchableBounce from "@/src/components/TouchableBounce";
+import { Slate } from "@/src/constants/Colors";
 
 export const unstable_settings = {
   initialRouteName: "index",
