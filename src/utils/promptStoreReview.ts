@@ -1,5 +1,5 @@
 import Constants from "expo-constants";
-import * as Analytics from "expo-firebase-analytics";
+import { logEvent } from "@/src/lib/Analytics";
 import * as StoreReview from "expo-store-review";
 import { Alert, Linking } from "react-native";
 
@@ -51,7 +51,7 @@ async function askIfTheyLikeMeAsync(): Promise<boolean> {
 
 export async function promptToReviewAsync(): Promise<boolean> {
   const likesMe = await askIfTheyLikeMeAsync();
-  Analytics.logEvent("prompted_about_liking", { likesGame: likesMe });
+  logEvent("prompted_about_liking", { likesGame: likesMe });
   if (!likesMe) {
     // TODO: Have a bug report thing
     return false;

@@ -1,6 +1,6 @@
 import React from "react";
 import AppIcon from "react-native-dynamic-app-icon";
-
+import Constants, { ExecutionEnvironment } from "expo-constants";
 export const icons = [
   {
     name: "Auto",
@@ -57,6 +57,9 @@ export default function DynamicIconProvider({
 }
 
 function useIconName() {
+  if (Constants.executionEnvironment === ExecutionEnvironment.StoreClient) {
+    return [null, () => {}];
+  }
   const [icon, _setIcon] = React.useState<string | null>(null);
 
   React.useEffect(() => {

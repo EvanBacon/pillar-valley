@@ -1,4 +1,4 @@
-import * as Analytics from "expo-firebase-analytics";
+import { logEvent } from "@/src/lib/Analytics";
 import { Expo as ExpoEase, Linear, TweenLite } from "gsap";
 import * as THREE from "three";
 import { DirectionalLight, HemisphereLight } from "three";
@@ -230,7 +230,7 @@ class Game extends GameObject {
     this.takeScreenshot();
     this.screenShotTaken = false;
     dispatch.score.reset();
-    Analytics.logEvent("game_over", {
+    logEvent("game_over", {
       score: this.score,
     });
     this.score = 0;

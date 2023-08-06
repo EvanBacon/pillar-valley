@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as Analytics from "expo-firebase-analytics";
+import { logEvent } from "@/src/lib/Analytics";
 import { Platform } from "expo-modules-core";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
@@ -60,7 +60,7 @@ export const useGlobalAudio = create(
       _syncEnabled: (enabled) => set((state) => ({ ...state, enabled })),
       toggleMuted: () =>
         set((state) => {
-          Analytics.logEvent("toggle_music", { on: state.enabled });
+          logEvent("toggle_music", { on: state.enabled });
           return { ...state, enabled: !state.enabled };
         }),
     }),
@@ -282,7 +282,7 @@ export const useAchievements = create(
       unlock: (key: string) => {
         set((state) => {
           if (!state.achievements[key] && Challenges[key]) {
-            Analytics.logEvent("achievement_unlocked", {
+            logEvent("achievement_unlocked", {
               id: [key],
               ...Challenges[key],
             });
@@ -327,7 +327,7 @@ export const useRounds = create(
         set((state) => {
           const next = state.bestRounds + 1;
 
-          Analytics.logEvent("had_best_round", {
+          logEvent("had_best_round", {
             count: state.bestRounds,
             score: useScore.getState().score.total,
           });
@@ -358,31 +358,31 @@ export const useRounds = create(
 
           // Unlock achievements
           if (next === 10) {
-            Analytics.logEvent("achievement_unlocked", {
+            logEvent("achievement_unlocked", {
               id: "rounds-10",
               ...Challenges["rounds-10"],
             });
             useAchievements.getState().unlock("rounds-10");
           } else if (next === 50) {
-            Analytics.logEvent("achievement_unlocked", {
+            logEvent("achievement_unlocked", {
               id: "rounds-50",
               ...Challenges["rounds-50"],
             });
             useAchievements.getState().unlock("rounds-50");
           } else if (next === 100) {
-            Analytics.logEvent("achievement_unlocked", {
+            logEvent("achievement_unlocked", {
               id: "rounds-100",
               ...Challenges["rounds-100"],
             });
             useAchievements.getState().unlock("rounds-100");
           } else if (next === 500) {
-            Analytics.logEvent("achievement_unlocked", {
+            logEvent("achievement_unlocked", {
               id: "rounds-500",
               ...Challenges["rounds-500"],
             });
             useAchievements.getState().unlock("rounds-500");
           } else if (next === 1000) {
-            Analytics.logEvent("achievement_unlocked", {
+            logEvent("achievement_unlocked", {
               id: "rounds-1000",
               ...Challenges["rounds-1000"],
             });

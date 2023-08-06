@@ -1,5 +1,5 @@
 import Constants from "expo-constants";
-import * as Analytics from "expo-firebase-analytics";
+import { logEvent } from "@/src/lib/Analytics";
 import React from "react";
 import { Share } from "react-native";
 
@@ -16,7 +16,7 @@ class ShareButton extends React.Component {
     const message = `OMG! I got ${score} points in @baconbrix ${appName}. ${
       storeUrl() || ""
     }`;
-    Analytics.logEvent("share", { score });
+    logEvent("share", { score });
     Share.share(
       {
         message,

@@ -1,4 +1,4 @@
-import * as Analytics from "expo-firebase-analytics";
+import { logEvent } from "@/src/lib/Analytics";
 import * as Haptics from "expo-haptics";
 import { Platform } from "react-native";
 import * as THREE from "three";
@@ -551,7 +551,7 @@ class Game extends GameObject {
 
     useScore.getState().resetScore();
     useRounds.getState().incrementRounds();
-    Analytics.logEvent("game_over", {
+    logEvent("game_over", {
       score: this.score,
     });
     this.score = 0;

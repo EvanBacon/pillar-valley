@@ -1,7 +1,6 @@
 import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import * as Device from "expo-device";
-import * as Analytics from "expo-firebase-analytics";
 import * as Font from "expo-font";
 import { SplashScreen, Stack, usePathname, useRouter } from "expo-router";
 import Head from "expo-router/head";
@@ -16,6 +15,7 @@ import { useUpdatedUpdatesInfoInSettings } from "@/src/hooks/useUpdatesInAppleSe
 import { useSyncGlobalAudioWithSettings } from "@/src/zustand/models";
 import DynamicIconProvider from "@/src/components/DynamicIconContext";
 import { Slate } from "../constants/Colors";
+import { logEvent } from "@/src/lib/Analytics";
 
 // import { setTestDeviceIDAsync } from "expo-ads-admob";
 export const unstable_settings = {
@@ -70,7 +70,7 @@ export default function Layout() {
 function InnerLayout() {
   const pathname = usePathname();
   useEffect(() => {
-    Analytics.logEvent("screen_view", { currentScreen: pathname });
+    logEvent("screen_view", { currentScreen: pathname });
   }, [pathname]);
 
   return (
@@ -161,11 +161,11 @@ function useLoadAssets() {
         ]);
       } catch (error) {
         console.log("Error loading fonts and audio!");
-        Analytics.logEvent("error_loading_assets", { error });
+        logEvent("error_loading_assets", { error });
         console.error(error);
       } finally {
         const total = getNow() - time;
-        Analytics.logEvent("assets_loaded", { milliseconds: total });
+        logEvent("assets_loaded", { milliseconds: total });
         // console.timeEnd("Setup");
       }
       setLoading(false);
