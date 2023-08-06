@@ -1,7 +1,8 @@
 import TouchableBounce from "@/src/components/TouchableBounce";
 import { Slate } from "@/src/constants/Colors";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { router, Stack } from "expo-router";
+import { router, SplashScreen, Stack } from "expo-router";
+import { useEffect } from "react";
 import { Platform } from "react-native";
 
 export const unstable_settings = {
@@ -25,6 +26,10 @@ function BackButton() {
 }
 
 export default function Settings() {
+  useEffect(() => {
+    SplashScreen.hideAsync();
+  }, []);
+
   return (
     <Stack
       screenOptions={{

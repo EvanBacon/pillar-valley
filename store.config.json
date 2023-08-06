@@ -1,7 +1,7 @@
 {
   "configVersion": 0,
   "apple": {
-    "version": "8.0.0",
+    "version": "8.0.1",
     "copyright": "2023 Evan Bacon",
     "release": {
       "automaticRelease": true

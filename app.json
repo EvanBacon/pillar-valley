@@ -49,7 +49,7 @@
         "googleMobileAdsAutoInit": true
       },
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": true
+        "ITSAppUsesNonExemptEncryption": false
       },
       "associatedDomains": [
         "applinks:pillarvalley.netlify.app",
