@@ -1,6 +1,6 @@
 import * as Updates from "expo-updates";
 import React from "react";
-import { Settings } from "react-native";
+import { Settings } from "@/src/lib/Settings";
 import { UPDATES_API_KEYS } from "@/src/apple-settings-x/shared";
 import * as Application from "expo-application";
 

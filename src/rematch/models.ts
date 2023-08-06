@@ -2,9 +2,9 @@ import { useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Analytics from "expo-firebase-analytics";
 import { Platform } from "expo-modules-core";
-import { Settings } from "react-native";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
+import { Settings } from "@/src/lib/Settings";
 
 import Challenges from "../constants/Achievements";
 import GameStates from "../Game/GameStates";
