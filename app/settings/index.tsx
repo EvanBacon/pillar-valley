@@ -168,20 +168,20 @@ function PreferencesScreen() {
       ],
     },
     {
-      title: "Improve Pillar Valley",
+      title: "",
       data: [
         canReview && {
-          title: "📝 Write a review",
+          title: "Write a review",
           onPress: () => {
             StoreReview.requestReview();
           },
         },
         Platform.OS === "ios" && {
-          title: "🌸 Change App Icon",
+          title: "Change App Icon",
           href: "/settings/icon",
         },
         {
-          title: "⭐️ Star the project on Github",
+          title: "Star the project on Github",
           href: "https://github.com/EvanBacon/pillar-valley/stargazers",
         },
         // Platform.OS !== "web" && {
@@ -195,18 +195,18 @@ function PreferencesScreen() {
         // },
 
         Platform.OS !== "web" && {
-          title: "⚙️ Open System Settings",
+          title: "Open System Settings",
           actionType: "external",
           onPress: () => {
             Linking.openSettings();
           },
         },
         {
-          title: "🐛 Report a bug",
+          title: "Report a bug",
           href: "https://github.com/EvanBacon/pillar-valley/issues/new",
         },
         getOtherPlatform() && {
-          title: "🌐 Play on another platform",
+          title: "Play on another platform",
           actionType: "external",
           onPress: () => {
             openOtherPlatform();
@@ -321,7 +321,7 @@ function PreferencesScreen() {
           stickySectionHeadersEnabled={false}
           // SectionSeparatorComponent={CupertinoItemSeparatorComponent}
           renderSectionHeader={({ section: { title } }) => {
-            if (!title) {
+            if (title == null) {
               return null;
             }
             return (
