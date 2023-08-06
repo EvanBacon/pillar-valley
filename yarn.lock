@@ -1229,10 +1229,10 @@
     debug "^4.3.4"
     uuid "^8.3.2"
 
-"@config-plugins/apple-settings@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@config-plugins/apple-settings/-/apple-settings-0.0.2.tgz#825ef23f3d48438028de29f1f433dc64da870239"
-  integrity sha512-ksNSZMCd0aQNAkXzdO6QKDP6U5yVojgT8Cp5D+yA4mvXg1jojRK4DTZdNC1I5p5powcSlnrvk/vVth4+Tm+qfg==
+"@config-plugins/apple-settings@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@config-plugins/apple-settings/-/apple-settings-0.0.3.tgz#832ab6ca0ba6d90d2145cadf2825e776f5072842"
+  integrity sha512-vsleVXnZROmYeyueMzhhOAoqL2fJb/uAR72Y0UpCOwqXk786rCvVHLJfJv21+AgjzFUGR/l68bgudlZII1o5qA==
   dependencies:
     "@bacons/xcode" "^1.0.0-alpha.5"
     "@expo/plist" "^0.0.20"
@@ -4686,7 +4686,7 @@ expo-2d-context@^0.0.3:
     string-format "0.5.0"
     tess2 "^1.0.0"
 
-expo-application@~5.3.0:
+expo-application@^5.3.0, expo-application@~5.3.0:
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/expo-application/-/expo-application-5.3.0.tgz#0811f2de69a3a7f521762fd7f8a0a4563276dada"
   integrity sha512-XLkaELwmiXW6JjFVkwuiFQaGZoNKAxNAcSJkFdz8s4rCljEwehylbzoPk37QHw3cxqb4v0/2EICtg4C4kpEVCA==

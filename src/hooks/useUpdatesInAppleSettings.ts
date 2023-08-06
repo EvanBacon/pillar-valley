@@ -1,8 +1,8 @@
 import * as Updates from "expo-updates";
 import React from "react";
 import { Settings } from "react-native";
-
 import { UPDATES_API_KEYS } from "@/src/apple-settings-x/shared";
+import * as Application from "expo-application";
 
 function displayDate() {
   return new Date().toLocaleString("en-US", {
@@ -20,6 +20,11 @@ export function useUpdatedUpdatesInfoInSettings() {
   });
 
   React.useEffect(() => {
+    Settings.set({
+      // Follows format from Keynote and other Apple apps
+      p_app_version: `${Application.nativeApplicationVersion} (${Application.nativeBuildVersion})`,
+    });
+
     Settings.set(
       UPDATES_API_KEYS.reduce<Record<string, string>>(
         (acc, { setting, key }) => {
