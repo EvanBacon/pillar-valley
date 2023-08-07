@@ -1,4 +1,3 @@
-/* global Alert */
 import React from "react";
 import { PanResponder, View } from "react-native";
 

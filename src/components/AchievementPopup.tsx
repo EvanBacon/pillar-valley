@@ -1,4 +1,4 @@
-import { useRouter } from "expo-router";
+import { router } from "expo-router";
 import React from "react";
 import {
   Animated,
@@ -44,7 +44,7 @@ class AnimatedCircle extends React.Component {
 
   getAnimation = (props = {}) => {
     const { reverse } = props;
-    const multiplier = reverse ? -1 : 1;
+
     const {
       delay,
       toValue,
@@ -312,7 +312,14 @@ class FirstText extends React.Component {
   }
 }
 
-class Popup extends React.Component {
+type PopupProps = {
+  setPresentAchievement: (
+    challenge: { id: string; name: string } | null
+  ) => void;
+  id: string;
+  name: string;
+};
+class Popup extends React.Component<PopupProps> {
   // parallel(animations, config?)
 
   async componentDidMount() {
@@ -421,7 +428,7 @@ class Popup extends React.Component {
     return (
       <TouchableWithoutFeedback
         onPress={() => {
-          this.props.router.push({
+          router.push({
             pathname: "/challenges",
             params: { id: this.props.id },
           });
@@ -503,7 +510,6 @@ class Popup extends React.Component {
 function PopupContainer() {
   const { presentAchievement, set } = usePresentAchievement();
   const { top } = useSafeAreaInsets();
-  const router = useRouter();
   return (
     <View
       style={[
@@ -514,11 +520,9 @@ function PopupContainer() {
     >
       {presentAchievement && (
         <Popup
-          router={router}
           setPresentAchievement={set}
           id={presentAchievement.id}
           name={presentAchievement.name}
-          score={presentAchievement.score}
         />
       )}
     </View>

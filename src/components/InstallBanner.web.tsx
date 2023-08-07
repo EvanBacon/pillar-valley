@@ -1,12 +1,11 @@
-import Constants from "expo-constants";
-import { usePathname } from "expo-router";
+// import Constants from "expo-constants";
 import React from "react";
 
-const manifest =
-  Constants.expoConfig || Constants.manifest2 || Constants.manifest;
-const origin =
-  // @ts-expect-error
-  manifest?.extra?.router?.headOrigin ?? manifest?.extra?.router?.origin;
+// const manifest =
+//   Constants.expoConfig || Constants.manifest2 || Constants.manifest;
+// const origin =
+//   // @ts-expect-error
+//   manifest?.extra?.router?.headOrigin ?? manifest?.extra?.router?.origin;
 
 export const InstallBanner = React.forwardRef(function InstallBanner(
   { id }: { id: string },

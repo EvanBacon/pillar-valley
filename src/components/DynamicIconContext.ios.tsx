@@ -56,10 +56,16 @@ export default function DynamicIconProvider({
   );
 }
 
-function useIconName() {
-  if (Constants.executionEnvironment === ExecutionEnvironment.StoreClient) {
-    return [null, () => {}];
-  }
+const useIconName =
+  Constants.executionEnvironment === ExecutionEnvironment.StoreClient
+    ? useIconNameExpoGo
+    : useIconNameCustom;
+
+function useIconNameExpoGo() {
+  return React.useState<string | null>(null);
+}
+
+function useIconNameCustom() {
   const [icon, _setIcon] = React.useState<string | null>(null);
 
   React.useEffect(() => {

@@ -1,12 +1,8 @@
 module.exports = {
   // parser: "babel-eslint",
   extends: ["universe/native"],
-  env: { browser: true },
+  env: { browser: true, jest: true },
   plugins: ["react", "bacon"],
-  env: {
-    browser: true,
-    jest: true,
-  },
   rules: {
     "bacon/no-empty-styles": "error",
     "bacon/modern-react-native": [

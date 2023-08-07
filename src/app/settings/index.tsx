@@ -76,7 +76,7 @@ function CurrentIconBadge() {
 function PreferencesScreen() {
   const { score, hardResetScore } = useScore();
   const { rounds, bestRounds, resetBestRounds, resetRounds } = useRounds();
-  const { currency, resetCurrency } = useCurrency();
+  const { resetCurrency } = useCurrency();
   const achievements = useAchievements();
   const [taps, setTaps] = React.useState(0);
   const canReview = useStoreReview();

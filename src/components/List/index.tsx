@@ -84,17 +84,4 @@ class List extends React.Component {
   }
 }
 
-// ListEmptyComponent={
-//   <View
-//     style={{
-//       justifyContent: 'center',
-//       flex: 1,
-//       height: Dimensions.get('window').height / 2,
-//       alignItems: 'center',
-//     }}
-//   >
-//     <Text style={{ fontSize: 24 }}>Coming Soon</Text>
-//   </View>
-// }
-
 export default List;
