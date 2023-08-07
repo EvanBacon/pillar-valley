@@ -60,7 +60,7 @@ export default function Layout() {
       </Head>
       <AnimatedSplashScreen
         loading={loading}
-        image={require("@/icons/splash.png")}
+        image={require("icons/splash.png")}
       >
         <InnerLayout />
       </AnimatedSplashScreen>

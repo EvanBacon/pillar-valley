@@ -4,32 +4,32 @@ import AppIcon from "react-native-dynamic-app-icon";
 export const icons = [
   {
     name: "Auto",
-    source: require("@/icons/pillars/default.png"),
+    source: require("icons/pillars/default.png"),
     iconId: null,
   },
   {
     name: "Spring",
-    source: require("@/icons/pillars/spring.png"),
+    source: require("icons/pillars/spring.png"),
     iconId: "spring",
   },
   {
     name: "Autumn",
-    source: require("@/icons/pillars/autumn.png"),
+    source: require("icons/pillars/autumn.png"),
     iconId: "autumn",
   },
   {
     name: "Solstice",
-    source: require("@/icons/pillars/solstice.png"),
+    source: require("icons/pillars/solstice.png"),
     iconId: "solstice",
   },
   {
     name: "Winter",
-    source: require("@/icons/pillars/winter.png"),
+    source: require("icons/pillars/winter.png"),
     iconId: "winter",
   },
   {
     name: "Bacon",
-    source: require("@/icons/pillars/special.png"),
+    source: require("icons/pillars/special.png"),
     iconId: "special",
   },
 ];

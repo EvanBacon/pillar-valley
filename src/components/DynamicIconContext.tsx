@@ -3,7 +3,7 @@ import React from "react";
 export const icons = [
   {
     name: "Auto",
-    source: require("@/icons/pillars/default.png"),
+    source: require("icons/pillars/default.png"),
     iconId: null,
   },
 ];
@@ -16,7 +16,7 @@ export default function DynamicIconProvider({
 }
 
 export function useSelectedIconSource(): any | null {
-  return require("@/icons/pillars/default.png");
+  return require("icons/pillars/default.png");
 }
 
 export function useDynamicAppIcon(): [

@@ -3,14 +3,14 @@ import * as React from "react";
 
 import { CustomList } from "@/components/CustomList";
 
-const Data = require("@/constants/Licenses");
+import Data from "@/constants/Licenses";
 
-function sortDataByKey(data, key) {
+function sortDataByKey(data: typeof Data, key: string) {
   data.sort((a, b) => (a[key] > b[key] ? 1 : b[key] > a[key] ? -1 : 0));
   return data;
 }
 
-function capitalizeFirstLetter(string) {
+function capitalizeFirstLetter(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 

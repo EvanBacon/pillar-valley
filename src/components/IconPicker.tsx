@@ -4,5 +4,5 @@ export default function IconPickerDefault() {
 }
 
 export function useSelectedIconSource() {
-  return require("@/icons/pillars/default.png");
+  return require("icons/pillars/default.png");
 }

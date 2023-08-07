@@ -543,11 +543,12 @@ class Game extends GameObject {
   };
 
   gameOver = (animate = true) => {
-    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-
     this.takeScreenshot();
     this.screenShotTaken = false;
     const scoreState = useScore.getState();
+    if (scoreState.score.current > 0) {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+    }
     scoreState.updateTotal(this.score);
     if (scoreState.score.isBest) {
       scoreState.setHighScore(scoreState.score.current);
