@@ -1,0 +1,6 @@
+{
+  "platforms": ["ios", "web"],
+  "ios": {
+    "modules": ["ExpoAppIconModule"]
+  }
+}

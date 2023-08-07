@@ -1,6 +1,7 @@
 import Constants, { ExecutionEnvironment } from "expo-constants";
+import AppIcon from "local:expo-app-icon";
 import React from "react";
-import AppIcon from "react-native-dynamic-app-icon";
+
 export const icons = [
   {
     name: "Auto",
@@ -61,31 +62,23 @@ const useIconName =
     ? useIconNameExpoGo
     : useIconNameCustom;
 
-function useIconNameExpoGo() {
+function useIconNameExpoGo(): [string | null, (name: string | null) => void] {
   return React.useState<string | null>(null);
 }
 
-function useIconNameCustom() {
-  const [icon, _setIcon] = React.useState<string | null>(null);
-
-  React.useEffect(() => {
-    let isMounted = true;
-    AppIcon.getIconName((result) => {
-      if (isMounted) _setIcon(result.iconName);
-    });
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+function useIconNameCustom(): [string | null, (name: string | null) => void] {
+  const [icon, _setIcon] = React.useState<string | null>(
+    AppIcon.getAlternateIcon()
+  );
 
   const setIcon = React.useCallback(
     (icon: string | null) => {
-      AppIcon.setAppIcon(icon);
+      AppIcon.setAlternateIcon(icon);
       _setIcon(icon || null);
     },
     [_setIcon]
   );
-  return [icon === "default" ? null : icon, setIcon];
+  return [icon, setIcon];
 }
 
 export function useSelectedIconSource(): any | null {
