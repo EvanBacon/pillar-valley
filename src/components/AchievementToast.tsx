@@ -6,7 +6,9 @@ export const DURATION = {
   FOREVER: 0,
 };
 
-const { height, width } = Dimensions.get("window");
+// '100%' > require('react-native').Dimensions.get("window").height
+
+const { height } = Dimensions.get("window");
 
 export default class Toast extends Component {
   constructor(props) {
