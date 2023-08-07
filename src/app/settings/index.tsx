@@ -3,14 +3,7 @@ import Constants from "expo-constants";
 import Head from "expo-router/head";
 import * as StoreReview from "expo-store-review";
 import React from "react";
-import {
-  Alert,
-  Image,
-  Linking,
-  Platform,
-  StyleSheet,
-  View,
-} from "react-native";
+import { Alert, Image, Linking, Platform } from "react-native";
 
 import {
   getOtherPlatform,
@@ -95,34 +88,16 @@ function PreferencesScreen() {
         { title: "Games Played", value: rounds },
         { title: "High score", value: score.best },
         { title: "High score beaten", value: bestRounds },
-        { title: "Gems collected", value: currency },
+        // { title: "Gems collected", value: currency },
       ],
     },
     {
-      title: "",
+      title: "Extras",
       data: [
         Platform.OS === "ios" && {
           leftIcon: <CurrentIconBadge />,
           title: "Customize App Icon",
           href: "/settings/icon",
-        },
-        canReview && {
-          leftIcon: (
-            <LeftIconWrapper>
-              <AppStoreSvg
-                height={14}
-                width={14}
-                fill={Platform.select({
-                  android: "#414141",
-                  default: "#0D96F6",
-                })}
-              />
-            </LeftIconWrapper>
-          ),
-          title: "Write a review",
-          onPress: () => {
-            StoreReview.requestReview();
-          },
         },
 
         // Platform.OS !== "web" && {
@@ -134,22 +109,6 @@ function PreferencesScreen() {
         //     await AdMobRewarded.showAdAsync();
         //   },
         // },
-
-        Platform.OS !== "web" && {
-          leftIcon: (
-            <LeftIconWrapper>
-              {Platform.select({
-                ios: <Apple height={14} width={14} />,
-                android: <Android height={14} width={14} />,
-              })}
-            </LeftIconWrapper>
-          ),
-          title: "Open System Settings",
-          actionType: "external",
-          onPress: () => {
-            Linking.openSettings();
-          },
-        },
 
         getOtherPlatform() && {
           leftIcon: (
@@ -163,13 +122,24 @@ function PreferencesScreen() {
             openOtherPlatform();
           },
         },
+        canReview && {
+          leftIcon: (
+            <LeftIconWrapper>
+              <AppStoreSvg height={14} width={14} />
+            </LeftIconWrapper>
+          ),
+          title: "Write a review",
+          onPress: () => {
+            StoreReview.requestReview();
+          },
+        },
         {
           leftIcon: (
             <LeftIconWrapper>
               <GitHubSvg height={14} width={14} />
             </LeftIconWrapper>
           ),
-          title: "Star the project on Github",
+          title: "Star on Github",
           href: "https://github.com/EvanBacon/pillar-valley/stargazers",
         },
         {
@@ -261,6 +231,21 @@ function PreferencesScreen() {
             setTaps((taps) => taps + 1);
           },
         },
+        Platform.OS !== "web" && {
+          leftIcon: (
+            <LeftIconWrapper>
+              {Platform.select({
+                ios: <Apple height={14} width={14} />,
+                android: <Android height={14} width={14} />,
+              })}
+            </LeftIconWrapper>
+          ),
+          title: "Open System Settings",
+          actionType: "external",
+          onPress: () => {
+            Linking.openSettings();
+          },
+        },
       ].filter(Boolean),
     },
     taps > 10 && {
@@ -303,25 +288,5 @@ function PreferencesScreen() {
     </>
   );
 }
-
-export function CupertinoItemSeparatorComponent() {
-  return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: Slate[100],
-      }}
-    >
-      <View
-        style={{
-          marginLeft: ITEM_START_WIDTH,
-          height: StyleSheet.hairlineWidth,
-          backgroundColor: "#C6C6C8",
-        }}
-      />
-    </View>
-  );
-}
-const ITEM_START_WIDTH = 60;
 
 export default connectActionSheet(PreferencesScreen);
