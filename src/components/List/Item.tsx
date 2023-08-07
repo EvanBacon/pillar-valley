@@ -1,56 +1,64 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
-import React from "react";
-import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
+import React, { FC } from "react";
+import {
+  StyleSheet,
+  Text,
+  TouchableHighlight,
+  View,
+  StyleProp,
+  ViewStyle,
+} from "react-native";
 
 import addNth from "../../utils/addNth";
 import Avatar from "../Avatar";
 
-export default class Item extends React.Component {
-  onPress = () => {
-    const { item, index, onPress } = this.props;
+interface ItemProps {
+  item?: {
+    displayName: string;
+    score: number;
+    photoURL: string;
+    timestamp: number;
+  };
+  index: number;
+  onPress: (item: any, index: number) => void;
+  style?: StyleProp<ViewStyle>;
+}
+
+const Item: FC<ItemProps> = ({ item = {}, index, onPress, style }) => {
+  const onPressItem = () => {
     onPress(item, index);
   };
-  render() {
-    const { index, onPress, style, ...props } = this.props;
-    const item = this.props.item || {};
 
-    const {
-      displayName,
-      score,
-      photoURL,
-      // rank: brokenRank,
-      timestamp,
-    } = item;
+  const { displayName, score, photoURL } = item;
 
-    const _rankValue = index + 1;
-    const rank = _rankValue + addNth(_rankValue);
-    return (
-      <TouchableHighlight
-        underlayColor="#21222D"
-        {...props}
-        onPress={this.onPress}
-        style={[styles.touchable, style]}
-      >
-        <View style={styles.container}>
-          <View style={{ flexDirection: "row" }}>
-            <Text style={styles.rank}>{rank}</Text>
-            <Avatar
-              textStyle={{ fontWeight: "bold" }}
-              avatarStyle={{ marginRight: 16 }}
-              name={displayName}
-              avatar={photoURL}
-            />
-            <View>
-              <Text style={styles.text}>{displayName}</Text>
-              <Text style={styles.subtitle}>{score} Points</Text>
-            </View>
+  const _rankValue = index + 1;
+  const rank = _rankValue + addNth(_rankValue);
+
+  return (
+    <TouchableHighlight
+      underlayColor="#21222D"
+      onPress={onPressItem}
+      style={[styles.touchable, style]}
+    >
+      <View style={styles.container}>
+        <View style={{ flexDirection: "row" }}>
+          <Text style={styles.rank}>{rank}</Text>
+          <Avatar
+            textStyle={{ fontWeight: "bold" }}
+            avatarStyle={{ marginRight: 16 }}
+            name={displayName}
+            avatar={photoURL}
+          />
+          <View>
+            <Text style={styles.text}>{displayName}</Text>
+            <Text style={styles.subtitle}>{score} Points</Text>
           </View>
-          <Ionicons size={24} color="#D8DADE" name="ios-arrow-forward" />
         </View>
-      </TouchableHighlight>
-    );
-  }
-}
+        <Ionicons size={24} color="#D8DADE" name="ios-arrow-forward" />
+      </View>
+    </TouchableHighlight>
+  );
+};
 
 const styles = StyleSheet.create({
   touchable: {},
@@ -74,3 +82,5 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
 });
+
+export default Item;

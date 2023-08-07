@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Image, Text, View } from "react-native";
+import { Image, Text, View, ViewStyle } from "react-native";
 
 export default function ScoreBadge({
   style = {},
@@ -7,8 +7,8 @@ export default function ScoreBadge({
   color,
 }: {
   color: string;
-  style: any;
-  children?: React.ReactChild;
+  style?: ViewStyle;
+  children?: React.ReactNode;
 }) {
   return (
     <View

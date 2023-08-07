@@ -1,14 +1,15 @@
-import React from "react";
+import React, { FC, useState, useEffect } from "react";
 import {
   Image,
   Text,
-  TextProps,
+  ViewStyle,
   TouchableOpacity,
   View,
-  ImageProps,
+  TextStyle,
+  ImageStyle,
+  StyleProp,
 } from "react-native";
 
-// https://github.com/FaridSafi/react-native-gifted-chat/blob/master/src/GiftedAvatar.js
 const Color = {
   white: "white",
   carrot: "#e67e22",
@@ -29,39 +30,47 @@ const {
   turquoise,
   midnightBlue,
 } = Color;
-// TODO
-// 3 words name initials
-// handle only alpha numeric chars
 
-export default class Avatar extends React.PureComponent<{
-  color?: string;
+type AvatarProps = {
+  color?: string | false;
   name: string;
-  onPress: (other: any) => void;
-  avatar: Function | number;
-  textStyle: TextProps["style"];
-  avatarStyle: ImageProps["style"];
-}> {
-  avatarName?: string;
-  avatarColor?: string;
+  onPress?: (other: AvatarProps) => void;
+  avatar?: (() => JSX.Element) | string | number;
+  textStyle?: StyleProp<TextStyle>;
+  avatarStyle?: StyleProp<ImageStyle>;
+};
 
-  setAvatarColor() {
-    const userName = this.props.name || "";
-    const name = userName.toUpperCase().split(" ");
-    if (name.length === 1) {
-      this.avatarName = `${name[0].charAt(0)}`;
-    } else if (name.length > 1) {
-      this.avatarName = `${name[0].charAt(0)}${name[1].charAt(0)}`;
-    } else {
-      this.avatarName = "";
+const Avatar: FC<AvatarProps> = ({
+  color,
+  name,
+  onPress,
+  avatar,
+  textStyle,
+  avatarStyle,
+}) => {
+  const [avatarName, setAvatarName] = useState<string>("");
+  const [avatarColor, setAvatarColor] = useState<string>("");
+
+  useEffect(() => {
+    setAvatarColorName();
+  }, [name]);
+
+  const setAvatarColorName = () => {
+    const userName = name || "";
+    const nameArr = userName.toUpperCase().split(" ");
+    let avatarName = "";
+    if (nameArr.length === 1) {
+      avatarName = `${nameArr[0].charAt(0)}`;
+    } else if (nameArr.length > 1) {
+      avatarName = `${nameArr[0].charAt(0)}${nameArr[1].charAt(0)}`;
     }
+    setAvatarName(avatarName);
 
     let sumChars = 0;
     for (let i = 0; i < userName.length; i += 1) {
       sumChars += userName.charCodeAt(i);
     }
 
-    // inspired by https://github.com/wbinnssmith/react-user-avatar
-    // colors from https://flatuicolors.com/
     const colors = [
       carrot,
       emerald,
@@ -72,93 +81,59 @@ export default class Avatar extends React.PureComponent<{
       midnightBlue,
     ];
 
-    this.avatarColor = colors[sumChars % colors.length];
-  }
+    setAvatarColor(colors[sumChars % colors.length]);
+  };
 
-  renderAvatar() {
-    if (typeof this.props.avatar === "function") {
-      return this.props.avatar();
-    } else if (typeof this.props.avatar === "string") {
-      return (
-        <Image
-          source={{ uri: this.props.avatar }}
-          style={[styles.avatarStyle, this.props.avatarStyle]}
-        />
-      );
-    } else if (typeof this.props.avatar === "number") {
-      return (
-        <Image
-          source={this.props.avatar}
-          style={[styles.avatarStyle, this.props.avatarStyle]}
-        />
-      );
+  const handlePress = () => {
+    if (onPress) {
+      onPress({ color, name, onPress, avatar, textStyle, avatarStyle });
     }
-    return null;
-  }
+  };
 
-  renderInitials() {
+  if (!name && !avatar) {
     return (
-      <Text style={[styles.textStyle, this.props.textStyle]}>
-        {this.avatarName}
-      </Text>
+      <View
+        style={[styles.avatarStyle, styles.avatarTransparent, avatarStyle]}
+        accessibilityTraits="image"
+      />
     );
   }
 
-  render() {
-    if (!this.props.name && !this.props.avatar) {
-      // render placeholder
-      return (
-        <View
-          style={[
-            styles.avatarStyle,
-            styles.avatarTransparent,
-            this.props.avatarStyle,
-          ]}
-          accessibilityTraits="image"
-        />
-      );
-    }
-    if (this.props.avatar) {
-      return (
-        <TouchableOpacity
-          disabled={!this.props.onPress}
-          style={{ flex: 1 }}
-          onPress={() => {
-            const { onPress, ...other } = this.props;
-            if (this.props.onPress) {
-              this.props.onPress(other);
-            }
-          }}
-          accessibilityTraits="image"
-        >
-          {this.renderAvatar()}
-        </TouchableOpacity>
-      );
-    }
-
-    this.setAvatarColor();
-
+  if (avatar) {
     return (
       <TouchableOpacity
-        disabled={!this.props.onPress}
-        onPress={() => {
-          const { onPress, ...other } = this.props;
-          if (this.props.onPress) {
-            this.props.onPress(other);
-          }
-        }}
-        style={[
-          styles.avatarStyle,
-          { backgroundColor: this.props.color || this.avatarColor },
-          this.props.avatarStyle,
-        ]}
+        disabled={!onPress}
+        onPress={handlePress}
+        style={{ flex: 1 }}
         accessibilityTraits="image"
       >
-        {this.renderInitials()}
+        {typeof avatar === "function" ? (
+          avatar()
+        ) : (
+          <Image
+            source={typeof avatar === "string" ? { uri: avatar } : avatar}
+            style={[styles.avatarStyle, avatarStyle]}
+          />
+        )}
       </TouchableOpacity>
     );
   }
-}
+
+  return (
+    <TouchableOpacity
+      disabled={!onPress}
+      onPress={handlePress}
+      style={[
+        styles.avatarStyle,
+        { backgroundColor: color || avatarColor },
+        avatarStyle,
+      ]}
+      accessibilityTraits="image"
+    >
+      <Text style={[styles.textStyle, textStyle]}>{avatarName}</Text>
+    </TouchableOpacity>
+  );
+};
 
 const styles = {
   avatarStyle: {
@@ -171,22 +146,16 @@ const styles = {
     aspectRatio: 1,
     flex: 1,
     borderRadius: 20,
-  },
+  } as ViewStyle,
   avatarTransparent: {
     backgroundColor: "#B8B8B8",
-  },
+  } as ViewStyle,
   textStyle: {
     color: Color.white,
     fontSize: 16,
-    backgroundColor: Color.backgroundTransparent,
+    backgroundColor: "transparent",
     fontWeight: "100",
-  },
+  } as TextStyle,
 };
 
-Avatar.defaultProps = {
-  name: null,
-  avatar: null,
-  onPress: null,
-  avatarStyle: {},
-  textStyle: {},
-};
+export default Avatar;

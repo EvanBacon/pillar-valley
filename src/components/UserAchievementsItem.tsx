@@ -1,55 +1,62 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
 
 import ScoreBadge from "./ScoreBadge";
 
-export default class UserAchievementsItem extends React.Component {
-  state = { completed: [], score: 0 };
+interface UserAchievementsItemProps {
+  data: {
+    complete: boolean;
+    points: number;
+  }[];
+  index: number;
+  onPress: (item: any, index: number) => void;
+  style?: object;
+  item?: any;
+}
 
-  constructor(props: any) {
-    super(props);
+const UserAchievementsItem: React.FC<UserAchievementsItemProps> = ({
+  data,
+  index,
+  onPress,
+  style,
+  item,
+}) => {
+  const [completed, setCompleted] = useState([]);
+  const [score, setScore] = useState(0);
 
-    if (props.data) {
-      const completed = props.data.filter((item) => item.complete);
-      console.log(completed);
-      this.state = {
-        completed,
-        score: completed.reduce((total, item) => total + item.points, 0),
-      };
+  useEffect(() => {
+    if (data) {
+      const completedItems = data.filter((item) => item.complete);
+      console.log(completedItems);
+      setCompleted(completedItems);
+      setScore(completedItems.reduce((total, item) => total + item.points, 0));
     }
-  }
+  }, [data]);
 
-  onPress = () => {
-    const { item, index, onPress } = this.props;
+  const handlePress = () => {
     onPress(item, index);
   };
 
-  render() {
-    const { data, index, onPress, style, ...props } = this.props;
-    const { completed, score } = this.state;
+  return (
+    <TouchableHighlight
+      underlayColor="#eeeeee"
+      onPress={handlePress}
+      style={[styles.touchable, style]}
+    >
+      <View style={styles.container}>
+        <Text style={styles.rank}>
+          Completed {completed.length}/{data.length}
+        </Text>
+        <ScoreBadge color="white">{score}</ScoreBadge>
 
-    return (
-      <TouchableHighlight
-        underlayColor="#eeeeee"
-        {...props}
-        onPress={this.onPress}
-        style={[styles.touchable, style]}
-      >
-        <View style={styles.container}>
-          <Text style={styles.rank}>
-            Completed {completed.length}/{data.length}
-          </Text>
-          <ScoreBadge color="white">{score}</ScoreBadge>
-
-          {onPress && (
-            <Ionicons size={24} color="#CCCCCC" name="ios-arrow-forward" />
-          )}
-        </View>
-      </TouchableHighlight>
-    );
-  }
-}
+        {onPress && (
+          <Ionicons size={24} color="#CCCCCC" name="ios-arrow-forward" />
+        )}
+      </View>
+    </TouchableHighlight>
+  );
+};
 
 const styles = StyleSheet.create({
   touchable: {},
@@ -72,3 +79,5 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
 });
+
+export default UserAchievementsItem;
