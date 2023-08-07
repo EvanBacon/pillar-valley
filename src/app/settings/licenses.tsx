@@ -1,9 +1,9 @@
 import Head from "expo-router/head";
 import * as React from "react";
 
-import { CustomList } from "@/src/components/CustomList";
+import { CustomList } from "@/components/CustomList";
 
-const Data = require("@/src/constants/Licenses");
+const Data = require("@/constants/Licenses");
 
 function sortDataByKey(data, key) {
   data.sort((a, b) => (a[key] > b[key] ? 1 : b[key] > a[key] ? -1 : 0));

@@ -1,7 +1,7 @@
 import * as StoreReview from "expo-store-review";
 import { Alert, Linking } from "react-native";
 
-import { logEvent } from "@/src/lib/Analytics";
+import { logEvent } from "@/lib/Analytics";
 
 // Use an unintrusive prompt to ask the user if they like pillar valley,
 // nothing happens if they say no.

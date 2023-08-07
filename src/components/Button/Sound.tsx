@@ -2,7 +2,7 @@ import * as Haptics from "expo-haptics";
 
 import Icon from "./Icon";
 
-import { useGlobalAudio } from "@/src/zustand/models";
+import { useGlobalAudio } from "@/zustand/models";
 
 function SoundButton() {
   const { enabled, toggleMuted } = useGlobalAudio();

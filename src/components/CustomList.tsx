@@ -6,7 +6,7 @@ import { SectionList, StyleSheet, Text, View } from "react-native";
 import { ScrollView, TouchableHighlight } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { Slate } from "@/src/constants/Colors";
+import { Slate } from "@/constants/Colors";
 
 function ActionTypeIcon({ type }: { type: "internal" | "external" }) {
   if (type === "internal") {

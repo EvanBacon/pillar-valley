@@ -4,11 +4,10 @@ import { useEffect } from "react";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-import GameStates from "../Game/GameStates";
-import Challenges from "../constants/Achievements";
-
-import { logEvent } from "@/src/lib/Analytics";
-import { Settings } from "@/src/lib/Settings";
+import GameStates from "@/Game/GameStates";
+import Challenges from "@/constants/Achievements";
+import { logEvent } from "@/lib/Analytics";
+import { Settings } from "@/lib/Settings";
 
 export type PresentAchievementShape = null | {
   id: string;

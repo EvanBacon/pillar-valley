@@ -9,13 +9,13 @@ import { Animated, StatusBar, Platform, StyleSheet, View } from "react-native";
 
 import { Slate } from "../constants/Colors";
 
-import AudioManager from "@/src/AudioManager";
-import Fire from "@/src/ExpoParty/Fire";
-import DynamicIconProvider from "@/src/components/DynamicIconContext";
-import TouchableBounce from "@/src/components/TouchableBounce";
-import { useUpdatedUpdatesInfoInSettings } from "@/src/hooks/useUpdatesInAppleSettings";
-import { logEvent } from "@/src/lib/Analytics";
-import { useSyncGlobalAudioWithSettings } from "@/src/zustand/models";
+import AudioManager from "@/AudioManager";
+import Fire from "@/ExpoParty/Fire";
+import DynamicIconProvider from "@/components/DynamicIconContext";
+import TouchableBounce from "@/components/TouchableBounce";
+import { useUpdatedUpdatesInfoInSettings } from "@/hooks/useUpdatesInAppleSettings";
+import { logEvent } from "@/lib/Analytics";
+import { useSyncGlobalAudioWithSettings } from "@/zustand/models";
 
 // import { setTestDeviceIDAsync } from "expo-ads-admob";
 export const unstable_settings = {
@@ -154,8 +154,8 @@ function useLoadAssets() {
       try {
         await Promise.all([
           Font.loadAsync({
-            Inter_400Regular: require("@/src/assets/fonts/Inter_400Regular.ttf"),
-            Inter_500Medium: require("@/src/assets/fonts/Inter_500Medium.ttf"),
+            Inter_400Regular: require("@/assets/fonts/Inter_400Regular.ttf"),
+            Inter_500Medium: require("@/assets/fonts/Inter_500Medium.ttf"),
           }),
           AudioManager.setupAsync(),
         ]);

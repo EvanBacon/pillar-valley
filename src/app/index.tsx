@@ -2,16 +2,16 @@ import Head from "expo-router/head";
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 
-import GameState from "@/src/Game/GameState";
-import AchievementPopup from "@/src/components/AchievementPopup";
-import Footer from "@/src/components/Footer";
-import GraphicsView from "@/src/components/GraphicsView";
-import Paused from "@/src/components/Paused";
-import ScoreMeta from "@/src/components/ScoreMeta";
-import Song from "@/src/components/Song";
-import TouchableView from "@/src/components/TouchableView";
-import Settings from "@/src/constants/Settings";
-import useAppState from "@/src/hooks/useAppState";
+import GameState from "@/Game/GameState";
+import AchievementPopup from "@/components/AchievementPopup";
+import Footer from "@/components/Footer";
+import GraphicsView from "@/components/GraphicsView";
+import Paused from "@/components/Paused";
+import ScoreMeta from "@/components/ScoreMeta";
+import Song from "@/components/Song";
+import TouchableView from "@/components/TouchableView";
+import Settings from "@/constants/Settings";
+import useAppState from "@/hooks/useAppState";
 
 // import GameState from "../NitroRoll/GameState";
 const InputGameView = Settings.isSimulator ? SkipGameViewInSimulator : GameView;

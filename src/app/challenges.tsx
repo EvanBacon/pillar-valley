@@ -2,10 +2,10 @@ import { connectActionSheet } from "@expo/react-native-action-sheet";
 import Head from "expo-router/head";
 import React from "react";
 
-import AchievementsItem from "@/src/components/AchievementsItem";
-import List from "@/src/components/List";
-import Challenges from "@/src/constants/Achievements";
-import { useAchievements } from "@/src/zustand/models";
+import AchievementsItem from "@/components/AchievementsItem";
+import List from "@/components/List";
+import Challenges from "@/constants/Achievements";
+import { useAchievements } from "@/zustand/models";
 
 const challengesListData = Object.keys(Challenges).map((key) => ({
   key,

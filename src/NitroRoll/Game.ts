@@ -13,7 +13,7 @@ import GameStates from "../Game/GameStates";
 import randomRange from "../Game/utils/randomRange";
 import { dispatch } from "../zustand/store";
 
-import { logEvent } from "@/src/lib/Analytics";
+import { logEvent } from "@/lib/Analytics";
 
 class Game extends GameObject {
   state = GameStates.Playing;

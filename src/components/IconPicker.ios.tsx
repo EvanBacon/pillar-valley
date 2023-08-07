@@ -6,7 +6,7 @@ import { Image, Text, View } from "react-native";
 import { icons, useDynamicAppIcon } from "./DynamicIconContext";
 import TouchableBounce from "./TouchableBounce.native";
 
-import { Slate } from "@/src/constants/Colors";
+import { Slate } from "@/constants/Colors";
 
 export default function App() {
   const [_icon, setIcon] = useDynamicAppIcon();

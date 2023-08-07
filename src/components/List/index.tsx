@@ -8,7 +8,7 @@ import Item from "./Item";
 import Separator from "./Separator";
 import UserCell from "./UserCell";
 
-import { Slate } from "@/src/constants/Colors";
+import { Slate } from "@/constants/Colors";
 
 class List extends React.Component {
   get userItem() {

@@ -8,25 +8,25 @@ import { Alert, Image, Linking, Platform } from "react-native";
 import {
   getOtherPlatform,
   openOtherPlatform,
-} from "@/src/components/Button/SwapPlatformButton";
-import { CustomList, LeftIconWrapper } from "@/src/components/CustomList";
-import { useSelectedIconSource } from "@/src/components/DynamicIconContext";
-import Android from "@/src/components/svg/android";
-import AppStoreSvg from "@/src/components/svg/app-store";
-import Apple from "@/src/components/svg/apple";
-import BrowserSvg from "@/src/components/svg/browser";
-import ExpoSvg from "@/src/components/svg/expo";
-import GitHubSvg from "@/src/components/svg/github";
-import InstagramSvg from "@/src/components/svg/instagram";
-import XSvg from "@/src/components/svg/x";
-import { Slate } from "@/src/constants/Colors";
-import useStoreReview from "@/src/hooks/useStoreReview";
+} from "@/components/Button/SwapPlatformButton";
+import { CustomList, LeftIconWrapper } from "@/components/CustomList";
+import { useSelectedIconSource } from "@/components/DynamicIconContext";
+import Android from "@/components/svg/android";
+import AppStoreSvg from "@/components/svg/app-store";
+import Apple from "@/components/svg/apple";
+import BrowserSvg from "@/components/svg/browser";
+import ExpoSvg from "@/components/svg/expo";
+import GitHubSvg from "@/components/svg/github";
+import InstagramSvg from "@/components/svg/instagram";
+import XSvg from "@/components/svg/x";
+import { Slate } from "@/constants/Colors";
+import useStoreReview from "@/hooks/useStoreReview";
 import {
   useAchievements,
   useCurrency,
   useRounds,
   useScore,
-} from "@/src/zustand/models";
+} from "@/zustand/models";
 
 function areYouSureAsync(): Promise<boolean> {
   return new Promise((resolve) => {

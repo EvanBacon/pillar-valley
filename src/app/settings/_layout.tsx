@@ -3,8 +3,8 @@ import { router, SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
 import { Platform } from "react-native";
 
-import TouchableBounce from "@/src/components/TouchableBounce";
-import { Slate } from "@/src/constants/Colors";
+import TouchableBounce from "@/components/TouchableBounce";
+import { Slate } from "@/constants/Colors";
 
 export const unstable_settings = {
   initialRouteName: "index",

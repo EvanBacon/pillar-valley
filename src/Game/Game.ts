@@ -19,7 +19,7 @@ import {
   useScore,
 } from "../zustand/models";
 
-import { logEvent } from "@/src/lib/Analytics";
+import { logEvent } from "@/lib/Analytics";
 
 function distance(
   p1: { x: number; z: number },
