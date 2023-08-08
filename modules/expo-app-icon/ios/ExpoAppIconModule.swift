@@ -8,6 +8,7 @@ public class ExpoAppIconModule: Module {
       "isSupported": UIApplication.shared.supportsAlternateIcons
     ])
 
+    /** Pass `null` to use the default icon. */
     AsyncFunction("setAlternateIcon") { (name: String?, promise: Promise) in
         if UIApplication.shared.supportsAlternateIcons {
             UIApplication.shared.setAlternateIconName(name) { error in
@@ -22,6 +23,7 @@ public class ExpoAppIconModule: Module {
         }
     }
 
+    /** @returns `null` if the default icon is being used. */
     Function("getAlternateIcon") { () -> String? in
       if UIApplication.shared.supportsAlternateIcons {
           return UIApplication.shared.alternateIconName
