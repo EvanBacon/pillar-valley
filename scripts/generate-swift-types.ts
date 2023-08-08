@@ -19,6 +19,11 @@ type OutputDef = {
     args: { name: string; type: string }[];
     returnType: string;
   }[];
+  getters: {
+    name: string;
+    returnType: string;
+    readonly: boolean;
+  }[];
 };
 
 async function doAsync() {
@@ -45,6 +50,7 @@ async function doAsync() {
 
   const outputDef: OutputDef = {
     funcs: [],
+    getters: [],
   };
 
   const moduleDef = deepSearchForModuleDefinition(
@@ -110,7 +116,10 @@ async function doAsync() {
     }
   }
 
-  function processFuncDef(ast: Substructure, type: "async" | "sync") {
+  function processFuncDef(
+    ast: Substructure,
+    type: "async" | "sync" | "getter"
+  ) {
     const funcNameDef = ast["key.substructure"]![0];
     const funcName = rawForOffset(
       funcNameDef["key.bodyoffset"]!,
@@ -136,30 +145,41 @@ async function doAsync() {
       params.pop();
     }
 
-    outputDef.funcs.push({
-      name: funcName,
-      args: params.map((param) => {
-        const typename = param["key.typename"]!;
-        return {
-          name: param["key.name"]!,
-          type: swiftTypeToTypeScript(typename),
-        };
-      }),
-      returnType:
-        type === "async"
-          ? "Promise<unknown>"
-          : bodyDef["key.typename"]
-          ? swiftTypeToTypeScript(bodyDef["key.typename"])
-          : "unknown",
+    const args = params.map((param) => {
+      const typename = param["key.typename"]!;
+      return {
+        name: param["key.name"]!,
+        type: swiftTypeToTypeScript(typename),
+      };
     });
-    console.log(
-      "ast",
-      bodyDef
-      //   rawForOffset(
-      //     ast["key.substructure"]![1]["key.bodyoffset"]!,
-      //     ast["key.substructure"]![1]["key.bodylength"]!
-      //   )
-    );
+    const returnType =
+      type === "async"
+        ? "Promise<unknown>"
+        : bodyDef["key.typename"]
+        ? swiftTypeToTypeScript(bodyDef["key.typename"])
+        : "unknown";
+    if (type === "getter") {
+      console.log("getter", funcName, bodyDef);
+      outputDef.getters.push({
+        name: funcName,
+        returnType,
+        readonly: true,
+      });
+    } else {
+      outputDef.funcs.push({
+        name: funcName,
+        args,
+        returnType,
+      });
+    }
+    // console.log(
+    //   "ast",
+    //   bodyDef
+    //   //   rawForOffset(
+    //   //     ast["key.substructure"]![1]["key.bodyoffset"]!,
+    //   //     ast["key.substructure"]![1]["key.bodylength"]!
+    //   //   )
+    // );
   }
 
   queryAll(moduleDef, (ast) => {
@@ -172,11 +192,32 @@ async function doAsync() {
     processFuncDef(ast, ast["key.name"] === "AsyncFunction" ? "async" : "sync");
   });
 
+  //   console.log(moduleDef);
+  queryAll(moduleDef, (ast) => {
+    return (
+      ast["key.kind"] === "source.lang.swift.expr.call" &&
+      //   ["Function"].includes(ast["key.name"]!)
+      ["Property"].includes(ast["key.name"]!)
+    );
+  }).map((ast) => {
+    processFuncDef(ast, "getter");
+  });
+  queryAll(moduleDef, (ast) => {
+    return (
+      ast["key.kind"] === "source.lang.swift.expr.call" &&
+      //   ["Function"].includes(ast["key.name"]!)
+      ast["key.name"]!.startsWith('Property("')
+    );
+  }).map((ast) => {
+    console.log("ff", ast);
+    // processFuncDef(ast, "getter");
+  });
+
   console.log(
     "\ndata",
     require("util").inspect(outputDef, { depth: 23, colors: true })
   );
-  console.log("printOutputDef", printOutputDef(outputDef));
+  //   console.log("printOutputDef", printOutputDef(outputDef));
   // console.log("data", moduleDef, moduleNameDef, outputDef);
 
   await fs.promises.mkdir(path.dirname(outputFilepath), { recursive: true });
@@ -208,6 +249,12 @@ ${
       })
     : ""
 }
+
+  // Properties
+${def.getters.map((getter) => {
+  return `  readonly ${getter.name}: ${getter.returnType};`;
+})}
+
 }
 
 export default requireNativeModule("${def.name}") as NativeModule;
@@ -232,6 +279,11 @@ ${
       })
     : ""
 }
+
+  // Properties
+${def.getters.map((getter) => {
+  return `  readonly ${getter.name}: ${getter.returnType};`;
+})}
 }
 
 export default {
