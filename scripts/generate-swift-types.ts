@@ -46,7 +46,7 @@ async function doAsync() {
     { cwd }
   );
   const raw = fs.readFileSync(fp, "utf8");
-  const data = JSON.parse(stdout) as RootAST;
+  const data = crawlAndConvertKeys(JSON.parse(stdout)) as RootAST;
 
   const outputDef: OutputDef = {
     funcs: [],
@@ -66,22 +66,21 @@ async function doAsync() {
   const moduleNameDef = queryASTShallow(
     moduleDef,
     (ast) =>
-      ast["key.kind"] === "source.lang.swift.expr.call" &&
-      ast["key.name"] === "Name"
+      ast["kind"] === "source.lang.swift.expr.call" && ast["name"] === "Name"
   );
 
   if (moduleNameDef) {
-    const offset = moduleNameDef["key.substructure"]![0];
+    const offset = moduleNameDef["substructure"]![0];
     outputDef.name = raw.substring(
-      offset["key.offset"] + 1,
-      offset["key.offset"] + (offset["key.length"] - 1)
+      offset["offset"] + 1,
+      offset["offset"] + (offset["length"] - 1)
     );
   }
 
   const constantsDef = queryASTShallow(moduleDef, (ast) => {
     return (
-      ast["key.kind"] === "source.lang.swift.expr.call" &&
-      ast["key.name"] === "Constants"
+      ast["kind"] === "source.lang.swift.expr.call" &&
+      ast["name"] === "Constants"
     );
   });
 
@@ -94,19 +93,19 @@ async function doAsync() {
 
   function rawForKeyElement(elm: KeyElement): string {
     // Strip quotes if present
-    return rawForOffset(elm["key.offset"], elm["key.length"]);
+    return rawForOffset(elm["offset"], elm["length"]);
   }
 
   if (constantsDef) {
-    const dict = constantsDef["key.substructure"]![0]["key.substructure"]![0];
-    if (dict["key.kind"] !== "source.lang.swift.expr.dictionary") {
+    const dict = constantsDef["substructure"]![0]["substructure"]![0];
+    if (dict["kind"] !== "source.lang.swift.expr.dictionary") {
       throw new Error("Expected dictionary");
     }
-    const elms = dict["key.elements"]!;
+    const elms = dict["elements"]!;
     // console.log("consts:", elms);
     for (let i = 0; i < elms.length / 2; i++) {
-      const key = dict["key.elements"]![i * 2];
-      const value = dict["key.elements"]![i * 2 + 1];
+      const key = dict["elements"]![i * 2];
+      const value = dict["elements"]![i * 2 + 1];
       const keyStr = rawForKeyElement(key);
       const valueStr = rawForKeyElement(value);
       if (!outputDef.constants) {
@@ -120,43 +119,43 @@ async function doAsync() {
     ast: Substructure,
     type: "async" | "sync" | "getter"
   ) {
-    const funcNameDef = ast["key.substructure"]![0];
+    const funcNameDef = ast["substructure"]![0];
     const funcName = rawForOffset(
-      funcNameDef["key.bodyoffset"]!,
-      funcNameDef["key.bodylength"]!
+      funcNameDef["bodyoffset"]!,
+      funcNameDef["bodylength"]!
     );
 
-    const bodyDef = ast["key.substructure"]![1]["key.substructure"]![0];
-    if (bodyDef["key.kind"] !== "source.lang.swift.expr.closure") {
+    const bodyDef = ast["substructure"]![1]["substructure"]![0];
+    if (bodyDef["kind"] !== "source.lang.swift.expr.closure") {
       throw new Error("Expected closure as second param for: " + funcName);
     }
 
     const params = queryAll(
       bodyDef,
-      (ast) => ast["key.kind"] === "source.lang.swift.decl.var.parameter"
+      (ast) => ast["kind"] === "source.lang.swift.decl.var.parameter"
     );
 
     // Drop the last param if it's a promise since this is the callback
     if (
       type === "async" &&
       params.length &&
-      params[params.length - 1]["key.typename"] === "Promise"
+      params[params.length - 1]["typename"] === "Promise"
     ) {
       params.pop();
     }
 
     const args = params.map((param) => {
-      const typename = param["key.typename"]!;
+      const typename = param["typename"]!;
       return {
-        name: param["key.name"]!,
+        name: param["name"]!,
         type: swiftTypeToTypeScript(typename),
       };
     });
     const returnType =
       type === "async"
         ? "Promise<unknown>"
-        : bodyDef["key.typename"]
-        ? swiftTypeToTypeScript(bodyDef["key.typename"])
+        : bodyDef["typename"]
+        ? swiftTypeToTypeScript(bodyDef["typename"])
         : "unknown";
     if (type === "getter") {
       console.log("getter", funcName, bodyDef);
@@ -176,37 +175,37 @@ async function doAsync() {
     //   "ast",
     //   bodyDef
     //   //   rawForOffset(
-    //   //     ast["key.substructure"]![1]["key.bodyoffset"]!,
-    //   //     ast["key.substructure"]![1]["key.bodylength"]!
+    //   //     ast["substructure"]![1]["bodyoffset"]!,
+    //   //     ast["substructure"]![1]["bodylength"]!
     //   //   )
     // );
   }
 
   queryAll(moduleDef, (ast) => {
     return (
-      ast["key.kind"] === "source.lang.swift.expr.call" &&
-      //   ["Function"].includes(ast["key.name"]!)
-      ["AsyncFunction", "Function"].includes(ast["key.name"]!)
+      ast["kind"] === "source.lang.swift.expr.call" &&
+      //   ["Function"].includes(ast["name"]!)
+      ["AsyncFunction", "Function"].includes(ast["name"]!)
     );
   }).map((ast) => {
-    processFuncDef(ast, ast["key.name"] === "AsyncFunction" ? "async" : "sync");
+    processFuncDef(ast, ast["name"] === "AsyncFunction" ? "async" : "sync");
   });
 
   //   console.log(moduleDef);
   queryAll(moduleDef, (ast) => {
     return (
-      ast["key.kind"] === "source.lang.swift.expr.call" &&
-      //   ["Function"].includes(ast["key.name"]!)
-      ["Property"].includes(ast["key.name"]!)
+      ast["kind"] === "source.lang.swift.expr.call" &&
+      //   ["Function"].includes(ast["name"]!)
+      ["Property"].includes(ast["name"]!)
     );
   }).map((ast) => {
     processFuncDef(ast, "getter");
   });
   queryAll(moduleDef, (ast) => {
     return (
-      ast["key.kind"] === "source.lang.swift.expr.call" &&
-      //   ["Function"].includes(ast["key.name"]!)
-      ast["key.name"]!.startsWith('Property("')
+      ast["kind"] === "source.lang.swift.expr.call" &&
+      //   ["Function"].includes(ast["name"]!)
+      ast["name"]!.startsWith('Property("')
     );
   }).map((ast) => {
     console.log("ff", ast);
@@ -326,7 +325,7 @@ function queryASTShallow(
   ast: Substructure,
   test: (ast: Substructure) => boolean
 ): Substructure | null {
-  for (const substructure of ast["key.substructure"] ?? []) {
+  for (const substructure of ast["substructure"] ?? []) {
     if (test(substructure)) {
       return substructure;
     }
@@ -339,7 +338,7 @@ function queryAll(
   test: (ast: Substructure) => boolean
 ): Substructure[] {
   const results: Substructure[] = [];
-  for (const substructure of ast["key.substructure"] ?? []) {
+  for (const substructure of ast["substructure"] ?? []) {
     if (test(substructure)) {
       results.push(substructure);
     }
@@ -351,7 +350,7 @@ function queryAST(
   ast: Substructure,
   test: (ast: Substructure) => boolean
 ): Substructure | null {
-  for (const substructure of ast["key.substructure"] ?? []) {
+  for (const substructure of ast["substructure"] ?? []) {
     if (test(substructure)) {
       return substructure;
     }
@@ -364,7 +363,7 @@ function deepSearchForModuleDefinition(
   ast: Substructure,
   type: string
 ): Substructure | null {
-  return queryAST(ast, (substructure) => substructure["key.typename"] === type);
+  return queryAST(ast, (substructure) => substructure["typename"] === type);
 }
 
 doAsync().catch((error) => {
@@ -372,42 +371,59 @@ doAsync().catch((error) => {
   process.exit(1);
 });
 
+function crawlAndConvertKeys(ast: any): any {
+  if (typeof ast !== "object") {
+    return ast;
+  }
+  if (Array.isArray(ast)) {
+    return ast.map(crawlAndConvertKeys);
+  }
+
+  // Crawl and strip the `key.` prefix from all keys
+  const newAst: any = {};
+  for (const [key, value] of Object.entries(ast)) {
+    const newKey = key.replace(/^key\./, "");
+    newAst[newKey] = crawlAndConvertKeys(value);
+  }
+  return newAst;
+}
+
 export interface RootAST {
-  "key.diagnostic_stage": string;
-  "key.length": number;
-  "key.offset": number;
-  "key.substructure": Substructure[];
+  diagnostic_stage: string;
+  length: number;
+  offset: number;
+  substructure: Substructure[];
 }
 
 export interface KeyElement {
-  "key.kind": string;
-  "key.length": number;
-  "key.offset": number;
+  kind: string;
+  length: number;
+  offset: number;
 }
 
 export interface KeyInheritedtype {
-  "key.name": string;
+  name: string;
 }
 
 export interface Substructure {
-  "key.bodylength"?: number;
-  "key.bodyoffset"?: number;
-  "key.kind": string;
-  "key.length": number;
-  "key.name"?: string;
-  "key.namelength": number;
-  "key.nameoffset": number;
-  "key.offset": number;
-  "key.substructure"?: Substructure[];
-  "key.elements"?: KeyElement[];
-  "key.typename"?: string;
-  "key.accessibility": string;
-  "key.attributes"?: KeyAttribute[];
-  "key.inheritedtypes"?: KeyInheritedtype[];
+  bodylength?: number;
+  bodyoffset?: number;
+  kind: string;
+  length: number;
+  name?: string;
+  namelength: number;
+  nameoffset: number;
+  offset: number;
+  substructure?: Substructure[];
+  elements?: KeyElement[];
+  typename?: string;
+  accessibility: string;
+  attributes?: KeyAttribute[];
+  inheritedtypes?: KeyInheritedtype[];
 }
 
 export interface KeyAttribute {
-  "key.attribute": string;
-  "key.length": number;
-  "key.offset": number;
+  attribute: string;
+  length: number;
+  offset: number;
 }
