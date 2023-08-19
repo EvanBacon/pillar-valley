@@ -195,3 +195,25 @@ index 80fadf6..0ab34a2 100644
 -  return "initial" in obj;
 +  return 'initial' in obj;
  }
+diff --git a/node_modules/expo-router/src/static/renderStaticContent.tsx b/node_modules/expo-router/src/static/renderStaticContent.tsx
+index 7fdae39..8db2a04 100644
+--- a/node_modules/expo-router/src/static/renderStaticContent.tsx
++++ b/node_modules/expo-router/src/static/renderStaticContent.tsx
+@@ -8,6 +8,7 @@
+ import { ServerContainer, ServerContainerRef } from "@react-navigation/native";
+ import App, { getManifest } from "expo-router/_entry";
+ import Head from "expo-router/head";
++import * as Font from 'expo-font/build/server';
+ import React from "react";
+ import ReactDOMServer from "react-dom/server";
+ import { AppRegistry } from "react-native-web";
+@@ -73,6 +74,9 @@ export function getStaticContent(location: URL): string {
+ 
+   output = output.replace("</head>", `${css}</head>`);
+ 
++    // Inject static fonts loaded with expo-font
++    output = output.replace('</head>', `${Font.getStaticResources().join('')}</head>`);
++
+   return "<!DOCTYPE html>" + output;
+ }
+ 

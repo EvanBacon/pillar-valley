@@ -1,5 +1,6 @@
 import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import * as Device from "expo-device";
 import * as Font from "expo-font";
 import { SplashScreen, Stack, usePathname, useRouter } from "expo-router";
@@ -145,6 +146,21 @@ function BackButton() {
 
 function useLoadAssets() {
   const [loading, setLoading] = React.useState(true);
+  const [fonts, error] = Font.useFonts({
+    ...FontAwesome.font,
+    ...Ionicons.font,
+    Inter_400Regular: require("@/assets/fonts/Inter_400Regular.ttf"),
+    Inter_500Medium: require("@/assets/fonts/Inter_500Medium.ttf"),
+  });
+
+  React.useEffect(() => {
+    if (error) {
+      console.log("Error loading fonts");
+      logEvent("error_loading_fonts", { error });
+      console.error(error);
+    }
+  }, [error]);
+
   React.useEffect(() => {
     StatusBar.setBarStyle("light-content", true);
     Fire.init();
@@ -152,15 +168,9 @@ function useLoadAssets() {
       // console.time("Setup");
       const time = getNow();
       try {
-        await Promise.all([
-          Font.loadAsync({
-            Inter_400Regular: require("@/assets/fonts/Inter_400Regular.ttf"),
-            Inter_500Medium: require("@/assets/fonts/Inter_500Medium.ttf"),
-          }),
-          AudioManager.setupAsync(),
-        ]);
+        await AudioManager.setupAsync();
       } catch (error) {
-        console.log("Error loading fonts and audio!");
+        console.log("Error loading audio");
         logEvent("error_loading_assets", { error });
         console.error(error);
       } finally {
@@ -171,7 +181,8 @@ function useLoadAssets() {
       setLoading(false);
     })();
   }, []);
-  return loading;
+
+  return loading && fonts;
 }
 
 if (Platform.OS !== "web") {

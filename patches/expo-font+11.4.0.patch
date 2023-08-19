@@ -1,0 +1,419 @@
+diff --git a/node_modules/expo-font/.DS_Store b/node_modules/expo-font/.DS_Store
+new file mode 100644
+index 0000000..1fa7faa
+Binary files /dev/null and b/node_modules/expo-font/.DS_Store differ
+diff --git a/node_modules/expo-font/build/ExpoFontLoader.web.d.ts b/node_modules/expo-font/build/ExpoFontLoader.web.d.ts
+index 3e468e6..2c64acf 100644
+--- a/node_modules/expo-font/build/ExpoFontLoader.web.d.ts
++++ b/node_modules/expo-font/build/ExpoFontLoader.web.d.ts
+@@ -4,7 +4,10 @@ declare const _default: {
+     readonly name: string;
+     unloadAllAsync(): Promise<void>;
+     unloadAsync(fontFamilyName: string, options?: UnloadFontOptions): Promise<void>;
++    getHeadElements(): string[];
++    isLoaded(fontFamilyName: string, resource?: UnloadFontOptions): boolean;
+     loadAsync(fontFamilyName: string, resource: FontResource): Promise<void>;
+ };
+ export default _default;
++export declare function _createWebFontTemplate(fontFamily: string, resource: FontResource): string;
+ //# sourceMappingURL=ExpoFontLoader.web.d.ts.map
+\ No newline at end of file
+diff --git a/node_modules/expo-font/build/ExpoFontLoader.web.d.ts.map b/node_modules/expo-font/build/ExpoFontLoader.web.d.ts.map
+index eefcb3c..536f43a 100644
+--- a/node_modules/expo-font/build/ExpoFontLoader.web.d.ts.map
++++ b/node_modules/expo-font/build/ExpoFontLoader.web.d.ts.map
+@@ -1 +1 @@
+-{"version":3,"file":"ExpoFontLoader.web.d.ts","sourceRoot":"","sources":["../src/ExpoFontLoader.web.ts"],"names":[],"mappings":"AAGA,OAAO,EAAE,iBAAiB,EAAE,MAAM,QAAQ,CAAC;AAC3C,OAAO,EAAe,YAAY,EAAE,MAAM,cAAc,CAAC;;;sBAiD/B,QAAQ,IAAI,CAAC;gCASH,MAAM,YAAY,iBAAiB,GAAG,QAAQ,IAAI,CAAC;8BASrD,MAAM,YAAY,YAAY,GAAG,QAAQ,IAAI,CAAC;;AAvBhF,wBA6CE"}
+\ No newline at end of file
++{"version":3,"file":"ExpoFontLoader.web.d.ts","sourceRoot":"","sources":["../src/ExpoFontLoader.web.ts"],"names":[],"mappings":"AAGA,OAAO,EAAE,iBAAiB,EAAE,MAAM,QAAQ,CAAC;AAC3C,OAAO,EAAe,YAAY,EAAE,MAAM,cAAc,CAAC;;;sBAiF/B,QAAQ,IAAI,CAAC;gCASH,MAAM,YAAY,iBAAiB,GAAG,QAAQ,IAAI,CAAC;uBASlE,MAAM,EAAE;6BAeF,MAAM,aAAY,iBAAiB,GAAQ,OAAO;8BAQjD,MAAM,YAAY,YAAY,GAAG,QAAQ,IAAI,CAAC;;AA9C1E,wBA8EE;AAeF,wBAAgB,sBAAsB,CAAC,UAAU,EAAE,MAAM,EAAE,QAAQ,EAAE,YAAY,GAAG,MAAM,CAIzF"}
+\ No newline at end of file
+diff --git a/node_modules/expo-font/build/ExpoFontLoader.web.js b/node_modules/expo-font/build/ExpoFontLoader.web.js
+index 3784a6a..4f8867b 100644
+--- a/node_modules/expo-font/build/ExpoFontLoader.web.js
++++ b/node_modules/expo-font/build/ExpoFontLoader.web.js
+@@ -31,6 +31,27 @@ function getFontFaceRulesMatchingResource(fontFamilyName, options) {
+             (options && options.display ? options.display === rule.style.fontDisplay : true));
+     });
+ }
++const serverContext = new Set();
++function getHeadElements() {
++    const css = [...serverContext.entries()].map(([{ css }]) => css).join('\n');
++    const links = [...serverContext.entries()].map(([{ resourceId }]) => resourceId);
++    // TODO: Maybe return nothing if no fonts were loaded.
++    return [
++        {
++            $$type: 'style',
++            children: css,
++            id: ID,
++            type: 'text/css',
++        },
++        ...links.map((resourceId) => ({
++            $$type: 'link',
++            rel: 'preload',
++            href: resourceId,
++            as: 'font',
++            crossorigin: '',
++        })),
++    ];
++}
+ export default {
+     get name() {
+         return 'ExpoFontLoader';
+@@ -52,20 +73,49 @@ export default {
+             sheet.deleteRule(item.index);
+         }
+     },
+-    async loadAsync(fontFamilyName, resource) {
++    getHeadElements() {
++        const elements = getHeadElements();
++        return elements.map((element) => {
++            switch (element.$$type) {
++                case 'style':
++                    return `<style id="${element.id}" type="${element.type}">${element.children}</style>`;
++                case 'link':
++                    return `<link rel="${element.rel}" href="${element.href}" as="${element.as}" crossorigin="${element.crossorigin}" />`;
++                default:
++                    return '';
++            }
++        });
++    },
++    isLoaded(fontFamilyName, resource = {}) {
++        if (typeof window === 'undefined') {
++            return true;
++        }
++        return getFontFaceRulesMatchingResource(fontFamilyName, resource)?.length > 0;
++    },
++    // NOTE(EvanBacon): No async keyword! This cannot return a promise in Node environments.
++    loadAsync(fontFamilyName, resource) {
+         if (!Platform.isDOMAvailable) {
+-            return;
++            serverContext.add({
++                css: _createWebFontTemplate(fontFamilyName, resource),
++                // @ts-expect-error
++                resourceId: resource.uri,
++            });
++            return Promise.resolve();
+         }
+         const canInjectStyle = document.head && typeof document.head.appendChild === 'function';
+         if (!canInjectStyle) {
+             throw new CodedError('ERR_WEB_ENVIRONMENT', `The browser's \`document.head\` element doesn't support injecting fonts.`);
+         }
+-        const style = _createWebStyle(fontFamilyName, resource);
++        const style = getStyleElement();
+         document.head.appendChild(style);
++        const res = getFontFaceRulesMatchingResource(fontFamilyName, resource);
++        if (!res.length) {
++            _createWebStyle(fontFamilyName, resource);
++        }
+         if (!isFontLoadingListenerSupported()) {
+-            return;
++            return Promise.resolve();
+         }
+-        return new FontObserver(fontFamilyName, { display: resource.display }).load();
++        return new FontObserver(fontFamilyName, { display: resource.display }).load(null, 6000);
+     },
+ };
+ const ID = 'expo-generated-fonts';
+@@ -79,12 +129,11 @@ function getStyleElement() {
+     styleElement.type = 'text/css';
+     return styleElement;
+ }
++export function _createWebFontTemplate(fontFamily, resource) {
++    return `@font-face{font-family:${fontFamily};src:url(${resource.uri});font-display:${resource.display || FontDisplay.AUTO}}`;
++}
+ function _createWebStyle(fontFamily, resource) {
+-    const fontStyle = `@font-face {
+-    font-family: ${fontFamily};
+-    src: url(${resource.uri});
+-    font-display: ${resource.display || FontDisplay.AUTO};
+-  }`;
++    const fontStyle = _createWebFontTemplate(fontFamily, resource);
+     const styleElement = getStyleElement();
+     // @ts-ignore: TypeScript does not define HTMLStyleElement::styleSheet. This is just for IE and
+     // possibly can be removed if it's unnecessary on IE 11.
+diff --git a/node_modules/expo-font/build/ExpoFontLoader.web.js.map b/node_modules/expo-font/build/ExpoFontLoader.web.js.map
+index 92c7ca9..06fd344 100644
+--- a/node_modules/expo-font/build/ExpoFontLoader.web.js.map
++++ b/node_modules/expo-font/build/ExpoFontLoader.web.js.map
+@@ -1 +1 @@
+-{"version":3,"file":"ExpoFontLoader.web.js","sourceRoot":"","sources":["../src/ExpoFontLoader.web.ts"],"names":[],"mappings":"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","sourcesContent":["import { CodedError, Platform } from 'expo-modules-core';\nimport FontObserver from 'fontfaceobserver';\n\nimport { UnloadFontOptions } from './Font';\nimport { FontDisplay, FontResource } from './Font.types';\n\nfunction getFontFaceStyleSheet(): CSSStyleSheet | null {\n  if (!Platform.isDOMAvailable) {\n    return null;\n  }\n  const styleSheet = getStyleElement();\n  return styleSheet.sheet ? (styleSheet.sheet as CSSStyleSheet) : null;\n}\n\ntype RuleItem = { rule: CSSFontFaceRule; index: number };\n\nfunction getFontFaceRules(): RuleItem[] {\n  const sheet = getFontFaceStyleSheet();\n  if (sheet) {\n    // @ts-ignore: rule iterator\n    const rules = [...sheet.cssRules];\n\n    const items: RuleItem[] = [];\n\n    for (let i = 0; i < rules.length; i++) {\n      const rule = rules[i];\n      if (rule instanceof CSSFontFaceRule) {\n        items.push({ rule, index: i });\n      }\n    }\n    return items;\n  }\n  return [];\n}\n\nfunction getFontFaceRulesMatchingResource(\n  fontFamilyName: string,\n  options?: UnloadFontOptions\n): RuleItem[] {\n  const rules = getFontFaceRules();\n  return rules.filter(({ rule }) => {\n    return (\n      rule.style.fontFamily === fontFamilyName &&\n      (options && options.display ? options.display === (rule.style as any).fontDisplay : true)\n    );\n  });\n}\n\nexport default {\n  get name(): string {\n    return 'ExpoFontLoader';\n  },\n\n  async unloadAllAsync(): Promise<void> {\n    if (!Platform.isDOMAvailable) return;\n\n    const element = document.getElementById(ID);\n    if (element && element instanceof HTMLStyleElement) {\n      document.removeChild(element);\n    }\n  },\n\n  async unloadAsync(fontFamilyName: string, options?: UnloadFontOptions): Promise<void> {\n    const sheet = getFontFaceStyleSheet();\n    if (!sheet) return;\n    const items = getFontFaceRulesMatchingResource(fontFamilyName, options);\n    for (const item of items) {\n      sheet.deleteRule(item.index);\n    }\n  },\n\n  async loadAsync(fontFamilyName: string, resource: FontResource): Promise<void> {\n    if (!Platform.isDOMAvailable) {\n      return;\n    }\n\n    const canInjectStyle = document.head && typeof document.head.appendChild === 'function';\n    if (!canInjectStyle) {\n      throw new CodedError(\n        'ERR_WEB_ENVIRONMENT',\n        `The browser's \\`document.head\\` element doesn't support injecting fonts.`\n      );\n    }\n\n    const style = _createWebStyle(fontFamilyName, resource);\n    document.head!.appendChild(style);\n\n    if (!isFontLoadingListenerSupported()) {\n      return;\n    }\n\n    return new FontObserver(fontFamilyName, { display: resource.display }).load();\n  },\n};\n\nconst ID = 'expo-generated-fonts';\n\nfunction getStyleElement(): HTMLStyleElement {\n  const element = document.getElementById(ID);\n  if (element && element instanceof HTMLStyleElement) {\n    return element;\n  }\n  const styleElement = document.createElement('style');\n  styleElement.id = ID;\n  styleElement.type = 'text/css';\n  return styleElement;\n}\n\nfunction _createWebStyle(fontFamily: string, resource: FontResource): HTMLStyleElement {\n  const fontStyle = `@font-face {\n    font-family: ${fontFamily};\n    src: url(${resource.uri});\n    font-display: ${resource.display || FontDisplay.AUTO};\n  }`;\n\n  const styleElement = getStyleElement();\n  // @ts-ignore: TypeScript does not define HTMLStyleElement::styleSheet. This is just for IE and\n  // possibly can be removed if it's unnecessary on IE 11.\n  if (styleElement.styleSheet) {\n    const styleElementIE = styleElement as any;\n    styleElementIE.styleSheet.cssText = styleElementIE.styleSheet.cssText\n      ? styleElementIE.styleSheet.cssText + fontStyle\n      : fontStyle;\n  } else {\n    const textNode = document.createTextNode(fontStyle);\n    styleElement.appendChild(textNode);\n  }\n  return styleElement;\n}\n\nfunction isFontLoadingListenerSupported(): boolean {\n  const { userAgent } = window.navigator;\n  // WebKit is broken https://github.com/bramstein/fontfaceobserver/issues/95\n  const isIOS = !!userAgent.match(/iPad|iPhone/i);\n  const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);\n  // Edge is broken https://github.com/bramstein/fontfaceobserver/issues/109#issuecomment-333356795\n  const isEdge = userAgent.includes('Edge');\n  // Internet Explorer\n  const isIE = userAgent.includes('Trident');\n  // Firefox\n  const isFirefox = userAgent.includes('Firefox');\n  return !isSafari && !isIOS && !isEdge && !isIE && !isFirefox;\n}\n"]}
+\ No newline at end of file
++{"version":3,"file":"ExpoFontLoader.web.js","sourceRoot":"","sources":["../src/ExpoFontLoader.web.ts"],"names":[],"mappings":"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","sourcesContent":["import { CodedError, Platform } from 'expo-modules-core';\nimport FontObserver from 'fontfaceobserver';\n\nimport { UnloadFontOptions } from './Font';\nimport { FontDisplay, FontResource } from './Font.types';\n\nfunction getFontFaceStyleSheet(): CSSStyleSheet | null {\n  if (!Platform.isDOMAvailable) {\n    return null;\n  }\n  const styleSheet = getStyleElement();\n  return styleSheet.sheet ? (styleSheet.sheet as CSSStyleSheet) : null;\n}\n\ntype RuleItem = { rule: CSSFontFaceRule; index: number };\n\nfunction getFontFaceRules(): RuleItem[] {\n  const sheet = getFontFaceStyleSheet();\n  if (sheet) {\n    // @ts-ignore: rule iterator\n    const rules = [...sheet.cssRules];\n\n    const items: RuleItem[] = [];\n\n    for (let i = 0; i < rules.length; i++) {\n      const rule = rules[i];\n      if (rule instanceof CSSFontFaceRule) {\n        items.push({ rule, index: i });\n      }\n    }\n    return items;\n  }\n  return [];\n}\n\nfunction getFontFaceRulesMatchingResource(\n  fontFamilyName: string,\n  options?: UnloadFontOptions\n): RuleItem[] {\n  const rules = getFontFaceRules();\n  return rules.filter(({ rule }) => {\n    return (\n      rule.style.fontFamily === fontFamilyName &&\n      (options && options.display ? options.display === (rule.style as any).fontDisplay : true)\n    );\n  });\n}\n\nconst serverContext: Set<{ css: string; resourceId: string }> = new Set();\n\nfunction getHeadElements(): {\n  $$type: string;\n  rel?: string;\n  href?: string;\n  as?: string;\n  crossorigin?: string;\n  children?: string;\n  id?: string;\n  type?: string;\n}[] {\n  const css = [...serverContext.entries()].map(([{ css }]) => css).join('\\n');\n  const links = [...serverContext.entries()].map(([{ resourceId }]) => resourceId);\n  // TODO: Maybe return nothing if no fonts were loaded.\n  return [\n    {\n      $$type: 'style',\n      children: css,\n      id: ID,\n      type: 'text/css',\n    },\n    ...links.map((resourceId) => ({\n      $$type: 'link',\n      rel: 'preload',\n      href: resourceId,\n      as: 'font',\n      crossorigin: '',\n    })),\n  ];\n}\n\nexport default {\n  get name(): string {\n    return 'ExpoFontLoader';\n  },\n\n  async unloadAllAsync(): Promise<void> {\n    if (!Platform.isDOMAvailable) return;\n\n    const element = document.getElementById(ID);\n    if (element && element instanceof HTMLStyleElement) {\n      document.removeChild(element);\n    }\n  },\n\n  async unloadAsync(fontFamilyName: string, options?: UnloadFontOptions): Promise<void> {\n    const sheet = getFontFaceStyleSheet();\n    if (!sheet) return;\n    const items = getFontFaceRulesMatchingResource(fontFamilyName, options);\n    for (const item of items) {\n      sheet.deleteRule(item.index);\n    }\n  },\n\n  getHeadElements(): string[] {\n    const elements = getHeadElements();\n\n    return elements.map((element) => {\n      switch (element.$$type) {\n        case 'style':\n          return `<style id=\"${element.id}\" type=\"${element.type}\">${element.children}</style>`;\n        case 'link':\n          return `<link rel=\"${element.rel}\" href=\"${element.href}\" as=\"${element.as}\" crossorigin=\"${element.crossorigin}\" />`;\n        default:\n          return '';\n      }\n    });\n  },\n\n  isLoaded(fontFamilyName: string, resource: UnloadFontOptions = {}): boolean {\n    if (typeof window === 'undefined') {\n      return true;\n    }\n    return getFontFaceRulesMatchingResource(fontFamilyName, resource)?.length > 0;\n  },\n\n  // NOTE(EvanBacon): No async keyword! This cannot return a promise in Node environments.\n  loadAsync(fontFamilyName: string, resource: FontResource): Promise<void> {\n    if (!Platform.isDOMAvailable) {\n      serverContext.add({\n        css: _createWebFontTemplate(fontFamilyName, resource),\n        // @ts-expect-error\n        resourceId: resource.uri!,\n      });\n      return Promise.resolve();\n    }\n\n    const canInjectStyle = document.head && typeof document.head.appendChild === 'function';\n    if (!canInjectStyle) {\n      throw new CodedError(\n        'ERR_WEB_ENVIRONMENT',\n        `The browser's \\`document.head\\` element doesn't support injecting fonts.`\n      );\n    }\n\n    const style = getStyleElement();\n    document.head!.appendChild(style);\n\n    const res = getFontFaceRulesMatchingResource(fontFamilyName, resource);\n    if (!res.length) {\n      _createWebStyle(fontFamilyName, resource);\n    }\n\n    if (!isFontLoadingListenerSupported()) {\n      return Promise.resolve();\n    }\n\n    return new FontObserver(fontFamilyName, { display: resource.display }).load(null, 6000);\n  },\n};\n\nconst ID = 'expo-generated-fonts';\n\nfunction getStyleElement(): HTMLStyleElement {\n  const element = document.getElementById(ID);\n  if (element && element instanceof HTMLStyleElement) {\n    return element;\n  }\n  const styleElement = document.createElement('style');\n  styleElement.id = ID;\n  styleElement.type = 'text/css';\n  return styleElement;\n}\n\nexport function _createWebFontTemplate(fontFamily: string, resource: FontResource): string {\n  return `@font-face{font-family:${fontFamily};src:url(${resource.uri});font-display:${\n    resource.display || FontDisplay.AUTO\n  }}`;\n}\n\nfunction _createWebStyle(fontFamily: string, resource: FontResource): HTMLStyleElement {\n  const fontStyle = _createWebFontTemplate(fontFamily, resource);\n\n  const styleElement = getStyleElement();\n  // @ts-ignore: TypeScript does not define HTMLStyleElement::styleSheet. This is just for IE and\n  // possibly can be removed if it's unnecessary on IE 11.\n  if (styleElement.styleSheet) {\n    const styleElementIE = styleElement as any;\n    styleElementIE.styleSheet.cssText = styleElementIE.styleSheet.cssText\n      ? styleElementIE.styleSheet.cssText + fontStyle\n      : fontStyle;\n  } else {\n    const textNode = document.createTextNode(fontStyle);\n    styleElement.appendChild(textNode);\n  }\n  return styleElement;\n}\n\nfunction isFontLoadingListenerSupported(): boolean {\n  const { userAgent } = window.navigator;\n  // WebKit is broken https://github.com/bramstein/fontfaceobserver/issues/95\n  const isIOS = !!userAgent.match(/iPad|iPhone/i);\n  const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);\n  // Edge is broken https://github.com/bramstein/fontfaceobserver/issues/109#issuecomment-333356795\n  const isEdge = userAgent.includes('Edge');\n  // Internet Explorer\n  const isIE = userAgent.includes('Trident');\n  // Firefox\n  const isFirefox = userAgent.includes('Firefox');\n  return !isSafari && !isIOS && !isEdge && !isIE && !isFirefox;\n}\n"]}
+\ No newline at end of file
+diff --git a/node_modules/expo-font/build/Font.d.ts.map b/node_modules/expo-font/build/Font.d.ts.map
+index 957e591..dd75bb7 100644
+--- a/node_modules/expo-font/build/Font.d.ts.map
++++ b/node_modules/expo-font/build/Font.d.ts.map
+@@ -1 +1 @@
+-{"version":3,"file":"Font.d.ts","sourceRoot":"","sources":["../src/Font.ts"],"names":[],"mappings":"AAGA,OAAO,EAAE,WAAW,EAAE,UAAU,EAAE,YAAY,EAAE,iBAAiB,EAAE,MAAM,cAAc,CAAC;AAaxF;;;;;;;GAOG;AACH,wBAAgB,iBAAiB,CAAC,UAAU,EAAE,MAAM,GAAG,IAAI,GAAG,MAAM,GAAG,IAAI,CAwB1E;AAGD;;;;;GAKG;AACH,wBAAgB,QAAQ,CAAC,UAAU,EAAE,MAAM,GAAG,OAAO,CAEpD;AAGD;;;;;GAKG;AACH,wBAAgB,SAAS,CAAC,UAAU,EAAE,MAAM,GAAG,OAAO,CAErD;AAGD;;;;;;;;;;;GAWG;AACH,wBAAsB,SAAS,CAC7B,mBAAmB,EAAE,MAAM,GAAG,MAAM,CAAC,MAAM,EAAE,UAAU,CAAC,EACxD,MAAM,CAAC,EAAE,UAAU,GAClB,OAAO,CAAC,IAAI,CAAC,CAef;AAwCD;;GAEG;AACH,wBAAsB,cAAc,IAAI,OAAO,CAAC,IAAI,CAAC,CAiBpD;AAGD;;;;;;;GAOG;AACH,wBAAsB,WAAW,CAC/B,mBAAmB,EAAE,MAAM,GAAG,MAAM,CAAC,MAAM,EAAE,iBAAiB,CAAC,EAC/D,OAAO,CAAC,EAAE,iBAAiB,GAC1B,OAAO,CAAC,IAAI,CAAC,CAkBf;AA0BD,OAAO,EAAE,WAAW,EAAE,UAAU,EAAE,YAAY,EAAE,iBAAiB,EAAE,CAAC"}
+\ No newline at end of file
++{"version":3,"file":"Font.d.ts","sourceRoot":"","sources":["../src/Font.ts"],"names":[],"mappings":"AAGA,OAAO,EAAE,WAAW,EAAE,UAAU,EAAE,YAAY,EAAE,iBAAiB,EAAE,MAAM,cAAc,CAAC;AAcxF;;;;;;;GAOG;AACH,wBAAgB,iBAAiB,CAAC,UAAU,EAAE,MAAM,GAAG,IAAI,GAAG,MAAM,GAAG,IAAI,CAoB1E;AAGD;;;;;GAKG;AACH,wBAAgB,QAAQ,CAAC,UAAU,EAAE,MAAM,GAAG,OAAO,CAKpD;AAGD;;;;;GAKG;AACH,wBAAgB,SAAS,CAAC,UAAU,EAAE,MAAM,GAAG,OAAO,CAErD;AAGD;;;;;;;;;;;GAWG;AACH,wBAAgB,SAAS,CACvB,mBAAmB,EAAE,MAAM,GAAG,MAAM,CAAC,MAAM,EAAE,UAAU,CAAC,EACxD,MAAM,CAAC,EAAE,UAAU,GAClB,OAAO,CAAC,IAAI,CAAC,CA+Bf;AAwCD;;GAEG;AACH,wBAAsB,cAAc,IAAI,OAAO,CAAC,IAAI,CAAC,CAiBpD;AAGD;;;;;;;GAOG;AACH,wBAAsB,WAAW,CAC/B,mBAAmB,EAAE,MAAM,GAAG,MAAM,CAAC,MAAM,EAAE,iBAAiB,CAAC,EAC/D,OAAO,CAAC,EAAE,iBAAiB,GAC1B,OAAO,CAAC,IAAI,CAAC,CAkBf;AA0BD,OAAO,EAAE,WAAW,EAAE,UAAU,EAAE,YAAY,EAAE,iBAAiB,EAAE,CAAC"}
+\ No newline at end of file
+diff --git a/node_modules/expo-font/build/Font.js b/node_modules/expo-font/build/Font.js
+index c306522..505e977 100644
+--- a/node_modules/expo-font/build/Font.js
++++ b/node_modules/expo-font/build/Font.js
+@@ -1,7 +1,8 @@
+-import { CodedError, UnavailabilityError } from 'expo-modules-core';
++import { CodedError, Platform, UnavailabilityError } from 'expo-modules-core';
+ import ExpoFontLoader from './ExpoFontLoader';
+ import { FontDisplay } from './Font.types';
+ import { getAssetForSource, loadSingleFontAsync, fontFamilyNeedsScoping, getNativeFontName, } from './FontLoader';
++import { registerStaticFont } from './server';
+ const loaded = {};
+ const loadPromises = {};
+ // @needsAudit
+@@ -21,15 +22,12 @@ export function processFontFamily(fontFamily) {
+     if (!isLoaded(fontFamily)) {
+         if (__DEV__) {
+             if (isLoading(fontFamily)) {
+-                console.error(`You started loading the font "${fontFamily}", but used it before it finished loading. You need to wait for Font.loadAsync to complete before using the font.`);
++                console.warn(`You started loading the font "${fontFamily}", but used it before it finished loading. You need to wait for Font.loadAsync to complete before using the font.`);
+             }
+             else {
+-                console.error(`fontFamily "${fontFamily}" is not a system font and has not been loaded through Font.loadAsync.\n
+-- If you intended to use a system font, make sure you typed the name correctly and that it is supported by your device operating system.\n
+-- If this is a custom font, be sure to load it with Font.loadAsync.`);
++                console.warn(`fontFamily "${fontFamily}" is not a system font and has not been loaded through expo-font.`);
+             }
+         }
+-        return 'System';
+     }
+     return `ExpoFont-${getNativeFontName(fontFamily)}`;
+ }
+@@ -41,6 +39,9 @@ export function processFontFamily(fontFamily) {
+  * @return Returns `true` if the font has fully loaded.
+  */
+ export function isLoaded(fontFamily) {
++    if (Platform.OS === 'web') {
++        return fontFamily in loaded || ExpoFontLoader.isLoaded(fontFamily);
++    }
+     return fontFamily in loaded;
+ }
+ // @needsAudit
+@@ -66,17 +67,29 @@ export function isLoading(fontFamily) {
+  * @return Returns a promise that fulfils when the font has loaded. Often you may want to wrap the
+  * method in a `try/catch/finally` to ensure the app continues if the font fails to load.
+  */
+-export async function loadAsync(fontFamilyOrFontMap, source) {
++export function loadAsync(fontFamilyOrFontMap, source) {
++    // NOTE(EvanBacon): Static render pass on web must be synchronous to collect all fonts.
++    // Because of this, `loadAsync` doesn't use the `async` keyword and deviates from the
++    // standard Expo SDK style guide.
+     if (typeof fontFamilyOrFontMap === 'object') {
+         if (source) {
+             throw new CodedError(`ERR_FONT_API`, `No fontFamily can be used for the provided source: ${source}. The second argument of \`loadAsync()\` can only be used with a \`string\` value as the first argument.`);
+         }
+         const fontMap = fontFamilyOrFontMap;
+         const names = Object.keys(fontMap);
+-        await Promise.all(names.map((name) => loadFontInNamespaceAsync(name, fontMap[name])));
+-        return;
++        if (Platform.OS === 'web' && typeof window !== 'undefined') {
++            names.map((name) => registerStaticFont(name, fontMap[name]));
++            return Promise.resolve();
++        }
++        return (async () => {
++            Promise.all(names.map((name) => loadFontInNamespaceAsync(name, fontMap[name])));
++        })();
++    }
++    if (Platform.OS === 'web' && typeof window !== 'undefined') {
++        registerStaticFont(fontFamilyOrFontMap, source);
++        return Promise.resolve();
+     }
+-    return await loadFontInNamespaceAsync(fontFamilyOrFontMap, source);
++    return loadFontInNamespaceAsync(fontFamilyOrFontMap, source);
+ }
+ async function loadFontInNamespaceAsync(fontFamily, source) {
+     if (!source) {
+diff --git a/node_modules/expo-font/build/Font.js.map b/node_modules/expo-font/build/Font.js.map
+index 94324e3..aaebefc 100644
+--- a/node_modules/expo-font/build/Font.js.map
++++ b/node_modules/expo-font/build/Font.js.map
+@@ -1 +1 @@
+-{"version":3,"file":"Font.js","sourceRoot":"","sources":["../src/Font.ts"],"names":[],"mappings":"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","sourcesContent":["import { CodedError, UnavailabilityError } from 'expo-modules-core';\n\nimport ExpoFontLoader from './ExpoFontLoader';\nimport { FontDisplay, FontSource, FontResource, UnloadFontOptions } from './Font.types';\nimport {\n  getAssetForSource,\n  loadSingleFontAsync,\n  fontFamilyNeedsScoping,\n  getNativeFontName,\n} from './FontLoader';\n\nconst loaded: { [name: string]: boolean } = {};\nconst loadPromises: { [name: string]: Promise<void> } = {};\n\n// @needsAudit\n// note(brentvatne): at some point we may want to warn if this is called outside of a managed app.\n/**\n * Used to transform font family names to the scoped name. This does not need to\n * be called in standalone or bare apps but it will return unscoped font family\n * names if it is called in those contexts.\n *\n * @param fontFamily Name of font to process.\n * @returns Returns a name processed for use with the [current workflow](https://docs.expo.dev/archive/managed-vs-bare/).\n */\nexport function processFontFamily(fontFamily: string | null): string | null {\n  if (!fontFamily || !fontFamilyNeedsScoping(fontFamily)) {\n    return fontFamily;\n  }\n\n  if (!isLoaded(fontFamily)) {\n    if (__DEV__) {\n      if (isLoading(fontFamily)) {\n        console.error(\n          `You started loading the font \"${fontFamily}\", but used it before it finished loading. You need to wait for Font.loadAsync to complete before using the font.`\n        );\n      } else {\n        console.error(\n          `fontFamily \"${fontFamily}\" is not a system font and has not been loaded through Font.loadAsync.\\n\n- If you intended to use a system font, make sure you typed the name correctly and that it is supported by your device operating system.\\n\n- If this is a custom font, be sure to load it with Font.loadAsync.`\n        );\n      }\n    }\n\n    return 'System';\n  }\n\n  return `ExpoFont-${getNativeFontName(fontFamily)}`;\n}\n\n// @needsAudit\n/**\n * Synchronously detect if the font for `fontFamily` has finished loading.\n *\n * @param fontFamily The name used to load the `FontResource`.\n * @return Returns `true` if the font has fully loaded.\n */\nexport function isLoaded(fontFamily: string): boolean {\n  return fontFamily in loaded;\n}\n\n// @needsAudit\n/**\n * Synchronously detect if the font for `fontFamily` is still being loaded.\n *\n * @param fontFamily The name used to load the `FontResource`.\n * @returns Returns `true` if the font is still loading.\n */\nexport function isLoading(fontFamily: string): boolean {\n  return fontFamily in loadPromises;\n}\n\n// @needsAudit\n/**\n * Highly efficient method for loading fonts from static or remote resources which can then be used\n * with the platform's native text elements. In the browser this generates a `@font-face` block in\n * a shared style sheet for fonts. No CSS is needed to use this method.\n *\n * @param fontFamilyOrFontMap string or map of values that can be used as the [`fontFamily`](https://reactnative.dev/docs/text#style)\n * style prop with React Native Text elements.\n * @param source the font asset that should be loaded into the `fontFamily` namespace.\n *\n * @return Returns a promise that fulfils when the font has loaded. Often you may want to wrap the\n * method in a `try/catch/finally` to ensure the app continues if the font fails to load.\n */\nexport async function loadAsync(\n  fontFamilyOrFontMap: string | Record<string, FontSource>,\n  source?: FontSource\n): Promise<void> {\n  if (typeof fontFamilyOrFontMap === 'object') {\n    if (source) {\n      throw new CodedError(\n        `ERR_FONT_API`,\n        `No fontFamily can be used for the provided source: ${source}. The second argument of \\`loadAsync()\\` can only be used with a \\`string\\` value as the first argument.`\n      );\n    }\n    const fontMap = fontFamilyOrFontMap;\n    const names = Object.keys(fontMap);\n    await Promise.all(names.map((name) => loadFontInNamespaceAsync(name, fontMap[name])));\n    return;\n  }\n\n  return await loadFontInNamespaceAsync(fontFamilyOrFontMap, source);\n}\n\nasync function loadFontInNamespaceAsync(\n  fontFamily: string,\n  source?: FontSource | null\n): Promise<void> {\n  if (!source) {\n    throw new CodedError(\n      `ERR_FONT_SOURCE`,\n      `Cannot load null or undefined font source: { \"${fontFamily}\": ${source} }. Expected asset of type \\`FontSource\\` for fontFamily of name: \"${fontFamily}\"`\n    );\n  }\n\n  if (loaded[fontFamily]) {\n    return;\n  }\n\n  if (loadPromises.hasOwnProperty(fontFamily)) {\n    return loadPromises[fontFamily];\n  }\n\n  // Important: we want all callers that concurrently try to load the same font to await the same\n  // promise. If we're here, we haven't created the promise yet. To ensure we create only one\n  // promise in the program, we need to create the promise synchronously without yielding the event\n  // loop from this point.\n\n  const asset = getAssetForSource(source);\n  loadPromises[fontFamily] = (async () => {\n    try {\n      await loadSingleFontAsync(fontFamily, asset);\n      loaded[fontFamily] = true;\n    } finally {\n      delete loadPromises[fontFamily];\n    }\n  })();\n\n  await loadPromises[fontFamily];\n}\n\n// @needsAudit\n/**\n * Unloads all the custom fonts. This is used for testing.\n */\nexport async function unloadAllAsync(): Promise<void> {\n  if (!ExpoFontLoader.unloadAllAsync) {\n    throw new UnavailabilityError('expo-font', 'unloadAllAsync');\n  }\n\n  if (Object.keys(loadPromises).length) {\n    throw new CodedError(\n      `ERR_UNLOAD`,\n      `Cannot unload fonts while they're still loading: ${Object.keys(loadPromises).join(', ')}`\n    );\n  }\n\n  for (const fontFamily of Object.keys(loaded)) {\n    delete loaded[fontFamily];\n  }\n\n  await ExpoFontLoader.unloadAllAsync();\n}\n\n// @needsAudit\n/**\n * Unload custom fonts matching the `fontFamily`s and display values provided.\n * Because fonts are automatically unloaded on every platform this is mostly used for testing.\n *\n * @param fontFamilyOrFontMap The name or names of the custom fonts that will be unloaded.\n * @param options When `fontFamilyOrFontMap` is a string, this should be the font source used to load\n * the custom font originally.\n */\nexport async function unloadAsync(\n  fontFamilyOrFontMap: string | Record<string, UnloadFontOptions>,\n  options?: UnloadFontOptions\n): Promise<void> {\n  if (!ExpoFontLoader.unloadAsync) {\n    throw new UnavailabilityError('expo-font', 'unloadAsync');\n  }\n  if (typeof fontFamilyOrFontMap === 'object') {\n    if (options) {\n      throw new CodedError(\n        `ERR_FONT_API`,\n        `No fontFamily can be used for the provided options: ${options}. The second argument of \\`unloadAsync()\\` can only be used with a \\`string\\` value as the first argument.`\n      );\n    }\n    const fontMap = fontFamilyOrFontMap;\n    const names = Object.keys(fontMap);\n    await Promise.all(names.map((name) => unloadFontInNamespaceAsync(name, fontMap[name])));\n    return;\n  }\n\n  return await unloadFontInNamespaceAsync(fontFamilyOrFontMap, options);\n}\n\nasync function unloadFontInNamespaceAsync(\n  fontFamily: string,\n  options?: UnloadFontOptions | null\n): Promise<void> {\n  if (!loaded[fontFamily]) {\n    return;\n  } else {\n    delete loaded[fontFamily];\n  }\n\n  // Important: we want all callers that concurrently try to load the same font to await the same\n  // promise. If we're here, we haven't created the promise yet. To ensure we create only one\n  // promise in the program, we need to create the promise synchronously without yielding the event\n  // loop from this point.\n\n  const nativeFontName = getNativeFontName(fontFamily);\n\n  if (!nativeFontName) {\n    throw new CodedError(`ERR_FONT_FAMILY`, `Cannot unload an empty name`);\n  }\n\n  await ExpoFontLoader.unloadAsync(nativeFontName, options);\n}\n\nexport { FontDisplay, FontSource, FontResource, UnloadFontOptions };\n"]}
+\ No newline at end of file
++{"version":3,"file":"Font.js","sourceRoot":"","sources":["../src/Font.ts"],"names":[],"mappings":"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","sourcesContent":["import { CodedError, Platform, UnavailabilityError } from 'expo-modules-core';\n\nimport ExpoFontLoader from './ExpoFontLoader';\nimport { FontDisplay, FontSource, FontResource, UnloadFontOptions } from './Font.types';\nimport {\n  getAssetForSource,\n  loadSingleFontAsync,\n  fontFamilyNeedsScoping,\n  getNativeFontName,\n} from './FontLoader';\nimport { registerStaticFont } from './server';\n\nconst loaded: { [name: string]: boolean } = {};\nconst loadPromises: { [name: string]: Promise<void> } = {};\n\n// @needsAudit\n// note(brentvatne): at some point we may want to warn if this is called outside of a managed app.\n/**\n * Used to transform font family names to the scoped name. This does not need to\n * be called in standalone or bare apps but it will return unscoped font family\n * names if it is called in those contexts.\n *\n * @param fontFamily Name of font to process.\n * @returns Returns a name processed for use with the [current workflow](https://docs.expo.dev/archive/managed-vs-bare/).\n */\nexport function processFontFamily(fontFamily: string | null): string | null {\n  if (!fontFamily || !fontFamilyNeedsScoping(fontFamily)) {\n    return fontFamily;\n  }\n\n  if (!isLoaded(fontFamily)) {\n    if (__DEV__) {\n      if (isLoading(fontFamily)) {\n        console.warn(\n          `You started loading the font \"${fontFamily}\", but used it before it finished loading. You need to wait for Font.loadAsync to complete before using the font.`\n        );\n      } else {\n        console.warn(\n          `fontFamily \"${fontFamily}\" is not a system font and has not been loaded through expo-font.`\n        );\n      }\n    }\n  }\n\n  return `ExpoFont-${getNativeFontName(fontFamily)}`;\n}\n\n// @needsAudit\n/**\n * Synchronously detect if the font for `fontFamily` has finished loading.\n *\n * @param fontFamily The name used to load the `FontResource`.\n * @return Returns `true` if the font has fully loaded.\n */\nexport function isLoaded(fontFamily: string): boolean {\n  if (Platform.OS === 'web') {\n    return fontFamily in loaded || ExpoFontLoader.isLoaded(fontFamily);\n  }\n  return fontFamily in loaded;\n}\n\n// @needsAudit\n/**\n * Synchronously detect if the font for `fontFamily` is still being loaded.\n *\n * @param fontFamily The name used to load the `FontResource`.\n * @returns Returns `true` if the font is still loading.\n */\nexport function isLoading(fontFamily: string): boolean {\n  return fontFamily in loadPromises;\n}\n\n// @needsAudit\n/**\n * Highly efficient method for loading fonts from static or remote resources which can then be used\n * with the platform's native text elements. In the browser this generates a `@font-face` block in\n * a shared style sheet for fonts. No CSS is needed to use this method.\n *\n * @param fontFamilyOrFontMap string or map of values that can be used as the [`fontFamily`](https://reactnative.dev/docs/text#style)\n * style prop with React Native Text elements.\n * @param source the font asset that should be loaded into the `fontFamily` namespace.\n *\n * @return Returns a promise that fulfils when the font has loaded. Often you may want to wrap the\n * method in a `try/catch/finally` to ensure the app continues if the font fails to load.\n */\nexport function loadAsync(\n  fontFamilyOrFontMap: string | Record<string, FontSource>,\n  source?: FontSource\n): Promise<void> {\n  // NOTE(EvanBacon): Static render pass on web must be synchronous to collect all fonts.\n  // Because of this, `loadAsync` doesn't use the `async` keyword and deviates from the\n  // standard Expo SDK style guide.\n\n  if (typeof fontFamilyOrFontMap === 'object') {\n    if (source) {\n      throw new CodedError(\n        `ERR_FONT_API`,\n        `No fontFamily can be used for the provided source: ${source}. The second argument of \\`loadAsync()\\` can only be used with a \\`string\\` value as the first argument.`\n      );\n    }\n    const fontMap = fontFamilyOrFontMap;\n    const names = Object.keys(fontMap);\n\n    if (Platform.OS === 'web' && typeof window !== 'undefined') {\n      names.map((name) => registerStaticFont(name, fontMap[name]));\n      return Promise.resolve();\n    }\n\n    return (async () => {\n      Promise.all(names.map((name) => loadFontInNamespaceAsync(name, fontMap[name])));\n    })();\n  }\n\n  if (Platform.OS === 'web' && typeof window !== 'undefined') {\n    registerStaticFont(fontFamilyOrFontMap, source);\n    return Promise.resolve();\n  }\n\n  return loadFontInNamespaceAsync(fontFamilyOrFontMap, source);\n}\n\nasync function loadFontInNamespaceAsync(\n  fontFamily: string,\n  source?: FontSource | null\n): Promise<void> {\n  if (!source) {\n    throw new CodedError(\n      `ERR_FONT_SOURCE`,\n      `Cannot load null or undefined font source: { \"${fontFamily}\": ${source} }. Expected asset of type \\`FontSource\\` for fontFamily of name: \"${fontFamily}\"`\n    );\n  }\n\n  if (loaded[fontFamily]) {\n    return;\n  }\n\n  if (loadPromises.hasOwnProperty(fontFamily)) {\n    return loadPromises[fontFamily];\n  }\n\n  // Important: we want all callers that concurrently try to load the same font to await the same\n  // promise. If we're here, we haven't created the promise yet. To ensure we create only one\n  // promise in the program, we need to create the promise synchronously without yielding the event\n  // loop from this point.\n\n  const asset = getAssetForSource(source);\n  loadPromises[fontFamily] = (async () => {\n    try {\n      await loadSingleFontAsync(fontFamily, asset);\n      loaded[fontFamily] = true;\n    } finally {\n      delete loadPromises[fontFamily];\n    }\n  })();\n\n  await loadPromises[fontFamily];\n}\n\n// @needsAudit\n/**\n * Unloads all the custom fonts. This is used for testing.\n */\nexport async function unloadAllAsync(): Promise<void> {\n  if (!ExpoFontLoader.unloadAllAsync) {\n    throw new UnavailabilityError('expo-font', 'unloadAllAsync');\n  }\n\n  if (Object.keys(loadPromises).length) {\n    throw new CodedError(\n      `ERR_UNLOAD`,\n      `Cannot unload fonts while they're still loading: ${Object.keys(loadPromises).join(', ')}`\n    );\n  }\n\n  for (const fontFamily of Object.keys(loaded)) {\n    delete loaded[fontFamily];\n  }\n\n  await ExpoFontLoader.unloadAllAsync();\n}\n\n// @needsAudit\n/**\n * Unload custom fonts matching the `fontFamily`s and display values provided.\n * Because fonts are automatically unloaded on every platform this is mostly used for testing.\n *\n * @param fontFamilyOrFontMap The name or names of the custom fonts that will be unloaded.\n * @param options When `fontFamilyOrFontMap` is a string, this should be the font source used to load\n * the custom font originally.\n */\nexport async function unloadAsync(\n  fontFamilyOrFontMap: string | Record<string, UnloadFontOptions>,\n  options?: UnloadFontOptions\n): Promise<void> {\n  if (!ExpoFontLoader.unloadAsync) {\n    throw new UnavailabilityError('expo-font', 'unloadAsync');\n  }\n  if (typeof fontFamilyOrFontMap === 'object') {\n    if (options) {\n      throw new CodedError(\n        `ERR_FONT_API`,\n        `No fontFamily can be used for the provided options: ${options}. The second argument of \\`unloadAsync()\\` can only be used with a \\`string\\` value as the first argument.`\n      );\n    }\n    const fontMap = fontFamilyOrFontMap;\n    const names = Object.keys(fontMap);\n    await Promise.all(names.map((name) => unloadFontInNamespaceAsync(name, fontMap[name])));\n    return;\n  }\n\n  return await unloadFontInNamespaceAsync(fontFamilyOrFontMap, options);\n}\n\nasync function unloadFontInNamespaceAsync(\n  fontFamily: string,\n  options?: UnloadFontOptions | null\n): Promise<void> {\n  if (!loaded[fontFamily]) {\n    return;\n  } else {\n    delete loaded[fontFamily];\n  }\n\n  // Important: we want all callers that concurrently try to load the same font to await the same\n  // promise. If we're here, we haven't created the promise yet. To ensure we create only one\n  // promise in the program, we need to create the promise synchronously without yielding the event\n  // loop from this point.\n\n  const nativeFontName = getNativeFontName(fontFamily);\n\n  if (!nativeFontName) {\n    throw new CodedError(`ERR_FONT_FAMILY`, `Cannot unload an empty name`);\n  }\n\n  await ExpoFontLoader.unloadAsync(nativeFontName, options);\n}\n\nexport { FontDisplay, FontSource, FontResource, UnloadFontOptions };\n"]}
+\ No newline at end of file
+diff --git a/node_modules/expo-font/build/FontHooks.d.ts b/node_modules/expo-font/build/FontHooks.d.ts
+index a894ed2..46c1907 100644
+--- a/node_modules/expo-font/build/FontHooks.d.ts
++++ b/node_modules/expo-font/build/FontHooks.d.ts
+@@ -16,5 +16,5 @@ import { FontSource } from './Font.types';
+  * loading.
+  * - __error__ (`Error | null`) - An error encountered when loading the fonts.
+  */
+-export declare function useFonts(map: string | Record<string, FontSource>): [boolean, Error | null];
++export declare const useFonts: (map: string | Record<string, FontSource>) => [boolean, Error | null];
+ //# sourceMappingURL=FontHooks.d.ts.map
+\ No newline at end of file
+diff --git a/node_modules/expo-font/build/FontHooks.d.ts.map b/node_modules/expo-font/build/FontHooks.d.ts.map
+index ac5e37d..57bfb62 100644
+--- a/node_modules/expo-font/build/FontHooks.d.ts.map
++++ b/node_modules/expo-font/build/FontHooks.d.ts.map
+@@ -1 +1 @@
+-{"version":3,"file":"FontHooks.d.ts","sourceRoot":"","sources":["../src/FontHooks.ts"],"names":[],"mappings":"AAGA,OAAO,EAAE,UAAU,EAAE,MAAM,cAAc,CAAC;AAG1C;;;;;;;;;;;;;;;;GAgBG;AACH,wBAAgB,QAAQ,CAAC,GAAG,EAAE,MAAM,GAAG,MAAM,CAAC,MAAM,EAAE,UAAU,CAAC,GAAG,CAAC,OAAO,EAAE,KAAK,GAAG,IAAI,CAAC,CAW1F"}
+\ No newline at end of file
++{"version":3,"file":"FontHooks.d.ts","sourceRoot":"","sources":["../src/FontHooks.ts"],"names":[],"mappings":"AAGA,OAAO,EAAE,UAAU,EAAE,MAAM,cAAc,CAAC;AAiC1C;;;;;;;;;;;;;;;;GAgBG;AACH,eAAO,MAAM,QAAQ,EAAE,CAAC,GAAG,EAAE,MAAM,GAAG,MAAM,CAAC,MAAM,EAAE,UAAU,CAAC,KAAK,CAAC,OAAO,EAAE,KAAK,GAAG,IAAI,CACzB,CAAC"}
+\ No newline at end of file
+diff --git a/node_modules/expo-font/build/FontHooks.js b/node_modules/expo-font/build/FontHooks.js
+index 20dd717..5b930e5 100644
+--- a/node_modules/expo-font/build/FontHooks.js
++++ b/node_modules/expo-font/build/FontHooks.js
+@@ -1,5 +1,30 @@
+ import { useEffect, useState } from 'react';
+-import { loadAsync } from './Font';
++import { loadAsync, isLoaded } from './Font';
++function isMapLoaded(map) {
++    if (typeof map === 'string') {
++        return isLoaded(map);
++    }
++    else {
++        return Object.keys(map).every((fontFamily) => isLoaded(fontFamily));
++    }
++}
++function useRuntimeFonts(map) {
++    const [loaded, setLoaded] = useState(
++    // For web rehydration, we need to check if the fonts are already loaded during the static render.
++    // Native will also benefit from this optimization.
++    isMapLoaded(map));
++    const [error, setError] = useState(null);
++    useEffect(() => {
++        loadAsync(map)
++            .then(() => setLoaded(true))
++            .catch(setError);
++    }, []);
++    return [loaded, error];
++}
++function useStaticFonts(map) {
++    loadAsync(map);
++    return [true, null];
++}
+ // @needsAudit
+ /**
+  * ```ts
+@@ -18,14 +43,5 @@ import { loadAsync } from './Font';
+  * loading.
+  * - __error__ (`Error | null`) - An error encountered when loading the fonts.
+  */
+-export function useFonts(map) {
+-    const [loaded, setLoaded] = useState(false);
+-    const [error, setError] = useState(null);
+-    useEffect(() => {
+-        loadAsync(map)
+-            .then(() => setLoaded(true))
+-            .catch(setError);
+-    }, []);
+-    return [loaded, error];
+-}
++export const useFonts = typeof window === 'undefined' ? useStaticFonts : useRuntimeFonts;
+ //# sourceMappingURL=FontHooks.js.map
+\ No newline at end of file
+diff --git a/node_modules/expo-font/build/FontHooks.js.map b/node_modules/expo-font/build/FontHooks.js.map
+index 6fef8fe..061b7e0 100644
+--- a/node_modules/expo-font/build/FontHooks.js.map
++++ b/node_modules/expo-font/build/FontHooks.js.map
+@@ -1 +1 @@
+-{"version":3,"file":"FontHooks.js","sourceRoot":"","sources":["../src/FontHooks.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,SAAS,EAAE,QAAQ,EAAE,MAAM,OAAO,CAAC;AAE5C,OAAO,EAAE,SAAS,EAAE,MAAM,QAAQ,CAAC;AAGnC,cAAc;AACd;;;;;;;;;;;;;;;;GAgBG;AACH,MAAM,UAAU,QAAQ,CAAC,GAAwC;IAC/D,MAAM,CAAC,MAAM,EAAE,SAAS,CAAC,GAAG,QAAQ,CAAC,KAAK,CAAC,CAAC;IAC5C,MAAM,CAAC,KAAK,EAAE,QAAQ,CAAC,GAAG,QAAQ,CAAe,IAAI,CAAC,CAAC;IAEvD,SAAS,CAAC,GAAG,EAAE;QACb,SAAS,CAAC,GAAG,CAAC;aACX,IAAI,CAAC,GAAG,EAAE,CAAC,SAAS,CAAC,IAAI,CAAC,CAAC;aAC3B,KAAK,CAAC,QAAQ,CAAC,CAAC;IACrB,CAAC,EAAE,EAAE,CAAC,CAAC;IAEP,OAAO,CAAC,MAAM,EAAE,KAAK,CAAC,CAAC;AACzB,CAAC","sourcesContent":["import { useEffect, useState } from 'react';\n\nimport { loadAsync } from './Font';\nimport { FontSource } from './Font.types';\n\n// @needsAudit\n/**\n * ```ts\n * const [loaded, error] = useFonts({ ... });\n * ```\n * Load a map of fonts with [`loadAsync`](#loadasync). This returns a `boolean` if the fonts are\n * loaded and ready to use. It also returns an error if something went wrong, to use in development.\n *\n * > Note, the fonts are not \"reloaded\" when you dynamically change the font map.\n *\n * @param map A map of `fontFamily`s to [`FontSource`](#fontsource)s. After loading the font you can\n * use the key in the `fontFamily` style prop of a `Text` element.\n *\n * @return\n * - __loaded__ (`boolean`) - A boolean to detect if the font for `fontFamily` has finished\n * loading.\n * - __error__ (`Error | null`) - An error encountered when loading the fonts.\n */\nexport function useFonts(map: string | Record<string, FontSource>): [boolean, Error | null] {\n  const [loaded, setLoaded] = useState(false);\n  const [error, setError] = useState<Error | null>(null);\n\n  useEffect(() => {\n    loadAsync(map)\n      .then(() => setLoaded(true))\n      .catch(setError);\n  }, []);\n\n  return [loaded, error];\n}\n"]}
+\ No newline at end of file
++{"version":3,"file":"FontHooks.js","sourceRoot":"","sources":["../src/FontHooks.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,SAAS,EAAE,QAAQ,EAAE,MAAM,OAAO,CAAC;AAE5C,OAAO,EAAE,SAAS,EAAE,QAAQ,EAAE,MAAM,QAAQ,CAAC;AAG7C,SAAS,WAAW,CAAC,GAAwC;IAC3D,IAAI,OAAO,GAAG,KAAK,QAAQ,EAAE;QAC3B,OAAO,QAAQ,CAAC,GAAG,CAAC,CAAC;KACtB;SAAM;QACL,OAAO,MAAM,CAAC,IAAI,CAAC,GAAG,CAAC,CAAC,KAAK,CAAC,CAAC,UAAU,EAAE,EAAE,CAAC,QAAQ,CAAC,UAAU,CAAC,CAAC,CAAC;KACrE;AACH,CAAC;AAED,SAAS,eAAe,CAAC,GAAwC;IAC/D,MAAM,CAAC,MAAM,EAAE,SAAS,CAAC,GAAG,QAAQ;IAClC,kGAAkG;IAClG,mDAAmD;IACnD,WAAW,CAAC,GAAG,CAAC,CACjB,CAAC;IACF,MAAM,CAAC,KAAK,EAAE,QAAQ,CAAC,GAAG,QAAQ,CAAe,IAAI,CAAC,CAAC;IAEvD,SAAS,CAAC,GAAG,EAAE;QACb,SAAS,CAAC,GAAG,CAAC;aACX,IAAI,CAAC,GAAG,EAAE,CAAC,SAAS,CAAC,IAAI,CAAC,CAAC;aAC3B,KAAK,CAAC,QAAQ,CAAC,CAAC;IACrB,CAAC,EAAE,EAAE,CAAC,CAAC;IAEP,OAAO,CAAC,MAAM,EAAE,KAAK,CAAC,CAAC;AACzB,CAAC;AAED,SAAS,cAAc,CAAC,GAAwC;IAC9D,SAAS,CAAC,GAAG,CAAC,CAAC;IACf,OAAO,CAAC,IAAI,EAAE,IAAI,CAAC,CAAC;AACtB,CAAC;AAED,cAAc;AACd;;;;;;;;;;;;;;;;GAgBG;AACH,MAAM,CAAC,MAAM,QAAQ,GACnB,OAAO,MAAM,KAAK,WAAW,CAAC,CAAC,CAAC,cAAc,CAAC,CAAC,CAAC,eAAe,CAAC","sourcesContent":["import { useEffect, useState } from 'react';\n\nimport { loadAsync, isLoaded } from './Font';\nimport { FontSource } from './Font.types';\n\nfunction isMapLoaded(map: string | Record<string, FontSource>) {\n  if (typeof map === 'string') {\n    return isLoaded(map);\n  } else {\n    return Object.keys(map).every((fontFamily) => isLoaded(fontFamily));\n  }\n}\n\nfunction useRuntimeFonts(map: string | Record<string, FontSource>): [boolean, Error | null] {\n  const [loaded, setLoaded] = useState(\n    // For web rehydration, we need to check if the fonts are already loaded during the static render.\n    // Native will also benefit from this optimization.\n    isMapLoaded(map)\n  );\n  const [error, setError] = useState<Error | null>(null);\n\n  useEffect(() => {\n    loadAsync(map)\n      .then(() => setLoaded(true))\n      .catch(setError);\n  }, []);\n\n  return [loaded, error];\n}\n\nfunction useStaticFonts(map: string | Record<string, FontSource>): [boolean, Error | null] {\n  loadAsync(map);\n  return [true, null];\n}\n\n// @needsAudit\n/**\n * ```ts\n * const [loaded, error] = useFonts({ ... });\n * ```\n * Load a map of fonts with [`loadAsync`](#loadasync). This returns a `boolean` if the fonts are\n * loaded and ready to use. It also returns an error if something went wrong, to use in development.\n *\n * > Note, the fonts are not \"reloaded\" when you dynamically change the font map.\n *\n * @param map A map of `fontFamily`s to [`FontSource`](#fontsource)s. After loading the font you can\n * use the key in the `fontFamily` style prop of a `Text` element.\n *\n * @return\n * - __loaded__ (`boolean`) - A boolean to detect if the font for `fontFamily` has finished\n * loading.\n * - __error__ (`Error | null`) - An error encountered when loading the fonts.\n */\nexport const useFonts: (map: string | Record<string, FontSource>) => [boolean, Error | null] =\n  typeof window === 'undefined' ? useStaticFonts : useRuntimeFonts;\n"]}
+\ No newline at end of file
+diff --git a/node_modules/expo-font/build/FontLoader.web.d.ts.map b/node_modules/expo-font/build/FontLoader.web.d.ts.map
+index 70d653f..093b297 100644
+--- a/node_modules/expo-font/build/FontLoader.web.d.ts.map
++++ b/node_modules/expo-font/build/FontLoader.web.d.ts.map
+@@ -1 +1 @@
+-{"version":3,"file":"FontLoader.web.d.ts","sourceRoot":"","sources":["../src/FontLoader.web.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,KAAK,EAAE,MAAM,YAAY,CAAC;AAInC,OAAO,EAAE,YAAY,EAAE,UAAU,EAAe,MAAM,cAAc,CAAC;AAiBrE,wBAAgB,sBAAsB,CAAC,IAAI,EAAE,MAAM,GAAG,OAAO,CAE5D;AAED,wBAAgB,iBAAiB,CAAC,MAAM,EAAE,UAAU,GAAG,KAAK,GAAG,YAAY,CAY1E;AAWD,wBAAsB,mBAAmB,CACvC,IAAI,EAAE,MAAM,EACZ,KAAK,EAAE,KAAK,GAAG,YAAY,GAC1B,OAAO,CAAC,IAAI,CAAC,CAMf;AAED,wBAAgB,iBAAiB,CAAC,IAAI,EAAE,MAAM,GAAG,MAAM,CAEtD"}
+\ No newline at end of file
++{"version":3,"file":"FontLoader.web.d.ts","sourceRoot":"","sources":["../src/FontLoader.web.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,KAAK,EAAE,MAAM,YAAY,CAAC;AAInC,OAAO,EAAE,YAAY,EAAE,UAAU,EAAe,MAAM,cAAc,CAAC;AAiBrE,wBAAgB,sBAAsB,CAAC,IAAI,EAAE,MAAM,GAAG,OAAO,CAE5D;AAED,wBAAgB,iBAAiB,CAAC,MAAM,EAAE,UAAU,GAAG,KAAK,GAAG,YAAY,CAY1E;AAYD,wBAAgB,mBAAmB,CAAC,IAAI,EAAE,MAAM,EAAE,KAAK,EAAE,KAAK,GAAG,YAAY,GAAG,OAAO,CAAC,IAAI,CAAC,CAY5F;AAED,wBAAgB,iBAAiB,CAAC,IAAI,EAAE,MAAM,GAAG,MAAM,CAEtD"}
+\ No newline at end of file
+diff --git a/node_modules/expo-font/build/FontLoader.web.js b/node_modules/expo-font/build/FontLoader.web.js
+index 1b96ffe..ccc0c7e 100644
+--- a/node_modules/expo-font/build/FontLoader.web.js
++++ b/node_modules/expo-font/build/FontLoader.web.js
+@@ -37,11 +37,18 @@ function throwInvalidSourceError(source) {
+         type = JSON.stringify(source, null, 2);
+     throw new CodedError(`ERR_FONT_SOURCE`, `Expected font asset of type \`string | FontResource | Asset\` instead got: ${type}`);
+ }
+-export async function loadSingleFontAsync(name, input) {
++// NOTE(EvanBacon): No async keyword!
++export function loadSingleFontAsync(name, input) {
+     if (typeof input !== 'object' || typeof input.uri !== 'string' || input.downloadAsync) {
+         throwInvalidSourceError(input);
+     }
+-    await ExpoFontLoader.loadAsync(name, input);
++    try {
++        return ExpoFontLoader.loadAsync(name, input);
++    }
++    catch {
++        // No-op.
++    }
++    return Promise.resolve();
+ }
+ export function getNativeFontName(name) {
+     return name;
+diff --git a/node_modules/expo-font/build/FontLoader.web.js.map b/node_modules/expo-font/build/FontLoader.web.js.map
+index b6d644b..43ec746 100644
+--- a/node_modules/expo-font/build/FontLoader.web.js.map
++++ b/node_modules/expo-font/build/FontLoader.web.js.map
+@@ -1 +1 @@
+-{"version":3,"file":"FontLoader.web.js","sourceRoot":"","sources":["../src/FontLoader.web.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,KAAK,EAAE,MAAM,YAAY,CAAC;AACnC,OAAO,EAAE,UAAU,EAAE,MAAM,mBAAmB,CAAC;AAE/C,OAAO,cAAc,MAAM,kBAAkB,CAAC;AAC9C,OAAO,EAA4B,WAAW,EAAE,MAAM,cAAc,CAAC;AAErE,SAAS,iBAAiB,CAAC,KAAU;IACnC,IAAI,OAAO,KAAK,KAAK,QAAQ,EAAE;QAC7B,OAAO,KAAK,IAAI,IAAI,CAAC;KACtB;SAAM,IAAI,OAAO,KAAK,KAAK,QAAQ,EAAE;QACpC,OAAO,KAAK,CAAC,GAAG,IAAI,KAAK,CAAC,QAAQ,IAAI,KAAK,CAAC,OAAO,IAAI,IAAI,CAAC;KAC7D;SAAM,IAAI,OAAO,KAAK,KAAK,QAAQ,EAAE;QACpC,OAAO,iBAAiB,CAAC,KAAK,CAAC,UAAU,CAAC,KAAK,CAAC,CAAC,CAAC;KACnD;IACD,OAAO,IAAI,CAAC;AACd,CAAC;AAED,SAAS,qBAAqB,CAAC,KAAU;IACvC,OAAO,KAAK,CAAC,OAAO,IAAI,WAAW,CAAC,IAAI,CAAC;AAC3C,CAAC;AAED,MAAM,UAAU,sBAAsB,CAAC,IAAY;IACjD,OAAO,KAAK,CAAC;AACf,CAAC;AAED,MAAM,UAAU,iBAAiB,CAAC,MAAkB;IAClD,MAAM,GAAG,GAAG,iBAAiB,CAAC,MAAM,CAAC,CAAC;IACtC,MAAM,OAAO,GAAG,qBAAqB,CAAC,MAAM,CAAC,CAAC;IAE9C,IAAI,CAAC,GAAG,IAAI,OAAO,GAAG,KAAK,QAAQ,EAAE;QACnC,uBAAuB,CAAC,GAAG,CAAC,CAAC;KAC9B;IAED,OAAO;QACL,GAAG,EAAE,GAAI;QACT,OAAO;KACR,CAAC;AACJ,CAAC;AAED,SAAS,uBAAuB,CAAC,MAAW;IAC1C,IAAI,IAAI,GAAW,OAAO,MAAM,CAAC;IACjC,IAAI,IAAI,KAAK,QAAQ;QAAE,IAAI,GAAG,IAAI,CAAC,SAAS,CAAC,MAAM,EAAE,IAAI,EAAE,CAAC,CAAC,CAAC;IAC9D,MAAM,IAAI,UAAU,CAClB,iBAAiB,EACjB,8EAA8E,IAAI,EAAE,CACrF,CAAC;AACJ,CAAC;AAED,MAAM,CAAC,KAAK,UAAU,mBAAmB,CACvC,IAAY,EACZ,KAA2B;IAE3B,IAAI,OAAO,KAAK,KAAK,QAAQ,IAAI,OAAO,KAAK,CAAC,GAAG,KAAK,QAAQ,IAAK,KAAa,CAAC,aAAa,EAAE;QAC9F,uBAAuB,CAAC,KAAK,CAAC,CAAC;KAChC;IAED,MAAM,cAAc,CAAC,SAAS,CAAC,IAAI,EAAE,KAAK,CAAC,CAAC;AAC9C,CAAC;AAED,MAAM,UAAU,iBAAiB,CAAC,IAAY;IAC5C,OAAO,IAAI,CAAC;AACd,CAAC","sourcesContent":["import { Asset } from 'expo-asset';\nimport { CodedError } from 'expo-modules-core';\n\nimport ExpoFontLoader from './ExpoFontLoader';\nimport { FontResource, FontSource, FontDisplay } from './Font.types';\n\nfunction uriFromFontSource(asset: any): string | null {\n  if (typeof asset === 'string') {\n    return asset || null;\n  } else if (typeof asset === 'object') {\n    return asset.uri || asset.localUri || asset.default || null;\n  } else if (typeof asset === 'number') {\n    return uriFromFontSource(Asset.fromModule(asset));\n  }\n  return null;\n}\n\nfunction displayFromFontSource(asset: any): FontDisplay | undefined {\n  return asset.display || FontDisplay.AUTO;\n}\n\nexport function fontFamilyNeedsScoping(name: string): boolean {\n  return false;\n}\n\nexport function getAssetForSource(source: FontSource): Asset | FontResource {\n  const uri = uriFromFontSource(source);\n  const display = displayFromFontSource(source);\n\n  if (!uri || typeof uri !== 'string') {\n    throwInvalidSourceError(uri);\n  }\n\n  return {\n    uri: uri!,\n    display,\n  };\n}\n\nfunction throwInvalidSourceError(source: any): never {\n  let type: string = typeof source;\n  if (type === 'object') type = JSON.stringify(source, null, 2);\n  throw new CodedError(\n    `ERR_FONT_SOURCE`,\n    `Expected font asset of type \\`string | FontResource | Asset\\` instead got: ${type}`\n  );\n}\n\nexport async function loadSingleFontAsync(\n  name: string,\n  input: Asset | FontResource\n): Promise<void> {\n  if (typeof input !== 'object' || typeof input.uri !== 'string' || (input as any).downloadAsync) {\n    throwInvalidSourceError(input);\n  }\n\n  await ExpoFontLoader.loadAsync(name, input);\n}\n\nexport function getNativeFontName(name: string): string {\n  return name;\n}\n"]}
+\ No newline at end of file
++{"version":3,"file":"FontLoader.web.js","sourceRoot":"","sources":["../src/FontLoader.web.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,KAAK,EAAE,MAAM,YAAY,CAAC;AACnC,OAAO,EAAE,UAAU,EAAE,MAAM,mBAAmB,CAAC;AAE/C,OAAO,cAAc,MAAM,kBAAkB,CAAC;AAC9C,OAAO,EAA4B,WAAW,EAAE,MAAM,cAAc,CAAC;AAErE,SAAS,iBAAiB,CAAC,KAAU;IACnC,IAAI,OAAO,KAAK,KAAK,QAAQ,EAAE;QAC7B,OAAO,KAAK,IAAI,IAAI,CAAC;KACtB;SAAM,IAAI,OAAO,KAAK,KAAK,QAAQ,EAAE;QACpC,OAAO,KAAK,CAAC,GAAG,IAAI,KAAK,CAAC,QAAQ,IAAI,KAAK,CAAC,OAAO,IAAI,IAAI,CAAC;KAC7D;SAAM,IAAI,OAAO,KAAK,KAAK,QAAQ,EAAE;QACpC,OAAO,iBAAiB,CAAC,KAAK,CAAC,UAAU,CAAC,KAAK,CAAC,CAAC,CAAC;KACnD;IACD,OAAO,IAAI,CAAC;AACd,CAAC;AAED,SAAS,qBAAqB,CAAC,KAAU;IACvC,OAAO,KAAK,CAAC,OAAO,IAAI,WAAW,CAAC,IAAI,CAAC;AAC3C,CAAC;AAED,MAAM,UAAU,sBAAsB,CAAC,IAAY;IACjD,OAAO,KAAK,CAAC;AACf,CAAC;AAED,MAAM,UAAU,iBAAiB,CAAC,MAAkB;IAClD,MAAM,GAAG,GAAG,iBAAiB,CAAC,MAAM,CAAC,CAAC;IACtC,MAAM,OAAO,GAAG,qBAAqB,CAAC,MAAM,CAAC,CAAC;IAE9C,IAAI,CAAC,GAAG,IAAI,OAAO,GAAG,KAAK,QAAQ,EAAE;QACnC,uBAAuB,CAAC,GAAG,CAAC,CAAC;KAC9B;IAED,OAAO;QACL,GAAG,EAAE,GAAI;QACT,OAAO;KACR,CAAC;AACJ,CAAC;AAED,SAAS,uBAAuB,CAAC,MAAW;IAC1C,IAAI,IAAI,GAAW,OAAO,MAAM,CAAC;IACjC,IAAI,IAAI,KAAK,QAAQ;QAAE,IAAI,GAAG,IAAI,CAAC,SAAS,CAAC,MAAM,EAAE,IAAI,EAAE,CAAC,CAAC,CAAC;IAC9D,MAAM,IAAI,UAAU,CAClB,iBAAiB,EACjB,8EAA8E,IAAI,EAAE,CACrF,CAAC;AACJ,CAAC;AAED,qCAAqC;AACrC,MAAM,UAAU,mBAAmB,CAAC,IAAY,EAAE,KAA2B;IAC3E,IAAI,OAAO,KAAK,KAAK,QAAQ,IAAI,OAAO,KAAK,CAAC,GAAG,KAAK,QAAQ,IAAK,KAAa,CAAC,aAAa,EAAE;QAC9F,uBAAuB,CAAC,KAAK,CAAC,CAAC;KAChC;IAED,IAAI;QACF,OAAO,cAAc,CAAC,SAAS,CAAC,IAAI,EAAE,KAAK,CAAC,CAAC;KAC9C;IAAC,MAAM;QACN,SAAS;KACV;IAED,OAAO,OAAO,CAAC,OAAO,EAAE,CAAC;AAC3B,CAAC;AAED,MAAM,UAAU,iBAAiB,CAAC,IAAY;IAC5C,OAAO,IAAI,CAAC;AACd,CAAC","sourcesContent":["import { Asset } from 'expo-asset';\nimport { CodedError } from 'expo-modules-core';\n\nimport ExpoFontLoader from './ExpoFontLoader';\nimport { FontResource, FontSource, FontDisplay } from './Font.types';\n\nfunction uriFromFontSource(asset: any): string | null {\n  if (typeof asset === 'string') {\n    return asset || null;\n  } else if (typeof asset === 'object') {\n    return asset.uri || asset.localUri || asset.default || null;\n  } else if (typeof asset === 'number') {\n    return uriFromFontSource(Asset.fromModule(asset));\n  }\n  return null;\n}\n\nfunction displayFromFontSource(asset: any): FontDisplay | undefined {\n  return asset.display || FontDisplay.AUTO;\n}\n\nexport function fontFamilyNeedsScoping(name: string): boolean {\n  return false;\n}\n\nexport function getAssetForSource(source: FontSource): Asset | FontResource {\n  const uri = uriFromFontSource(source);\n  const display = displayFromFontSource(source);\n\n  if (!uri || typeof uri !== 'string') {\n    throwInvalidSourceError(uri);\n  }\n\n  return {\n    uri: uri!,\n    display,\n  };\n}\n\nfunction throwInvalidSourceError(source: any): never {\n  let type: string = typeof source;\n  if (type === 'object') type = JSON.stringify(source, null, 2);\n  throw new CodedError(\n    `ERR_FONT_SOURCE`,\n    `Expected font asset of type \\`string | FontResource | Asset\\` instead got: ${type}`\n  );\n}\n\n// NOTE(EvanBacon): No async keyword!\nexport function loadSingleFontAsync(name: string, input: Asset | FontResource): Promise<void> {\n  if (typeof input !== 'object' || typeof input.uri !== 'string' || (input as any).downloadAsync) {\n    throwInvalidSourceError(input);\n  }\n\n  try {\n    return ExpoFontLoader.loadAsync(name, input);\n  } catch {\n    // No-op.\n  }\n\n  return Promise.resolve();\n}\n\nexport function getNativeFontName(name: string): string {\n  return name;\n}\n"]}
+\ No newline at end of file
+diff --git a/node_modules/expo-font/build/server.d.ts b/node_modules/expo-font/build/server.d.ts
+new file mode 100644
+index 0000000..4bfec28
+--- /dev/null
++++ b/node_modules/expo-font/build/server.d.ts
+@@ -0,0 +1,8 @@
++import { FontSource } from './Font.types';
++/**
++ * @returns the server resources that should be statically extracted.
++ * @private
++ */
++export declare function getStaticResources(): any;
++export declare function registerStaticFont(fontFamily: string, source?: FontSource | null): void;
++//# sourceMappingURL=server.d.ts.map
+\ No newline at end of file
+diff --git a/node_modules/expo-font/build/server.d.ts.map b/node_modules/expo-font/build/server.d.ts.map
+new file mode 100644
+index 0000000..0dad372
+--- /dev/null
++++ b/node_modules/expo-font/build/server.d.ts.map
+@@ -0,0 +1 @@
++{"version":3,"file":"server.d.ts","sourceRoot":"","sources":["../src/server.ts"],"names":[],"mappings":"AAGA,OAAO,EAAE,UAAU,EAAE,MAAM,cAAc,CAAC;AAG1C;;;GAGG;AACH,wBAAgB,kBAAkB,QAEjC;AAED,wBAAgB,kBAAkB,CAAC,UAAU,EAAE,MAAM,EAAE,MAAM,CAAC,EAAE,UAAU,GAAG,IAAI,QAWhF"}
+\ No newline at end of file
+diff --git a/node_modules/expo-font/build/server.js b/node_modules/expo-font/build/server.js
+new file mode 100644
+index 0000000..104b5c8
+--- /dev/null
++++ b/node_modules/expo-font/build/server.js
+@@ -0,0 +1,19 @@
++import { CodedError } from 'expo-modules-core';
++import ExpoFontLoader from './ExpoFontLoader';
++import { getAssetForSource, loadSingleFontAsync } from './FontLoader';
++/**
++ * @returns the server resources that should be statically extracted.
++ * @private
++ */
++export function getStaticResources() {
++    return ExpoFontLoader.getHeadElements();
++}
++export function registerStaticFont(fontFamily, source) {
++    // MUST BE A SYNC FUNCTION!
++    if (!source) {
++        throw new CodedError(`ERR_FONT_SOURCE`, `Cannot load null or undefined font source: { "${fontFamily}": ${source} }. Expected asset of type \`FontSource\` for fontFamily of name: "${fontFamily}"`);
++    }
++    const asset = getAssetForSource(source);
++    loadSingleFontAsync(fontFamily, asset);
++}
++//# sourceMappingURL=server.js.map
+\ No newline at end of file
+diff --git a/node_modules/expo-font/build/server.js.map b/node_modules/expo-font/build/server.js.map
+new file mode 100644
+index 0000000..368206a
+--- /dev/null
++++ b/node_modules/expo-font/build/server.js.map
+@@ -0,0 +1 @@
++{"version":3,"file":"server.js","sourceRoot":"","sources":["../src/server.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,UAAU,EAAE,MAAM,mBAAmB,CAAC;AAE/C,OAAO,cAAc,MAAM,kBAAkB,CAAC;AAE9C,OAAO,EAAE,iBAAiB,EAAE,mBAAmB,EAAE,MAAM,cAAc,CAAC;AAEtE;;;GAGG;AACH,MAAM,UAAU,kBAAkB;IAChC,OAAO,cAAc,CAAC,eAAe,EAAE,CAAC;AAC1C,CAAC;AAED,MAAM,UAAU,kBAAkB,CAAC,UAAkB,EAAE,MAA0B;IAC/E,2BAA2B;IAC3B,IAAI,CAAC,MAAM,EAAE;QACX,MAAM,IAAI,UAAU,CAClB,iBAAiB,EACjB,iDAAiD,UAAU,MAAM,MAAM,sEAAsE,UAAU,GAAG,CAC3J,CAAC;KACH;IACD,MAAM,KAAK,GAAG,iBAAiB,CAAC,MAAM,CAAC,CAAC;IAExC,mBAAmB,CAAC,UAAU,EAAE,KAAK,CAAC,CAAC;AACzC,CAAC","sourcesContent":["import { CodedError } from 'expo-modules-core';\n\nimport ExpoFontLoader from './ExpoFontLoader';\nimport { FontSource } from './Font.types';\nimport { getAssetForSource, loadSingleFontAsync } from './FontLoader';\n\n/**\n * @returns the server resources that should be statically extracted.\n * @private\n */\nexport function getStaticResources() {\n  return ExpoFontLoader.getHeadElements();\n}\n\nexport function registerStaticFont(fontFamily: string, source?: FontSource | null) {\n  // MUST BE A SYNC FUNCTION!\n  if (!source) {\n    throw new CodedError(\n      `ERR_FONT_SOURCE`,\n      `Cannot load null or undefined font source: { \"${fontFamily}\": ${source} }. Expected asset of type \\`FontSource\\` for fontFamily of name: \"${fontFamily}\"`\n    );\n  }\n  const asset = getAssetForSource(source);\n\n  loadSingleFontAsync(fontFamily, asset);\n}\n"]}
+\ No newline at end of file
