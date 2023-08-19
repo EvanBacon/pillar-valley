@@ -1,6 +1,10 @@
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { loadAsync } from "expo-font";
 import React from "react";
 import { TouchableOpacity, View } from "react-native";
+
+// Ensure this font is extracted for static web.
+loadAsync(MaterialIcons.font);
 
 export default function EditPhoto({
   onPress,

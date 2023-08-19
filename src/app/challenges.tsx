@@ -1,4 +1,6 @@
 import { connectActionSheet } from "@expo/react-native-action-sheet";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { loadAsync } from "expo-font";
 import Head from "expo-router/head";
 import React from "react";
 
@@ -11,7 +13,11 @@ const challengesListData = Object.keys(Challenges).map((key) => ({
   key,
   ...Challenges[key],
 }));
+
 function AchievementScreen({ showActionSheetWithOptions }) {
+  // Ensure this font is extracted for static web.
+  loadAsync(MaterialIcons.font);
+
   const { achievements } = useAchievements();
   const [filter, setFilter] = React.useState("All");
 
