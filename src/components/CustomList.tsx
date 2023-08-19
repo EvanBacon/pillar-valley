@@ -1,10 +1,11 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import * as Haptics from "expo-haptics";
-import { router } from "expo-router";
+import { Link, router } from "expo-router";
 import React from "react";
-import { SectionList, StyleSheet, Text, View } from "react-native";
+import { Platform, SectionList, StyleSheet, Text, View } from "react-native";
 import { ScrollView, TouchableHighlight } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { unstable_styles } from "./custom-list.module.css";
 
 import { Slate } from "@/constants/Colors";
 
@@ -51,6 +52,67 @@ function Item({
     }
   };
 
+  const contents = (
+    <View
+      style={{
+        flex: 1,
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        // padding: 24,
+        paddingHorizontal: 16,
+        paddingVertical: 14,
+        // fontSize: 18,
+      }}
+    >
+      <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+        {leftIcon}
+        {title && (
+          <Text
+            style={{
+              fontFamily: "Inter_500Medium",
+              color: Slate[100],
+              fontSize: 16,
+            }}
+          >
+            {title}
+          </Text>
+        )}
+      </View>
+      {renderItem()}
+    </View>
+  );
+
+  if (Platform.OS === "web") {
+    if (href) {
+      return (
+        <Link
+          hrefAttrs={{
+            target: href?.startsWith("http") ? "_blank" : undefined,
+          }}
+          href={href}
+          style={[
+            unstable_styles.listItem,
+            {
+              display: "flex",
+              borderCurve: "continuous",
+            },
+            top && {
+              borderTopLeftRadius: 10,
+              borderTopRightRadius: 10,
+            },
+            bottom && {
+              borderBottomLeftRadius: 10,
+              borderBottomRightRadius: 10,
+            },
+          ]}
+        >
+          {contents}
+        </Link>
+      );
+    }
+  }
+
   return (
     <TouchableHighlight
       disabled={!onPress && !href}
@@ -77,33 +139,7 @@ function Item({
         if (onPress) onPress();
       }}
     >
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          // padding: 24,
-          paddingHorizontal: 16,
-          paddingVertical: 14,
-          // fontSize: 18,
-        }}
-      >
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-          {leftIcon}
-          {title && (
-            <Text
-              style={{
-                fontFamily: "Inter_500Medium",
-                color: Slate[100],
-                fontSize: 16,
-              }}
-            >
-              {title}
-            </Text>
-          )}
-        </View>
-        {renderItem()}
-      </View>
+      {contents}
     </TouchableHighlight>
   );
 }

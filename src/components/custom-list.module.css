@@ -1,0 +1,13 @@
+.listItem {
+  transition-property: background-color;
+  transition-duration: 200ms;
+  background-color: #282a35;
+}
+
+.listItem:hover {
+  background-color: #2e303c;
+}
+
+.listItem:active {
+  background-color: #3d4051;
+}

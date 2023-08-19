@@ -1,0 +1,29 @@
+diff --git a/node_modules/expo-haptics/build/ExpoHaptics.web.js b/node_modules/expo-haptics/build/ExpoHaptics.web.js
+index 5145fc5..e0da8b3 100644
+--- a/node_modules/expo-haptics/build/ExpoHaptics.web.js
++++ b/node_modules/expo-haptics/build/ExpoHaptics.web.js
+@@ -1,6 +1,9 @@
+ export default {
+-    get name() {
+-        return 'ExpoHaptics';
+-    },
++  get name() {
++    return "ExpoHaptics";
++  },
++  notificationAsync() {},
++  impactAsync() {},
++  selectionAsync() {},
+ };
+ //# sourceMappingURL=ExpoHaptics.web.js.map
+diff --git a/node_modules/expo-haptics/src/ExpoHaptics.web.ts b/node_modules/expo-haptics/src/ExpoHaptics.web.ts
+index 6e9ff99..04cd49d 100644
+--- a/node_modules/expo-haptics/src/ExpoHaptics.web.ts
++++ b/node_modules/expo-haptics/src/ExpoHaptics.web.ts
+@@ -2,4 +2,7 @@ export default {
+   get name(): string {
+     return 'ExpoHaptics';
+   },
++  notificationAsync() {},
++  impactAsync() {},
++  selectionAsync() {},
+ };
