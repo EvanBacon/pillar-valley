@@ -1,6 +1,7 @@
 import { ConfigPlugin, withDangerousMod } from "@expo/config-plugins";
 import fs from "fs";
 import path from "path";
+import plist from "@expo/plist";
 
 import {
   withIosAccentColor,
@@ -21,6 +22,7 @@ function kebabToCamelCase(str: string) {
     return g[1].toUpperCase();
   });
 }
+import { sync as globSync } from "glob";
 
 const withWidget: ConfigPlugin<Props> = (config, props) => {
   // TODO: Magically based on the top-level folders in the `ios-widgets/` folder
@@ -39,6 +41,21 @@ const withWidget: ConfigPlugin<Props> = (config, props) => {
     config._internal?.projectRoot ?? "",
     props.directory
   );
+
+  const entitlementsFiles = globSync("*.entitlements", {
+    absolute: true,
+    cwd: widgetFolderAbsolutePath,
+  });
+
+  if (entitlementsFiles.length > 1) {
+    throw new Error(
+      `Found multiple entitlements files in ${widgetFolderAbsolutePath}`
+    );
+  }
+
+  const entitlementsJson = entitlementsFiles[0]
+    ? plist.parse(fs.readFileSync(entitlementsFiles[0], "utf8"))
+    : undefined;
 
   // Ensure the entry file exists
   withDangerousMod(config, [
@@ -99,7 +116,11 @@ const withWidget: ConfigPlugin<Props> = (config, props) => {
     teamId: props.appleTeamId,
   });
 
-  config = withEASTargets(config, { targetName, bundleIdentifier: bundleId });
+  config = withEASTargets(config, {
+    targetName,
+    bundleIdentifier: bundleId,
+    entitlements: entitlementsJson,
+  });
 
   if (props.accentColor) {
     const lightColor =

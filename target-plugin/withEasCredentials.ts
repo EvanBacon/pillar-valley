@@ -37,7 +37,8 @@ export const withDefaultAppGroup: ConfigPlugin = (config) => {
 export const withEASTargets: ConfigPlugin<{
   bundleIdentifier: string;
   targetName: string;
-}> = (config, { bundleIdentifier, targetName }) => {
+  entitlements?: Record<string, any>;
+}> = (config, { bundleIdentifier, targetName, entitlements }) => {
   // Extra EAS targets
   safeSet(config, "extra.eas.build.experimental.ios.appExtensions", []);
 
@@ -50,12 +51,30 @@ export const withEASTargets: ConfigPlugin<{
     config.extra!.eas.build.experimental.ios.appExtensions[existing] = {
       ...config.extra!.eas.build.experimental.ios.appExtensions[existing],
       bundleIdentifier,
+      entitlements: {
+        ...config.extra!.eas.build.experimental.ios.appExtensions[existing]
+          .entitlements,
+        ...entitlements,
+      },
     };
   } else {
     config.extra!.eas.build.experimental.ios.appExtensions.push({
       bundleIdentifier,
       targetName,
+      entitlements,
     });
+
+    // "appExtensions": [
+    //   {
+    //     "targetName": "widgets",
+    //     "bundleIdentifier": "com.evanbacon.pillarvalley.widgets",
+    //     "entitlements": {
+    //       "com.apple.security.application-groups": [
+    //         "group.bacon.data"
+    //       ]
+    //     }
+    //   }
+    // ]
   }
 
   return config;
