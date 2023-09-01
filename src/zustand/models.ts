@@ -169,6 +169,8 @@ export const useGameScreenshot = create<{
     }),
 }));
 
+import SmartSettings from "local:smart-settings";
+
 export const useScore = create(
   persist<{
     score: {
@@ -250,6 +252,9 @@ export const useScore = create(
           } else if (total > 500) {
             useAchievements.getState().unlock("total-score-500");
           }
+
+          // Update for Widgets using the app group `group.bacon.data`
+          SmartSettings.set("pillarsTraversed", total, "group.bacon.data");
 
           return { ...state, score: { ...state.score, total } };
         });
