@@ -19,10 +19,8 @@ struct PillarWidgetView: View {
         Text("Valley Stats")
           .font(.title2)
           .padding(.top, 12)
-          .bold()
           .foregroundColor(.white)
           
-        
         Spacer()
        
         Text("\(pillarsTraversed)")
