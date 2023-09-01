@@ -51,6 +51,9 @@
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       },
+      "entitlements": {
+        "com.apple.security.application-groups": ["group.bacon.data"]
+      },
       "associatedDomains": [
         "applinks:pillarvalley.netlify.app",
         "webcredentials:pillarvalley.netlify.app",

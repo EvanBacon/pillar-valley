@@ -1,9 +1,9 @@
 import { ConfigPlugin } from "@expo/config-plugins";
 import { sync as globSync } from "glob";
 import path from "path";
-import withWidget from "./withWidget";
 
-import { withXcodeProjectBetaBaseMod } from "./withXcparse";
+import withWidget from "./withWidget";
+// import { withXcodeProjectBetaBaseMod } from "./withXcparse";
 
 export const withTargetsDir: ConfigPlugin<{
   appleTeamId: string;
@@ -24,5 +24,6 @@ export const withTargetsDir: ConfigPlugin<{
     });
   });
 
-  return withXcodeProjectBetaBaseMod(config);
+  return config;
+  // return withXcodeProjectBetaBaseMod(config);
 };

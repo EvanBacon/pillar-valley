@@ -3,4 +3,5 @@ module.exports = {
   type: "widget",
   icon: "../../icons/pillars/spring.png",
   widgetBackgroundColor: "#DB739C",
+  accentColor: "#F09458",
 };

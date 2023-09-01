@@ -16,14 +16,6 @@ module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
   if (!config.plugins) config.plugins = [];
 
   config.plugins.push([
-    require("./target-plugin").withTargetsDir,
-    {
-      appleTeamId: "QQ57RJ5UTD",
-      // match: "watch-app",
-    },
-  ]);
-
-  config.plugins.push([
     "@config-plugins/react-native-dynamic-app-icon",
     fs
       .readdirSync(path.resolve(__dirname, "./icons/pillars"))
@@ -38,6 +30,11 @@ module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
         return acc;
       }, {}),
   ]);
+
+  config = require("./target-plugin").withTargetsDir(config, {
+    appleTeamId: "QQ57RJ5UTD",
+    // match: "watch-app",
+  });
 
   config = withAppleSettings(config as ExpoConfig, {
     // The name of the .plist file to generate. Root is the default and must be provided.
