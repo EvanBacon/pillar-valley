@@ -131,4 +131,14 @@ export type Config = {
    * @example In Swift: `Color("gradient1")` -> `#FF0000` in light-mode
    */
   colors?: Record<string, string | DynamicColor>;
+
+  /**
+   * Additional images to generate in the `Assets.xcassets`. These will be available as `UIImage`s in the native source. The sources can be URLs or local file paths.
+   * @example In Expo config: `images: { evan: "https://github.com/evanbacon.png" }`
+   * @example In Swift: `Image("evan")` -> `[picture of guy]`
+   */
+  images?: Record<
+    string,
+    string | { "1x"?: string; "2x"?: string; "3x"?: string }
+  >;
 };
