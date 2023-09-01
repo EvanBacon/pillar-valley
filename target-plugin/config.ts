@@ -1,6 +1,11 @@
 import { ExtensionType } from "./target";
 
-export type DynamicColor = { color: string; darkColor?: string };
+// Shape based on tailwind
+// https://tailwindcss.com/docs/customizing-colors
+export type DynamicColor = {
+  light: string;
+  dark?: string;
+};
 
 export type Config = {
   /**
@@ -42,4 +47,11 @@ export type Config = {
 
   /** Apple team ID to use for signing the target. Defaults to whatever is used in the main App target. */
   appleTeamId?: string;
+
+  /**
+   * Additional colors to generate in the `Assets.xcassets`. These will be available as `UIColor`s in the native source.
+   * @example In Expo config: `colors: { gradient1: { color: "#FF0000", darkColor: "#0000FF" }`
+   * @example In Swift: `Color("gradient1")` -> `#FF0000` in light-mode
+   */
+  colors?: Record<string, string | DynamicColor>;
 };

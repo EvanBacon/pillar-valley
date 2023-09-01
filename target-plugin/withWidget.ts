@@ -1,12 +1,10 @@
 import { ConfigPlugin, withDangerousMod } from "@expo/config-plugins";
-import fs from "fs";
-import path from "path";
 import plist from "@expo/plist";
+import fs from "fs";
+import { sync as globSync } from "glob";
+import path from "path";
 
-import {
-  withIosAccentColor,
-  withIosWidgetBackgroundColor,
-} from "./accentColor/withAccentColor";
+import { withIosColorAsset } from "./accentColor/withAccentColor";
 import { Config } from "./config";
 import { withIosIcon } from "./icon/withIosIcon";
 import { getFrameworksForType, getTargetInfoPlistForType } from "./target";
@@ -22,8 +20,6 @@ function kebabToCamelCase(str: string) {
     return g[1].toUpperCase();
   });
 }
-import { sync as globSync } from "glob";
-
 const withWidget: ConfigPlugin<Props> = (config, props) => {
   // TODO: Magically based on the top-level folders in the `ios-widgets/` folder
 
@@ -122,38 +118,24 @@ const withWidget: ConfigPlugin<Props> = (config, props) => {
     entitlements: entitlementsJson,
   });
 
-  if (props.accentColor) {
-    const lightColor =
-      typeof props.accentColor === "string"
-        ? props.accentColor
-        : props.accentColor.color;
-    const darkColor =
-      typeof props.accentColor === "string"
-        ? undefined
-        : props.accentColor.darkColor;
-    // You use the WidgetBackground and AccentColor to style the widget configuration interface of a configurable widget. Apple could have chosen names to make that more obvious.
-    // https://useyourloaf.com/blog/widget-background-and-accent-color/
-    // i.e. when you press and hold on a widget to configure it, the background color of the widget configuration interface changes to the background color we set here.
-    withIosAccentColor(config, {
-      cwd: props.directory,
-      color: lightColor,
-      darkColor,
-    });
-  }
+  props.colors = props.colors ?? {};
+  const colors: NonNullable<Props["colors"]> = props.colors ?? {};
 
-  if (props.widgetBackgroundColor) {
-    const lightColor =
-      typeof props.widgetBackgroundColor === "string"
-        ? props.widgetBackgroundColor
-        : props.widgetBackgroundColor.color;
-    const darkColor =
-      typeof props.widgetBackgroundColor === "string"
-        ? undefined
-        : props.widgetBackgroundColor.darkColor;
-    withIosWidgetBackgroundColor(config, {
-      cwd: props.directory,
-      color: lightColor,
-      darkColor,
+  // You use the WidgetBackground and AccentColor to style the widget configuration interface of a configurable widget. Apple could have chosen names to make that more obvious.
+  // https://useyourloaf.com/blog/widget-background-and-accent-color/
+  // i.e. when you press and hold on a widget to configure it, the background color of the widget configuration interface changes to the background color we set here.
+  if (props.widgetBackgroundColor)
+    colors["WidgetBackground"] = props.widgetBackgroundColor;
+  if (props.accentColor) colors["AccentColor"] = props.accentColor;
+
+  if (props.colors) {
+    Object.entries(props.colors).forEach(([name, color]) => {
+      withIosColorAsset(config, {
+        cwd: props.directory,
+        name,
+        color: typeof color === "string" ? color : color.light,
+        darkColor: typeof color === "string" ? undefined : color.dark,
+      });
     });
   }
 
