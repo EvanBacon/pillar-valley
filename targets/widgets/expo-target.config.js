@@ -12,6 +12,9 @@ module.exports = {
       dark: "#282A37",
     },
   },
+  entitlements: {
+    "com.apple.security.application-groups": ["group.bacon.data"],
+  },
   widgetBackgroundColor: "#DB739C",
   accentColor: "#F09458",
 };

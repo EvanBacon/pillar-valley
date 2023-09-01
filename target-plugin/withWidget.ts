@@ -5,7 +5,7 @@ import { sync as globSync } from "glob";
 import path from "path";
 
 import { withIosColorAsset } from "./accentColor/withAccentColor";
-import { Config } from "./config";
+import { Config, Entitlements } from "./config";
 import { withIosIcon } from "./icon/withIosIcon";
 import { getFrameworksForType, getTargetInfoPlistForType } from "./target";
 import { withEASTargets } from "./withEasCredentials";
@@ -49,9 +49,38 @@ const withWidget: ConfigPlugin<Props> = (config, props) => {
     );
   }
 
-  const entitlementsJson = entitlementsFiles[0]
-    ? plist.parse(fs.readFileSync(entitlementsFiles[0], "utf8"))
-    : undefined;
+  let entitlementsJson: undefined | Entitlements = props.entitlements;
+
+  // If the user defined entitlements, then overwrite any existing entitlements file
+  if (props.entitlements) {
+    withDangerousMod(config, [
+      "ios",
+      async (config) => {
+        const entitlementsFilePath =
+          entitlementsFiles[0] ??
+          // Use the name `generated` to help indicate that this file should be in sync with the config
+          path.join(widgetFolderAbsolutePath, `generated.entitlements`);
+
+        if (entitlementsFiles[0]) {
+          console.log(
+            `[${widget}] Replacing ${path.relative(
+              widgetFolderAbsolutePath,
+              entitlementsFiles[0]
+            )} with entitlements JSON from config`
+          );
+        }
+        fs.writeFileSync(
+          entitlementsFilePath,
+          plist.build(props.entitlements as any)
+        );
+        return config;
+      },
+    ]);
+  } else {
+    entitlementsJson = entitlementsFiles[0]
+      ? plist.parse(fs.readFileSync(entitlementsFiles[0], "utf8"))
+      : undefined;
+  }
 
   // Ensure the entry file exists
   withDangerousMod(config, [
