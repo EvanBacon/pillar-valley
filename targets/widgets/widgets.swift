@@ -74,6 +74,7 @@ struct widgets: Widget {
     StaticConfiguration(kind: kind, provider: PillarProvider()) { entry in
       PillarWidgetView(pillarsTraversed: entry.pillarsTraversed)
     }
+    .supportedFamilies([.systemSmall])
     .configurationDisplayName("Pillar Widget")
     .description("Displays the number of pillars traversed.")
   }
