@@ -1,3 +1,5 @@
+import "ts-node/register";
+
 import withAppleSettings, {
   ChildPane,
   Group,
@@ -12,6 +14,14 @@ import { UPDATES_API_KEYS } from "./src/apple-settings-x/shared";
 
 module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
   if (!config.plugins) config.plugins = [];
+
+  config.plugins.push([
+    require("./target-plugin").withTargetsDir,
+    {
+      appleTeamId: "QQ57RJ5UTD",
+      // match: "watch-app",
+    },
+  ]);
 
   config.plugins.push([
     "@config-plugins/react-native-dynamic-app-icon",
