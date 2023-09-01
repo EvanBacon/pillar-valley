@@ -38,7 +38,7 @@
     "expo-gl": "~13.0.1",
     "expo-haptics": "~12.4.0",
     "expo-linking": "~5.0.2",
-    "expo-router": "^2.0.0",
+    "expo-router": "^2.0.5",
     "expo-sensors": "~12.3.0",
     "expo-splash-screen": "~0.20.5",
     "expo-status-bar": "~1.6.0",
