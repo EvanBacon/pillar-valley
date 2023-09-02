@@ -12,7 +12,7 @@ import path, { join } from "path";
 export const withImageAsset: ConfigPlugin<{
   cwd: string;
   name: string;
-  image: string | { "1x"?: string; "2x"?: string; "3x": string };
+  image: string | { "1x"?: string; "2x"?: string; "3x"?: string };
 }> = (config, { cwd, name, image }) => {
   return withDangerousMod(config, [
     "ios",
@@ -25,10 +25,20 @@ export const withImageAsset: ConfigPlugin<{
       // Ensure the Images.xcassets/AppIcon.appiconset path exists
       await fs.ensureDir(join(iosNamedProjectRoot, imgPath));
 
+      const userDefinedIcon =
+        typeof image === "string"
+          ? { "1x": image, "2x": undefined, "3x": undefined }
+          : image;
+
       // Finally, write the Config.json
       await writeContentsJsonAsync(join(iosNamedProjectRoot, imgPath), {
         images: await generateResizedImageAsync(
-          image,
+          Object.fromEntries(
+            Object.entries(userDefinedIcon).map(([key, value]) => [
+              key,
+              value?.match(/^[./]/) ? path.join(cwd, value) : value,
+            ])
+          ),
           name,
           projectRoot,
           iosNamedProjectRoot,
@@ -132,7 +142,7 @@ export async function setIconsAsync(
 }
 
 export async function generateResizedImageAsync(
-  icon: { "1x"?: string; "2x"?: string; "3x": string } | string,
+  icon: { "1x"?: string; "2x"?: string; "3x"?: string } | string,
   name: string,
   projectRoot: string,
   iosNamedProjectRoot: string,
@@ -152,6 +162,12 @@ export async function generateResizedImageAsync(
     const [scale, iconPath] = icon;
     const filename = `${scale}.png`;
 
+    const imgEntry: ContentsJsonImage = {
+      idiom: "universal",
+      // @ts-ignore: template types not supported in TS yet
+      scale,
+    };
+
     if (iconPath) {
       // Using this method will cache the images in `.expo` based on the properties used to generate them.
       // this method also supports remote URLs and using the global sharp instance.
@@ -161,14 +177,6 @@ export async function generateResizedImageAsync(
         {
           src: iconPath,
           name: filename,
-          // width: iconSizePx,
-          // height: iconSizePx,
-          // removeTransparency: true,
-          // The icon should be square, but if it's not then it will be cropped.
-          // resizeMode: "cover",
-          // Force the background color to solid white to prevent any transparency.
-          // TODO: Maybe use a more adaptive option based on the icon color?
-          // backgroundColor: "#ffffff",
         }
       );
       // Write image buffer to the file system.
@@ -178,90 +186,12 @@ export async function generateResizedImageAsync(
         filename
       );
       await fs.writeFile(assetPath, source);
-    }
-
-    const imgEntry: ContentsJsonImage = {
-      idiom: "universal",
-      // @ts-ignore: template types not supported in TS yet
-      scale,
-    };
-    if (filename) {
-      imgEntry.filename = filename;
+      if (filename) {
+        imgEntry.filename = filename;
+      }
     }
 
     imagesJson.push(imgEntry);
-  }
-
-  //   {
-  //     "images" : [
-  //       {
-  //         "filename" : "valleys.png",
-  //         "idiom" : "universal",
-  //         "scale" : "1x"
-  //       },
-  //       {
-  //         "idiom" : "universal",
-  //         "scale" : "2x"
-  //       },
-  //       {
-  //         "idiom" : "universal",
-  //         "scale" : "3x"
-  //       }
-  //     ],
-  //     "info" : {
-  //       "author" : "xcode",
-  //       "version" : 1
-  //     }
-  //   }
-
-  // keep track of icons that have been generated so we can reuse them in the Contents.json
-  const generatedIcons: Record<string, boolean> = {};
-
-  for (const platform of ICON_CONTENTS) {
-    const isMarketing = platform.idiom === "ios-marketing";
-    for (const { size, scales } of platform.sizes) {
-      for (const scale of scales) {
-        // The marketing icon is special because it makes no sense.
-        const filename = isMarketing
-          ? "ItunesArtwork@2x.png"
-          : getAppleIconName(size, scale);
-        // Only create an image that hasn't already been generated.
-        if (!(filename in generatedIcons)) {
-          const iconSizePx = size * scale;
-
-          // Using this method will cache the images in `.expo` based on the properties used to generate them.
-          // this method also supports remote URLs and using the global sharp instance.
-          const { source } = await generateImageAsync(
-            { projectRoot, cacheType: IMAGE_CACHE_NAME + cacheComponent },
-            {
-              src: icon,
-              name: filename,
-              width: iconSizePx,
-              height: iconSizePx,
-              removeTransparency: true,
-              // The icon should be square, but if it's not then it will be cropped.
-              resizeMode: "cover",
-              // Force the background color to solid white to prevent any transparency.
-              // TODO: Maybe use a more adaptive option based on the icon color?
-              backgroundColor: "#ffffff",
-            }
-          );
-          // Write image buffer to the file system.
-          const assetPath = join(iosNamedProjectRoot, IMAGESET_PATH, filename);
-          await fs.writeFile(assetPath, source);
-          // Save a reference to the generated image so we don't create a duplicate.
-          generatedIcons[filename] = true;
-        }
-
-        imagesJson.push({
-          idiom: platform.idiom,
-          size: `${size}x${size}`,
-          // @ts-ignore: template types not supported in TS yet
-          scale: `${scale}x`,
-          filename,
-        });
-      }
-    }
   }
 
   return imagesJson;

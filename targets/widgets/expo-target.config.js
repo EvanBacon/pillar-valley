@@ -15,6 +15,9 @@ module.exports = {
   entitlements: {
     "com.apple.security.application-groups": ["group.bacon.data"],
   },
+  images: {
+    valleys: "../../valleys.png",
+  },
   widgetBackgroundColor: "#DB739C",
   accentColor: "#F09458",
 };

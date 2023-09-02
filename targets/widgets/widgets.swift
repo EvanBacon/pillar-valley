@@ -26,7 +26,8 @@ struct PillarWidgetView: View {
         Text("\(pillarsTraversed)")
           .font(.largeTitle)
           .foregroundColor(.white)
-          
+        
+     
         
         HStack {
           Text("Pillars Traversed")

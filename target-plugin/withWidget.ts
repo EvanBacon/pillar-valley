@@ -10,6 +10,7 @@ import { withIosIcon } from "./icon/withIosIcon";
 import { getFrameworksForType, getTargetInfoPlistForType } from "./target";
 import { withEASTargets } from "./withEasCredentials";
 import { withXcodeChanges } from "./withXcodeChanges";
+import { withImageAsset } from "./icon/withImageAsset";
 
 type Props = Config & {
   directory: string;
@@ -146,6 +147,16 @@ const withWidget: ConfigPlugin<Props> = (config, props) => {
     bundleIdentifier: bundleId,
     entitlements: entitlementsJson,
   });
+
+  if (props.images) {
+    Object.entries(props.images).forEach(([name, image]) => {
+      withImageAsset(config, {
+        image,
+        name,
+        cwd: props.directory,
+      });
+    });
+  }
 
   props.colors = props.colors ?? {};
   const colors: NonNullable<Props["colors"]> = props.colors ?? {};
