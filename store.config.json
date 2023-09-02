@@ -1,7 +1,7 @@
 {
   "configVersion": 0,
   "apple": {
-    "version": "8.0.2",
+    "version": "8.0.3",
     "copyright": "2023 Evan Bacon",
     "release": {
       "automaticRelease": true
@@ -24,7 +24,7 @@
           "fyp",
           "clash"
         ],
-        "releaseNotes": "Fixed bugs when navigating",
+        "releaseNotes": "Added a home screen widget for Pillar enthusiasts!",
         "marketingUrl": "https://github.com/EvanBacon/Expo-Pillar-Valley/",
         "promoText": "Immerse yourself in a suave world of zen",
         "supportUrl": "https://github.com/EvanBacon/Expo-Pillar-Valley/issues",

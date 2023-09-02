@@ -4,7 +4,7 @@
     "description": "Immerse yourself in a suave world of zen",
     "slug": "pillar-valley",
     "privacy": "public",
-    "version": "8.0.2",
+    "version": "8.0.3",
     "orientation": "portrait",
     "primaryColor": "#F09458",
     "backgroundColor": "#F09458",
@@ -50,6 +50,9 @@
       },
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
+      },
+      "entitlements": {
+        "com.apple.security.application-groups": ["group.bacon.data"]
       },
       "associatedDomains": [
         "applinks:pillarvalley.netlify.app",

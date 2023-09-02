@@ -1,3 +1,5 @@
+import "ts-node/register";
+
 import withAppleSettings, {
   ChildPane,
   Group,
@@ -28,6 +30,11 @@ module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
         return acc;
       }, {}),
   ]);
+
+  config = require("./target-plugin").withTargetsDir(config, {
+    appleTeamId: "QQ57RJ5UTD",
+    // match: "watch-app",
+  });
 
   config = withAppleSettings(config as ExpoConfig, {
     // The name of the .plist file to generate. Root is the default and must be provided.

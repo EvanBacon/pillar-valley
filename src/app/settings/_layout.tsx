@@ -18,7 +18,9 @@ function BackButton() {
     <TouchableBounce
       onPress={() => {
         // TODO: Fix going back multiple times when nested.
-        router.back();
+        while (router.canGoBack()) {
+          router.back();
+        }
       }}
     >
       <FontAwesome size={24} color="white" name="angle-down" />
