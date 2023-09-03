@@ -6,28 +6,35 @@ struct PillarWidgetView: View {
   
   var body: some View {
     ZStack {
-      LinearGradient(gradient: Gradient(colors: [Color("gradient1"), Color("gradient2")]), startPoint: .top, endPoint: .bottom)
-        .ignoresSafeArea()
-     
+      LinearGradient(
+        gradient:
+          Gradient(
+            colors: [
+              Color("gradient1"),
+              Color("gradient2")
+            ]
+          ),
+        startPoint: .top,
+        endPoint: .bottom
+      )
+      .ignoresSafeArea()
+      
       Image("valleys")
-        // Fill absolutely with resize cover
         .resizable()
         .scaledToFill()
         .ignoresSafeArea()
-        
+      
       VStack() {
         Text("Valley Stats")
           .font(.title2)
           .padding(.top, 12)
           .foregroundColor(.white)
-          
+        
         Spacer()
-       
+        
         Text("\(pillarsTraversed)")
           .font(.largeTitle)
           .foregroundColor(.white)
-        
-     
         
         HStack {
           Text("Pillars Traversed")
@@ -73,7 +80,6 @@ struct widgets: Widget {
     StaticConfiguration(kind: kind, provider: PillarProvider()) { entry in
       PillarWidgetView(pillarsTraversed: entry.pillarsTraversed)
     }
-    .supportedFamilies([.systemSmall])
     .configurationDisplayName("Pillar Widget")
     .description("Displays the number of pillars traversed.")
   }
