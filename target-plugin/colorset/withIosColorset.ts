@@ -1,7 +1,8 @@
 import { ConfigPlugin, withDangerousMod } from "@expo/config-plugins";
 import { ContentsJsonImageIdiom } from "@expo/prebuild-config/build/plugins/icons/AssetContents";
-import fs from "fs";
-import path, { join } from "path";
+import fs from "node:fs";
+import path from "node:path";
+
 import { customColorFromCSS } from "./customColorFromCSS";
 
 type Appearance = {
@@ -19,7 +20,7 @@ type Color = {
   };
 };
 
-export const withIosColorAsset: ConfigPlugin<{
+export const withIosColorset: ConfigPlugin<{
   cwd: string;
   name: string;
   color: string;
@@ -30,7 +31,7 @@ export const withIosColorAsset: ConfigPlugin<{
     async (config) => {
       await setColorAsync(
         { color, darkColor },
-        join(
+        path.join(
           config.modRequest.projectRoot,
           cwd,
           `Assets.xcassets/${name}.colorset`

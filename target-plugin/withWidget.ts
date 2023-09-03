@@ -4,7 +4,7 @@ import fs from "fs";
 import { sync as globSync } from "glob";
 import path from "path";
 
-import { withIosColorAsset } from "./accentColor/withAccentColor";
+import { withIosColorset } from "./colorset/withIosColorset";
 import { Config, Entitlements } from "./config";
 import { withIosIcon } from "./icon/withIosIcon";
 import { getFrameworksForType, getTargetInfoPlistForType } from "./target";
@@ -158,6 +158,23 @@ const withWidget: ConfigPlugin<Props> = (config, props) => {
     });
   }
 
+  withConfigColors(config, props);
+
+  if (props.icon) {
+    withIosIcon(config, {
+      type: props.type,
+      cwd: props.directory,
+      // TODO: read from the top-level icon.png file in the folder -- ERR this doesn't allow for URLs
+      iconFilePath: props.icon,
+    });
+  }
+
+  return config;
+};
+
+const withConfigColors: ConfigPlugin<
+  Pick<Props, "widgetBackgroundColor" | "accentColor" | "colors" | "directory">
+> = (config, props) => {
   props.colors = props.colors ?? {};
   const colors: NonNullable<Props["colors"]> = props.colors ?? {};
 
@@ -170,21 +187,12 @@ const withWidget: ConfigPlugin<Props> = (config, props) => {
 
   if (props.colors) {
     Object.entries(props.colors).forEach(([name, color]) => {
-      withIosColorAsset(config, {
+      withIosColorset(config, {
         cwd: props.directory,
         name,
         color: typeof color === "string" ? color : color.light,
         darkColor: typeof color === "string" ? undefined : color.dark,
       });
-    });
-  }
-
-  if (props.icon) {
-    withIosIcon(config, {
-      type: props.type,
-      cwd: props.directory,
-      // TODO: read from the top-level icon.png file in the folder -- ERR this doesn't allow for URLs
-      iconFilePath: props.icon,
     });
   }
 

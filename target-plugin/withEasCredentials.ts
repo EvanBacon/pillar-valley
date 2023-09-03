@@ -1,4 +1,4 @@
-import { ConfigPlugin, withEntitlementsPlist } from "expo/config-plugins";
+import { ConfigPlugin } from "expo/config-plugins";
 
 function safeSet(obj: any, key: string, value: any) {
   const segments = key.split(".");
@@ -13,26 +13,6 @@ function safeSet(obj: any, key: string, value: any) {
 
   return obj;
 }
-
-function unique<T>(arr: T[]) {
-  return [...new Set(arr)];
-}
-
-export const withDefaultAppGroup: ConfigPlugin = (config) => {
-  withEntitlementsPlist(config, (config) => {
-    // Inject an App Group
-    config.modResults["com.apple.security.application-groups"] = unique([
-      ...(config.modResults[
-        "com.apple.security.application-groups"
-      ] as string[]),
-      "group." + config.ios!.bundleIdentifier!,
-    ]);
-
-    return config;
-  });
-
-  return config;
-};
 
 export const withEASTargets: ConfigPlugin<{
   bundleIdentifier: string;
