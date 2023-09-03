@@ -3,6 +3,7 @@ import { sync as globSync } from "glob";
 import path from "path";
 
 import withWidget from "./withWidget";
+import { withAutoEasExtensionCredentials } from "./withEasCredentials";
 // import { withXcodeProjectBetaBaseMod } from "./withXcparse";
 
 export const withTargetsDir: ConfigPlugin<{
@@ -23,6 +24,8 @@ export const withTargetsDir: ConfigPlugin<{
       directory: path.relative(projectRoot, path.dirname(configPath)),
     });
   });
+
+  // withAutoEasExtensionCredentials(config);
 
   return config;
   // return withXcodeProjectBetaBaseMod(config);
