@@ -4,6 +4,7 @@ import path from "path";
 
 import withWidget from "./withWidget";
 import { withAutoEasExtensionCredentials } from "./withEasCredentials";
+import { withXcodeProjectBetaBaseMod } from "./withXcparse";
 // import { withXcodeProjectBetaBaseMod } from "./withXcparse";
 
 export const withTargetsDir: ConfigPlugin<{
@@ -27,6 +28,6 @@ export const withTargetsDir: ConfigPlugin<{
 
   // withAutoEasExtensionCredentials(config);
 
-  return config;
-  // return withXcodeProjectBetaBaseMod(config);
+  // return config;
+  return withXcodeProjectBetaBaseMod(config);
 };
