@@ -7,7 +7,8 @@
   "build": {
     "base": {
       "ios": {
-        "resourceClass": "large"
+        "resourceClass": "large",
+        "image": "latest"
       },
       "channel": "default",
       "cache": {
@@ -30,7 +31,8 @@
         "gradleCommand": ":app:assembleDebug"
       },
       "ios": {
-        "buildConfiguration": "Debug"
+        "buildConfiguration": "Debug",
+        "image": "latest"
       },
       "env": {
         "EXPO_PUBLIC_AD_MOB_UNIT_ID_IOS": "ca-app-pub-3940256099942544/1712485313",
