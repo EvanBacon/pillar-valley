@@ -54,34 +54,29 @@ struct PillarWidgetView: View {
   
   @ViewBuilder
   var body: some View {
-    switch family {
-    case .systemSmall:
-      ZStack {
+    
+    ZStack {
+      VStack() {
+        Text("Valley Stats")
+          .font(.title2)
+          .foregroundColor(.white)
+          .padding(.top, conditionalPadding)
         
-        VStack() {
-          Text("Valley Stats")
-            .font(.title2)
-            .foregroundColor(.white)
-            .padding(.top, conditionalPadding)
-          
-          Spacer()
-          
-          Text("\(pillarsTraversed)")
-            .font(.largeTitle)
-            .foregroundColor(.white)
-          
-          Text("Pillars Traversed")
-            .opacity(0.7)
-            .multilineTextAlignment(.center)
-            .foregroundColor(.white)
-            .padding(.bottom, conditionalPadding)
-        }
+        Spacer()
+        
+        Text("\(pillarsTraversed)")
+          .font(.largeTitle)
+          .foregroundColor(.white)
+        
+        Text("Pillars Traversed")
+          .opacity(0.7)
+          .multilineTextAlignment(.center)
+          .foregroundColor(.white)
+          .padding(.bottom, conditionalPadding)
       }
+    }
       .widgetURL(URL(string: "/"))
       .widgetBackground()
-    default:
-      ZStack {}
-    }
   }
   
   private var conditionalPadding: CGFloat {
@@ -135,6 +130,6 @@ struct widgets: Widget {
 
 struct widgets_Previews: PreviewProvider {
   static var previews: some View {
-    PillarWidgetView(pillarsTraversed: 12) .previewContext(WidgetPreviewContext(family: .systemSmall))
+    PillarWidgetView(pillarsTraversed: 12).previewContext(WidgetPreviewContext(family: .systemSmall))
   }
 }
