@@ -75,7 +75,14 @@ export function useDynamicQuickActions() {
           ios: "symbol:envelope",
           android: "shortcut_feedback",
         }),
-        params: { href: "mailto:bacon@expo.dev" },
+        params: {
+          href:
+            "mailto:bacon@expo.dev?subject=" +
+            // Set a default subject line that I can filter against
+            encodeURIComponent(
+              "[Pillar Valley]: I have feedback on Pillar Valley"
+            ),
+        },
       },
     ]);
   }, [name]);
