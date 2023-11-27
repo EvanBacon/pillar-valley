@@ -59,16 +59,10 @@ struct PillarWidgetView: View {
       ZStack {
         
         VStack() {
-          if #available(iOSApplicationExtension 17.0, *) {
-            Text("Valley Stats")
-              .font(.title2)
-              .foregroundColor(.white)
-          } else {
-            Text("Valley Stats")
-              .font(.title2)
-              .foregroundColor(.white)
-              .padding(.top, 12)
-          }
+          Text("Valley Stats")
+            .font(.title2)
+            .foregroundColor(.white)
+            .padding(.top, conditionalPadding)
           
           Spacer()
           
@@ -76,16 +70,11 @@ struct PillarWidgetView: View {
             .font(.largeTitle)
             .foregroundColor(.white)
           
-          if #available(iOSApplicationExtension 17.0, *) {
-            Text("Pillars Traversed")
-              .opacity(0.7)
-              .foregroundColor(.white)
-          } else {
-            Text("Pillars Traversed")
-              .opacity(0.7)
-              .foregroundColor(.white)
-              .padding(.bottom, 12)
-          }
+          Text("Pillars Traversed")
+            .opacity(0.7)
+            .multilineTextAlignment(.center)
+            .foregroundColor(.white)
+            .padding(.bottom, conditionalPadding)
         }
       }
       .widgetURL(URL(string: "/"))
@@ -94,6 +83,15 @@ struct PillarWidgetView: View {
       ZStack {}
     }
   }
+  
+  private var conditionalPadding: CGFloat {
+        if #available(iOSApplicationExtension 17.0, *) {
+            return 0
+        } else {
+            return 12
+        }
+    }
+  
 }
 
 struct PillarProvider: TimelineProvider {
