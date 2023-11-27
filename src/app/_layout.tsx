@@ -65,71 +65,72 @@ export default function Layout() {
         loading={loading}
         image={require("icons/splash.png")}
       >
-        <InnerLayout />
+        <DynamicIconProvider>
+          <InnerLayout />
+        </DynamicIconProvider>
       </AnimatedSplashScreen>
     </>
   );
 }
 function InnerLayout() {
   const pathname = usePathname();
+  useDynamicQuickActions();
   useEffect(() => {
     logEvent("screen_view", { currentScreen: pathname });
   }, [pathname]);
 
   return (
     <View style={{ backgroundColor: "blue", flex: 1 }}>
-      <DynamicIconProvider>
-        <ActionSheetProvider>
-          <Stack
-            screenOptions={{
-              headerTintColor: "white",
-              headerStyle: {
-                backgroundColor: "#21222B",
-                borderBottomWidth: 0,
-              },
-              headerBackTitleStyle: {
-                fontFamily: "Inter_500Medium",
-              },
+      <ActionSheetProvider>
+        <Stack
+          screenOptions={{
+            headerTintColor: "white",
+            headerStyle: {
+              backgroundColor: "#21222B",
+              borderBottomWidth: 0,
+            },
+            headerBackTitleStyle: {
+              fontFamily: "Inter_500Medium",
+            },
 
-              contentStyle: {
-                backgroundColor: Slate[900],
-              },
+            contentStyle: {
+              backgroundColor: Slate[900],
+            },
 
-              headerTitleStyle: {
-                color: "white",
-                fontFamily: "Inter_500Medium",
-              },
+            headerTitleStyle: {
+              color: "white",
+              fontFamily: "Inter_500Medium",
+            },
+          }}
+        >
+          <Stack.Screen name="index" options={{ header: () => null }} />
+          <Stack.Screen
+            name="challenges"
+            options={{
+              title: "Challenges",
+              headerRight: BackButton,
+              presentation: "modal",
             }}
-          >
-            <Stack.Screen name="index" options={{ header: () => null }} />
-            <Stack.Screen
-              name="challenges"
-              options={{
-                title: "Challenges",
-                headerRight: BackButton,
-                presentation: "modal",
-              }}
-            />
+          />
 
-            <Stack.Screen
-              name="settings"
-              options={{
-                title: "Settings",
-                headerShown: false,
-                presentation: "modal",
-              }}
-            />
-            <Stack.Screen
-              name="privacy"
-              options={{
-                title: "Privacy",
-                headerRight: BackButton,
-                presentation: "modal",
-              }}
-            />
-          </Stack>
-        </ActionSheetProvider>
-      </DynamicIconProvider>
+          <Stack.Screen
+            name="settings"
+            options={{
+              title: "Settings",
+              headerShown: false,
+              presentation: "modal",
+            }}
+          />
+          <Stack.Screen
+            name="privacy"
+            options={{
+              title: "Privacy",
+              headerRight: BackButton,
+              presentation: "modal",
+            }}
+          />
+        </Stack>
+      </ActionSheetProvider>
     </View>
   );
 }

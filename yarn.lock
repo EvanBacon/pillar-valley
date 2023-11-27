@@ -1597,10 +1597,10 @@
     resolve-from "^5.0.0"
     sucrase "^3.20.0"
 
-"@expo/metro-runtime@2.2.7":
-  version "2.2.7"
-  resolved "https://registry.yarnpkg.com/@expo/metro-runtime/-/metro-runtime-2.2.7.tgz#94c3ac63848e4431574c13e8f965ab34874fbd4d"
-  integrity sha512-g2er682p6VBCmjwAk4op5K6K5IK2mj8iQQhxKm0DUU9sCxayH2NrHH5p7qyBjCtIjxNqcTToQabbtgSLkLbtsg==
+"@expo/metro-runtime@2.2.16":
+  version "2.2.16"
+  resolved "https://registry.yarnpkg.com/@expo/metro-runtime/-/metro-runtime-2.2.16.tgz#dad958d74ad4a432a1f729d7a7313ec44083c656"
+  integrity sha512-WOUe7ByZsQpFRifyh9WgsjMYrCGHirWA8VvtR5fs+vi0za3yFIaC89wYMvEZILyvn+RIe7Ysln8nzF4xgtnKFg==
   dependencies:
     "@bacons/react-views" "^1.1.3"
     qs "^6.10.3"
@@ -4968,10 +4968,10 @@ expo-haptics@~12.4.0:
   resolved "https://registry.yarnpkg.com/expo-haptics/-/expo-haptics-12.4.0.tgz#99ad9d6a8eafb219aee022ec1412a998e1c90d71"
   integrity sha512-eELhZOO64oJa6AtEUxosatjSENE/tQgF2rVJxDsvRdx8Vgd3uFC+FRoM3nbMVJkxDgAaP3EKOPT1zVM41sNurw==
 
-expo-head@0.0.11:
-  version "0.0.11"
-  resolved "https://registry.yarnpkg.com/expo-head/-/expo-head-0.0.11.tgz#729fa6b9c8ce09c4af1e0efdccc86b23d7124569"
-  integrity sha512-nQ/DmxuLRLmCmnWFvfKoqG0/CA1SqEe4kvPlp7sAjsptLC7BHxOTViNchLznOlXTc/9yG05YYzZbWHvjIeE08Q==
+expo-head@0.0.20:
+  version "0.0.20"
+  resolved "https://registry.yarnpkg.com/expo-head/-/expo-head-0.0.20.tgz#a99d9f349110cae878e10a8d5a31749155fb5ab1"
+  integrity sha512-K0ETFOp/I+Td1T40D8k+Nlk8zCtvUFKTVYiwUhLoCCPf4dGC0zXv/noJLgyZ8jZ+5FJLlrSTpk2Gm9bxJfqkLw==
   dependencies:
     react-helmet-async "^1.3.0"
 
@@ -5031,18 +5031,18 @@ expo-quick-actions@^0.2.3:
     "@expo/image-utils" "^0.3.23"
     schema-utils "^4.2.0"
 
-expo-router@^2.0.5:
-  version "2.0.5"
-  resolved "https://registry.yarnpkg.com/expo-router/-/expo-router-2.0.5.tgz#855c85d0529c56e57412b7877093e3af3966df66"
-  integrity sha512-yRTDxA5RKKlD0Gbqe7LbeaA6E/ZdJdS2tHaf//ywqOSI1coPWA20YDvPE6WPSx1I7m2EveEXE78KFvQdF5+qYA==
+expo-router@^2.0.14:
+  version "2.0.14"
+  resolved "https://registry.yarnpkg.com/expo-router/-/expo-router-2.0.14.tgz#6c05fc9620d3d3e94dfffdd013ad5dace1bc69e0"
+  integrity sha512-F5dP4WMe+zQLzlGSbC+NT9/67FGgwmUCJuPGD4BkK0eRt0uga+y53vQ59m5MCOebqE0N9Ukr/Jz8Num16iGqZA==
   dependencies:
     "@bacons/react-views" "^1.1.3"
-    "@expo/metro-runtime" "2.2.7"
+    "@expo/metro-runtime" "2.2.16"
     "@radix-ui/react-slot" "1.0.1"
     "@react-navigation/bottom-tabs" "~6.5.7"
     "@react-navigation/native" "~6.1.6"
     "@react-navigation/native-stack" "~6.9.12"
-    expo-head "0.0.11"
+    expo-head "0.0.20"
     expo-splash-screen "~0.20.2"
     query-string "7.1.3"
     react-helmet-async "^1.3.0"

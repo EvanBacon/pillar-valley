@@ -2,6 +2,8 @@ import Constants, { ExecutionEnvironment } from "expo-constants";
 import AppIcon from "local:expo-app-icon";
 import React from "react";
 
+import { logEvent } from "@/lib/Analytics";
+
 export const icons = [
   {
     name: "Auto",
@@ -57,7 +59,7 @@ export default function DynamicIconProvider({
   );
 }
 
-export const useIconName =
+const useIconName =
   Constants.executionEnvironment === ExecutionEnvironment.StoreClient
     ? useIconNameExpoGo
     : useIconNameCustom;
@@ -73,6 +75,7 @@ function useIconNameCustom(): [string | null, (name: string | null) => void] {
 
   const setIcon = React.useCallback(
     (icon: string | null) => {
+      logEvent("set_icon", { icon: icon || "default" });
       AppIcon.setAlternateIcon(icon);
       _setIcon(icon || null);
     },

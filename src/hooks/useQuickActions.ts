@@ -2,7 +2,8 @@ import * as QuickActions from "expo-quick-actions";
 import { router } from "expo-router";
 import React from "react";
 
-import { useIconName } from "@/components/DynamicIconContext";
+import { logEvent } from "@/lib/Analytics";
+import { icons, useDynamicAppIcon } from "@/components/DynamicIconContext";
 
 export function useQuickActionCallback(
   callback?: (data: QuickActions.Action) => void | Promise<void>
@@ -27,13 +28,13 @@ export function useQuickActionCallback(
 }
 
 export function useDynamicQuickActions() {
-  const [name] = useIconName();
+  const [name] = useDynamicAppIcon();
   React.useEffect(() => {
     QuickActions.setItems([
       {
         id: "icon",
-        title: "Change Icon",
-        subtitle: name ?? "Default",
+        title: "App Icon",
+        subtitle: icons.find((icon) => icon.iconId === name)?.name,
         icon: "symbol:apps.iphone",
         params: { href: "/settings/icon" },
       },
@@ -43,13 +44,13 @@ export function useDynamicQuickActions() {
         icon: "symbol:trophy",
         params: { href: "/challenges" },
       },
-      //   {
-      //     id: "licenses",
-      //     title: "Licenses",
-      //     subtitle: "(This app doesn't do much)",
-      //     icon: "symbol:figure.wave",
-      //     params: { href: "/settings/licenses" },
-      //   },
+      {
+        id: "licenses",
+        title: "Licenses",
+        // subtitle: "(This app doesn't do much)",
+        icon: "symbol:checkmark.seal",
+        params: { href: "/settings/licenses" },
+      },
       {
         id: "feedback",
         title: "Leave Feedback",
@@ -58,17 +59,24 @@ export function useDynamicQuickActions() {
         params: { href: "mailto:bacon@expo.dev" },
       },
     ]);
-  }, []);
+  }, [name]);
+
+  // Perform navigation on quick action press
   useRouterQuickActions();
 }
 
 function useRouterQuickActions() {
   useQuickActionCallback((action) => {
-    console.log("action", action);
+    logEvent("quick_action", {
+      action: action.id,
+      title: action.title,
+      subtitle: action.subtitle,
+      href: action.params?.href,
+    });
+
     // Doing this instead of adding an extra layout to the app
     setTimeout(() => {
       if (typeof action.params?.href === "string") {
-        console.log("Link to:", action.params.href);
         router.push(action.params.href);
       }
     });

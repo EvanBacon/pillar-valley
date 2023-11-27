@@ -8,10 +8,6 @@ export const icons = [
   },
 ];
 
-export function useIconName() {
-  return React.useState<string | null>(null);
-}
-
 export default function DynamicIconProvider({
   children,
 }: {
