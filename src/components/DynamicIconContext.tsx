@@ -7,6 +7,11 @@ export const icons = [
     iconId: null,
   },
 ];
+
+export function useIconName() {
+  return React.useState<string | null>(null);
+}
+
 export default function DynamicIconProvider({
   children,
 }: {

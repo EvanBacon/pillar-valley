@@ -57,7 +57,7 @@ export default function DynamicIconProvider({
   );
 }
 
-const useIconName =
+export const useIconName =
   Constants.executionEnvironment === ExecutionEnvironment.StoreClient
     ? useIconNameExpoGo
     : useIconNameCustom;

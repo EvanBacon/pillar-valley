@@ -1544,6 +1544,23 @@
     semver "7.3.2"
     tempy "0.3.0"
 
+"@expo/image-utils@^0.3.23":
+  version "0.3.23"
+  resolved "https://registry.yarnpkg.com/@expo/image-utils/-/image-utils-0.3.23.tgz#f14fd7e1f5ff6f8e4911a41e27dd274470665c3f"
+  integrity sha512-nhUVvW0TrRE4jtWzHQl8TR4ox7kcmrc2I0itaeJGjxF5A54uk7avgA0wRt7jP1rdvqQo1Ke1lXyLYREdhN9tPw==
+  dependencies:
+    "@expo/spawn-async" "1.5.0"
+    chalk "^4.0.0"
+    fs-extra "9.0.0"
+    getenv "^1.0.0"
+    jimp-compact "0.16.1"
+    mime "^2.4.4"
+    node-fetch "^2.6.0"
+    parse-png "^2.1.0"
+    resolve-from "^5.0.0"
+    semver "7.3.2"
+    tempy "0.3.0"
+
 "@expo/json-file@8.2.36":
   version "8.2.36"
   resolved "https://registry.yarnpkg.com/@expo/json-file/-/json-file-8.2.36.tgz#62a505cb7f30a34d097386476794680a3f7385ff"
@@ -5005,6 +5022,14 @@ expo-modules-core@1.5.9:
   dependencies:
     compare-versions "^3.4.0"
     invariant "^2.2.4"
+
+expo-quick-actions@^0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/expo-quick-actions/-/expo-quick-actions-0.2.3.tgz#cf966be87796497e8ba9b22b4bf33f90dd8978c0"
+  integrity sha512-gi6/GraTZkLPViL2W0jo2KOMTKV1d4+Le3kMFvMUqQx4bIXCjgPEhyi46eet1LYZEaVlTozKR9IR36BOBvDrhA==
+  dependencies:
+    "@expo/image-utils" "^0.3.23"
+    schema-utils "^4.2.0"
 
 expo-router@^2.0.5:
   version "2.0.5"

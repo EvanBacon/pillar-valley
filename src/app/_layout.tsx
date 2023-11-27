@@ -14,6 +14,7 @@ import AudioManager from "@/AudioManager";
 import Fire from "@/ExpoParty/Fire";
 import DynamicIconProvider from "@/components/DynamicIconContext";
 import TouchableBounce from "@/components/TouchableBounce";
+import { useDynamicQuickActions } from "@/hooks/useQuickActions";
 import { useUpdatedUpdatesInfoInSettings } from "@/hooks/useUpdatesInAppleSettings";
 import { logEvent } from "@/lib/Analytics";
 import { useSyncGlobalAudioWithSettings } from "@/zustand/models";
@@ -32,6 +33,7 @@ export default function Layout() {
   const loading = useLoadAssets();
   useUpdatedUpdatesInfoInSettings();
   useSyncGlobalAudioWithSettings();
+
   return (
     <>
       <Head>
@@ -193,6 +195,33 @@ if (Platform.OS !== "web") {
   }
 }
 
+// [
+//   {
+//     "title": "New Chat",
+//     "icon": "compose",
+//     "id": "0",
+//     "params": { "href": "/compose" },
+//   },
+//   {
+//     "title": "Reply to Lydia",
+//     "subtitle": "Explain React Server Components plz",
+//     "icon": "contact",
+//     "id": "1",
+//     "params": { "href": "/messages/theavocoder" },
+//   },
+//   {
+//     "title": "Search",
+//     "icon": "search",
+//     "id": "3",
+//     "params": { "href": "/search" },
+//   },
+//   {
+//     "title": "Leave Feedback",
+//     "subtitle": "Please provide feedback before deleting the app",
+//     "icon": "symbol:envelope",
+//     "id": "4",
+//     "params": { "href": "mailto:support@myapp.dev" },
+//   }
 function AnimatedSplashScreen({ children, loading, image }) {
   const animation = React.useMemo(() => new Animated.Value(1), []);
   const [isAppReady, setAppReady] = React.useState(false);

@@ -12,6 +12,7 @@ import Song from "@/components/Song";
 import TouchableView from "@/components/TouchableView";
 import Settings from "@/constants/Settings";
 import useAppState from "@/hooks/useAppState";
+import { useDynamicQuickActions } from "@/hooks/useQuickActions";
 
 // import GameState from "../NitroRoll/GameState";
 const InputGameView = Settings.isSimulator ? SkipGameViewInSimulator : GameView;
@@ -74,6 +75,8 @@ function SkipGameViewInSimulator({ onLoad }: { onLoad: () => void }) {
 }
 
 export default function GameScreen() {
+  useDynamicQuickActions();
+
   const [loading, setLoading] = React.useState(true);
   const appState = useAppState();
   const isPaused = appState !== "active";
