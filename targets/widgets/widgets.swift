@@ -1,48 +1,97 @@
 import WidgetKit
 import SwiftUI
 
+extension View {
+  func widgetBackground() -> some View {
+    if #available(iOSApplicationExtension 17.0, *) {
+      return containerBackground(for: .widget) {
+        ZStack {
+          LinearGradient(
+            gradient:
+              Gradient(
+                colors: [
+                  Color("gradient1"),
+                  Color("gradient2")
+                ]
+              ),
+            startPoint: .top,
+            endPoint: .bottom
+          )
+          Image("valleys")
+            .resizable()
+            .scaledToFill()
+        }
+      }
+    } else {
+      return background {
+        ZStack {
+          LinearGradient(
+            gradient:
+              Gradient(
+                colors: [
+                  Color("gradient1"),
+                  Color("gradient2")
+                ]
+              ),
+            startPoint: .top,
+            endPoint: .bottom
+          )
+          .ignoresSafeArea()
+          Image("valleys")
+            .resizable()
+            .scaledToFill()
+            .ignoresSafeArea()
+        }
+      }
+    }
+  }
+}
+
 struct PillarWidgetView: View {
   let pillarsTraversed: Int
   
+  @Environment(\.widgetFamily) var family
+  
+  @ViewBuilder
   var body: some View {
-    ZStack {
-      LinearGradient(
-        gradient:
-          Gradient(
-            colors: [
-              Color("gradient1"),
-              Color("gradient2")
-            ]
-          ),
-        startPoint: .top,
-        endPoint: .bottom
-      )
-      .ignoresSafeArea()
-      
-      Image("valleys")
-        .resizable()
-        .scaledToFill()
-        .ignoresSafeArea()
-      
-      VStack() {
-        Text("Valley Stats")
-          .font(.title2)
-          .padding(.top, 12)
-          .foregroundColor(.white)
+    switch family {
+    case .systemSmall:
+      ZStack {
         
-        Spacer()
-        
-        Text("\(pillarsTraversed)")
-          .font(.largeTitle)
-          .foregroundColor(.white)
-        
-        HStack {
-          Text("Pillars Traversed")
-            .opacity(0.7)
+        VStack() {
+          if #available(iOSApplicationExtension 17.0, *) {
+            Text("Valley Stats")
+              .font(.title2)
+              .foregroundColor(.white)
+          } else {
+            Text("Valley Stats")
+              .font(.title2)
+              .foregroundColor(.white)
+              .padding(.top, 12)
+          }
+          
+          Spacer()
+          
+          Text("\(pillarsTraversed)")
+            .font(.largeTitle)
             .foregroundColor(.white)
-            .padding(.bottom, 12)
+          
+          if #available(iOSApplicationExtension 17.0, *) {
+            Text("Pillars Traversed")
+              .opacity(0.7)
+              .foregroundColor(.white)
+          } else {
+            Text("Pillars Traversed")
+              .opacity(0.7)
+              .foregroundColor(.white)
+              .padding(.bottom, 12)
+          }
         }
       }
+      .widgetURL(URL(string: "/"))
+      .widgetBackground()
+    default:
+      ZStack {}
     }
   }
 }
@@ -82,9 +131,9 @@ struct widgets: Widget {
     }
     .configurationDisplayName("Pillar Widget")
     .description("Displays the number of pillars traversed.")
+    
   }
 }
-
 
 struct widgets_Previews: PreviewProvider {
   static var previews: some View {
