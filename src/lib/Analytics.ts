@@ -7,6 +7,6 @@ export function logEvent(name: string, params?: Record<string, any>) {
   ) {
     return;
   }
-  const { logEvent } = require("expo-firebase-analytics");
-  logEvent(name, params);
+  // const { logEvent } = require("expo-firebase-analytics");
+  // logEvent(name, params);
 }

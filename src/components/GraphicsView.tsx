@@ -9,7 +9,7 @@ import {
   StyleSheet,
 } from "react-native";
 import * as THREE from "three";
-import uuidv4 from "uuid/v4";
+import { v4 as uuidv4 } from "uuid";
 
 export type ResizeEvent = {
   x: number;

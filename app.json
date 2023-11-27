@@ -62,7 +62,10 @@
     },
     "android": {
       "playStoreUrl": "https://play.google.com/store/apps/details?id=com.evanbacon.pillarvalley",
-      "icon": "./icons/expo.png",
+      "adaptiveIcon": {
+        "foregroundImage": "./icons/ios.png",
+        "backgroundColor": "#F09458"
+      },
       "package": "com.evanbacon.pillarvalley",
       "googleServicesFile": "./google-services.json",
       "config": {
@@ -94,6 +97,22 @@
         {
           "origin": false,
           "headOrigin": "https://pillarvalley.netlify.app"
+        }
+      ],
+      [
+        "expo-quick-actions",
+        {
+          "androidIcons": {
+            "shortcut_achievements": {
+              "foregroundImage": "./icons/shortcut/achievements.png",
+              "backgroundColor": "#F09458"
+            },
+            "shortcut_licenses": {
+              "foregroundImage": "./icons/shortcut/licenses.png",
+              "backgroundColor": "#F09458"
+            },
+            "shortcut_feedback": "./icons/shortcut/feedback.png"
+          }
         }
       ]
     ],
