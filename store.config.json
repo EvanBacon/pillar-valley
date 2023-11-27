@@ -25,13 +25,13 @@
           "clash"
         ],
         "releaseNotes": "Added a home screen widget for Pillar enthusiasts!",
-        "marketingUrl": "https://github.com/EvanBacon/Expo-Pillar-Valley/",
+        "marketingUrl": "https://pillarvalley.netlify.app/",
         "promoText": "Immerse yourself in a suave world of zen",
         "supportUrl": "https://github.com/EvanBacon/Expo-Pillar-Valley/issues",
         "title": "Pillar Valley",
         "subtitle": "The Finest of Gaming",
         "privacyPolicyUrl": "https://pillarvalley.netlify.app/privacy",
-        "privacyChoicesUrl": "https://github.com/EvanBacon/Expo-Pillar-Valley/blob/master/PRIVACY-FOOBAR.md"
+        "privacyChoicesUrl": "https://pillarvalley.netlify.app/privacy"
       }
     },
     "categories": [
