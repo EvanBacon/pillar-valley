@@ -291,9 +291,10 @@ export const useAchievements = create(
               id: [key],
               ...Challenges[key],
             });
+            usePresentAchievement
+              .getState()
+              .set({ id: key, ...Challenges[key] });
           }
-
-          usePresentAchievement.getState().set({ id: key, ...Challenges[key] });
 
           return {
             ...state,
