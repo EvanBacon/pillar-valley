@@ -14,8 +14,6 @@
 
 ## Play
 
-[![Run in Expo Go](https://img.shields.io/badge/Run%20in%20Expo%20Go-4285F4.svg?style=flat-square&logo=EXPO&labelColor=4285F4&logoColor=fff)](https://expo.dev/@bacon/pillar-valley)
-
 [![Play online](https://img.shields.io/badge/Play%20Online-4285F4.svg?style=flat-square&logo=Google-Chrome&labelColor=4285F4&logoColor=fff)](https://pillarvalley.netlify.app/)
 
 ### App Stores
