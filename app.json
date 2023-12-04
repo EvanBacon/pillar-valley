@@ -114,10 +114,17 @@
             "shortcut_feedback": "./icons/shortcut/feedback.png"
           }
         }
+      ],
+      [
+        "@bacons/apple-targets",
+        {
+          "appleTeamId": "QQ57RJ5UTD"
+        }
       ]
     ],
     "experiments": {
-      "tsconfigPaths": true
+      "tsconfigPaths": true,
+      "typedRoutes": true
     },
     "runtimeVersion": {
       "policy": "sdkVersion"

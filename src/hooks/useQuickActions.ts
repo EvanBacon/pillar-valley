@@ -1,37 +1,15 @@
 import * as QuickActions from "expo-quick-actions";
-import { router } from "expo-router";
+import { useQuickActionRouting, RouterAction } from "expo-quick-actions/router";
 import React from "react";
 
 import { logEvent } from "@/lib/Analytics";
 import { icons, useDynamicAppIcon } from "@/components/DynamicIconContext";
 import { Platform } from "react-native";
 
-export function useQuickActionCallback(
-  callback?: (data: QuickActions.Action) => void | Promise<void>
-) {
-  React.useEffect(() => {
-    let isMounted = true;
-
-    if (QuickActions.initial) {
-      callback?.(QuickActions.initial);
-    }
-
-    const sub = QuickActions.addListener((event) => {
-      if (isMounted) {
-        callback?.(event);
-      }
-    });
-    return () => {
-      isMounted = false;
-      sub.remove();
-    };
-  }, [QuickActions.initial, callback]);
-}
-
 export function useDynamicQuickActions() {
   const [name] = useDynamicAppIcon();
   React.useEffect(() => {
-    const actions: QuickActions.Action[] = [];
+    const actions: RouterAction[] = [];
 
     if (Platform.OS === "ios") {
       actions.push({
@@ -46,7 +24,7 @@ export function useDynamicQuickActions() {
       });
     }
 
-    QuickActions.setItems([
+    QuickActions.setItems<RouterAction>([
       ...actions,
       {
         id: "achievements",
@@ -88,23 +66,31 @@ export function useDynamicQuickActions() {
   }, [name]);
 
   // Perform navigation on quick action press
-  useRouterQuickActions();
-}
-
-function useRouterQuickActions() {
-  useQuickActionCallback((action) => {
+  useQuickActionRouting((action) => {
     logEvent("quick_action", {
       action: action.id,
       title: action.title,
       subtitle: action.subtitle,
       href: action.params?.href,
     });
-
-    // Doing this instead of adding an extra layout to the app
-    setTimeout(() => {
-      if (typeof action.params?.href === "string") {
-        router.push(action.params.href);
-      }
-    });
   });
 }
+
+// function useRouterQuickActions() {
+//     useRouterQuickActions()
+//   useQuickActionCallback((action) => {
+//     logEvent("quick_action", {
+//       action: action.id,
+//       title: action.title,
+//       subtitle: action.subtitle,
+//       href: action.params?.href,
+//     });
+
+//     // Doing this instead of adding an extra layout to the app
+//     setTimeout(() => {
+//       if (typeof action.params?.href === "string") {
+//         router.push(action.params.href);
+//       }
+//     });
+//   });
+// }

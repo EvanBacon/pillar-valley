@@ -31,11 +31,6 @@ module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
       }, {}),
   ]);
 
-  config = require("./target-plugin").withTargetsDir(config, {
-    appleTeamId: "QQ57RJ5UTD",
-    // match: "watch-app",
-  });
-
   config = withAppleSettings(config as ExpoConfig, {
     // The name of the .plist file to generate. Root is the default and must be provided.
     Root: {

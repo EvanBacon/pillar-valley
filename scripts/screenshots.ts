@@ -5,15 +5,15 @@ import * as path from "path";
 // Define the simulators and their respective device IDs
 const simulators = [
   // iPad mini (6th generation)
-  { name: "iPad Pro (2nd Gen)", id: "2BE21987-D78C-4C56-97F3-16E9FFC0A056" },
+  //   { name: "iPad Pro (2nd Gen)", id: "2BE21987-D78C-4C56-97F3-16E9FFC0A056" },
   // iPad Pro (12.9-inch) (6th generation)
   { name: "iPad Pro (6th Gen)", id: "211D918A-9DA3-4A9F-BA65-A1B03FD495B3" },
   // iPhone 15 Pro Max
   { name: 'iPhone 6.7"', id: "8A8B76C8-7CE9-47FC-A88F-69D0C010D22B" },
   // iPhone 15
-  { name: 'iPhone 6.5"', id: "B668BBCA-BD25-411E-B4DE-B6CEE1D1EBCC" },
+  //   { name: 'iPhone 6.5"', id: "B668BBCA-BD25-411E-B4DE-B6CEE1D1EBCC" },
   // iPhone SE (3rd generation)
-  { name: 'iPhone 5.5"', id: "4234A59A-9840-45FF-AD9D-E4C5CB473881" },
+  //   { name: 'iPhone 5.5"', id: "4234A59A-9840-45FF-AD9D-E4C5CB473881" },
 ];
 
 // Function to launch the simulator

@@ -22,7 +22,7 @@
     "preset": "jest-expo"
   },
   "dependencies": {
-    "@bacons/xcode": "^1.0.0-alpha.6",
+    "@bacons/apple-targets": "^0.0.0",
     "@config-plugins/apple-settings": "^0.0.5",
     "@config-plugins/react-native-dynamic-app-icon": "^6.0.0",
     "@expo/plist": "^0.0.20",
@@ -41,7 +41,7 @@
     "expo-gl": "~13.0.1",
     "expo-haptics": "~12.4.0",
     "expo-linking": "~5.0.2",
-    "expo-quick-actions": "^0.2.3",
+    "expo-quick-actions": "^0.2.6",
     "expo-router": "^2.0.14",
     "expo-sensors": "~12.3.0",
     "expo-splash-screen": "~0.20.5",

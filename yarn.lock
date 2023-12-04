@@ -1215,6 +1215,15 @@
     "@babel/helper-validator-identifier" "^7.22.5"
     to-fast-properties "^2.0.0"
 
+"@bacons/apple-targets@^0.0.0":
+  version "0.0.0"
+  resolved "https://registry.yarnpkg.com/@bacons/apple-targets/-/apple-targets-0.0.0.tgz#b6cd841bd9d50bc7b3e3ee297c11c4c08449920c"
+  integrity sha512-v4k15c5g3g50SoaKnO4U/iwO+WCDBd/bMnzaMrkv01kC3iCuvWhFJVfxbFSBds8+7VuPgJ/Nx5HYIPVGh8A+Bw==
+  dependencies:
+    "@bacons/xcode" "^1.0.0-alpha.9"
+    fs-extra "^11.2.0"
+    glob "^10.2.6"
+
 "@bacons/react-views@^1.1.3":
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/@bacons/react-views/-/react-views-1.1.3.tgz#06e7ae8803cc363d13d6fd06b828e10ad8bb3910"
@@ -1224,6 +1233,15 @@
   version "1.0.0-alpha.6"
   resolved "https://registry.yarnpkg.com/@bacons/xcode/-/xcode-1.0.0-alpha.6.tgz#a4c2d1ef7894e452d25328a10432ee7052593b53"
   integrity sha512-PRZS5gABunNJJvaxtHkOQvW63zS2zcZNWDxpsO4zRPR65usEWl2D1SPZ/3LZUuBmvcbQUOoCQjAw7hC3/kufWQ==
+  dependencies:
+    "@expo/plist" "^0.0.18"
+    debug "^4.3.4"
+    uuid "^8.3.2"
+
+"@bacons/xcode@^1.0.0-alpha.9":
+  version "1.0.0-alpha.9"
+  resolved "https://registry.yarnpkg.com/@bacons/xcode/-/xcode-1.0.0-alpha.9.tgz#0d09ee07ed8ad8b81830420f97cb37e04397795c"
+  integrity sha512-ai/nluA0CqU5O/8zrNiAAO8NaAncYV4rwhry9t0uajiEaHFHNLJaWwn77MOic3/r+Q6YpQq05JY8x+a8hI6ijg==
   dependencies:
     "@expo/plist" "^0.0.18"
     debug "^4.3.4"
@@ -4949,10 +4967,10 @@ expo-modules-core@1.5.9:
     compare-versions "^3.4.0"
     invariant "^2.2.4"
 
-expo-quick-actions@^0.2.3:
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/expo-quick-actions/-/expo-quick-actions-0.2.3.tgz#cf966be87796497e8ba9b22b4bf33f90dd8978c0"
-  integrity sha512-gi6/GraTZkLPViL2W0jo2KOMTKV1d4+Le3kMFvMUqQx4bIXCjgPEhyi46eet1LYZEaVlTozKR9IR36BOBvDrhA==
+expo-quick-actions@^0.2.6:
+  version "0.2.6"
+  resolved "https://registry.yarnpkg.com/expo-quick-actions/-/expo-quick-actions-0.2.6.tgz#d53d6d8aeca4470c8597de07ae8ce06e6c76c88f"
+  integrity sha512-Oe59mPEDYjMzUiI4jnoJeds6q+qxzLQr5rC+7nhu+L7YmnzVpZSkXo/1/qQzTAZADY1V+LXpaBpH10jcmtsaog==
   dependencies:
     "@expo/image-utils" "^0.3.23"
     schema-utils "^4.2.0"
@@ -5374,6 +5392,15 @@ fs-extra@^11.1.1:
     jsonfile "^6.0.1"
     universalify "^2.0.0"
 
+fs-extra@^11.2.0:
+  version "11.2.0"
+  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-11.2.0.tgz#e70e17dfad64232287d01929399e0ea7c86b0e5b"
+  integrity sha512-PmDi3uwK5nFuXh7XDTlVnS17xJS7vW36is2+w3xcv8SVxiB4NyATf4ctkVY5bkSjX0Y4nbvZCq1/EjtEyr9ktw==
+  dependencies:
+    graceful-fs "^4.2.0"
+    jsonfile "^6.0.1"
+    universalify "^2.0.0"
+
 fs-extra@^8.1.0, fs-extra@~8.1.0:
   version "8.1.0"
   resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-8.1.0.tgz#49d43c45a88cd9677668cb7be1b46efdb8d2e1c0"
@@ -5520,6 +5547,17 @@ glob@7.1.6:
     minimatch "^3.0.4"
     once "^1.3.0"
     path-is-absolute "^1.0.0"
+
+glob@^10.2.6:
+  version "10.3.10"
+  resolved "https://registry.yarnpkg.com/glob/-/glob-10.3.10.tgz#0351ebb809fd187fe421ab96af83d3a70715df4b"
+  integrity sha512-fa46+tv1Ak0UPK1TOy/pZrIybNNt4HCv7SDzwyfiOZkvZLEbjsZkJBPtDHVshZjbecAoAGSC20MjLDG/qr679g==
+  dependencies:
+    foreground-child "^3.1.0"
+    jackspeak "^2.3.5"
+    minimatch "^9.0.1"
+    minipass "^5.0.0 || ^6.0.2 || ^7.0.0"
+    path-scurry "^1.10.1"
 
 glob@^10.3.4:
   version "10.3.4"
@@ -6213,6 +6251,15 @@ jackspeak@^2.0.3:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/jackspeak/-/jackspeak-2.3.1.tgz#ce2effa4c458e053640e61938865a5b5fae98456"
   integrity sha512-4iSY3Bh1Htv+kLhiiZunUhQ+OYXIn0ze3ulq8JeWrFKmhPAJSySV2+kdtRh2pGcCeF0s6oR8Oc+pYZynJj4t8A==
+  dependencies:
+    "@isaacs/cliui" "^8.0.2"
+  optionalDependencies:
+    "@pkgjs/parseargs" "^0.11.0"
+
+jackspeak@^2.3.5:
+  version "2.3.6"
+  resolved "https://registry.yarnpkg.com/jackspeak/-/jackspeak-2.3.6.tgz#647ecc472238aee4b06ac0e461acc21a8c505ca8"
+  integrity sha512-N3yCS/NegsOBokc8GAdM8UcmfsKiSS8cipheD/nivzr700H+nsMOxJjQnvwOcRYVuFkdH0wGUvW2WbXGmrZGbQ==
   dependencies:
     "@isaacs/cliui" "^8.0.2"
   optionalDependencies:
