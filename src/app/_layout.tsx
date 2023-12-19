@@ -164,7 +164,7 @@ function useLoadAssets() {
   React.useEffect(() => {
     if (error) {
       console.log("Error loading fonts");
-      logEvent("error_loading_fonts", { error });
+      logEvent("error_loading_fonts", { error: error.message });
       console.error(error);
     }
   }, [error]);
@@ -177,9 +177,9 @@ function useLoadAssets() {
       const time = getNow();
       try {
         await AudioManager.setupAsync();
-      } catch (error) {
+      } catch (error: any) {
         console.log("Error loading audio");
-        logEvent("error_loading_assets", { error });
+        logEvent("error_loading_assets", { error: error.message });
         console.error(error);
       } finally {
         const total = getNow() - time;
