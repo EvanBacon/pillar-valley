@@ -22,7 +22,7 @@
     "preset": "jest-expo"
   },
   "dependencies": {
-    "@bacons/apple-targets": "^0.0.0",
+    "@bacons/apple-targets": "^0.0.2",
     "@config-plugins/apple-settings": "^0.0.5",
     "@config-plugins/react-native-dynamic-app-icon": "^6.0.0",
     "@expo/plist": "^0.0.20",

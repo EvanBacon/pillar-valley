@@ -1215,10 +1215,10 @@
     "@babel/helper-validator-identifier" "^7.22.5"
     to-fast-properties "^2.0.0"
 
-"@bacons/apple-targets@^0.0.0":
-  version "0.0.0"
-  resolved "https://registry.yarnpkg.com/@bacons/apple-targets/-/apple-targets-0.0.0.tgz#b6cd841bd9d50bc7b3e3ee297c11c4c08449920c"
-  integrity sha512-v4k15c5g3g50SoaKnO4U/iwO+WCDBd/bMnzaMrkv01kC3iCuvWhFJVfxbFSBds8+7VuPgJ/Nx5HYIPVGh8A+Bw==
+"@bacons/apple-targets@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@bacons/apple-targets/-/apple-targets-0.0.2.tgz#e9d59cf59d5ee79128846e693e4562dac2af7a46"
+  integrity sha512-WJ4RM5AQ5rjkeCXbzOB13BCJZc4d7Y8le52ZtG8jryZul63z9ywavUaNmuZ0hn4Phdhq9DLghhLJBQR87fUdbw==
   dependencies:
     "@bacons/xcode" "^1.0.0-alpha.9"
     fs-extra "^11.2.0"
