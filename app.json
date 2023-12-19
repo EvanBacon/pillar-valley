@@ -4,13 +4,16 @@
     "description": "Immerse yourself in a suave world of zen",
     "slug": "pillar-valley",
     "privacy": "public",
-    "version": "8.0.5",
+    "version": "8.0.6",
     "orientation": "portrait",
     "primaryColor": "#F09458",
     "backgroundColor": "#F09458",
     "jsEngine": "hermes",
     "scheme": "plrvly",
     "locales": {
+      "en": {
+        "CFBundleName": "Pillar Valley"
+      },
       "es": {
         "CFBundleName": "Valle de los Pilares"
       }

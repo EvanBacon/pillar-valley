@@ -5,7 +5,7 @@ import React from "react";
 import { Platform, SectionList, StyleSheet, Text, View } from "react-native";
 import { ScrollView, TouchableHighlight } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { unstable_styles } from "./custom-list.module.css";
+import unstable_styles from "./custom-list.module.css";
 
 import { Slate } from "@/constants/Colors";
 
@@ -87,12 +87,10 @@ function Item({
     if (href) {
       return (
         <Link
-          hrefAttrs={{
-            target: href?.startsWith("http") ? "_blank" : undefined,
-          }}
+          target={href?.startsWith("http") ? "_blank" : undefined}
           href={href}
+          className={unstable_styles.listItem}
           style={[
-            unstable_styles.listItem,
             {
               display: "flex",
               borderCurve: "continuous",

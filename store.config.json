@@ -1,14 +1,14 @@
 {
   "configVersion": 0,
   "apple": {
-    "version": "8.0.4",
+    "version": "8.0.6",
     "copyright": "2023 Evan Bacon",
     "release": {
       "automaticRelease": true
     },
     "info": {
       "en-US": {
-        "description": "In this extremely unique adventure you play as a brave pair of circles who venture endlessly to find their true meaning. \n\nKeep your rhythm flowing with a profound soundtrack  that will sooth your ears into submission.\n\nIntuitive one handed design allows you to do all of your favorite one handed activities while you continue the fun!\n\nMade with bunches of love in Expo!",
+        "description": "In this extremely unique adventure you play as a brave pair of circles who venture endlessly to find their true meaning. \n\nKeep your rhythm flowing with a profound soundtrack  that will sooth your ears into submission.\n\nIntuitive one handed design allows you to do all of your favorite one handed activities while you continue the fun!",
         "keywords": [
           "game",
           "valley",
@@ -24,7 +24,7 @@
           "fyp",
           "clash"
         ],
-        "releaseNotes": "Added a home screen widget for Pillar enthusiasts!",
+        "releaseNotes": "Minor bug fix patch for crash reporting.",
         "marketingUrl": "https://pillarvalley.netlify.app/",
         "promoText": "Immerse yourself in a suave world of zen",
         "supportUrl": "https://github.com/EvanBacon/Expo-Pillar-Valley/issues",
@@ -63,7 +63,7 @@
     "review": {
       "firstName": "Evan",
       "lastName": "Bacon",
-      "email": "bacon@expo.io",
+      "email": "baconbrix@gmail.com",
       "phone": "2243030301",
       "demoRequired": false,
       "notes": "I <3 U"

@@ -1,0 +1,13 @@
+diff --git a/node_modules/expo-quick-actions/build/router.js b/node_modules/expo-quick-actions/build/router.js
+index 58ebd18..5e36e5c 100644
+--- a/node_modules/expo-quick-actions/build/router.js
++++ b/node_modules/expo-quick-actions/build/router.js
+@@ -25,7 +25,7 @@ export function useQuickActionRouting(callback) {
+             if (isMounted) {
+                 if (!callback?.(data) && isRouterAction(data)) {
+                     setTimeout(() => {
+-                        router.push(data.params.href);
++                        router.navigate(data.params.href);
+                     });
+                 }
+             }

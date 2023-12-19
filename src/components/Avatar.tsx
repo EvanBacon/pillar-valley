@@ -33,7 +33,7 @@ const {
 
 type AvatarProps = {
   color?: string | false;
-  name: string;
+  name?: string;
   onPress?: (other: AvatarProps) => void;
   avatar?: (() => JSX.Element) | string | number;
   textStyle?: StyleProp<TextStyle>;
