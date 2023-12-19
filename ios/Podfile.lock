@@ -1419,7 +1419,7 @@ SPEC CHECKSUMS:
   EXJSONUtils: d138005ee11b84fc4e3bf7119a160034db5d5e20
   EXManifests: 2355abd4aeacfb75eec5b43393c0aef9c2789fcf
   Expo: 00eaae3d5de1f2e9af393abf1b2c9efb57b3b599
-  ExpoAppIcon: 58ad803c21c49de47da2c2a15c110b5cfe32a468
+  ExpoAppIcon: f264d91aaf1fa8bb6f9d554fa596ba749896c3da
   ExpoBlur: 6c4602d729a492663b0916e5862b334a23157f0a
   ExpoDevice: 30d5e44aff42048ab016fa0c37a51fdb6b1f8608
   ExpoFileSystem: ebbbe77366bff2e66876e3b3bf09e61d3bb72c70
@@ -1491,7 +1491,7 @@ SPEC CHECKSUMS:
   RNScreens: 5f4df9babb21d30723580377b5f52d9f9baf0005
   RNSVG: 255767813dac22db1ec2062c8b7e7b856d4e5ae6
   RNVexoAnalytics: d8e520dd28293e1c3e860e5f49785c0f2580314d
-  SmartSettings: c7c933c3d3d442ffbebd25512f8f64f7dd5b561a
+  SmartSettings: bd98b811a59299169dae7cc2c13e527eb7d400f8
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   sqlite3: f163dbbb7aa3339ad8fc622782c2d9d7b72f7e9c
   Yoga: 2b33a7ac96c58cdaa7b810948fc6a2a76ed2d108

@@ -24,12 +24,12 @@ interface ItemProps {
   style?: StyleProp<ViewStyle>;
 }
 
-const Item: FC<ItemProps> = ({ item = {}, index, onPress, style }) => {
+const Item: FC<ItemProps> = ({ item, index, onPress, style }) => {
   const onPressItem = () => {
     onPress(item, index);
   };
 
-  const { displayName, score, photoURL } = item;
+  const { displayName, score, photoURL } = item ?? {};
 
   const _rankValue = index + 1;
   const rank = _rankValue + addNth(_rankValue);

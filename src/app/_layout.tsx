@@ -3,10 +3,12 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import * as Device from "expo-device";
 import * as Font from "expo-font";
-import { SplashScreen, Stack, usePathname, useRouter } from "expo-router";
+import { Stack, usePathname, useRouter } from "expo-router";
 import Head from "expo-router/head";
+import * as SplashScreen from "expo-splash-screen";
 import React, { useEffect } from "react";
-import { Animated, StatusBar, Platform, StyleSheet, View } from "react-native";
+import { Animated, StatusBar, Platform, StyleSheet } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { vexo } from "vexo-analytics";
 
 import { Slate } from "../constants/Colors";
@@ -83,7 +85,7 @@ function InnerLayout() {
   }, [pathname]);
 
   return (
-    <View style={{ backgroundColor: "blue", flex: 1 }}>
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <ActionSheetProvider>
         <Stack
           screenOptions={{
@@ -134,7 +136,7 @@ function InnerLayout() {
           />
         </Stack>
       </ActionSheetProvider>
-    </View>
+    </GestureHandlerRootView>
   );
 }
 

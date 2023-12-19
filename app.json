@@ -11,6 +11,9 @@
     "jsEngine": "hermes",
     "scheme": "plrvly",
     "locales": {
+      "en": {
+        "CFBundleName": "Pillar Valley"
+      },
       "es": {
         "CFBundleName": "Valle de los Pilares"
       }
