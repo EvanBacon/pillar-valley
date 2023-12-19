@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>PreferenceSpecifiers</key>
+    <array>
+      <dict>
+        <key>Type</key>
+        <string>PSToggleSwitchSpecifier</string>
+        <key>Title</key>
+        <string>Music and Sound ♫</string>
+        <key>Key</key>
+        <string>p_inapp_audio</string>
+        <key>DefaultValue</key>
+        <true/>
+        <key>FalseValue</key>
+        <false/>
+        <key>TrueValue</key>
+        <true/>
+      </dict>
+      <dict>
+        <key>Type</key>
+        <string>PSGroupSpecifier</string>
+        <key>Title</key>
+        <string>About</string>
+        <key>FooterText</key>
+        <string>Built by Evan Bacon 🥓
+Powered by Expo 𝝠</string>
+      </dict>
+      <dict>
+        <key>Type</key>
+        <string>PSTitleValueSpecifier</string>
+        <key>Title</key>
+        <string>Version</string>
+        <key>DefaultValue</key>
+        <string/>
+        <key>Key</key>
+        <string>p_app_version</string>
+      </dict>
+      <dict>
+        <key>Type</key>
+        <string>PSChildPaneSpecifier</string>
+        <key>Title</key>
+        <string>Licenses</string>
+        <key>File</key>
+        <string>Licenses</string>
+      </dict>
+      <dict>
+        <key>Type</key>
+        <string>PSChildPaneSpecifier</string>
+        <key>Title</key>
+        <string>Developer Info</string>
+        <key>File</key>
+        <string>Developer</string>
+      </dict>
+      <dict>
+        <key>Type</key>
+        <string>PSChildPaneSpecifier</string>
+        <key>Title</key>
+        <string>Runtime</string>
+        <key>File</key>
+        <string>Runtime</string>
+      </dict>
+    </array>
+  </dict>
+</plist>
