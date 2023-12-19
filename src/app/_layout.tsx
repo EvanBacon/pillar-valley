@@ -7,6 +7,7 @@ import { SplashScreen, Stack, usePathname, useRouter } from "expo-router";
 import Head from "expo-router/head";
 import React, { useEffect } from "react";
 import { Animated, StatusBar, Platform, StyleSheet, View } from "react-native";
+import { vexo } from "vexo-analytics";
 
 import { Slate } from "../constants/Colors";
 
@@ -18,6 +19,8 @@ import { useDynamicQuickActions } from "@/hooks/useQuickActions";
 import { useUpdatedUpdatesInfoInSettings } from "@/hooks/useUpdatesInAppleSettings";
 import { logEvent } from "@/lib/Analytics";
 import { useSyncGlobalAudioWithSettings } from "@/zustand/models";
+
+vexo("52b377af-bf1d-432d-aac2-2859d2c153d6");
 
 // import { setTestDeviceIDAsync } from "expo-ads-admob";
 export const unstable_settings = {
