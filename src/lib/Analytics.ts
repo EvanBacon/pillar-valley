@@ -12,5 +12,5 @@ export function logEvent(
     return;
   }
 
-  customEvent(name, params);
+  // customEvent(name, params);
 }

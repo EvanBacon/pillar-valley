@@ -69,9 +69,17 @@ function useIconNameExpoGo(): [string | null, (name: string | null) => void] {
 }
 
 function useIconNameCustom(): [string | null, (name: string | null) => void] {
-  const [icon, _setIcon] = React.useState<string | null>(
-    AppIcon.getAlternateIcon()
-  );
+  const [icon, _setIcon] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    let isMounted = true;
+    AppIcon.getAlternateIcon().then((icon) => {
+      if (isMounted) _setIcon(icon || null);
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const setIcon = React.useCallback(
     (icon: string | null) => {

@@ -1,6 +1,5 @@
-import { requireNativeModule } from "expo-modules-core";
-
 import Constants, { ExecutionEnvironment } from "expo-constants";
+import { requireNativeModule } from "expo-modules-core";
 
 if (Constants.executionEnvironment === ExecutionEnvironment.Bare) {
   // It loads the native module object from the JSI or falls back to
@@ -10,7 +9,7 @@ if (Constants.executionEnvironment === ExecutionEnvironment.Bare) {
     /** Pass `null` to use the default icon. */
     setAlternateIcon: (iconName: string | null) => Promise<string | null>;
     /** @returns `null` if the default icon is being used. */
-    getAlternateIcon: () => string | null;
+    getAlternateIcon: () => Promise<string | null>;
   };
 } else {
   module.exports = require("./ExpoAppIconModule.web");

@@ -1,5 +1,5 @@
 import * as Application from "expo-application";
-import * as Updates from "expo-updates";
+// import * as Updates from "expo-updates";
 import React from "react";
 
 import { UPDATES_API_KEYS } from "@/apple-settings-x/shared";
@@ -12,13 +12,13 @@ function displayDate() {
 }
 
 export function useUpdatedUpdatesInfoInSettings() {
-  Updates.useUpdateEvents((event) => {
-    Settings.set({
-      p_exupdates_live_type: event.type,
-      p_exupdates_live_message: event.message ?? "",
-      p_exupdates_live__updatedAt: displayDate(),
-    });
-  });
+  // Updates.useUpdateEvents((event) => {
+  //   Settings.set({
+  //     p_exupdates_live_type: event.type,
+  //     p_exupdates_live_message: event.message ?? "",
+  //     p_exupdates_live__updatedAt: displayDate(),
+  //   });
+  // });
 
   React.useEffect(() => {
     Settings.set({
@@ -26,18 +26,18 @@ export function useUpdatedUpdatesInfoInSettings() {
       p_app_version: `${Application.nativeApplicationVersion} (${Application.nativeBuildVersion})`,
     });
 
-    Settings.set(
-      UPDATES_API_KEYS.reduce<Record<string, string>>(
-        (acc, { setting, key }) => {
-          // @ts-expect-error
-          const v = Updates[key];
+    // Settings.set(
+    //   UPDATES_API_KEYS.reduce<Record<string, string>>(
+    //     (acc, { setting, key }) => {
+    //       // @ts-expect-error
+    //       const v = Updates[key];
 
-          acc[setting] = typeof v === "boolean" ? (v ? "✓" : "×") : String(v);
-          return acc;
-        },
-        {}
-      )
-    );
+    //       acc[setting] = typeof v === "boolean" ? (v ? "✓" : "×") : String(v);
+    //       return acc;
+    //     },
+    //     {}
+    //   )
+    // );
 
     Settings.set({
       p_exupdates__updatedAt: displayDate(),

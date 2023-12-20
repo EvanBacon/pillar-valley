@@ -3649,11 +3649,6 @@ application-config-path@^0.1.0:
   resolved "https://registry.yarnpkg.com/application-config-path/-/application-config-path-0.1.1.tgz#8b5ac64ff6afdd9bd70ce69f6f64b6998f5f756e"
   integrity sha512-zy9cHePtMP0YhwG+CfHm0bgwdnga2X3gZexpdCwEj//dpb+TKajtiC8REEUJUSq6Ab4f9cgNy2l8ObXzCXFkEw==
 
-arg@4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/arg/-/arg-4.1.0.tgz#583c518199419e0037abb74062c37f8519e575f0"
-  integrity sha512-ZWc51jO3qegGkVh8Hwpv636EkbesNV5ZNQPCtRa+0qytRYPEs9IYT9qITY9buezqUH5uqyzlWLcufrzU2rffdg==
-
 arg@5.0.2:
   version "5.0.2"
   resolved "https://registry.yarnpkg.com/arg/-/arg-5.0.2.tgz#c81433cc427c92c4dcf4865142dbca6f15acd59c"
@@ -5347,11 +5342,6 @@ expo-device@~5.9.0:
   dependencies:
     ua-parser-js "^0.7.33"
 
-expo-eas-client@~0.11.0:
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/expo-eas-client/-/expo-eas-client-0.11.0.tgz#0f25aa497849cade7ebef55c0631093a87e58b07"
-  integrity sha512-99W0MUGe3U4/MY1E9UeJ4uKNI39mN8/sOGA0Le8XC47MTbwbLoVegHR3C5y2fXLwLn7EpfNxAn5nlxYjY3gD2A==
-
 expo-file-system@~16.0.0, expo-file-system@~16.0.1:
   version "16.0.1"
   resolved "https://registry.yarnpkg.com/expo-file-system/-/expo-file-system-16.0.1.tgz#326b7c2f6e53e1a0eaafc9769578aafb3f9c9f43"
@@ -5376,11 +5366,6 @@ expo-haptics@~12.8.0:
   resolved "https://registry.yarnpkg.com/expo-haptics/-/expo-haptics-12.8.0.tgz#ceeafe9a86c0f1f4a0ba2ad714f5d0ba66a30e20"
   integrity sha512-NsLq5R1//SvKhyRA4FHR9d9W945JueBFG77JOgp571/QAIcJ9yAJjdPhtraKLw9SJe6bEzKfRrnFpI1YylRgrQ==
 
-expo-json-utils@~0.12.0:
-  version "0.12.0"
-  resolved "https://registry.yarnpkg.com/expo-json-utils/-/expo-json-utils-0.12.0.tgz#15ad797e9518a6a47eae9b95599e6373e641f8f2"
-  integrity sha512-xsUsPUZcXZWoT4RY3FhEPYGYvr2iThMNNU5drdmkC/vmkePvqy5kK4aIqlIKzQboXxj7k1dXoNSSLg5mKy8uKg==
-
 expo-keep-awake@~12.8.0:
   version "12.8.0"
   resolved "https://registry.yarnpkg.com/expo-keep-awake/-/expo-keep-awake-12.8.0.tgz#c70b6b3a04ecedb3117cd334fe74be846c5a879b"
@@ -5393,14 +5378,6 @@ expo-linking@~6.2.1:
   dependencies:
     expo-constants "~15.4.0"
     invariant "^2.2.4"
-
-expo-manifests@~0.13.0:
-  version "0.13.0"
-  resolved "https://registry.yarnpkg.com/expo-manifests/-/expo-manifests-0.13.0.tgz#20f163f84a414c6c50b8079e5fd0685d7c5b8ce2"
-  integrity sha512-N3adl3edSga3jdatLXjXiltdSwQkB1rOI5uyGEE5OwR/bpxc/5OUgHdRZjJgY6jJmVY4BCAiw0RXFoVRBbgE0Q==
-  dependencies:
-    "@expo/config" "~8.5.0"
-    expo-json-utils "~0.12.0"
 
 expo-modules-autolinking@1.9.0:
   version "1.9.0"
@@ -5468,11 +5445,6 @@ expo-store-review@~6.8.2:
   resolved "https://registry.yarnpkg.com/expo-store-review/-/expo-store-review-6.8.2.tgz#4fe10ff6640bdcab126332f3e47b2236d261a39a"
   integrity sha512-un2kfD1GHweNt16nEuH2N5GVYxmf+JuZLM6AHXtu5LQBfU5RKfPqAoiRDycBww1k7RiWG6Juu96/W3btulkFLg==
 
-expo-structured-headers@~3.7.0:
-  version "3.7.0"
-  resolved "https://registry.yarnpkg.com/expo-structured-headers/-/expo-structured-headers-3.7.0.tgz#69b752cf43515535eccd30513da428688634a7ec"
-  integrity sha512-uGcU65gzP4trfmVtntAg3rU/pytTGpCUXN+hQmCwCCvQb9qK1aoCXvVlqlW5zP8SZ04tzF1WXKR+P8RSEn5rSw==
-
 expo-system-ui@~2.9.1:
   version "2.9.1"
   resolved "https://registry.yarnpkg.com/expo-system-ui/-/expo-system-ui-2.9.1.tgz#ff8617b280cf9bd77abfd4059d0d9d38b919bb79"
@@ -5488,28 +5460,6 @@ expo-three@^6.1.0:
   dependencies:
     "@expo/browser-polyfill" "^1.0.0"
     expo-asset-utils "~3.0.0"
-
-expo-updates-interface@~0.15.0:
-  version "0.15.0"
-  resolved "https://registry.yarnpkg.com/expo-updates-interface/-/expo-updates-interface-0.15.0.tgz#2633fe438c258bdc6f3f36d4c3742b2ecd9e3c6f"
-  integrity sha512-B4x1wXJhdjIqPeOnGmsqCqJL3lTdNeEGpAan5D4el9D1yYIq0uHYcjyO27zdAbLs3WKitIii4GE9QNfnCU1+iA==
-
-expo-updates@~0.24.3:
-  version "0.24.3"
-  resolved "https://registry.yarnpkg.com/expo-updates/-/expo-updates-0.24.3.tgz#1cb5fa93008bc0ae3b0d212bc59e9a9bb7d54346"
-  integrity sha512-lI6dt4pw8wD4Js3h1FH6X2s2p59WjiLVR6yUfzKwiLBF84Ta9aP7Cqj5X00MB+dKZDa8m87Am8SOqC0rtGWJxg==
-  dependencies:
-    "@expo/code-signing-certificates" "0.0.5"
-    "@expo/config" "~8.5.0"
-    "@expo/config-plugins" "~7.8.0"
-    arg "4.1.0"
-    chalk "^4.1.2"
-    expo-eas-client "~0.11.0"
-    expo-manifests "~0.13.0"
-    expo-structured-headers "~3.7.0"
-    expo-updates-interface "~0.15.0"
-    fbemitter "^3.0.0"
-    resolve-from "^5.0.0"
 
 expo@^50.0.0-preview.4:
   version "50.0.0-preview.4"
