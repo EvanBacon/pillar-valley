@@ -1,6 +1,6 @@
 import { Asset } from "expo-asset";
 import * as FileSystem from "expo-file-system";
-import { loadTextureAsync } from "expo-three";
+// import { loadTextureAsync } from "expo-three";
 import { Back, Expo as ExpoEase, TweenMax } from "gsap";
 import { Platform } from "react-native";
 import * as THREE from "three";
@@ -44,12 +44,15 @@ class FlatMaterial extends THREE.MeshPhongMaterial {
   }
 }
 
+const textureLoader = new THREE.TextureLoader();
+
 async function loadMenuMaterialAsync(
   asset: any,
   color: number
 ): Promise<THREE.Material[]> {
   const image = new THREE.MeshBasicMaterial({
-    map: await loadTextureAsync({ asset }),
+    // NOTE: This might not work on native, but Expo GL doesn't seem to load in the simulator and my cord is on the other side of the room.
+    map: textureLoader.load(asset.localUri), // await loadTextureAsync({ asset }),
   });
 
   const material = new FlatMaterial({ color });

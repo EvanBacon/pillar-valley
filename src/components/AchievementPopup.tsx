@@ -514,8 +514,9 @@ function PopupContainer() {
     <View
       style={[
         StyleSheet.absoluteFill,
-        { top, padding: 16, alignItems: "center", pointerEvents: "box-none" },
+        { top, padding: 16, alignItems: "center" },
       ]}
+      pointerEvents="box-none"
     >
       {presentAchievement && (
         <Popup
