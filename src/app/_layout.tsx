@@ -9,7 +9,6 @@ import * as SplashScreen from "expo-splash-screen";
 import React, { useEffect } from "react";
 import { Animated, StatusBar, Platform, StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { vexo } from "vexo-analytics";
 
 import { Slate } from "../constants/Colors";
 
@@ -22,8 +21,11 @@ import { useUpdatedUpdatesInfoInSettings } from "@/hooks/useUpdatesInAppleSettin
 import { logEvent } from "@/lib/Analytics";
 import { useSyncGlobalAudioWithSettings } from "@/zustand/models";
 
-vexo("52b377af-bf1d-432d-aac2-2859d2c153d6");
+if (Platform.OS !== "web") {
+  const { vexo } = require("vexo-analytics");
 
+  vexo("52b377af-bf1d-432d-aac2-2859d2c153d6");
+}
 // import { setTestDeviceIDAsync } from "expo-ads-admob";
 export const unstable_settings = {
   initialRouteName: "index",
@@ -260,10 +262,10 @@ function AnimatedSplashScreen({ children, loading, image }) {
 
       {!isSplashAnimationComplete && (
         <Animated.View
-          pointerEvents="none"
           style={[
             StyleSheet.absoluteFill,
             {
+              pointerEvents: "none",
               backgroundColor: "#F09458",
               opacity: animation,
             },

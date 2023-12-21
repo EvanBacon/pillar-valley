@@ -83,7 +83,7 @@ export default function GameScreen() {
       <Head>
         <title>Play | Pillar Valley</title>
       </Head>
-      <View style={styles.container} pointerEvents="box-none">
+      <View style={styles.container}>
         <Song />
         <InputGameView onLoad={() => setLoading(false)} isPaused={isPaused} />
         {/* <BottomBannerAd /> */}
@@ -109,6 +109,7 @@ const styles = StyleSheet.create({
     height: "100%",
     flex: 1,
     backgroundColor: "#F09458",
+    pointerEvents: "box-none",
   },
   image: {
     ...StyleSheet.absoluteFillObject,
