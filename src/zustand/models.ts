@@ -30,6 +30,11 @@ const initialScoreState: ScoreShape = {
   isBest: false,
 };
 
+// TODO: Upstream this for web compat.
+if (typeof expo === "undefined") {
+  globalThis.expo = {};
+}
+
 export function useSyncGlobalAudioWithSettings() {
   const glob = useGlobalAudio();
   const key = "p_inapp_audio";
@@ -169,8 +174,6 @@ export const useGameScreenshot = create<{
     }),
 }));
 
-import SmartSettings from "local:smart-settings";
-
 export const useScore = create(
   persist<{
     score: {
@@ -254,7 +257,11 @@ export const useScore = create(
           }
 
           // Update for Widgets using the app group `group.bacon.data`
-          SmartSettings.set("pillarsTraversed", total, "group.bacon.data");
+          expo?.modules?.SmartSettings?.set?.(
+            "pillarsTraversed",
+            total,
+            "group.bacon.data"
+          );
 
           return { ...state, score: { ...state.score, total } };
         });

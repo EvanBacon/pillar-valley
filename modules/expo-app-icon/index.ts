@@ -8,12 +8,17 @@ declare global {
       /** @returns `null` if the default icon is being used. */
       getAlternateIcon: () => Promise<string | null>;
     }
+
+    interface SmartSettings {
+      set(key: string, value: string | number, suite?: string): void;
+    }
   }
 
   var expo:
     | {
         modules: {
           ExpoAppIcon?: Native.ExpoAppIcon;
+          SmartSettings?: Native.SmartSettings;
         };
       }
     | undefined;
