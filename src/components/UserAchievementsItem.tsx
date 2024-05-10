@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
 
 import ScoreBadge from "./ScoreBadge";
+import { SF } from "./sf-symbol";
 
 interface UserAchievementsItemProps {
   data: {
@@ -51,7 +52,12 @@ const UserAchievementsItem: React.FC<UserAchievementsItemProps> = ({
         <ScoreBadge color="white">{score}</ScoreBadge>
 
         {onPress && (
-          <Ionicons size={24} color="#CCCCCC" name="ios-arrow-forward" />
+          <SF
+            size={24}
+            color="#CCCCCC"
+            fallback="arrow-forward"
+            name="arrow.right"
+          />
         )}
       </View>
     </TouchableHighlight>

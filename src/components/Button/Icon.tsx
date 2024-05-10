@@ -5,6 +5,7 @@ import { Platform, StyleSheet } from "react-native";
 
 import AudioManager from "../../AudioManager";
 import TouchableBounce from "../TouchableBounce";
+import { SF } from "../sf-symbol";
 
 export default function Icon({
   onPressIn,
@@ -16,6 +17,7 @@ export default function Icon({
   soundIn = "button_in",
   style,
   iconStyle,
+  fallback,
 }: any) {
   return (
     <TouchableBounce
@@ -28,11 +30,18 @@ export default function Icon({
       onPressOut={() => AudioManager.playAsync(soundOut)}
       style={[styles.container, style]}
     >
-      <FontAwesome
+      <SF
         size={size}
         color={color}
         name={name}
-        style={[styles.icon, iconStyle]}
+        fallback={
+          <FontAwesome
+            size={size}
+            color={color}
+            name={fallback ?? name}
+            style={[styles.icon, iconStyle]}
+          />
+        }
       />
     </TouchableBounce>
   );

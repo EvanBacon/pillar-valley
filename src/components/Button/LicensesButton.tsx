@@ -4,7 +4,14 @@ import Icon from "./Icon";
 
 const LicensesButton = React.forwardRef(
   (props: React.ComponentProps<typeof Icon>, ref) => {
-    return <Icon {...props} ref={ref} name="handshake-o" />;
+    return (
+      <Icon
+        {...props}
+        ref={ref}
+        name="handshake-o"
+        fallback="hands.and.sparkles"
+      />
+    );
   }
 );
 export default LicensesButton;

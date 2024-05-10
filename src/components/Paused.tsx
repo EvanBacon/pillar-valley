@@ -6,6 +6,7 @@ import * as Animatable from "react-native-animatable";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { useFont } from "../hooks/useFont";
+import { SF } from "./sf-symbol";
 
 export default function Paused() {
   const color = "white";
@@ -30,7 +31,7 @@ export default function Paused() {
             fontSize: 48,
           }}
         >
-          <FontAwesome color={color} size={48} name="pause" /> Paused
+          <SF size={48} color="white" fallback="pause" name="pause" /> Paused
         </Text>
         <Animatable.Text
           animation="fadeIn"
@@ -58,7 +59,7 @@ export default function Paused() {
           marginBottom: 24,
         }}
       >
-        Also you can follow me on Twitter and Instagram @baconbrix
+        Also you can follow me on 𝕏 @baconbrix
       </Animatable.Text>
     </BlurView>
   );

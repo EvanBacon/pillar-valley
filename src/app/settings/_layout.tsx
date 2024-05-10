@@ -1,10 +1,10 @@
-import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { router, SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
 import { Platform } from "react-native";
 
 import TouchableBounce from "@/components/TouchableBounce";
 import { Slate } from "@/constants/Colors";
+import { SF } from "@/components/sf-symbol";
 
 export const unstable_settings = {
   initialRouteName: "index",
@@ -23,7 +23,7 @@ function BackButton() {
         }
       }}
     >
-      <FontAwesome size={24} color="white" name="angle-down" />
+      <SF size={24} color="white" fallback="arrow-down" name="chevron.down" />
     </TouchableBounce>
   );
 }

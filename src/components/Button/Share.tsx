@@ -47,7 +47,14 @@ class ShareButton extends React.Component {
     if (!screenshot) {
       return null;
     }
-    return <Icon onPress={this.onPress} name="share" {...props} />;
+    return (
+      <Icon
+        onPress={this.onPress}
+        name="square.and.arrow.up"
+        fallback="share"
+        {...props}
+      />
+    );
   }
 }
 

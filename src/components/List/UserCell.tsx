@@ -3,6 +3,7 @@ import React from "react";
 import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
 
 import Avatar from "../Avatar";
+import { SF } from "../sf-symbol";
 
 export default class UserCell extends React.Component {
   static defaultProps = {
@@ -53,7 +54,12 @@ export default class UserCell extends React.Component {
             </View>
           </View>
           {onPress && (
-            <Ionicons size={24} color="#CCCCCC" name="ios-arrow-forward" />
+            <SF
+              size={24}
+              color="#CCCCCC"
+              fallback="arrow-forward"
+              name="arrow.right"
+            />
           )}
         </View>
       </TouchableHighlight>

@@ -12,7 +12,8 @@ function SoundButton() {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
         toggleMuted();
       }}
-      name={enabled ? "volume-up" : "volume-off"}
+      name={enabled ? "speaker.wave.3" : "speaker.slash"}
+      fallback={enabled ? "volume-up" : "volume-off"}
     />
   );
 }

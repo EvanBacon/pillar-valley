@@ -11,6 +11,7 @@ import {
 
 import addNth from "../../utils/addNth";
 import Avatar from "../Avatar";
+import { SF } from "../sf-symbol";
 
 interface ItemProps {
   item?: {
@@ -54,7 +55,13 @@ const Item: FC<ItemProps> = ({ item, index, onPress, style }) => {
             <Text style={styles.subtitle}>{score} Points</Text>
           </View>
         </View>
-        <Ionicons size={24} color="#D8DADE" name="ios-arrow-forward" />
+        <SF
+          size={24}
+          color="#D8DADE"
+          fallback="arrow-forward"
+          name="arrow.right"
+        />
+        {/* <Ionicons size={24} color="#D8DADE" name="ios-arrow-forward" /> */}
       </View>
     </TouchableHighlight>
   );

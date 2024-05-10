@@ -1,4 +1,3 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
 import * as Haptics from "expo-haptics";
 import { Link, router } from "expo-router";
 import React from "react";
@@ -8,14 +7,28 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import unstable_styles from "./custom-list.module.css";
 
 import { Slate } from "@/constants/Colors";
+import { SF } from "./sf-symbol";
 
 function ActionTypeIcon({ type }: { type: "internal" | "external" }) {
   if (type === "internal") {
     return (
-      <Ionicons color={Slate[500]} size={20} name="chevron-forward-outline" />
+      <SF
+        size={20}
+        color={Slate[500]}
+        name="chevron.forward"
+        fallback="chevron-forward-outline"
+      />
     );
   } else {
-    return <Ionicons color={Slate[500]} size={20} name="ios-open-outline" />;
+    return (
+      <SF
+        size={20}
+        color={Slate[500]}
+        name="arrow.up.right.square"
+        fallback="open-outline"
+      />
+    );
+    // return <Ionicons color={Slate[500]} size={20} name="open-outline" />;
   }
 }
 
