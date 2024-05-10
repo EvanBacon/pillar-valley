@@ -5,80 +5,56 @@ import { useGlobalAudio } from "./zustand/models";
 
 const audio = {
   // Common
-  "button_in.wav": require("./assets/audio/button_in.wav"),
-  "button_out.wav": require("./assets/audio/button_out.wav"),
-  "unlock.mp3": require("./assets/audio/unlock.mp3"),
+  button_in: require("./assets/audio/button_in.wav"),
+  button_out: require("./assets/audio/button_out.wav"),
+  unlock: require("./assets/audio/unlock.mp3"),
   // Pillar Valley
-  "song.mp3": require("./assets/audio/song.mp3"),
+  // "song.mp3": require("./assets/audio/song.mp3"),
 };
 
 // eslint-disable-line
 class AudioManager {
+  private _pending: Map<string, ReturnType<typeof Audio.Sound.createAsync>> =
+    new Map();
   sounds: Record<string, Audio.Sound> = {};
+
+  private loadAsync = async (name: string) => {
+    await this.setupAsync();
+
+    const item = this.assets[name];
+    const pending = this._pending.get(name) ?? Audio.Sound.createAsync(item);
+    if (!this._pending.has(name)) {
+      this._pending.set(name, pending);
+    }
+    const { sound } = await pending;
+    const soundName = name.substr(0, name.lastIndexOf("."));
+    this.sounds[soundName] = sound;
+    return sound;
+  };
 
   playAsync = async (name: string, isLooping: boolean = false) => {
     if (!useGlobalAudio.getState().enabled || Platform.OS === "web") {
       return;
     }
 
-    await this.setupAsync();
-
-    if (name in this.sounds) {
-      const soundObject = this.sounds[name];
-      try {
-        await soundObject.setPositionAsync(0);
-        await soundObject.setIsLoopingAsync(isLooping);
-        await soundObject.playAsync();
-      } catch (error) {
-        console.warn("Error playing audio", { error });
-      }
-    } else {
-      console.warn(
-        `Audio "${name}" doesn't exist. Expected: ${Object.keys(
-          this.sounds
-        ).join(", ")}`
-      );
+    const soundObject = await this.loadAsync(name);
+    try {
+      await soundObject.setPositionAsync(0);
+      await soundObject.setIsLoopingAsync(isLooping);
+      await soundObject.playAsync();
+    } catch (error) {
+      console.warn("Error playing audio", { error });
     }
   };
   stopAsync = async (name: string) => {
-    await this.setupAsync();
-    if (name in this.sounds) {
-      const soundObject = this.sounds[name];
-      try {
-        await soundObject.stopAsync();
-      } catch (error) {
-        console.warn("Error stopping audio", { error });
-      }
-    } else {
-      console.warn("Audio doesn't exist", name);
-    }
+    await (await this.loadAsync(name)).stopAsync();
   };
   volumeAsync = async (name: string, volume: number) => {
-    await this.setupAsync();
-    if (name in this.sounds) {
-      const soundObject = this.sounds[name];
-      try {
-        await soundObject.setVolumeAsync(volume);
-      } catch (error) {
-        console.warn("Error setting volume of audio", { error });
-      }
-    } else {
-      console.warn("Audio doesn't exist", name);
-    }
+    await (await this.loadAsync(name)).setVolumeAsync(volume);
   };
 
   pauseAsync = async (name: string) => {
-    await this.setupAsync();
-    if (name in this.sounds) {
-      const soundObject = this.sounds[name];
-      try {
-        await soundObject.pauseAsync();
-      } catch (error) {
-        console.warn("Error pausing audio", { error });
-      }
-    } else {
-      console.warn("Audio doesn't exist", name);
-    }
+    await (await this.loadAsync(name)).pauseAsync();
   };
 
   async configureExperienceAudioAsync() {
@@ -94,17 +70,6 @@ class AudioManager {
 
   private assets: Record<string, number> = audio;
 
-  private async setupAudioAsync(): Promise<void> {
-    const keys = Object.keys(this.assets || {});
-    for (const key of keys) {
-      const item = this.assets[key];
-      const { sound } = await Audio.Sound.createAsync(item);
-      const soundName = key.substr(0, key.lastIndexOf("."));
-      // console.log("Audio", soundName, sound);
-      this.sounds[soundName] = sound;
-    }
-  }
-
   _isSetup = false;
   setupPromise: Promise<void> | null = null;
   setupAsync = async () => {
@@ -114,7 +79,6 @@ class AudioManager {
     this._isSetup = true;
     this.setupPromise = (async () => {
       await this.configureExperienceAudioAsync();
-      await this.setupAudioAsync();
       this.setupPromise = null;
     })();
     return this.setupPromise;

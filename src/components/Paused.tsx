@@ -1,4 +1,3 @@
-import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { BlurView } from "expo-blur";
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";

@@ -8,11 +8,13 @@ export function SF({
   color,
   fallback,
   name,
+  style,
 }: {
   size: number;
   color: string;
   name: SymbolViewProps["name"];
   fallback: React.ComponentProps<typeof Ionicons>["name"] | React.ReactNode;
+  style?: any;
 }) {
   return (
     <SymbolView
@@ -20,10 +22,13 @@ export function SF({
       tintColor={color}
       resizeMode="scaleAspectFit"
       name={name}
-      style={{
-        width: size,
-        height: size,
-      }}
+      style={[
+        {
+          width: size,
+          height: size,
+        },
+        style,
+      ]}
       //   animationSpec={
       //     {
       //       // variableAnimationSpec: {
@@ -35,10 +40,10 @@ export function SF({
       //     }
       //   }
       fallback={
-        typeof fallback === "string" ? (
-          <Ionicons color={color} size={size} name={fallback} />
-        ) : (
+        typeof fallback !== "string" ? (
           fallback
+        ) : (
+          <Ionicons color={color} size={size} name={fallback} style={style} />
         )
       }
     />

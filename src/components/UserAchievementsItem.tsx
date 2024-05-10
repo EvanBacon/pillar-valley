@@ -1,4 +1,3 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
 

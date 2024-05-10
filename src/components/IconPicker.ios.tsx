@@ -1,12 +1,11 @@
-import Entypo from "@expo/vector-icons/Entypo";
 import * as Haptics from "expo-haptics";
-import React from "react";
 import { Image, Text, View } from "react-native";
 
 import { icons, useDynamicAppIcon } from "./DynamicIconContext";
 import TouchableBounce from "./TouchableBounce.native";
 
 import { Slate } from "@/constants/Colors";
+import { SF } from "./sf-symbol";
 
 export default function App() {
   const [_icon, setIcon] = useDynamicAppIcon();
@@ -108,9 +107,10 @@ function Item({ ...props }) {
             </Text>
           </View>
           {props.isSelected && (
-            <Entypo
+            <SF
               style={{ marginRight: 8 }}
-              name="check"
+              name="checkmark"
+              fallback="check"
               size={20}
               color={Slate["800"]}
             />

@@ -20,6 +20,7 @@ import { useDynamicQuickActions } from "@/hooks/useQuickActions";
 import { useUpdatedUpdatesInfoInSettings } from "@/hooks/useUpdatesInAppleSettings";
 import { logEvent } from "@/lib/Analytics";
 import { useSyncGlobalAudioWithSettings } from "@/zustand/models";
+import { SF } from "@/components/sf-symbol";
 
 if (Platform.OS !== "web") {
   const { vexo } = require("vexo-analytics");
@@ -173,7 +174,12 @@ function BackButton() {
   }
   return (
     <TouchableBounce onPress={() => router.back()}>
-      <FontAwesome size={24} color="white" name="angle-down" />
+      <SF
+        size={24}
+        color="white"
+        fallback="chevron-down-outline"
+        name="chevron.down"
+      />
     </TouchableBounce>
   );
 }
@@ -199,7 +205,6 @@ function useLoadAssets() {
     StatusBar.setBarStyle("light-content", true);
     // Fire.init();
     (async () => {
-      // console.time("Setup");
       const time = getNow();
       try {
         await AudioManager.setupAsync();
@@ -210,7 +215,7 @@ function useLoadAssets() {
       } finally {
         const total = getNow() - time;
         logEvent("assets_loaded", { milliseconds: total });
-        // console.timeEnd("Setup");
+        console.log("Setup:", total);
       }
       setLoading(false);
     })();

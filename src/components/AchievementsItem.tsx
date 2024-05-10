@@ -1,4 +1,3 @@
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import React from "react";
 import {
   StyleProp,
@@ -11,6 +10,7 @@ import {
 
 import Avatar from "./Avatar";
 import ScoreBadge from "./ScoreBadge";
+import { SF } from "./sf-symbol";
 
 interface ItemProps {
   complete?: boolean;
@@ -43,13 +43,20 @@ const Item: React.FC<ItemProps> = ({
   };
 
   const icon = complete ? (
-    <MaterialIcons style={styles.icon} size={24} color="green" name="check" />
-  ) : (
-    <MaterialIcons
+    <SF
+      size={24}
+      color="green"
+      name="checkmark"
       style={styles.icon}
+      fallback="check"
+    />
+  ) : (
+    <SF
       size={24}
       color="#D8DADE"
-      name="hourglass-empty"
+      name="hourglass"
+      style={styles.icon}
+      fallback="hourglass-empty"
     />
   );
 

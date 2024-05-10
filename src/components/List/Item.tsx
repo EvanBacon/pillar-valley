@@ -1,4 +1,3 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
 import React, { FC } from "react";
 import {
   StyleSheet,
