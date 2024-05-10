@@ -24,16 +24,16 @@ export function SF({
         width: size,
         height: size,
       }}
-      animationSpec={
-        {
-          // variableAnimationSpec: {
-          //   cumulative: true,
-          //   dimInactiveLayers: false,
-          // },
-          // repeatCount: 0,
-          // repeating: false,
-        }
-      }
+      //   animationSpec={
+      //     {
+      //       // variableAnimationSpec: {
+      //       //   cumulative: true,
+      //       //   dimInactiveLayers: false,
+      //       // },
+      //       // repeatCount: 0,
+      //       // repeating: false,
+      //     }
+      //   }
       fallback={
         typeof fallback === "string" ? (
           <Ionicons color={color} size={size} name={fallback} />
