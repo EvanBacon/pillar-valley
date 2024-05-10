@@ -1,6 +1,5 @@
 import { Asset } from "expo-asset";
-import * as FileSystem from "expo-file-system";
-// import { loadTextureAsync } from "expo-three";
+// import * as FileSystem from "expo-file-system";
 import { Back, Expo as ExpoEase, TweenMax } from "gsap";
 import { Platform } from "react-native";
 import * as THREE from "three";
@@ -12,28 +11,28 @@ import MotionObserver from "./MotionObserver";
 // cannot handle them, https://github.com/expo/expo/issues/2693
 // this workaround copies them to a known path files so we can use a regular
 // `file://...` uri instead.
-async function copyAssetToCacheAsync(
-  assetModule: number,
-  localFilename: string
-): Promise<Asset> {
-  const asset = Asset.fromModule(assetModule);
-  await asset.downloadAsync();
-  if (Platform.OS !== "android") {
-    return asset;
-  }
-  const localUri = `${FileSystem.cacheDirectory}asset_${localFilename}`;
-  const fileInfo = await FileSystem.getInfoAsync(localUri, { size: false });
-  if (!fileInfo.exists) {
-    console.log(`copyAssetToCacheAsync ${asset.localUri} -> ${localUri}`);
-    await FileSystem.copyAsync({
-      from: asset.localUri!,
-      to: localUri,
-    });
-  }
-  asset.localUri = localUri;
+// async function copyAssetToCacheAsync(
+//   assetModule: number,
+//   localFilename: string
+// ): Promise<Asset> {
+//   const asset = Asset.fromModule(assetModule);
+//   await asset.downloadAsync();
+//   if (Platform.OS !== "android") {
+//     return asset;
+//   }
+//   const localUri = `${FileSystem.cacheDirectory}asset_${localFilename}`;
+//   const fileInfo = await FileSystem.getInfoAsync(localUri, { size: false });
+//   if (!fileInfo.exists) {
+//     console.log(`copyAssetToCacheAsync ${asset.localUri} -> ${localUri}`);
+//     await FileSystem.copyAsync({
+//       from: asset.localUri!,
+//       to: localUri,
+//     });
+//   }
+//   asset.localUri = localUri;
 
-  return asset;
-}
+//   return asset;
+// }
 
 class FlatMaterial extends THREE.MeshPhongMaterial {
   constructor(props: any) {
@@ -44,7 +43,85 @@ class FlatMaterial extends THREE.MeshPhongMaterial {
   }
 }
 
-const textureLoader = new THREE.TextureLoader();
+// import registry from '@react-native/assets-registry/registry';
+
+// function assetToPath(source: number): string {
+//   // get the URI from the packager
+//   const asset = registry.getAssetByID(source);
+//   if (asset == null) {
+//     throw new Error(
+//       `Asset with ID "${source}" could not be found. Please check the image source or packager.`
+//     );
+//   }
+//   return path.join(
+//     __dirname,
+//     process.env.NODE_ENV === 'production' ? '../../../' : '',
+//     decodeURIComponent(
+//       asset.httpServerLocation.replace('/assets/?unstable_path=', '')
+//     ),
+//     `${asset.name}.${asset.type}`
+//   );
+// }
+
+// import { Asset } from 'expo-asset';
+class MetroAssetTextureLoader extends THREE.Loader {
+  constructor(manager?: any) {
+    super(manager);
+  }
+
+  load(
+    moduleId: number,
+    onLoad?: (texture: THREE.Texture) => void,
+    onProgress?: (event: ProgressEvent<EventTarget>) => void,
+    onError?: (error: any) => void
+  ) {
+    const texture = new THREE.Texture();
+    const loader = new THREE.ImageLoader(this.manager);
+
+    // Resolves the metro asset object to a URL.
+    Asset.fromModule(moduleId)
+      .downloadAsync()
+      .then((asset) => {
+        // On web, do whatever the THREE.ImageLoader does.
+        if (Platform.OS === "web") {
+          loader.setCrossOrigin(this.crossOrigin);
+          loader.setPath(this.path);
+          loader.load(
+            asset.localUri!,
+            function (image) {
+              texture.image = image;
+              texture.needsUpdate = true;
+
+              if (onLoad !== undefined) {
+                onLoad(texture);
+              }
+            },
+            onProgress,
+            onError
+          );
+        } else {
+          // Use a data texture
+          texture.image = {
+            data: asset,
+            width: asset.width,
+            height: asset.height,
+          };
+          // @ts-expect-error: Forces passing to `gl.texImage2D(...)` verbatim
+          texture.isDataTexture = true;
+          texture.needsUpdate = true;
+
+          if (onLoad !== undefined) {
+            onLoad(texture);
+          }
+        }
+      })
+      .catch(onError);
+
+    return texture;
+  }
+}
+
+const textureLoader = new MetroAssetTextureLoader();
 
 async function loadMenuMaterialAsync(
   asset: any,
@@ -52,7 +129,7 @@ async function loadMenuMaterialAsync(
 ): Promise<THREE.Material[]> {
   const image = new THREE.MeshBasicMaterial({
     // NOTE: This might not work on native, but Expo GL doesn't seem to load in the simulator and my cord is on the other side of the room.
-    map: textureLoader.load(asset.localUri), // await loadTextureAsync({ asset }),
+    map: textureLoader.load(asset), // await loadTextureAsync({ asset }),
   });
 
   const material = new FlatMaterial({ color });
@@ -85,10 +162,11 @@ export default class MenuObject extends GameObject {
     titleGroup.position.z = -200;
 
     const pillar = await makeMenuPillarAsync(
-      await copyAssetToCacheAsync(
-        require("../assets/images/PILLAR.png"),
-        "pillar.png"
-      )
+      require("../assets/images/PILLAR.png")
+      // await copyAssetToCacheAsync(
+      //   require("../assets/images/PILLAR.png"),
+      //   "pillar.png"
+      // )
     );
     titleGroup.add(pillar);
 
@@ -100,10 +178,11 @@ export default class MenuObject extends GameObject {
     });
 
     const pillarB = await makeMenuPillarAsync(
-      await copyAssetToCacheAsync(
-        require("../assets/images/VALLEY.png"),
-        "valley.png"
-      )
+      require("../assets/images/VALLEY.png")
+      // await copyAssetToCacheAsync(
+      //   require("../assets/images/VALLEY.png"),
+      //   "valley.png"
+      // )
     );
     titleGroup.add(pillarB);
 
@@ -118,10 +197,11 @@ export default class MenuObject extends GameObject {
       });
     }
     const pillarC = await makeMenuPillarAsync(
-      await copyAssetToCacheAsync(
-        require("../assets/images/BEGIN.png"),
-        "begin.png"
-      ),
+      require("../assets/images/BEGIN.png"),
+      // await copyAssetToCacheAsync(
+      //   require("../assets/images/BEGIN.png"),
+      //   "begin.png"
+      // ),
       0xedcbbf
     );
     titleGroup.add(pillarC);

@@ -18,7 +18,8 @@
       "env": {
         "EXPO_PUBLIC_AD_MOB_UNIT_ID_IOS": "ca-app-pub-2312569320461549/2517428180",
         "EXPO_PUBLIC_AD_MOB_UNIT_ID_ANDROID": "ca-app-pub-2312569320461549/9830096940",
-        "NODE_ENV": "production"
+        "NODE_ENV": "production",
+        "EXPO_USE_FAST_RESOLVER": "1"
         // "EAS_BUILD_DISABLE_NPM_CACHE": "1",
         // "EAS_BUILD_DISABLE_COCOAPODS_CACHE": "1"
         // "NVM_NODEJS_ORG_MIRROR": "https://nodejs.raccoon-tw.dev/release"

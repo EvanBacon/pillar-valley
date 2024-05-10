@@ -13,7 +13,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Slate } from "../constants/Colors";
 
 import AudioManager from "@/AudioManager";
-import Fire from "@/ExpoParty/Fire";
+// import Fire from "@/ExpoParty/Fire";
 import DynamicIconProvider from "@/components/DynamicIconContext";
 import TouchableBounce from "@/components/TouchableBounce";
 import { useDynamicQuickActions } from "@/hooks/useQuickActions";
@@ -26,6 +26,30 @@ if (Platform.OS !== "web") {
 
   vexo("52b377af-bf1d-432d-aac2-2859d2c153d6");
 }
+
+const suppressMetroWarnings = (shouldSuppress = true) => {
+  if (shouldSuppress) {
+    global.__expo_three_oldWarn = global.__expo_three_oldWarn || console.warn;
+    global.console.warn = (str) => {
+      let tst = (str || "") + "";
+      if (
+        tst.startsWith("THREE.WebGLRenderer:") ||
+        tst.startsWith("THREE.WebGLShader: gl.getShader") ||
+        tst.startsWith("THREE.Matrix4: .getInverse()") ||
+        tst.startsWith("THREE.Matrix3: .getInverse()")
+      ) {
+        // don't provide stack traces for warnspew from THREE
+        console.log("Warning:", str);
+        return;
+      }
+      return global.__expo_three_oldWarn.apply(console, [str]);
+    };
+  } else {
+    console.warn = global.__expo_three_oldWarn;
+  }
+};
+suppressMetroWarnings();
+
 // import { setTestDeviceIDAsync } from "expo-ads-admob";
 export const unstable_settings = {
   initialRouteName: "index",
@@ -173,7 +197,7 @@ function useLoadAssets() {
 
   React.useEffect(() => {
     StatusBar.setBarStyle("light-content", true);
-    Fire.init();
+    // Fire.init();
     (async () => {
       // console.time("Setup");
       const time = getNow();

@@ -2,7 +2,7 @@
   "configVersion": 0,
   "apple": {
     "version": "9.0.0",
-    "copyright": "2023 Evan Bacon",
+    "copyright": "2024 Evan Bacon",
     "release": {
       "automaticRelease": true
     },
