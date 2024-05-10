@@ -1,4 +1,3 @@
-import { TweenMax } from "gsap";
 import {
   Color,
   Mesh,
@@ -12,6 +11,7 @@ import Gem from "./Gem";
 import Settings from "../../constants/Settings";
 import GameObject from "../GameObject";
 import randomRange from "../utils/randomRange";
+import { RNAnimator } from "../utils/animator";
 
 const radius = 33.3333333 / 2;
 
@@ -149,13 +149,20 @@ class Platform extends GameObject {
 
       for (let i = 0; i < this.gems.length; i += 1) {
         const gem = this.gems[i];
-        TweenMax.to(gem, 0.3, {
-          alpha: 1,
-          delay: (i + 1) * 0.1, // randomRange(0, 0.2),
-          _scale: 1,
-          y: 0,
-          onComplete: () => (gem.canBeCollected = true),
-        });
+
+        RNAnimator.to(
+          gem,
+          300,
+          {
+            alpha: 1,
+            _scale: 1,
+            y: 0,
+          },
+          {
+            delay: 1000 * ((i + 1) * 0.1),
+            onComplete: () => (gem.canBeCollected = true),
+          }
+        );
       }
     }
   };
@@ -168,9 +175,9 @@ class Platform extends GameObject {
           Settings.ballDistance * 1.5,
           gem.driftAngle
         );
-        TweenMax.to(gem, 0.4, {
+
+        RNAnimator.to(gem, 400, {
           alpha: 0,
-          // delay: i * 0.2, //randomRange(0, 0.2),
           x,
           z: y,
         });
@@ -184,36 +191,48 @@ class Platform extends GameObject {
 
   public animateOut = () => {
     this.animateGemsOut();
-    if (this.mesh)
-      TweenMax.to(this.mesh, randomRange(0.5, 0.7), {
-        alpha: 0,
-        delay: randomRange(0, 0.2),
-        y: this.getEndPosition(),
-        onComplete: () => this.destroy(),
-      });
+    if (this.mesh) {
+      RNAnimator.to(
+        this.mesh,
+        randomRange(500, 700),
+        {
+          alpha: 0,
+          y: this.getEndPosition(),
+        },
+        {
+          delay: randomRange(0, 200),
+          onComplete: () => this.destroy(),
+        }
+      );
+    }
   };
 
   public animateIn = () => {
     if (!this.mesh) return;
     // this.mesh.alpha = 0;
     this.mesh.y = this.getEndPosition();
-    TweenMax.to(this.mesh, randomRange(0.5, 0.7), {
-      // alpha: 1,
-      // delay: randomRange(0, 0.2),
+    RNAnimator.to(this.mesh, randomRange(500, 700), {
       y: -500,
     });
   };
+
   public becomeTarget = () => {
     // this._animateColorTo(33);
   };
 
   private _animateColorTo = (saturation: number) => {
-    TweenMax.to(this, 0.5, {
-      saturation,
-      onUpdate: () => {
-        if (this.platformMaterial) this.platformMaterial.color = this.color;
+    RNAnimator.to(
+      this,
+      500,
+      {
+        saturation,
       },
-    });
+      {
+        onUpdate: () => {
+          if (this.platformMaterial) this.platformMaterial.color = this.color;
+        },
+      }
+    );
   };
 
   private getEndPosition = (): number => randomRange(-1500, -1000);

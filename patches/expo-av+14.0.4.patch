@@ -1,0 +1,19 @@
+diff --git a/node_modules/expo-av/ios/EXAV/EXAVPlayerData.m b/node_modules/expo-av/ios/EXAV/EXAVPlayerData.m
+index eef6690..9f7af8c 100644
+--- a/node_modules/expo-av/ios/EXAV/EXAVPlayerData.m
++++ b/node_modules/expo-av/ios/EXAV/EXAVPlayerData.m
+@@ -375,9 +375,11 @@ - (void)setStatus:(NSDictionary *)parameters
+     // Apply seek if necessary.
+     if (mustSeek) {
+       [_player seekToTime:newPosition toleranceBefore:toleranceBefore toleranceAfter:toleranceAfter completionHandler:^(BOOL seekSucceeded) {
+-        dispatch_async(self->_exAV.methodQueue, ^{
+-          applyPostSeekParameters(seekSucceeded);
+-        });
++          if (self->_exAV != nil) {
++              dispatch_async(self->_exAV.methodQueue, ^{
++                applyPostSeekParameters(seekSucceeded);
++              });
++          }
+       }];
+     } else {
+       applyPostSeekParameters(YES);

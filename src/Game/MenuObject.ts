@@ -1,11 +1,11 @@
 import { Asset } from "expo-asset";
 // import * as FileSystem from "expo-file-system";
-import { Back, Expo as ExpoEase, TweenMax } from "gsap";
-import { Platform } from "react-native";
+import { Easing, Platform } from "react-native";
 import * as THREE from "three";
 
 import GameObject from "./GameObject";
 import MotionObserver from "./MotionObserver";
+import { RNAnimator } from "./utils/animator";
 
 // bundled asset uri's become `asset://...` in production build, but expo-gl
 // cannot handle them, https://github.com/expo/expo/issues/2693
@@ -163,26 +163,24 @@ export default class MenuObject extends GameObject {
 
     const pillar = await makeMenuPillarAsync(
       require("../assets/images/PILLAR.png")
-      // await copyAssetToCacheAsync(
-      //   require("../assets/images/PILLAR.png"),
-      //   "pillar.png"
-      // )
     );
     titleGroup.add(pillar);
 
     pillar.position.y = -1100;
-    TweenMax.to(pillar.position, 1.1, {
-      y: -500,
-      ease: Back.easeOut,
-      delay: 0,
-    });
+
+    RNAnimator.to(
+      pillar.position,
+      1000 * 1.1,
+      {
+        y: -500,
+      },
+      {
+        easing: Easing.out(Easing.back(1.7)),
+      }
+    );
 
     const pillarB = await makeMenuPillarAsync(
       require("../assets/images/VALLEY.png")
-      // await copyAssetToCacheAsync(
-      //   require("../assets/images/VALLEY.png"),
-      //   "valley.png"
-      // )
     );
     titleGroup.add(pillarB);
 
@@ -190,18 +188,20 @@ export default class MenuObject extends GameObject {
       pillarB.position.y = -1100;
       pillarB.position.x = 55;
       pillarB.position.z = 55;
-      TweenMax.to(pillarB.position, 1.0, {
-        y: -530,
-        ease: Back.easeOut,
-        delay: 0.1,
-      });
+      RNAnimator.to(
+        pillarB.position,
+        1000,
+        {
+          y: -530,
+        },
+        {
+          easing: Easing.out(Easing.back(1.7)),
+          delay: 100,
+        }
+      );
     }
     const pillarC = await makeMenuPillarAsync(
       require("../assets/images/BEGIN.png"),
-      // await copyAssetToCacheAsync(
-      //   require("../assets/images/BEGIN.png"),
-      //   "begin.png"
-      // ),
       0xedcbbf
     );
     titleGroup.add(pillarC);
@@ -209,11 +209,18 @@ export default class MenuObject extends GameObject {
     pillarC.position.y = -1100;
     pillarC.position.x = 30;
     pillarC.position.z = 105;
-    TweenMax.to(pillarC.position, 1.0, {
-      y: -540,
-      ease: ExpoEase.easeOut,
-      delay: 0.2,
-    });
+
+    RNAnimator.to(
+      pillarC.position,
+      1000,
+      {
+        y: -540,
+      },
+      {
+        easing: Easing.out(Easing.exp),
+        delay: 200,
+      }
+    );
 
     this.add(titleGroup);
 
@@ -222,15 +229,21 @@ export default class MenuObject extends GameObject {
   pillars: THREE.Mesh[] = [];
 
   animateHidden = (onComplete: () => void) => {
-    TweenMax.to(this.position, 1.0, {
-      y: -1100,
-      ease: ExpoEase.easeOut,
-      // delay: 0.2,
-      onComplete: async () => {
-        this.motionObserver.stop();
-        onComplete();
+    RNAnimator.to(
+      this.position,
+      1000,
+      {
+        y: -1100,
       },
-    });
+      {
+        easing: Easing.out(Easing.exp),
+        delay: 200,
+        onComplete: async () => {
+          this.motionObserver.stop();
+          onComplete();
+        },
+      }
+    );
   };
 
   updateWithCamera = (camera: THREE.Camera) => {

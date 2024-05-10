@@ -1,10 +1,10 @@
-import { Power2 as Cubic, TweenMax } from "gsap";
 import { Mesh, CylinderBufferGeometry, MeshPhongMaterial } from "three";
-
 import Colors from "../../constants/Colors";
 import Settings from "../../constants/Settings";
 import Circle from "../Circle";
 import GameObject from "../GameObject";
+import { Easing } from "react-native";
+import { RNAnimator } from "../utils/animator";
 
 const radius = 26.6666667 / 2;
 const PlayerBallGeom = new CylinderBufferGeometry(radius, radius, 9, 24);
@@ -35,10 +35,16 @@ class PlayerBall extends GameObject {
     duration = 0.7,
   }: { onComplete?: () => void; duration?: number } = {}) => {
     this.circle?.reset();
-    TweenMax.to(this, duration || 0.7, {
-      alpha: 0,
-      onComplete,
-    });
+    RNAnimator.to(
+      this,
+      1000 * duration,
+      {
+        alpha: 0,
+      },
+      {
+        onComplete,
+      }
+    );
   };
 
   landed = (perfection: number, targetRadius: number) => {
@@ -46,21 +52,35 @@ class PlayerBall extends GameObject {
 
     this.circle.visible = true;
 
-    const duration = 0.7;
+    const duration = 700;
 
     const scale = targetRadius + targetRadius * 0.5 * perfection;
 
-    TweenMax.to(this.circle.scale, duration, {
-      x: scale,
-      y: scale,
-      ease: Cubic.easeOut,
-    });
+    RNAnimator.to(
+      this.circle.scale,
+      duration,
+      {
+        x: scale,
+        y: scale,
+      },
+      {
+        easing: Easing.out(Easing.cubic),
+      }
+    );
 
-    TweenMax.to(this.circle, duration, {
-      alpha: 0,
-      ease: Cubic.easeOut,
-      onComplete: () => this.circle?.reset(),
-    });
+    RNAnimator.to(
+      this.circle,
+      duration,
+      {
+        alpha: 0,
+      },
+      {
+        easing: Easing.out(Easing.cubic),
+        onComplete: () => {
+          this.circle?.reset();
+        },
+      }
+    );
   };
 }
 
