@@ -53,6 +53,12 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "pillar-valley"
     },
+    "expo-atlas@0.2.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/expo/expo-atlas",
+        "licenseUrl": "https://github.com/expo/expo-atlas",
+        "parents": "pillar-valley"
+    },
     "expo-av@14.0.4": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
@@ -136,16 +142,16 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "pillar-valley"
     },
-    "expo-system-ui@3.0.4": {
+    "expo-symbols@0.1.4": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "pillar-valley"
     },
-    "expo-three@6.2.0": {
+    "expo-system-ui@3.0.4": {
         "licenses": "MIT",
-        "repository": "https://github.com/expo/expo-three",
-        "licenseUrl": "https://github.com/expo/expo-three/raw/master/LICENSE",
+        "repository": "https://github.com/expo/expo",
+        "licenseUrl": "https://github.com/expo/expo",
         "parents": "pillar-valley"
     },
     "expo@51.0.2": {
