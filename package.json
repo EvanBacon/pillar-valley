@@ -49,6 +49,7 @@
     "expo-store-review": "~7.0.2",
     "expo-symbols": "^0.1.4",
     "expo-system-ui": "~3.0.4",
+    "expo-updates": "~0.25.11",
     "firebase": "^9.4.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",

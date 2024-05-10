@@ -1,0 +1,12 @@
+diff --git a/node_modules/expo-haptics/build/ExpoHaptics.web.js b/node_modules/expo-haptics/build/ExpoHaptics.web.js
+index e14927a..80ad5ff 100644
+--- a/node_modules/expo-haptics/build/ExpoHaptics.web.js
++++ b/node_modules/expo-haptics/build/ExpoHaptics.web.js
+@@ -1,2 +1,6 @@
+-export default {};
++export default {
++  notificationAsync() {},
++  impactAsync() {},
++  selectionAsync() {},
++};
+ //# sourceMappingURL=ExpoHaptics.web.js.map
