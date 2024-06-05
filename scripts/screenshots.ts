@@ -6,6 +6,7 @@ import { execSync } from "child_process";
 import * as fs from "fs";
 import os from "os";
 import * as path from "path";
+import { KNOWN_SIZES, getSimsForSizesAsync } from "./getSimsForSizes";
 
 const CHAR_CHEVRON_OPEN = 60;
 const CHAR_B_LOWER = 98;
@@ -92,15 +93,14 @@ async function updateSimulatorLinkingPermissionsAsync(
   }
 }
 
-// Define the simulators and their respective device IDs
-const simulators = [
-  { id: "251FC869-1A35-46A1-B3B2-20AE88AB2384", name: "iPhone 15 Plus" },
-  { id: "DAC5FD64-4DB3-457D-82BA-3CF5F239757A", name: "iPhone 14 Plus" },
-  {
-    id: "5103AD54-1E7A-447C-ABEB-DDF1F0A4DC81",
-    name: "iPad Pro (12.9-inch) (6th generation)",
-  },
-];
+// [
+//   { id: "251FC869-1A35-46A1-B3B2-20AE88AB2384", name: "iPhone 15 Plus" },
+//   { id: "DAC5FD64-4DB3-457D-82BA-3CF5F239757A", name: "iPhone 14 Plus" },
+//   {
+//     id: "5103AD54-1E7A-447C-ABEB-DDF1F0A4DC81",
+//     name: "iPad Pro (12.9-inch) (6th generation)",
+//   },
+// ];
 
 // Function to launch the simulator
 function launchSimulator(deviceId: string) {
@@ -168,6 +168,22 @@ function takeScreenshot(deviceId: string, outputPath: string) {
 // Main function to run the process
 async function runProcess(ipaPath: string, urls: string[]) {
   const infoPlist = await getInfoPlistAsync(ipaPath);
+
+  const supportsIPad = infoPlist.UIDeviceFamily.includes(2);
+
+  // Define the simulators and their respective device IDs
+  const simulators = getSimsForSizesAsync(
+    KNOWN_SIZES.filter((size) => {
+      if (supportsIPad) {
+        return true;
+      }
+      return size.idiom !== "ipad";
+    })
+  ).map((device) => ({
+    id: device.device.udid,
+    name: device.size,
+  }));
+
   console.log("infoPlist", infoPlist);
   const bundleId = infoPlist.CFBundleIdentifier;
   console.log("Bundle ID:", bundleId);
@@ -260,8 +276,11 @@ async function getInfoPlistAsync(binaryPath: string): Promise<any> {
 const ipaPath = process.argv[2];
 
 // TODO: Get URLs from Expo Router.
-// TODO: Get simulators by size.
 // TODO: Get orientations
+// TODO: Light mode / dark mode
+
+// NOTE: Gets simulators by size automatically.
+// NOTE: Filters out ipads automatically.
 
 const urls = ["/", "/challenges", "/settings", "/settings/icon"];
 // const urls = process.argv.slice(3);

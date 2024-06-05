@@ -5,16 +5,19 @@ export const KNOWN_SIZES = [
     width: 1290,
     height: 2796,
     name: "6.7 inches",
+    idiom: "iphone",
   },
   {
     width: 1284,
     height: 2778,
     name: "6.5 inches",
+    idiom: "iphone",
   },
   {
     width: 1242,
     height: 2208,
     name: "5.5 inches",
+    idiom: "iphone",
   },
   //   {
   //     device:
@@ -26,6 +29,7 @@ export const KNOWN_SIZES = [
     width: 2048,
     height: 2732,
     name: "12.9 inches",
+    idiom: "ipad",
   },
 ];
 
