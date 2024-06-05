@@ -7,6 +7,7 @@ import * as fs from "fs";
 import os from "os";
 import * as path from "path";
 import { KNOWN_SIZES, getSimsForSizesAsync } from "./getSimsForSizes";
+import { getRouterFixtureFromProject } from "./router-fixtures";
 
 const CHAR_CHEVRON_OPEN = 60;
 const CHAR_B_LOWER = 98;
@@ -282,7 +283,7 @@ const ipaPath = process.argv[2];
 // NOTE: Gets simulators by size automatically.
 // NOTE: Filters out ipads automatically.
 
-const urls = ["/", "/challenges", "/settings", "/settings/icon"];
+const urls = getRouterFixtureFromProject(process.cwd()); //["/", "/challenges", "/settings", "/settings/icon"];
 // const urls = process.argv.slice(3);
 
 runProcess(ipaPath, urls).catch((err) => console.error(err));
