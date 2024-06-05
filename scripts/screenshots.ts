@@ -1,11 +1,11 @@
+import plist from "@expo/plist";
+import spawnAsync, { SpawnOptions } from "@expo/spawn-async";
+import bplistCreator from "bplist-creator";
+import binaryPlist from "bplist-parser";
 import { execSync } from "child_process";
 import * as fs from "fs";
-import * as path from "path";
-import bplistCreator from "bplist-creator";
 import os from "os";
-
-import plist from "@expo/plist";
-import binaryPlist from "bplist-parser";
+import * as path from "path";
 
 const CHAR_CHEVRON_OPEN = 60;
 const CHAR_B_LOWER = 98;
@@ -39,13 +39,13 @@ const debug = console.debug;
 /** Rewrite the simulator permissions to allow opening deep links without needing to prompt the user first. */
 async function updateSimulatorLinkingPermissionsAsync(
   device: { udid: string },
-  { url, appId }: { url: string; appId?: string }
+  { schemes, appId }: { schemes: string[]; appId?: string }
 ) {
   if (!device.udid || !appId) {
     debug(
       "Skipping deep link permissions as missing properties could not be found:",
       {
-        url,
+        schemes,
         appId,
         udid: device.udid,
       }
@@ -53,18 +53,10 @@ async function updateSimulatorLinkingPermissionsAsync(
     return;
   }
   debug("Rewriting simulator permissions to support deep linking:", {
-    url,
+    schemes,
     appId,
     udid: device.udid,
   });
-  let scheme: string;
-  try {
-    // Attempt to extract the scheme from the URL.
-    scheme = new URL(url).protocol.slice(0, -1);
-  } catch (error: any) {
-    debug(`Could not parse the URL scheme: ${error.message}`);
-    return;
-  }
 
   // Get the hard-coded path to the simulator's scheme approval plist file.
   const plistPath = path.join(
@@ -82,10 +74,12 @@ async function updateSimulatorLinkingPermissionsAsync(
       {};
 
   debug("Allowed links:", plistData);
-  const key = `com.apple.CoreSimulator.CoreSimulatorBridge-->${scheme}`;
-  // Replace any existing value for the scheme with the new appId.
-  plistData[key] = appId;
-  debug("Allowing deep link:", { key, appId });
+  for (const scheme of schemes) {
+    const key = `com.apple.CoreSimulator.CoreSimulatorBridge-->${scheme}`;
+    // Replace any existing value for the scheme with the new appId.
+    plistData[key] = appId;
+    debug("Allowing deep link:", { key, appId });
+  }
 
   try {
     const data = bplistCreator(plistData);
@@ -100,16 +94,12 @@ async function updateSimulatorLinkingPermissionsAsync(
 
 // Define the simulators and their respective device IDs
 const simulators = [
-  // iPad mini (6th generation)
-  //   { name: "iPad Pro (2nd Gen)", id: "2BE21987-D78C-4C56-97F3-16E9FFC0A056" },
-  // iPad Pro (12.9-inch) (6th generation)
-  { name: "iPad Pro (6th Gen)", id: "211D918A-9DA3-4A9F-BA65-A1B03FD495B3" },
-  // iPhone 15 Pro Max
-  { name: 'iPhone 6.7"', id: "8A8B76C8-7CE9-47FC-A88F-69D0C010D22B" },
-  // iPhone 15
-  //   { name: 'iPhone 6.5"', id: "B668BBCA-BD25-411E-B4DE-B6CEE1D1EBCC" },
-  // iPhone SE (3rd generation)
-  //   { name: 'iPhone 5.5"', id: "4234A59A-9840-45FF-AD9D-E4C5CB473881" },
+  { id: "251FC869-1A35-46A1-B3B2-20AE88AB2384", name: "iPhone 15 Plus" },
+  { id: "DAC5FD64-4DB3-457D-82BA-3CF5F239757A", name: "iPhone 14 Plus" },
+  {
+    id: "5103AD54-1E7A-447C-ABEB-DDF1F0A4DC81",
+    name: "iPad Pro (12.9-inch) (6th generation)",
+  },
 ];
 
 // Function to launch the simulator
@@ -128,8 +118,6 @@ function launchSimulator(deviceId: string) {
     throw error;
   }
 }
-
-import spawnAsync, { SpawnOptions } from "@expo/spawn-async";
 
 export async function xcrunAsync(
   args: (string | undefined)[],
@@ -179,26 +167,64 @@ function takeScreenshot(deviceId: string, outputPath: string) {
 
 // Main function to run the process
 async function runProcess(ipaPath: string, urls: string[]) {
+  const infoPlist = await getInfoPlistAsync(ipaPath);
+  console.log("infoPlist", infoPlist);
+  const bundleId = infoPlist.CFBundleIdentifier;
+  console.log("Bundle ID:", bundleId);
+
+  let allowedSchemes: string[] = [];
+  if (Array.isArray(infoPlist.CFBundleURLTypes)) {
+    allowedSchemes = infoPlist.CFBundleURLTypes.map(
+      (type: any) => type.CFBundleURLSchemes
+    ).flat();
+    console.log("Schemes:", allowedSchemes);
+  }
+
+  // Assert schemes allowed:
+  if (allowedSchemes.length === 0) {
+    console.error("No schemes found in binary Info.plist");
+    process.exit(1);
+  }
+
+  const validUrls: string[] = [];
+
+  for (const url of urls) {
+    if (url.startsWith("/")) {
+      validUrls.push(allowedSchemes[0] + "://" + url.replace(/^\/+/, ""));
+    } else if (!allowedSchemes.some((scheme) => url.startsWith(scheme + ":"))) {
+      console.error(
+        `URL ${url} does not match any allowed schemes: ${allowedSchemes.join(
+          ", "
+        )}`
+      );
+      process.exit(1);
+    } else {
+      validUrls.push(url);
+    }
+  }
+
+  console.log("URLs:", validUrls);
+
   for (const simulator of simulators) {
     launchSimulator(simulator.id);
     await installIPA(simulator.id, ipaPath);
 
+    await updateSimulatorLinkingPermissionsAsync(
+      {
+        udid: simulator.id,
+      },
+      {
+        schemes: allowedSchemes,
+        appId: bundleId,
+      }
+    );
+
     resetStatusBar(simulator.id);
 
     let i = 0;
-    for (const url of urls) {
-      await updateSimulatorLinkingPermissionsAsync(
-        {
-          udid: simulator.id,
-        },
-        {
-          url,
-          appId: bundleId,
-        }
-      );
-
+    for (const url of validUrls) {
       // Reset the URL state
-      openURL(simulator.id, scheme + "/");
+      openURL(simulator.id, allowedSchemes[0] + "://");
       openURL(simulator.id, url);
 
       if (i === 0) {
@@ -223,15 +249,21 @@ async function runProcess(ipaPath: string, urls: string[]) {
   }
 }
 
+async function getInfoPlistAsync(binaryPath: string): Promise<any> {
+  const builtInfoPlistPath = path.join(binaryPath, "Info.plist");
+  return await parsePlistAsync(builtInfoPlistPath);
+}
+
 // From: `EXPO_DEBUG=1 npx expo run:ios --configuration Release`
 // /Users/evanbacon/Library/Developer/Xcode/DerivedData/PillarValley-avtqstqrqkadpuefualysygwukgh/Build/Products/Release-iphonesimulator/PillarValley.app
 // Parsing command-line arguments
 const ipaPath = process.argv[2];
-const scheme = "plrvly:/";
-const bundleId = "com.evanbacon.pillarvalley";
-const urls = ["/", "/challenges", "/settings", "/settings/icon"].map(
-  (pathname) => scheme + pathname
-);
+
+// TODO: Get URLs from Expo Router.
+// TODO: Get simulators by size.
+// TODO: Get orientations
+
+const urls = ["/", "/challenges", "/settings", "/settings/icon"];
 // const urls = process.argv.slice(3);
 
 runProcess(ipaPath, urls).catch((err) => console.error(err));
