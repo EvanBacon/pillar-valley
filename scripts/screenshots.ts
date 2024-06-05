@@ -1,6 +1,102 @@
 import { execSync } from "child_process";
 import * as fs from "fs";
 import * as path from "path";
+import bplistCreator from "bplist-creator";
+import os from "os";
+
+import plist from "@expo/plist";
+import binaryPlist from "bplist-parser";
+
+const CHAR_CHEVRON_OPEN = 60;
+const CHAR_B_LOWER = 98;
+// .mobileprovision
+// const CHAR_ZERO = 30;
+
+async function parsePlistAsync(plistPath: string) {
+  debug(`Parse plist: ${plistPath}`);
+
+  return parsePlistBuffer(await fs.promises.readFile(plistPath));
+}
+
+function parsePlistBuffer(contents: Buffer) {
+  if (contents[0] === CHAR_CHEVRON_OPEN) {
+    const info = plist.parse(contents.toString());
+    if (Array.isArray(info)) return info[0];
+    return info;
+  } else if (contents[0] === CHAR_B_LOWER) {
+    const info = binaryPlist.parseBuffer(contents);
+    if (Array.isArray(info)) return info[0];
+    return info;
+  } else {
+    throw new Error(
+      `Cannot parse plist of type byte (0x${contents[0].toString(16)})`
+    );
+  }
+}
+
+const debug = console.debug;
+
+/** Rewrite the simulator permissions to allow opening deep links without needing to prompt the user first. */
+async function updateSimulatorLinkingPermissionsAsync(
+  device: { udid: string },
+  { url, appId }: { url: string; appId?: string }
+) {
+  if (!device.udid || !appId) {
+    debug(
+      "Skipping deep link permissions as missing properties could not be found:",
+      {
+        url,
+        appId,
+        udid: device.udid,
+      }
+    );
+    return;
+  }
+  debug("Rewriting simulator permissions to support deep linking:", {
+    url,
+    appId,
+    udid: device.udid,
+  });
+  let scheme: string;
+  try {
+    // Attempt to extract the scheme from the URL.
+    scheme = new URL(url).protocol.slice(0, -1);
+  } catch (error: any) {
+    debug(`Could not parse the URL scheme: ${error.message}`);
+    return;
+  }
+
+  // Get the hard-coded path to the simulator's scheme approval plist file.
+  const plistPath = path.join(
+    os.homedir(),
+    `Library/Developer/CoreSimulator/Devices`,
+    device.udid,
+    `data/Library/Preferences/com.apple.launchservices.schemeapproval.plist`
+  );
+
+  const plistData = fs.existsSync(plistPath)
+    ? // If the file exists, then read it in the bplist format.
+      await parsePlistAsync(plistPath)
+    : // The file doesn't exist when we first launch the simulator, but an empty object can be used to create it (June 2024 x Xcode 15.3).
+      // Can be tested by launching a new simulator or by deleting the file and relaunching the simulator.
+      {};
+
+  debug("Allowed links:", plistData);
+  const key = `com.apple.CoreSimulator.CoreSimulatorBridge-->${scheme}`;
+  // Replace any existing value for the scheme with the new appId.
+  plistData[key] = appId;
+  debug("Allowing deep link:", { key, appId });
+
+  try {
+    const data = bplistCreator(plistData);
+    // Write the updated plist back to disk
+    await fs.promises.writeFile(plistPath, data);
+  } catch (error: any) {
+    console.warn(
+      `Could not update simulator linking permissions: ${error.message}`
+    );
+  }
+}
 
 // Define the simulators and their respective device IDs
 const simulators = [
@@ -91,6 +187,16 @@ async function runProcess(ipaPath: string, urls: string[]) {
 
     let i = 0;
     for (const url of urls) {
+      await updateSimulatorLinkingPermissionsAsync(
+        {
+          udid: simulator.id,
+        },
+        {
+          url,
+          appId: bundleId,
+        }
+      );
+
       // Reset the URL state
       openURL(simulator.id, scheme + "/");
       openURL(simulator.id, url);
@@ -122,6 +228,7 @@ async function runProcess(ipaPath: string, urls: string[]) {
 // Parsing command-line arguments
 const ipaPath = process.argv[2];
 const scheme = "plrvly:/";
+const bundleId = "com.evanbacon.pillarvalley";
 const urls = ["/", "/challenges", "/settings", "/settings/icon"].map(
   (pathname) => scheme + pathname
 );
