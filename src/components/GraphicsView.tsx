@@ -5,7 +5,6 @@ import {
   AppState,
   LayoutChangeEvent,
   PixelRatio,
-  Platform,
   StyleSheet,
 } from "react-native";
 import * as THREE from "three";

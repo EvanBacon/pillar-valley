@@ -1,5 +1,4 @@
 import * as Linking from "expo-linking";
-import { Platform } from "expo-modules-core";
 import * as React from "react";
 
 import Icon from "./Icon";
