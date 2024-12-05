@@ -12,6 +12,4 @@ config.transformer.getTransformOptions = async () => ({
   },
 });
 
-const { withExpoAtlas } = require("expo-atlas/metro");
-
-module.exports = withExpoAtlas(config);
+module.exports = config;
