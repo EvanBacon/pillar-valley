@@ -1,0 +1,16 @@
+diff --git a/node_modules/expo-router/build/head/url.js b/node_modules/expo-router/build/head/url.js
+index b06e8b5..e6d0253 100644
+--- a/node_modules/expo-router/build/head/url.js
++++ b/node_modules/expo-router/build/head/url.js
+@@ -36,9 +36,8 @@ const memoSanitizeUrl = memoize(sanitizeUrl);
+ function getHeadOriginFromConstants() {
+     // This will require a rebuild in bare-workflow to update.
+     const manifest = expo_constants_1.default.expoConfig;
+-    const origin = manifest?.extra?.router?.headOrigin ??
+-        manifest?.extra?.router?.origin ??
+-        manifest?.extra?.router?.generatedOrigin;
++    console.log(manifest)
++    const origin = "https://pillarvalley.netlify.app";
+     if (!origin) {
+         throwOrAlert(`Expo Head: Add the handoff origin to the Expo Config (requires rebuild). Add the Config Plugin ${protocolWarningString}, where \`origin\` is the hosted URL.`);
+         // Fallback value that shouldn't be used for real.

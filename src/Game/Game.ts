@@ -166,7 +166,7 @@ function getAbsolutePosition(gameObject: THREE.Object3D): THREE.Vector3 {
 }
 
 function playHaptics(impact: number) {
-  if (Platform.OS !== "ios") {
+  if (process.env.EXPO_OS !== "ios") {
     return;
   }
   if (impact < 0.3) {

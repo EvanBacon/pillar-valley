@@ -1,6 +1,6 @@
 import { Asset } from "expo-asset";
 // import * as FileSystem from "expo-file-system";
-import { Easing, Platform } from "react-native";
+import { Easing } from "react-native";
 import * as THREE from "three";
 
 import GameObject from "./GameObject";
@@ -17,7 +17,7 @@ import { RNAnimator } from "./utils/animator";
 // ): Promise<Asset> {
 //   const asset = Asset.fromModule(assetModule);
 //   await asset.downloadAsync();
-//   if (Platform.OS !== "android") {
+//   if (process.env.EXPO_OS !== "android") {
 //     return asset;
 //   }
 //   const localUri = `${FileSystem.cacheDirectory}asset_${localFilename}`;
@@ -83,7 +83,7 @@ class MetroAssetTextureLoader extends THREE.Loader {
       .downloadAsync()
       .then((asset) => {
         // On web, do whatever the THREE.ImageLoader does.
-        if (Platform.OS === "web") {
+        if (process.env.EXPO_OS === "web") {
           loader.setCrossOrigin(this.crossOrigin);
           loader.setPath(this.path);
           loader.load(

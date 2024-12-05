@@ -1,20 +1,20 @@
-import { Subscription } from "expo-modules-core";
+import { type EventSubscription } from "expo-modules-core";
 import { DeviceMotion } from "expo-sensors";
-import { Dimensions, Platform } from "react-native";
+import { Dimensions } from "react-native";
 
 import Settings from "../constants/Settings";
 
 export default class MotionObserver {
   private offset = { z: 0, x: 0 };
 
-  private _subscription: Subscription | null = null;
+  private _subscription: EventSubscription | null = null;
 
   public start = () => {
     if (!Settings.isMotionMenuEnabled) {
       return;
     }
 
-    if (Platform.OS === "web") {
+    if (process.env.EXPO_OS === "web") {
       window.addEventListener("mousemove", ({ pageX: x, pageY: y }) => {
         const amount = -0.1;
 

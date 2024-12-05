@@ -96,7 +96,7 @@ function Item({
     </View>
   );
 
-  if (Platform.OS === "web") {
+  if (process.env.EXPO_OS === "web") {
     if (href) {
       return (
         <Link

@@ -45,7 +45,7 @@ function Footer() {
   };
   const views = [];
 
-  if (Platform.OS !== "web") {
+  if (process.env.EXPO_OS !== "web") {
     views.push(<SoundButton />);
   }
 

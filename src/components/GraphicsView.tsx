@@ -38,7 +38,7 @@ export default class GraphicsView extends React.Component<Props> {
   rafID?: number;
 
   static defaultProps = {
-    onShouldReloadContext: Platform.OS !== "web",
+    onShouldReloadContext: process.env.EXPO_OS !== "web",
     isPaused: false,
   };
 

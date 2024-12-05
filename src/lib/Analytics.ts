@@ -1,5 +1,5 @@
 import Constants, { ExecutionEnvironment } from "expo-constants";
-import { customEvent } from "vexo-analytics";
+// import { customEvent } from "vexo-analytics";
 
 export function logEvent(
   name: string,
