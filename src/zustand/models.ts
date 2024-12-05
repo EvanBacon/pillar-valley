@@ -1,5 +1,4 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Platform } from "expo-modules-core";
+import Storage from "expo-sqlite/kv-store";
 import { useEffect } from "react";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
@@ -39,7 +38,7 @@ export function useSyncGlobalAudioWithSettings() {
   const glob = useGlobalAudio();
   const key = "p_inapp_audio";
   useEffect(() => {
-    if (Platform.OS === "ios") {
+    if (process.env.EXPO_OS === "ios") {
       let isMounted = true;
       const callback = Settings.watchKeys(key, () => {
         if (isMounted) {
@@ -74,30 +73,30 @@ export const useGlobalAudio = create(
       storage: createJSONStorage(() => {
         return {
           getItem(name) {
-            if (Platform.OS === "ios") {
+            if (process.env.EXPO_OS === "ios") {
               return JSON.stringify({
                 state: { enabled: Boolean(Settings.get(name)) },
                 version: 0,
               });
             } else {
-              return AsyncStorage.getItem(name);
+              return Storage.getItem(name);
             }
           },
           setItem(name, value) {
-            if (Platform.OS === "ios") {
+            if (process.env.EXPO_OS === "ios") {
               const enabled = Boolean(JSON.parse(value).state.enabled);
               Settings.set({
                 [name]: enabled,
               });
             } else {
-              return AsyncStorage.setItem(name, value);
+              return Storage.setItem(name, value);
             }
           },
           removeItem(name) {
-            if (Platform.OS === "ios") {
+            if (process.env.EXPO_OS === "ios") {
               Settings.set({ [name]: undefined });
             } else {
-              return AsyncStorage.removeItem(name);
+              return Storage.removeItem(name);
             }
           },
         };
@@ -137,7 +136,7 @@ export const useCurrency = create(
     }),
     {
       name: "useCurrency", // unique name
-      storage: createJSONStorage(() => AsyncStorage),
+      storage: createJSONStorage(() => Storage),
     }
   )
 );
@@ -269,7 +268,7 @@ export const useScore = create(
     }),
     {
       name: "useScore", // unique name
-      storage: createJSONStorage(() => AsyncStorage),
+      storage: createJSONStorage(() => Storage),
     }
   )
 );
@@ -312,7 +311,7 @@ export const useAchievements = create(
     }),
     {
       name: "useAchievements", // unique name
-      storage: createJSONStorage(() => AsyncStorage),
+      storage: createJSONStorage(() => Storage),
     }
   )
 );
@@ -407,7 +406,7 @@ export const useRounds = create(
     }),
     {
       name: "useRounds", // unique name
-      storage: createJSONStorage(() => AsyncStorage),
+      storage: createJSONStorage(() => Storage),
     }
   )
 );

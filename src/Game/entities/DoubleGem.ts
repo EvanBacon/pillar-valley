@@ -1,5 +1,4 @@
 import * as Haptics from "expo-haptics";
-import { Platform } from "react-native";
 import { MeshPhongMaterial } from "three";
 
 import Gem from "./Gem";
@@ -12,7 +11,7 @@ const DoubleGemMaterial = new MeshPhongMaterial({
 export default class DoubleGem extends Gem {
   pickup() {
     super.pickup();
-    if (Platform.OS !== "ios") return;
+    if (process.env.EXPO_OS !== "ios") return;
     try {
       Haptics.selectionAsync();
     } catch {

@@ -1,5 +1,4 @@
 import { Audio } from "expo-av";
-import { Platform } from "react-native";
 
 import { useGlobalAudio } from "./zustand/models";
 
@@ -33,7 +32,7 @@ class AudioManager {
   };
 
   playAsync = async (name: string, isLooping: boolean = false) => {
-    if (!useGlobalAudio.getState().enabled || Platform.OS === "web") {
+    if (!useGlobalAudio.getState().enabled || process.env.EXPO_OS === "web") {
       return;
     }
 
