@@ -9,6 +9,7 @@
     "primaryColor": "#F09458",
     "backgroundColor": "#F09458",
     "jsEngine": "hermes",
+    "userInterfaceStyle": "automatic",
     "scheme": "plrvly",
     "locales": {
       "en": {
