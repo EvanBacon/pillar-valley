@@ -4,11 +4,12 @@
     "description": "Immerse yourself in a suave world of zen",
     "slug": "pillar-valley",
     "privacy": "public",
-    "version": "10.0.0",
+    "version": "11.0.0",
     "orientation": "portrait",
     "primaryColor": "#F09458",
     "backgroundColor": "#F09458",
     "jsEngine": "hermes",
+    "userInterfaceStyle": "automatic",
     "scheme": "plrvly",
     "locales": {
       "en": {
@@ -42,6 +43,7 @@
     },
     "assetBundlePatterns": ["src/assets/**/*", "icons/splash.png"],
     "ios": {
+      "appleTeamId": "QQ57RJ5UTD",
       "appStoreUrl": "https://itunes.apple.com/us/app/pillar-valley/id1336398804",
       "icon": "./icons/pillars/default.png",
       "supportsTablet": true,
@@ -63,6 +65,7 @@
         "activitycontinuation:pillarvalley.netlify.app"
       ]
     },
+    "newArchEnabled": true,
     "android": {
       "playStoreUrl": "https://play.google.com/store/apps/details?id=com.evanbacon.pillarvalley",
       "adaptiveIcon": {
@@ -110,8 +113,7 @@
       [
         "expo-router",
         {
-          "origin": false,
-          "headOrigin": "https://pillarvalley.netlify.app"
+          "origin": "https://pillarvalley.netlify.app"
         }
       ],
       [
@@ -130,12 +132,7 @@
           }
         }
       ],
-      [
-        "@bacons/apple-targets",
-        {
-          "appleTeamId": "QQ57RJ5UTD"
-        }
-      ]
+      ["@bacons/apple-targets"]
     ],
     "experiments": {
       "tsconfigPaths": true,

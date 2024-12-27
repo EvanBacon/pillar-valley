@@ -94,13 +94,13 @@ function PreferencesScreen() {
     {
       title: "Extras",
       data: [
-        Platform.OS === "ios" && {
+        process.env.EXPO_OS === "ios" && {
           leftIcon: <CurrentIconBadge />,
           title: "Customize App Icon",
           href: "/settings/icon",
         },
 
-        // Platform.OS !== "web" && {
+        // process.env.EXPO_OS !== "web" && {
         //   title: "🎥 Watch an ad",
         //   onPress: async () => {
         //     // Display a rewarded ad
@@ -203,7 +203,7 @@ function PreferencesScreen() {
           title: "Licenses",
           href: "/settings/licenses",
         },
-        Platform.OS !== "web" && {
+        process.env.EXPO_OS !== "web" && {
           title: "Deep Linking Scheme",
           value: `${Constants.expoConfig?.scheme}://`,
         },
@@ -231,7 +231,7 @@ function PreferencesScreen() {
             setTaps((taps) => taps + 1);
           },
         },
-        Platform.OS !== "web" && {
+        process.env.EXPO_OS !== "web" && {
           leftIcon: (
             <LeftIconWrapper>
               {Platform.select({

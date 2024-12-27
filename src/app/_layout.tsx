@@ -7,7 +7,7 @@ import { Stack, usePathname, useRouter } from "expo-router";
 import Head from "expo-router/head";
 import * as SplashScreen from "expo-splash-screen";
 import React, { useEffect } from "react";
-import { Animated, StatusBar, Platform, StyleSheet } from "react-native";
+import { Animated, StatusBar, StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { Slate } from "../constants/Colors";
@@ -22,10 +22,10 @@ import { logEvent } from "@/lib/Analytics";
 import { useSyncGlobalAudioWithSettings } from "@/zustand/models";
 import { SF } from "@/components/sf-symbol";
 
-if (Platform.OS !== "web") {
-  const { vexo } = require("vexo-analytics");
+if (process.env.EXPO_OS !== "web") {
+  // const { vexo } = require("vexo-analytics");
 
-  vexo("52b377af-bf1d-432d-aac2-2859d2c153d6");
+  // vexo("52b377af-bf1d-432d-aac2-2859d2c153d6");
 }
 
 const suppressMetroWarnings = (shouldSuppress = true) => {
@@ -169,7 +169,7 @@ function InnerLayout() {
 
 function BackButton() {
   const router = useRouter();
-  if (Platform.OS === "web") {
+  if (process.env.EXPO_OS === "web") {
     return null;
   }
   return (
@@ -224,7 +224,7 @@ function useLoadAssets() {
   return loading && fonts;
 }
 
-if (Platform.OS !== "web") {
+if (process.env.EXPO_OS !== "web") {
   if (!Device.isDevice) {
     // Disable ads in the emulator / simulator
     // https://docs.expo.io/versions/latest/sdk/admob/#settestdeviceidasynctestdeviceid
@@ -281,7 +281,7 @@ function AnimatedSplashScreen({ children, loading, image }) {
     setAppReady(true);
   }, []);
 
-  if (Platform.OS === "web") {
+  if (process.env.EXPO_OS === "web") {
     return children;
   }
 

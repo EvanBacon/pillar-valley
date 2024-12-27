@@ -1,7 +1,7 @@
 import * as Haptics from "expo-haptics";
 import { Link, router } from "expo-router";
 import React from "react";
-import { Platform, SectionList, StyleSheet, Text, View } from "react-native";
+import { SectionList, StyleSheet, Text, View } from "react-native";
 import { ScrollView, TouchableHighlight } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import unstable_styles from "./custom-list.module.css";
@@ -96,7 +96,7 @@ function Item({
     </View>
   );
 
-  if (Platform.OS === "web") {
+  if (process.env.EXPO_OS === "web") {
     if (href) {
       return (
         <Link

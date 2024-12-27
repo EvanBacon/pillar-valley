@@ -9,7 +9,7 @@ import {
 import GameObject from "../Game/GameObject";
 import randomRange from "../Game/utils/randomRange";
 
-const count = Platform.OS === "android" ? 0 : 50;
+const count = process.env.EXPO_OS === "android" ? 0 : 50;
 
 class Stars extends GameObject {
   particles: Mesh[] = [];

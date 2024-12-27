@@ -11,7 +11,7 @@ export function useDynamicQuickActions() {
   React.useEffect(() => {
     const actions: RouterAction[] = [];
 
-    if (Platform.OS === "ios") {
+    if (process.env.EXPO_OS === "ios") {
       actions.push({
         id: "icon",
         title: "App Icon",

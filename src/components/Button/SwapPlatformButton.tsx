@@ -1,17 +1,18 @@
 import * as Linking from "expo-linking";
-import { Platform } from "expo-modules-core";
 import * as React from "react";
 
 import Icon from "./Icon";
 
 function isAndroidWeb() {
-  if (Platform.OS !== "web" || typeof window === "undefined") return false;
+  if (process.env.EXPO_OS !== "web" || typeof window === "undefined")
+    return false;
   const ua = navigator.userAgent.toLowerCase();
   return ua.includes("android");
 }
 
 function isAppleMobileWeb() {
-  if (Platform.OS !== "web" || typeof window === "undefined") return false;
+  if (process.env.EXPO_OS !== "web" || typeof window === "undefined")
+    return false;
   // iOS detection from: http://stackoverflow.com/a/9039885/177710
   return (
     /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream
@@ -25,7 +26,7 @@ const icons = {
 };
 
 export function getOtherPlatform(): string | null {
-  switch (Platform.OS) {
+  switch (process.env.EXPO_OS) {
     case "ios":
     case "android":
       return "web";

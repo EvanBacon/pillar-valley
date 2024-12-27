@@ -1,6 +1,5 @@
 import { router, SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
-import { Platform } from "react-native";
 
 import TouchableBounce from "@/components/TouchableBounce";
 import { Slate } from "@/constants/Colors";
@@ -11,7 +10,7 @@ export const unstable_settings = {
 };
 
 function BackButton() {
-  if (Platform.OS === "web") {
+  if (process.env.EXPO_OS === "web") {
     return null;
   }
   return (

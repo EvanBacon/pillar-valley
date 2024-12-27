@@ -1,11 +1,10 @@
-import { Platform } from "expo-modules-core";
 import * as React from "react";
 
 import Icon from "./Icon";
 
 function isPWA() {
   return (
-    Platform.OS === "web" &&
+    process.env.EXPO_OS === "web" &&
     typeof window !== "undefined" &&
     window.matchMedia("(display-mode: standalone)").matches
   );
@@ -15,7 +14,11 @@ export function usePWAInstallable() {
   const [canInstall, setCanInstall] = React.useState(canInstallPWA());
 
   React.useEffect(() => {
-    if (Platform.OS !== "web" || typeof window === "undefined" || isPWA())
+    if (
+      process.env.EXPO_OS !== "web" ||
+      typeof window === "undefined" ||
+      isPWA()
+    )
       return;
 
     // https://web.dev/customize-install/
@@ -33,7 +36,7 @@ export function usePWAInstallable() {
 
 function canInstallPWA() {
   // Can't install a PWA in a native app or in a PWA
-  if (Platform.OS !== "web" || isPWA()) {
+  if (process.env.EXPO_OS !== "web" || isPWA()) {
     return false;
   }
   if (typeof window === "undefined") {
