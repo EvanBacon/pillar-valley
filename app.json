@@ -127,6 +127,7 @@
       "@bacons/apple-targets"
     ],
     "experiments": {
+      "reactCompiler": true,
       "tsconfigPaths": true,
       "typedRoutes": true
     },

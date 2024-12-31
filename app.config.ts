@@ -20,10 +20,10 @@ module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
     fs
       .readdirSync(path.resolve(__dirname, "./icons/pillars"))
       .sort()
-      .reduce<Record<string, { light: string; dark?: string }>>((acc, file) => {
+      .reduce<Record<string, { image: string }>>((acc, file) => {
         if (!file.startsWith("default.png") && file.endsWith(".png")) {
           acc[file.replace(/\.[\w]+/, "")] = {
-            light: `./icons/pillars/${file}`,
+            image: `./icons/pillars/${file}`,
           };
         }
 

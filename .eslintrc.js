@@ -1,9 +1,9 @@
 module.exports = {
   // parser: "babel-eslint",
-  extends: ["universe/native"],
-  env: { browser: true, jest: true },
-  plugins: ["react", "bacon"],
+  extends: "expo",
+  plugins: ["eslint-plugin-react-compiler", "react", "bacon"],
   rules: {
+    "react-compiler/react-compiler": "error",
     "bacon/no-empty-styles": "error",
     "bacon/modern-react-native": [
       "error",
@@ -37,6 +37,9 @@ module.exports = {
     // ],
     "react/prefer-stateless-function": 0,
   },
+
+  env: { browser: true, jest: true },
+
   overrides: [
     {
       files: ["**/__tests__/*"],

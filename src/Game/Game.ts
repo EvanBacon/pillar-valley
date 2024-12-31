@@ -1,5 +1,4 @@
 import * as Haptics from "expo-haptics";
-import { Platform } from "react-native";
 import * as THREE from "three";
 import { DirectionalLight, HemisphereLight } from "three";
 
