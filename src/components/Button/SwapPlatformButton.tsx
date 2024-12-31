@@ -87,4 +87,6 @@ const SwapPlatformButton = React.forwardRef((props, ref) => {
   return <Icon {...props} onPress={onPress} ref={ref} name={icons[platform]} />;
 });
 
+SwapPlatformButton.displayName = "SwapPlatformButton";
+
 export default SwapPlatformButton;

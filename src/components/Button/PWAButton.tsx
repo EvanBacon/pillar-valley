@@ -50,23 +50,27 @@ function canInstallPWA() {
  * To delete PWAs go to - chrome://apps
  */
 function PWAButton({ onInstall, ...props }) {
-  const onPress = React.useCallback(() => {
-    if (window.deferredPWAInstallPrompt) {
-      window.deferredPWAInstallPrompt.prompt();
-      // Wait for the user to respond to the prompt
-      window.deferredPWAInstallPrompt.userChoice.then((choiceResult) => {
-        if (choiceResult.outcome === "accepted") {
-          onInstall(true);
-          console.log("User accepted the install prompt");
-        } else {
-          console.log("User dismissed the install prompt");
-        }
-      });
-    }
-  }, []);
-
   // TODO(Bacon): Maybe a better icon
-  return <Icon {...props} onPress={onPress} name="download" />;
+  return (
+    <Icon
+      {...props}
+      onPress={() => {
+        if (window.deferredPWAInstallPrompt) {
+          window.deferredPWAInstallPrompt.prompt();
+          // Wait for the user to respond to the prompt
+          window.deferredPWAInstallPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === "accepted") {
+              onInstall(true);
+              console.log("User accepted the install prompt");
+            } else {
+              console.log("User dismissed the install prompt");
+            }
+          });
+        }
+      }}
+      name="download"
+    />
+  );
 }
 
 export default PWAButton;

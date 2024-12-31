@@ -70,7 +70,6 @@ export default class GameState {
   };
 
   onResize = (layout: ResizeEvent) => {
-    const { scale } = layout;
     const width = layout.width;
     const height = layout.height;
 

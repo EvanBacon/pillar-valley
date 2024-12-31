@@ -22,15 +22,7 @@ function GameView({
   onLoad: () => void;
   isPaused: boolean;
 }) {
-  const machine = React.useRef(new GameState());
-
-  const onContextCreate = React.useCallback(
-    async (props) => {
-      await machine.current.onContextCreateAsync(props);
-      onLoad();
-    },
-    [onLoad]
-  );
+  const machine = new GameState();
 
   return (
     <TouchableView
@@ -38,17 +30,18 @@ function GameView({
         flex: 1,
         overflow: "hidden",
       }}
-      onTouchesBegan={machine.current.onTouchesBegan}
+      onTouchesBegan={machine.onTouchesBegan}
     >
       <GraphicsView
-        ref={(ref) => {
-          global.gameRef = ref;
-        }}
+        ref={(ref) => (global.gameRef = ref)}
         key="game"
         isPaused={isPaused}
-        onContextCreate={onContextCreate}
-        onRender={machine.current.onRender}
-        onResize={machine.current.onResize}
+        onContextCreate={async (props) => {
+          await machine.onContextCreateAsync(props);
+          onLoad();
+        }}
+        onRender={machine.onRender}
+        onResize={machine.onResize}
       />
     </TouchableView>
   );

@@ -33,14 +33,11 @@ export const InstallBanner = React.forwardRef(function InstallBanner(
   // }, [pathname]);
 
   if (process.env.NODE_ENV !== "production") {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    React.useEffect(() => {
-      if (!id.match(/^\d+$/)) {
-        console.warn(
-          `InstallBanner: Invalid iTunes App Store ID "${id}". Must be a number.`
-        );
-      }
-    }, [id]);
+    if (!id.match(/^\d+$/)) {
+      console.warn(
+        `InstallBanner: Invalid iTunes App Store ID "${id}". Must be a number.`
+      );
+    }
   }
 
   return (

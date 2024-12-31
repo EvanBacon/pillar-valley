@@ -9,34 +9,28 @@ const SONG_FILE = require("@/assets/audio/song.mp3");
 function Song() {
   const { enabled } = useGlobalAudio();
 
-  const soundObject = React.useRef(
-    Audio.Sound.createAsync(SONG_FILE, {
-      isLooping: true,
-    })
-  );
+  const soundObject = Audio.Sound.createAsync(SONG_FILE, {
+    isLooping: true,
+  });
 
   React.useEffect(() => {
     if (enabled) {
-      soundObject.current.then(async ({ sound }) => {
+      soundObject.then(async ({ sound }) => {
         await sound.setPositionAsync(0);
         await sound.setIsLoopingAsync(true);
         sound.playAsync();
       });
       // AudioManager.playAsync("song", true);
     } else {
-      soundObject.current.then(async ({ sound }) => {
-        sound.pauseAsync();
-      });
+      soundObject.then(({ sound }) => sound.pauseAsync());
 
       // AudioManager.pauseAsync("song");
     }
     return () => {
-      soundObject.current.then(async ({ sound }) => {
-        sound.stopAsync();
-      });
+      soundObject.then(({ sound }) => sound.stopAsync());
       // AudioManager.stopAsync("song");
     };
-  }, [enabled]);
+  }, [enabled, soundObject]);
 
   return null;
 }

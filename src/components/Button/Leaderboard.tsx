@@ -7,4 +7,6 @@ const LeaderboardButton = React.forwardRef(
     return <Icon {...props} ref={ref} name="trophy" />;
   }
 );
+
+LeaderboardButton.displayName = "LeaderboardButton";
 export default LeaderboardButton;

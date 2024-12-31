@@ -92,35 +92,34 @@ export function useFont(name?: string): string | undefined {
 
 type NProps = React.ComponentProps<typeof UpstreamText> & { block?: boolean };
 
-export const Text = React.forwardRef<
-  NProps,
-  React.ElementRef<typeof UpstreamText>
->(({ block, ...props }, ref) => {
-  const style = React.useMemo(
-    () => StyleSheet.flatten(props.style),
-    [props.style]
-  );
-  const fontFamily = useFont(style.fontFamily);
+export const Text = React.forwardRef<HTMLSpanElement, NProps>(
+  ({ block, style, children, ...props }, ref) => {
+    const flattenedStyle = React.useMemo(
+      () => StyleSheet.flatten(style),
+      [style]
+    );
+    const fontFamily = useFont(flattenedStyle.fontFamily);
 
-  const shouldBlock = React.useMemo(() => {
-    return block && !fontFamily && style.fontFamily;
-  }, [block, fontFamily, style.fontFamily]);
+    const shouldBlock = React.useMemo(() => {
+      return block && !fontFamily && flattenedStyle.fontFamily;
+    }, [block, fontFamily, flattenedStyle.fontFamily]);
 
-  const children = shouldBlock ? "" : props.children;
+    const renderedChildren = shouldBlock ? "" : children;
 
-  return (
-    <span
-      ref={ref}
-      {...props}
-      children={children}
-      style={[
-        style,
-        {
+    return (
+      <span
+        ref={ref}
+        {...props}
+        children={renderedChildren}
+        style={{
+          ...flattenedStyle,
           // Ensure an unloaded font never reaches Yoga to prevent
           // a panic attack.
           fontFamily,
-        },
-      ]}
-    />
-  );
-}) as React.FC<NProps>;
+        }}
+      />
+    );
+  }
+);
+
+Text.displayName = "useFont(Text)";
