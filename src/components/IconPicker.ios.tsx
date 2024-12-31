@@ -1,5 +1,5 @@
 import * as Haptics from "expo-haptics";
-import { Image, Text, View } from "react-native";
+import { Image, Text, useColorScheme, View } from "react-native";
 
 import { icons, useDynamicAppIcon } from "./DynamicIconContext";
 import TouchableBounce from "./TouchableBounce.native";
@@ -9,7 +9,7 @@ import { SF } from "./sf-symbol";
 
 export default function App() {
   const [_icon, setIcon] = useDynamicAppIcon();
-
+  const isDark = useColorScheme() === "dark";
   return (
     <View
       style={{
@@ -28,7 +28,7 @@ export default function App() {
               }}
               isSelected={icon.iconId === _icon}
               name={icon.name}
-              source={icon.source}
+              source={isDark ? icon.sourceDark ?? icon.source : icon.source}
               key={String(index)}
             />
           );

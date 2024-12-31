@@ -4,6 +4,7 @@ export const icons = [
   {
     name: "Auto",
     source: require("icons/pillars/default.png"),
+    sourceDark: require("icons/pillars/default-dark.png"),
     iconId: null,
   },
 ];

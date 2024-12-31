@@ -41,11 +41,15 @@
         "projectId": "a1a81680-f84c-11e7-88a7-c74e9d068889"
       }
     },
+
     "assetBundlePatterns": ["src/assets/**/*", "icons/splash.png"],
     "ios": {
       "appleTeamId": "QQ57RJ5UTD",
       "appStoreUrl": "https://itunes.apple.com/us/app/pillar-valley/id1336398804",
-      "icon": "./icons/pillars/default.png",
+      "icon": {
+        "light": "./icons/pillars/default.png",
+        "dark": "./icons/pillars/default-dark.png"
+      },
       "supportsTablet": true,
       "bundleIdentifier": "com.evanbacon.pillarvalley",
       "googleServicesFile": "./GoogleService-Info.plist",
@@ -98,18 +102,6 @@
       }
     },
     "plugins": [
-      [
-        "expo-build-properties",
-        {
-          "ios": {
-            "newArchEnabled": true,
-            "ccacheEnabled": false
-          },
-          "android": {
-            "newArchEnabled": true
-          }
-        }
-      ],
       [
         "expo-router",
         {
