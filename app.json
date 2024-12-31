@@ -19,7 +19,7 @@
         "CFBundleName": "Valle de los Pilares"
       }
     },
-    "icon": "./icons/expo.png",
+    "icon": "./icons/pillars/default.png",
     "githubUrl": "https://github.com/evanbacon/expo-pillar-valley",
     "splash": {
       "image": "./icons/splash.png",
@@ -69,7 +69,7 @@
     "android": {
       "playStoreUrl": "https://play.google.com/store/apps/details?id=com.evanbacon.pillarvalley",
       "adaptiveIcon": {
-        "foregroundImage": "./icons/ios.png",
+        "foregroundImage": "./icons/pillars/default.png",
         "backgroundColor": "#F09458"
       },
       "package": "com.evanbacon.pillarvalley",
@@ -83,7 +83,7 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./icons/expo.png",
+      "favicon": "./icons/pillars/default.png",
       "config": {
         "firebase": {
           "apiKey": "AIzaSyAkOa9Hyx6aKaSItFWBbrw_zou6RlQYdck",

@@ -13,7 +13,6 @@ import TouchableView from "@/components/TouchableView";
 import Settings from "@/constants/Settings";
 import useAppState from "@/hooks/useAppState";
 
-// import GameState from "../NitroRoll/GameState";
 const InputGameView = Settings.isSimulator ? SkipGameViewInSimulator : GameView;
 
 function GameView({
