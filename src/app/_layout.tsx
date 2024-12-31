@@ -24,7 +24,6 @@ import { SF } from "@/components/sf-symbol";
 
 if (process.env.EXPO_OS !== "web") {
   // const { vexo } = require("vexo-analytics");
-
   // vexo("52b377af-bf1d-432d-aac2-2859d2c153d6");
 }
 

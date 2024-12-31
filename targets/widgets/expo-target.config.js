@@ -1,7 +1,6 @@
 /** @type {import('@bacons/apple-targets').Config} */
 module.exports = {
   type: "widget",
-  icon: "../../icons/pillars/spring.png",
   colors: {
     gradient1: {
       light: "#E4975D",
@@ -13,9 +12,6 @@ module.exports = {
     },
     $accent: "#F09458",
     $widgetBackground: "#DB739C",
-  },
-  entitlements: {
-    "com.apple.security.application-groups": ["group.bacon.data"],
   },
   images: {
     valleys: "../../valleys.png",

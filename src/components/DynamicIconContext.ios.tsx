@@ -1,5 +1,5 @@
 import Constants, { ExecutionEnvironment } from "expo-constants";
-import AppIcon from "local:expo-app-icon";
+import * as AppIcon from "expo-quick-actions/icon";
 import React from "react";
 
 import { logEvent } from "@/lib/Analytics";
@@ -72,8 +72,11 @@ function useIconNameCustom(): [string | null, (name: string | null) => void] {
   const [icon, _setIcon] = React.useState<string | null>(null);
 
   React.useEffect(() => {
+    if (!AppIcon.isSupported) {
+      return;
+    }
     let isMounted = true;
-    AppIcon.getAlternateIcon().then((icon) => {
+    AppIcon.getIcon?.().then((icon) => {
       if (isMounted) _setIcon(icon || null);
     });
     return () => {
@@ -83,8 +86,12 @@ function useIconNameCustom(): [string | null, (name: string | null) => void] {
 
   const setIcon = React.useCallback(
     (icon: string | null) => {
+      if (!AppIcon.isSupported) {
+        return;
+      }
+
       logEvent("set_icon", { icon: icon || "default" });
-      AppIcon.setAlternateIcon(icon);
+      AppIcon.setIcon?.(icon);
       _setIcon(icon || null);
     },
     [_setIcon]

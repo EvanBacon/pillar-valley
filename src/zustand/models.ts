@@ -1,3 +1,4 @@
+import { ExtensionStorage } from "@bacons/apple-targets";
 import Storage from "expo-sqlite/kv-store";
 import { useEffect } from "react";
 import { create } from "zustand";
@@ -7,6 +8,8 @@ import GameStates from "@/Game/GameStates";
 import Challenges from "@/constants/Achievements";
 import { logEvent } from "@/lib/Analytics";
 import { Settings } from "@/lib/Settings";
+
+const extStorage = new ExtensionStorage("group.bacon.data");
 
 export type PresentAchievementShape = null | {
   id: string;
@@ -256,11 +259,8 @@ export const useScore = create(
           }
 
           // Update for Widgets using the app group `group.bacon.data`
-          expo?.modules?.SmartSettings?.set?.(
-            "pillarsTraversed",
-            total,
-            "group.bacon.data"
-          );
+          extStorage.set("pillarsTraversed", total);
+          ExtensionStorage.reloadWidget();
 
           return { ...state, score: { ...state.score, total } };
         });

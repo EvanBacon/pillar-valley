@@ -16,7 +16,7 @@ module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
   if (!config.plugins) config.plugins = [];
 
   config.plugins.push([
-    "@config-plugins/react-native-dynamic-app-icon",
+    "expo-quick-actions/icon/plugin",
     fs
       .readdirSync(path.resolve(__dirname, "./icons/pillars"))
       .sort()
