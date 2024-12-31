@@ -1,4 +1,3 @@
-import { GestureResponderEvent } from "react-native";
 import * as THREE from "three";
 
 import { GLEvent, ResizeEvent } from "../components/GraphicsView";
@@ -63,7 +62,7 @@ export default class GameState {
     await this.game.loadAsync();
   };
 
-  onTouchesBegan = (_: GestureResponderEvent) => {
+  onTouchesBegan = () => {
     if (this.game) {
       this.game.onTouchesBegan();
     }
