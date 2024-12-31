@@ -274,7 +274,7 @@ function AnimatedSplashScreen({ children, loading, image }) {
         useNativeDriver: true,
       }).start(() => setAnimationComplete(true));
     }
-  }, [isAppReady, loading]);
+  }, [animation, isAppReady, loading]);
 
   const onImageLoaded = React.useCallback(async () => {
     setAppReady(true);

@@ -43,7 +43,7 @@ class AnimatedCircle extends React.Component {
   };
 
   getAnimation = (props = {}) => {
-    const { reverse } = props;
+    // const { reverse } = props;
 
     const {
       delay,

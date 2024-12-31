@@ -14,4 +14,7 @@ const LicensesButton = React.forwardRef(
     );
   }
 );
+
+LicensesButton.displayName = "LicensesButton";
+
 export default LicensesButton;

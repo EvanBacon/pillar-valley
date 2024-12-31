@@ -63,7 +63,7 @@ export default class GameState {
     await this.game.loadAsync();
   };
 
-  onTouchesBegan = (state: GestureResponderEvent) => {
+  onTouchesBegan = (_: GestureResponderEvent) => {
     if (this.game) {
       this.game.onTouchesBegan();
     }

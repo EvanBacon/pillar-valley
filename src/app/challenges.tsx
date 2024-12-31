@@ -54,12 +54,12 @@ function AchievementScreen({ showActionSheetWithOptions }) {
       </Head>
       <List
         noMore
-        renderItem={({ item, index }) => (
+        renderItem={({ item: { key, ...item }, index }) => (
           <AchievementsItem
             onPress={() => {}}
             {...item}
             index={index}
-            complete={achievements[item.key]}
+            complete={achievements[key]}
           />
         )}
         title={`${data.length} Challenges`}

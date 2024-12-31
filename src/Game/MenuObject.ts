@@ -65,10 +65,6 @@ class FlatMaterial extends THREE.MeshPhongMaterial {
 
 // import { Asset } from 'expo-asset';
 class MetroAssetTextureLoader extends THREE.Loader {
-  constructor(manager?: any) {
-    super(manager);
-  }
-
   load(
     moduleId: number,
     onLoad?: (texture: THREE.Texture) => void,

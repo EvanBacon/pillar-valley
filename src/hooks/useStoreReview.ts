@@ -1,4 +1,3 @@
-import { Platform } from "expo-modules-core";
 import * as StoreReview from "expo-store-review";
 import React from "react";
 

@@ -37,9 +37,18 @@ type AvatarProps = {
   onPress?: (other: AvatarProps) => void;
   avatar?: (() => JSX.Element) | string | number;
   textStyle?: StyleProp<TextStyle>;
-  avatarStyle?: StyleProp<ImageStyle>;
+  avatarStyle?: StyleProp<Pick<ViewStyle | ImageStyle, "marginRight">>;
 };
 
+const colors = [
+  carrot,
+  emerald,
+  peterRiver,
+  wisteria,
+  alizarin,
+  turquoise,
+  midnightBlue,
+];
 const Avatar: FC<AvatarProps> = ({
   color,
   name,
@@ -48,53 +57,28 @@ const Avatar: FC<AvatarProps> = ({
   textStyle,
   avatarStyle,
 }) => {
-  const [avatarName, setAvatarName] = useState<string>("");
-  const [avatarColor, setAvatarColor] = useState<string>("");
+  const userName = name || "";
+  const nameArr = userName.toUpperCase().split(" ");
+  let avatarName = "";
+  if (nameArr.length === 1) {
+    avatarName = `${nameArr[0].charAt(0)}`;
+  } else if (nameArr.length > 1) {
+    avatarName = `${nameArr[0].charAt(0)}${nameArr[1].charAt(0)}`;
+  }
+  let sumChars = 0;
+  for (let i = 0; i < userName.length; i += 1) {
+    sumChars += userName.charCodeAt(i);
+  }
 
-  useEffect(() => {
-    setAvatarColorName();
-  }, [name]);
+  const avatarColor = colors[sumChars % colors.length];
 
-  const setAvatarColorName = () => {
-    const userName = name || "";
-    const nameArr = userName.toUpperCase().split(" ");
-    let avatarName = "";
-    if (nameArr.length === 1) {
-      avatarName = `${nameArr[0].charAt(0)}`;
-    } else if (nameArr.length > 1) {
-      avatarName = `${nameArr[0].charAt(0)}${nameArr[1].charAt(0)}`;
-    }
-    setAvatarName(avatarName);
-
-    let sumChars = 0;
-    for (let i = 0; i < userName.length; i += 1) {
-      sumChars += userName.charCodeAt(i);
-    }
-
-    const colors = [
-      carrot,
-      emerald,
-      peterRiver,
-      wisteria,
-      alizarin,
-      turquoise,
-      midnightBlue,
-    ];
-
-    setAvatarColor(colors[sumChars % colors.length]);
-  };
-
-  const handlePress = () => {
-    if (onPress) {
-      onPress({ color, name, onPress, avatar, textStyle, avatarStyle });
-    }
-  };
+  const handlePress = () =>
+    onPress?.({ color, name, onPress, avatar, textStyle, avatarStyle });
 
   if (!name && !avatar) {
     return (
       <View
         style={[styles.avatarStyle, styles.avatarTransparent, avatarStyle]}
-        accessibilityTraits="image"
       />
     );
   }
@@ -105,7 +89,6 @@ const Avatar: FC<AvatarProps> = ({
         disabled={!onPress}
         onPress={handlePress}
         style={{ flex: 1 }}
-        accessibilityTraits="image"
       >
         {typeof avatar === "function" ? (
           avatar()
@@ -128,7 +111,6 @@ const Avatar: FC<AvatarProps> = ({
         { backgroundColor: color || avatarColor },
         avatarStyle,
       ]}
-      accessibilityTraits="image"
     >
       <Text style={[styles.textStyle, textStyle]}>{avatarName}</Text>
     </TouchableOpacity>

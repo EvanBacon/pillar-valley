@@ -53,7 +53,7 @@ export function useSyncGlobalAudioWithSettings() {
         isMounted = false;
       };
     }
-  }, []);
+  }, [glob]);
 }
 
 export const useGlobalAudio = create(
