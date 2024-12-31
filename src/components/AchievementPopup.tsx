@@ -311,6 +311,7 @@ class FirstText extends React.Component {
     );
   }
 }
+import { useEffect, useRef, forwardRef, ForwardRefRenderFunction } from "react";
 
 type PopupProps = {
   setPresentAchievement: (
@@ -318,194 +319,125 @@ type PopupProps = {
   ) => void;
   id: string;
   name: string;
+  score?: number;
 };
-class Popup extends React.Component<PopupProps> {
-  // parallel(animations, config?)
 
-  async componentDidMount() {
-    try {
-      await AudioManager.playAsync("unlock");
-    } finally {
-      setTimeout(() => {
-        this.open();
-      }, 500);
-    }
-  }
+const PopupRender: ForwardRefRenderFunction<unknown, PopupProps> = (
+  { setPresentAchievement, id, name, score },
+  _
+) => {
+  const circleRef = useRef<any>(null);
+  const firstTextRef = useRef<any>(null);
+  const animation = useRef(new Animated.Value(0)).current;
 
-  reset = () => {
-    this.circle.reset();
-    this.firstText.reset();
-    this.animation.setValue(0);
-  };
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        await AudioManager.playAsync("unlock");
+      } finally {
+        mounted && setTimeout(() => open(), 500);
+      }
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
-  open = () => {
-    // this.circle.animate();
-    this.animate();
-  };
-
-  getAnimation = (toValue = 1, delay = 0) =>
-    Animated.timing(this.animation, {
+  const open = () => animate();
+  const getAnimation = (toValue = 1, delay = 0) =>
+    Animated.timing(animation, {
       toValue,
       useNativeDriver: false,
       easing: Easing.out(Easing.cubic),
       duration: 800,
       delay,
     });
+  const getReverseAnimation = () => getAnimation(0, 2500);
 
-  getReverseAnimation = () => this.getAnimation(0, 2500);
-
-  animate = () => {
+  const animate = () => {
     Animated.sequence([
-      this.circle.getAnimation(),
-      this.getAnimation(),
-      this.firstText.getAnimation(1, 3000),
-      this.getReverseAnimation(),
-      this.circle.getReverseAnimation(),
-    ]).start(() => {
-      this.props.setPresentAchievement(null);
-    });
-    // this.getAnimation().start();
+      circleRef.current?.getAnimation(),
+      getAnimation(),
+      firstTextRef.current?.getAnimation(1, 3000),
+      getReverseAnimation(),
+      circleRef.current?.getReverseAnimation(),
+    ]).start(() => setPresentAchievement(null));
   };
 
-  circleConfig = (index) => {
-    const config = {
-      delay: 120 * index,
-      friction: 3 + index * 5,
-      tension: 2 + index * 2,
-    };
-
-    if (index === 2) {
-      config["toColor"] = "orange";
-    }
-    return config;
-  };
-
-  circles = [];
-
-  _reset = () => {
-    this.reset();
-    this.open();
-  };
-
-  animation = new Animated.Value(0);
-
-  get animatedContainerStyle() {
-    const width = this.animation.interpolate({
-      inputRange: [0, 1],
-      outputRange: [circleSize, openWidth],
-    });
-    const backgroundColor = this.animation.interpolate({
+  const containerStyle = {
+    backgroundColor: animation.interpolate({
       inputRange: [0, 0.02],
       outputRange: [Colors.darkGreenTransparent, Colors.darkGreen],
-    });
-    return {
-      backgroundColor,
-      borderRadius: circleSize / 2,
-      height: circleSize,
-      width,
-      flexDirection: "row",
-      alignItems: "flex-start",
-    };
-  }
+    }),
+    width: animation.interpolate({
+      inputRange: [0, 1],
+      outputRange: [circleSize, openWidth],
+    }),
+    borderRadius: circleSize / 2,
+    height: circleSize,
+    flexDirection: "row" as const,
+    alignItems: "flex-start" as const,
+  };
 
-  get firstTextAnimatedStyle() {
-    const inputRange = [0.5, 1];
-    const opacity = this.animation.interpolate({
-      inputRange,
-      outputRange: [0, 1],
-    });
-    const translateX = this.animation.interpolate({
-      inputRange,
-      outputRange: [20, 0],
-    });
-    return {
-      opacity,
-      transform: [{ translateX }],
-    };
-  }
-
-  render() {
-    return (
-      <TouchableWithoutFeedback
-        onPress={() => {
-          router.push({
-            pathname: "/challenges",
-            params: { id: this.props.id },
-          });
-        }}
-      >
-        <Animated.View style={this.animatedContainerStyle}>
-          <View
-            style={{
-              position: "absolute",
-              top: 0,
-              bottom: 0,
-              right: 0,
+  return (
+    <TouchableWithoutFeedback
+      onPress={() => router.push({ pathname: "/challenges", params: { id } })}
+    >
+      <Animated.View style={containerStyle}>
+        <View
+          style={[
+            StyleSheet.absoluteFill,
+            {
               left: circleSize,
               borderTopRightRadius: circleSize / 2,
               borderBottomRightRadius: circleSize / 2,
               overflow: "hidden",
-            }}
-          >
-            <FirstText
-              renderUpperContents={() => (
-                <View>
-                  <Text
-                    style={{
-                      color: Colors.white,
-                      marginHorizontal: 8,
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {this.props.name}
+            },
+          ]}
+        >
+          <FirstText
+            renderUpperContents={() => (
+              <View>
+                <Text style={{ color: Colors.white, fontWeight: "bold" }}>
+                  {name}
+                </Text>
+                <View style={{ flexDirection: "row" }}>
+                  <Text style={{ color: Colors.white }}>
+                    Challenge Complete!{" "}
                   </Text>
-
-                  <View style={{ flexDirection: "row" }}>
-                    <Text
+                  {score && (
+                    <View
                       style={{
-                        color: Colors.white,
-                        marginHorizontal: 8,
+                        backgroundColor: "white",
+                        borderRadius: 10,
+                        paddingHorizontal: 4,
                       }}
                     >
-                      Challenge Complete!{" "}
-                    </Text>
-                    {this.props.score && (
-                      <View
-                        style={{
-                          backgroundColor: "white",
-                          borderRadius: 10,
-                          paddingHorizontal: 4,
-                        }}
-                      >
-                        <Text
-                          style={{ fontWeight: "bold", color: Colors.green }}
-                        >
-                          {this.props.score || 0}x
-                        </Text>
-                      </View>
-                    )}
-                  </View>
+                      <Text style={{ fontWeight: "bold", color: Colors.green }}>
+                        {score}x
+                      </Text>
+                    </View>
+                  )}
                 </View>
-              )}
-              renderLowerContents={() => (
-                <Text style={{ color: Colors.white, fontWeight: "bold" }}>
-                  Tap for details
-                </Text>
-              )}
-              containerAnimation={this.animation}
-              ref={(ref) => (this.firstText = ref)}
-            />
-          </View>
-
-          <BouncingCircle
-            containerAnimation={this.animation}
-            ref={(ref) => (this.circle = ref)}
+              </View>
+            )}
+            renderLowerContents={() => (
+              <Text style={{ color: Colors.white, fontWeight: "bold" }}>
+                Tap for details
+              </Text>
+            )}
+            containerAnimation={animation}
+            ref={firstTextRef}
           />
-        </Animated.View>
-      </TouchableWithoutFeedback>
-    );
-  }
-}
+        </View>
+        <BouncingCircle containerAnimation={animation} ref={circleRef} />
+      </Animated.View>
+    </TouchableWithoutFeedback>
+  );
+};
+
+const Popup = forwardRef(PopupRender);
 
 function PopupContainer() {
   const { presentAchievement, set } = usePresentAchievement();
