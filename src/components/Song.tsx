@@ -1,6 +1,5 @@
 import * as React from "react";
 
-// import AudioManager from "../AudioManager";
 import { useGlobalAudio } from "../zustand/models";
 import { Audio } from "expo-av";
 
@@ -20,15 +19,11 @@ function Song() {
         await sound.setIsLoopingAsync(true);
         sound.playAsync();
       });
-      // AudioManager.playAsync("song", true);
     } else {
       soundObject.then(({ sound }) => sound.pauseAsync());
-
-      // AudioManager.pauseAsync("song");
     }
     return () => {
       soundObject.then(({ sound }) => sound.stopAsync());
-      // AudioManager.stopAsync("song");
     };
   }, [enabled, soundObject]);
 
