@@ -1,5 +1,10 @@
-import { router } from "expo-router";
-import React from "react";
+import React, {
+  useRef,
+  useEffect,
+  forwardRef,
+  useImperativeHandle,
+  ForwardRefRenderFunction,
+} from "react";
 import {
   Animated,
   Easing,
@@ -8,9 +13,11 @@ import {
   TouchableWithoutFeedback,
   View,
   Platform,
+  Image,
+  ImageSourcePropType,
 } from "react-native";
+import { router } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-
 import AudioManager from "../AudioManager";
 import { usePresentAchievement } from "../zustand/models";
 
@@ -24,80 +31,78 @@ const Colors = {
   transparent: "transparent",
 };
 const useNativeDriver = Platform.select({ web: false, default: true });
+const circleSize = 64;
+const openWidth = circleSize * 5;
 
-class AnimatedCircle extends React.Component {
-  static defaultProps = {
-    renderComponent: (props) => <Animated.View {...props} />,
-    toValue: 1,
-    delay: 0,
-    // speed: 12 * 0.2,
-    // bounciness: 8,
-    tension: 3.5 * 4,
-    friction: 4,
-    useNativeDriver,
-  };
-  animation = new Animated.Value(0);
+type AnimatedCircleProps = {
+  innerColor?: string;
+  outerColor?: string;
+  toColor?: string;
+  containerAnimation?: Animated.Value;
+  style?: any;
+  delay?: number;
+  speed?: number;
+  bounciness?: number;
+  tension?: number;
+  friction?: number;
+  source?: ImageSourcePropType;
+};
 
-  reset = () => {
-    this.animation.setValue(0);
-  };
+const AnimatedCircle = forwardRef((props: AnimatedCircleProps, ref) => {
+  const {
+    innerColor = Colors.green,
+    outerColor = Colors.darkGreen,
+    toColor,
+    containerAnimation,
+    style,
+    delay = 0,
+    speed,
+    bounciness,
+    tension = 14,
+    friction = 4,
+    source,
+  } = props;
+  const animation = useRef(new Animated.Value(0)).current;
 
-  getAnimation = (props = {}) => {
-    // const { reverse } = props;
+  const reset = () => animation.setValue(0);
 
-    const {
+  const getAnimation = (override?: any) =>
+    Animated.spring(animation, {
       delay,
-      toValue,
-      speed,
-      bounciness,
-
-      tension,
-      friction,
-      useNativeDriver,
-      containerAnimation,
-    } = this.props;
-    return Animated.spring(this.animation, {
-      delay,
-      toValue,
+      toValue: 1,
       speed,
       bounciness,
       tension,
       friction,
       useNativeDriver: containerAnimation ? false : useNativeDriver,
-      ...props,
+      ...(override || {}),
     });
+
+  const getReverseAnimation = (override?: any) =>
+    getAnimation({ toValue: 0, ...override });
+
+  const animate = () => getAnimation().start();
+
+  const animatedStyle = {
+    backgroundColor: containerAnimation
+      ? containerAnimation.interpolate({
+          inputRange: [0, 1],
+          outputRange: [innerColor, toColor || innerColor],
+        })
+      : innerColor,
+    transform: [{ scale: animation }],
   };
 
-  getReverseAnimation = (props = {}) =>
-    this.getAnimation({ toValue: 0, reverse: true, velocity: 10, ...props });
+  useImperativeHandle(ref, () => ({
+    reset,
+    animate,
+    getAnimation,
+    getReverseAnimation,
+  }));
 
-  animate = () => {
-    this.getAnimation().start();
-  };
-
-  get animatedStyle() {
-    const { innerColor, toColor, containerAnimation } = this.props;
-
-    let backgroundColor = innerColor;
-    if (containerAnimation) {
-      backgroundColor = containerAnimation.interpolate({
-        inputRange: [0, 1],
-        outputRange: [innerColor, toColor || innerColor],
-      });
-    }
-
-    return {
-      backgroundColor,
-      transform: [{ scale: this.animation }],
-    };
-  }
-
-  render() {
-    const { innerColor, outerColor, style, renderComponent, ...props } =
-      this.props;
-
-    const finalProps = {
-      style: [
+  return (
+    <Animated.View
+      style={[
         {
           borderWidth: 10,
           borderRadius: circleSize / 2,
@@ -105,218 +110,185 @@ class AnimatedCircle extends React.Component {
           height: circleSize,
           aspectRatio: 1,
           position: "absolute",
-
-          // minWidth: circleSize,
-          // maxWidth: circleSize,
-          // minHeight: circleSize,
-          // maxHeight: circleSize,
           borderColor: outerColor,
-          backgroundColor: innerColor,
+          overflow: "hidden",
+          alignItems: "stretch",
         },
-        this.animatedStyle,
+        animatedStyle,
         style,
-      ],
-      ...props,
-    };
-    return renderComponent(finalProps);
-  }
-}
+      ]}
+    >
+      {source && (
+        <Image
+          style={{
+            flex: 1,
+            width: "100%",
+            height: "100%",
+            padding: 10,
+          }}
+          resizeMode="contain"
+          source={source}
+        />
+      )}
+    </Animated.View>
+  );
+});
 
-class AnimatedBadge extends React.Component {
-  static defaultProps = {
-    renderComponent: (props) => <Animated.Image {...props} />,
-    resizeMode: "contain",
+type BouncingCircleProps = {
+  containerAnimation: Animated.Value;
+};
+
+const BouncingCircle = forwardRef((props: BouncingCircleProps, ref) => {
+  const { containerAnimation } = props;
+  const circles = useRef<any[]>([]).current;
+
+  const reset = () => circles.forEach((item) => item?.reset?.());
+  const getAnimation = () => {
+    const anims = circles.map((c) => c?.getAnimation());
+    return Animated.stagger(80, anims);
   };
-
-  getReverseAnimation = (props) => this.circle?.getReverseAnimation(props);
-  getAnimation = (toValue) => this.circle?.getAnimation(toValue);
-  animate = () => this.circle?.animate();
-  reset = () => this.circle?.reset();
-  render() {
-    const { ...props } = this.props;
-    return <AnimatedCircle ref={(ref) => (this.circle = ref)} {...props} />;
-  }
-}
-
-const circleSize = 64;
-const openWidth = circleSize * 5;
-
-class BouncingCircle extends React.Component {
-  reset = () => {
-    this.circles.forEach((circle) => circle.reset());
-  };
-
-  getAnimation = () => {
-    const animations = this.circles.map((circle) => circle.getAnimation());
-    return Animated.stagger(80, animations);
-  };
-
-  getReverseAnimation = () => {
-    const animations = this.circles.map((circle, index) => {
-      const inverseIndex = this.circles.length - index;
-      let delay = 100 * index;
-      if (index === this.circles.length - 1) {
-        delay = 0;
-      }
-      return circle.getReverseAnimation({
+  const getReverseAnimation = () => {
+    const anims = circles.map((c, idx) => {
+      const invIdx = circles.length - idx;
+      let d = 100 * idx;
+      if (idx === circles.length - 1) d = 0;
+      return c?.getReverseAnimation?.({
         friction: 10,
-        delay,
-        velocity: 6 * inverseIndex,
+        delay: d,
+        velocity: 6 * invIdx,
       });
     });
-    return Animated.parallel(animations);
+    return Animated.parallel(anims);
   };
+  const animate = () => getAnimation().start();
 
-  animate = () => {
-    this.getAnimation().start();
-  };
+  useImperativeHandle(ref, () => ({
+    reset,
+    getAnimation,
+    getReverseAnimation,
+    animate,
+  }));
 
-  circleConfig = (index) => {
-    let config = {
-      delay: 120 * index,
-      friction: 3 + index * 5,
-      tension: 2 + index * 2,
-    };
-
-    if (index === 2) {
-      config = {
-        ...config,
-        containerAnimation: this.props.containerAnimation,
-        toColor: Colors.green,
-        useNativeDriver: false,
-      };
-    }
-    return config;
-  };
-
-  circles = [];
-  colors = [
+  const circleColors = [
     [Colors.lightGreen, Colors.green],
     [Colors.darkerGreen, Colors.green],
     [Colors.transparent, Colors.darkGreen],
   ];
 
-  _reset = () => {
-    this.reset();
-    this.animate();
+  const circleConfig = (index: number) => {
+    let base = {
+      delay: 120 * index,
+      friction: 3 + index * 5,
+      tension: 2 + index * 2,
+    };
+    if (index === 2) {
+      base = { ...base, containerAnimation, toColor: Colors.green };
+    }
+    return base;
   };
 
-  render() {
-    return (
-      <View
+  return (
+    <View
+      style={{
+        width: circleSize,
+        height: circleSize,
+        justifyContent: "center",
+        zIndex: 5,
+      }}
+    >
+      {circleColors.map(([outer, inner], i) => (
+        <AnimatedCircle
+          key={"circle" + i}
+          ref={(el) => el && (circles[i] = el)}
+          outerColor={outer}
+          innerColor={inner}
+          {...circleConfig(i)}
+        />
+      ))}
+      <AnimatedCircle
+        ref={(el) => el && (circles[3] = el)}
         style={{
+          position: "absolute",
           width: circleSize,
           height: circleSize,
-          justifyContent: "center",
+          zIndex: 5,
+          borderWidth: 0,
         }}
-      >
-        {this.colors.map(([outer, inner], index) => (
-          <AnimatedCircle
-            key={"d" + index}
-            ref={(ref) => this.circles.push(ref)}
-            outerColor={outer}
-            innerColor={inner}
-            {...this.circleConfig(index)}
-          />
-        ))}
-        <AnimatedBadge
-          source={require("../assets/images/expoBadge.png")}
-          ref={(ref) => this.circles.push(ref)}
-          style={{
-            resizeMode: "contain",
-            position: "absolute",
-            width: circleSize,
-            height: "60%",
-            borderWidth: 0,
-          }}
-          {...this.circleConfig(3)}
-        />
-      </View>
-    );
-  }
-}
+        source={require("../assets/images/expoBadge.png")}
+        {...circleConfig(3)}
+      />
+    </View>
+  );
+});
 
-class FirstText extends React.Component {
-  reset = () => {
-    this.animation.setValue(0);
-  };
+type FirstTextProps = {
+  containerAnimation: Animated.Value;
+  renderUpperContents: () => JSX.Element;
+  renderLowerContents: () => JSX.Element;
+};
 
-  open = () => {
-    this.animate();
-  };
+const FirstText = forwardRef((props: FirstTextProps, ref) => {
+  const { containerAnimation, renderUpperContents, renderLowerContents } =
+    props;
+  const animation = useRef(new Animated.Value(0)).current;
 
-  getAnimation = (toValue = 1, delay = 500) =>
-    Animated.timing(this.animation, {
+  const reset = () => animation.setValue(0);
+  const getAnimation = (toValue = 1, delay = 500) =>
+    Animated.timing(animation, {
       toValue,
       useNativeDriver: false,
       easing: Easing.inOut(Easing.cubic),
       duration: 600,
       delay,
     });
+  const getReverseAnimation = () => getAnimation(0);
 
-  getReverseAnimation = () => this.getAnimation(0);
+  const animate = () => getAnimation().start();
 
-  animate = () => {
-    this.getAnimation().start();
-  };
+  useImperativeHandle(ref, () => ({
+    reset,
+    getAnimation,
+    getReverseAnimation,
+    animate,
+  }));
 
-  animation = new Animated.Value(0);
+  const opacity = containerAnimation.interpolate({
+    inputRange: [0.5, 1],
+    outputRange: [0, 1],
+  });
+  const translateX = containerAnimation.interpolate({
+    inputRange: [0.5, 1],
+    outputRange: [20, 0],
+  });
+  const translateY = animation.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, -circleSize],
+  });
 
-  get firstTextAnimatedStyle() {
-    const inputRange = [0.5, 1];
-
-    const opacity = this.props.containerAnimation.interpolate({
-      inputRange: [0.5, 1],
-      outputRange: [0, 1],
-    });
-    const translateX = this.props.containerAnimation.interpolate({
-      inputRange,
-      outputRange: [20, 0],
-    });
-
-    const translateY = this.animation.interpolate({
-      inputRange: [0, 1],
-      outputRange: [0, -circleSize],
-    });
-
-    return {
-      opacity,
-      transform: [{ translateX }, { translateY }],
-    };
-  }
-
-  render() {
-    return (
-      <Animated.View
-        style={[
-          {
-            overflow: "hidden",
-            width: openWidth - circleSize,
-            height: circleSize * 2,
-          },
-          this.firstTextAnimatedStyle,
-        ]}
-      >
-        <View
-          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-        >
-          {this.props.renderUpperContents()}
-        </View>
-        <View
-          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-        >
-          {this.props.renderLowerContents()}
-        </View>
-      </Animated.View>
-    );
-  }
-}
-import { useEffect, useRef, forwardRef, ForwardRefRenderFunction } from "react";
+  return (
+    <Animated.View
+      style={[
+        {
+          overflow: "hidden",
+          width: openWidth - circleSize,
+          height: circleSize * 2,
+          opacity,
+          transform: [{ translateX }, { translateY }],
+        },
+      ]}
+    >
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        {renderUpperContents()}
+      </View>
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        {renderLowerContents()}
+      </View>
+    </Animated.View>
+  );
+});
 
 type PopupProps = {
-  setPresentAchievement: (
-    challenge: { id: string; name: string } | null
-  ) => void;
+  setPresentAchievement: (val: { id: string; name: string } | null) => void;
   id: string;
   name: string;
   score?: number;
@@ -345,6 +317,7 @@ const PopupRender: ForwardRefRenderFunction<unknown, PopupProps> = (
   }, []);
 
   const open = () => animate();
+
   const getAnimation = (toValue = 1, delay = 0) =>
     Animated.timing(animation, {
       toValue,
@@ -439,9 +412,10 @@ const PopupRender: ForwardRefRenderFunction<unknown, PopupProps> = (
 
 const Popup = forwardRef(PopupRender);
 
-function PopupContainer() {
+export function PopupContainer() {
   const { presentAchievement, set } = usePresentAchievement();
   const { top } = useSafeAreaInsets();
+
   return (
     <View
       style={[
