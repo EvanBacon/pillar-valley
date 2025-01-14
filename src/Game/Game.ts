@@ -1,4 +1,5 @@
-import * as Haptics from "expo-haptics";
+import * as Haptics from "@/lib/expo-haptics";
+
 import * as THREE from "three";
 import { DirectionalLight, HemisphereLight } from "three";
 
@@ -169,11 +170,11 @@ function playHaptics(impact: number) {
     return;
   }
   if (impact < 0.3) {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    Haptics.impactAsync?.(Haptics.ImpactFeedbackStyle.Light);
   } else if (impact < 0.6) {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    Haptics.impactAsync?.(Haptics.ImpactFeedbackStyle.Medium);
   } else {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+    Haptics.impactAsync?.(Haptics.ImpactFeedbackStyle.Heavy);
   }
 }
 
@@ -425,7 +426,7 @@ class Game extends GameObject {
     if (this.state === GameStates.Playing) {
       return;
     }
-    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    Haptics.notificationAsync?.(Haptics.NotificationFeedbackType.Success);
     this.titleGroup?.animateHidden(async () => {
       await this.loadGame();
       this.setGameState(GameStates.Playing);
@@ -546,7 +547,7 @@ class Game extends GameObject {
     this.screenShotTaken = false;
     const scoreState = useScore.getState();
     if (scoreState.score.current > 0) {
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+      Haptics.notificationAsync?.(Haptics.NotificationFeedbackType.Error);
     }
     scoreState.updateTotal(this.score);
     if (scoreState.score.isBest) {

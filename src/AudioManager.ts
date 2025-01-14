@@ -18,6 +18,7 @@ class AudioManager {
   sounds: Record<string, Audio.Sound> = {};
 
   private loadAsync = async (name: string) => {
+    if (typeof window === "undefined") return;
     await this.setupAsync();
 
     const item = this.assets[name];
@@ -32,31 +33,41 @@ class AudioManager {
   };
 
   playAsync = async (name: string, isLooping: boolean = false) => {
+    if (typeof window === "undefined") return;
+
     if (!useGlobalAudio.getState().enabled || process.env.EXPO_OS === "web") {
       return;
     }
 
     const soundObject = await this.loadAsync(name);
     try {
-      await soundObject.setPositionAsync(0);
-      await soundObject.setIsLoopingAsync(isLooping);
-      await soundObject.playAsync();
+      await soundObject?.setPositionAsync(0);
+      await soundObject?.setIsLoopingAsync(isLooping);
+      await soundObject?.playAsync();
     } catch (error) {
       console.warn("Error playing audio", { error });
     }
   };
   stopAsync = async (name: string) => {
-    await (await this.loadAsync(name)).stopAsync();
+    if (typeof window === "undefined") return;
+
+    await (await this.loadAsync(name))?.stopAsync();
   };
   volumeAsync = async (name: string, volume: number) => {
-    await (await this.loadAsync(name)).setVolumeAsync(volume);
+    if (typeof window === "undefined") return;
+
+    await (await this.loadAsync(name))?.setVolumeAsync(volume);
   };
 
   pauseAsync = async (name: string) => {
-    await (await this.loadAsync(name)).pauseAsync();
+    if (typeof window === "undefined") return;
+
+    await (await this.loadAsync(name))?.pauseAsync();
   };
 
   async configureExperienceAudioAsync() {
+    if (typeof window === "undefined") return;
+
     return Audio.setAudioModeAsync({
       playThroughEarpieceAndroid: false,
       allowsRecordingIOS: false,

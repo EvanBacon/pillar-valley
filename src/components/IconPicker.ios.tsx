@@ -1,4 +1,4 @@
-import * as Haptics from "expo-haptics";
+import * as Haptics from "@/lib/expo-haptics";
 import { Image, Text, useColorScheme, View } from "react-native";
 
 import { icons, useDynamicAppIcon } from "./DynamicIconContext";
@@ -41,13 +41,13 @@ export default function App() {
 function Item({ ...props }) {
   return (
     <TouchableBounce
-      onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)}
+      onPressIn={() => Haptics.impactAsync?.(Haptics.ImpactFeedbackStyle.Heavy)}
       onPress={() => {
         props.onPress();
         if (props.isSelected) {
-          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          Haptics.impactAsync?.(Haptics.ImpactFeedbackStyle.Light);
         } else {
-          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+          Haptics.notificationAsync?.(Haptics.NotificationFeedbackType.Success);
         }
       }}
       style={{ marginVertical: 8, marginHorizontal: 24 }}

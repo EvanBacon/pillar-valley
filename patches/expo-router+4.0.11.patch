@@ -10,7 +10,7 @@ index b06e8b5..e6d0253 100644
 -        manifest?.extra?.router?.origin ??
 -        manifest?.extra?.router?.generatedOrigin;
 +    console.log(manifest)
-+    const origin = "https://pillarvalley.netlify.app";
++    const origin = "https://pillarvalley.expo.app";
      if (!origin) {
          throwOrAlert(`Expo Head: Add the handoff origin to the Expo Config (requires rebuild). Add the Config Plugin ${protocolWarningString}, where \`origin\` is the hosted URL.`);
          // Fallback value that shouldn't be used for real.

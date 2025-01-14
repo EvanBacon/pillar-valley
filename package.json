@@ -12,7 +12,7 @@
     "format-code": "yarn run prettier && yarn run lint:fix",
     "licenses": "npm-license-crawler --onlyDirectDependencies --dependencies --json src/constants/Licenses.json",
     "prepublish:web": "expo export -p web",
-    "publish:web": "netlify deploy --dir dist --prod",
+    "publish:web": "eas deploy --prod",
     "start": "expo start --dev-client",
     "android": "expo run:android",
     "ios": "expo run:ios",

@@ -14,7 +14,7 @@
 
 ## Play
 
-[![Play online](https://img.shields.io/badge/Play%20Online-4285F4.svg?style=flat-square&logo=Google-Chrome&labelColor=4285F4&logoColor=fff)](https://pillarvalley.netlify.app/)
+[![Play online](https://img.shields.io/badge/Play%20Online-4285F4.svg?style=flat-square&logo=Google-Chrome&labelColor=4285F4&logoColor=fff)](https://pillarvalley.expo.app/)
 
 ### App Stores
 

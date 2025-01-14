@@ -89,6 +89,14 @@ function PreferencesScreen() {
         { title: "High score", value: score.best },
         { title: "High score beaten", value: bestRounds },
         // { title: "Gems collected", value: currency },
+        // {
+        //   title: "Test Achievement",
+        //   value: require("package.json").dependencies["expo"],
+        //   onPress: () => {
+        //     achievements.resetAchievements();
+        //     achievements.unlock("rounds-10");
+        //   },
+        // },
       ],
     },
     {

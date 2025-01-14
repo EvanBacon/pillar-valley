@@ -48,7 +48,7 @@ const Item: React.FC<ItemProps> = ({
       color="green"
       name="checkmark"
       style={styles.icon}
-      fallback="check"
+      fallback="checkmark"
     />
   ) : (
     <SF
@@ -56,7 +56,7 @@ const Item: React.FC<ItemProps> = ({
       color="#D8DADE"
       name="hourglass"
       style={styles.icon}
-      fallback="hourglass-empty"
+      fallback="hourglass"
     />
   );
 

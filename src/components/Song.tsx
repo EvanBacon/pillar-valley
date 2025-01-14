@@ -5,7 +5,7 @@ import { Audio } from "expo-av";
 
 const SONG_FILE = require("@/assets/audio/song.mp3");
 
-function Song() {
+function SongClient() {
   const { enabled } = useGlobalAudio();
 
   const soundObject = Audio.Sound.createAsync(SONG_FILE, {
@@ -29,5 +29,7 @@ function Song() {
 
   return null;
 }
+
+export const Song = typeof window === "undefined" ? () => null : SongClient;
 
 export default Song;

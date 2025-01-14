@@ -1,4 +1,4 @@
-import * as Haptics from "expo-haptics";
+import * as Haptics from "@/lib/expo-haptics";
 
 import Icon from "./Icon";
 
@@ -9,7 +9,7 @@ function SoundButton() {
   return (
     <Icon
       onPress={() => {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        Haptics.impactAsync?.(Haptics.ImpactFeedbackStyle.Light);
         toggleMuted();
       }}
       name={enabled ? "speaker.wave.3" : "speaker.slash"}

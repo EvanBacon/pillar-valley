@@ -1,4 +1,4 @@
-import * as Haptics from "expo-haptics";
+import * as Haptics from "@/lib/expo-haptics";
 import { MeshPhongMaterial } from "three";
 
 import Gem from "./Gem";
@@ -13,7 +13,7 @@ export default class DoubleGem extends Gem {
     super.pickup();
     if (process.env.EXPO_OS !== "ios") return;
     try {
-      Haptics.selectionAsync();
+      Haptics.selectionAsync?.();
     } catch {
       /* not supported */
     }

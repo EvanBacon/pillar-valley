@@ -64,9 +64,9 @@
         "com.apple.security.application-groups": ["group.bacon.data"]
       },
       "associatedDomains": [
-        "applinks:pillarvalley.netlify.app",
-        "webcredentials:pillarvalley.netlify.app",
-        "activitycontinuation:pillarvalley.netlify.app"
+        "applinks:pillarvalley.expo.app",
+        "webcredentials:pillarvalley.expo.app",
+        "activitycontinuation:pillarvalley.expo.app"
       ]
     },
     "newArchEnabled": true,
@@ -105,7 +105,7 @@
       [
         "expo-router",
         {
-          "origin": "https://pillarvalley.netlify.app"
+          "origin": "https://pillarvalley.expo.app"
         }
       ],
       [

@@ -1,5 +1,6 @@
+import "@/runtime/local-storage";
+
 import { ExtensionStorage } from "@bacons/apple-targets";
-import Storage from "expo-sqlite/kv-store";
 import { useEffect } from "react";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
@@ -82,7 +83,7 @@ export const useGlobalAudio = create(
                 version: 0,
               });
             } else {
-              return Storage.getItem(name);
+              return localStorage.getItem(name);
             }
           },
           setItem(name, value) {
@@ -92,14 +93,14 @@ export const useGlobalAudio = create(
                 [name]: enabled,
               });
             } else {
-              return Storage.setItem(name, value);
+              return localStorage.setItem(name, value);
             }
           },
           removeItem(name) {
             if (process.env.EXPO_OS === "ios") {
               Settings.set({ [name]: undefined });
             } else {
-              return Storage.removeItem(name);
+              return localStorage.removeItem(name);
             }
           },
         };
@@ -115,6 +116,18 @@ export const usePresentAchievement = create<{
   presentAchievement: null,
   set: (val) => set((state) => ({ ...state, presentAchievement: val })),
 }));
+
+const LocalStorageObj = {
+  getItem: (name: string): string | null | Promise<string | null> => {
+    return localStorage.getItem(name);
+  },
+  setItem: (name: string, value: string): unknown | Promise<unknown> => {
+    return localStorage.setItem(name, value);
+  },
+  removeItem: (name: string): unknown | Promise<unknown> => {
+    return localStorage.removeItem(name);
+  },
+};
 
 export const useCurrency = create(
   persist<{
@@ -139,7 +152,7 @@ export const useCurrency = create(
     }),
     {
       name: "useCurrency", // unique name
-      storage: createJSONStorage(() => Storage),
+      storage: createJSONStorage(() => LocalStorageObj),
     }
   )
 );
@@ -268,7 +281,7 @@ export const useScore = create(
     }),
     {
       name: "useScore", // unique name
-      storage: createJSONStorage(() => Storage),
+      storage: createJSONStorage(() => LocalStorageObj),
     }
   )
 );
@@ -311,7 +324,7 @@ export const useAchievements = create(
     }),
     {
       name: "useAchievements", // unique name
-      storage: createJSONStorage(() => Storage),
+      storage: createJSONStorage(() => LocalStorageObj),
     }
   )
 );
@@ -406,7 +419,7 @@ export const useRounds = create(
     }),
     {
       name: "useRounds", // unique name
-      storage: createJSONStorage(() => Storage),
+      storage: createJSONStorage(() => LocalStorageObj),
     }
   )
 );

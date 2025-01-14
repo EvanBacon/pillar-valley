@@ -1,4 +1,4 @@
-import * as Haptics from "expo-haptics";
+import * as Haptics from "@/lib/expo-haptics";
 import { router, useNavigation } from "expo-router";
 import React from "react";
 import { Platform, StyleSheet, View } from "react-native";
@@ -34,12 +34,12 @@ function Footer() {
   const navigation = useNavigation();
   // const router = useRouter();
   const onChallengesPress = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    Haptics.impactAsync?.(Haptics.ImpactFeedbackStyle.Light);
 
     router.push("/challenges");
   };
   const onPreferencesPress = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    Haptics.impactAsync?.(Haptics.ImpactFeedbackStyle.Light);
     navigation.push("settings");
     // router.push("/settings");
   };

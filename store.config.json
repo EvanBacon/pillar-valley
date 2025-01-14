@@ -2,7 +2,7 @@
   "configVersion": 0,
   "apple": {
     "version": "10.0.0",
-    "copyright": "2024 Evan Bacon",
+    "copyright": "2025 Evan Bacon",
     "release": {
       "automaticRelease": true
     },
@@ -24,14 +24,14 @@
           "fyp",
           "clash"
         ],
-        "releaseNotes": "Update to 51 and New Architecture",
-        "marketingUrl": "https://pillarvalley.netlify.app/",
+        "releaseNotes": "Update to Expo SDK 52 and improve universal links",
+        "marketingUrl": "https://pillarvalley.expo.app/",
         "promoText": "Immerse yourself in a suave world of zen",
         "supportUrl": "https://github.com/EvanBacon/Expo-Pillar-Valley/issues",
         "title": "Pillar Valley",
         "subtitle": "The Finest of Gaming",
-        "privacyPolicyUrl": "https://pillarvalley.netlify.app/privacy",
-        "privacyChoicesUrl": "https://pillarvalley.netlify.app/privacy"
+        "privacyPolicyUrl": "https://pillarvalley.expo.app/privacy",
+        "privacyChoicesUrl": "https://pillarvalley.expo.app/privacy"
       }
     },
     "categories": [

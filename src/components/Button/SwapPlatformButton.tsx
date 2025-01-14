@@ -59,7 +59,7 @@ function openPlatformLink(platform: string | null) {
         "https://itunes.apple.com/us/app/pillar-valley/id1336398804?ls=1&mt=8"
       );
     case "web":
-      return Linking.openURL("https://pillarvalley.netlify.app");
+      return Linking.openURL("https://pillarvalley.expo.app");
     default:
       throw new Error("unsupported platform " + platform);
   }

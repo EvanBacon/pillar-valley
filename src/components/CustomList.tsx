@@ -1,4 +1,4 @@
-import * as Haptics from "expo-haptics";
+import * as Haptics from "@/lib/expo-haptics";
 import { Link, router } from "expo-router";
 import React from "react";
 import { SectionList, StyleSheet, Text, View } from "react-native";
@@ -143,7 +143,7 @@ function Item({
       ]}
       underlayColor={Slate[400]}
       onPress={() => {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        Haptics.impactAsync?.(Haptics.ImpactFeedbackStyle.Light);
         if (href) {
           router.push(href);
         }
