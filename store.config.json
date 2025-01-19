@@ -1,7 +1,7 @@
 {
   "configVersion": 0,
   "apple": {
-    "version": "10.0.0",
+    "version": "12.0.0",
     "copyright": "2025 Evan Bacon",
     "release": {
       "automaticRelease": true
@@ -43,6 +43,8 @@
       "ENTERTAINMENT"
     ],
     "advisory": {
+      "koreaAgeRatingOverride": "NONE",
+      "ageRatingOverride": "NONE",
       "alcoholTobaccoOrDrugUseOrReferences": "NONE",
       "contests": "NONE",
       "gamblingSimulated": "NONE",
@@ -57,8 +59,7 @@
       "violenceRealisticProlongedGraphicOrSadistic": "NONE",
       "gambling": false,
       "unrestrictedWebAccess": false,
-      "kidsAgeBand": null,
-      "seventeenPlus": false
+      "kidsAgeBand": null
     },
     "review": {
       "firstName": "Evan",

@@ -27,6 +27,7 @@ import {
   useRounds,
   useScore,
 } from "@/zustand/models";
+import * as AppIcon from "expo-quick-actions/icon";
 
 function areYouSureAsync(): Promise<boolean> {
   return new Promise((resolve) => {
@@ -102,7 +103,7 @@ function PreferencesScreen() {
     {
       title: "Extras",
       data: [
-        process.env.EXPO_OS === "ios" && {
+        AppIcon.isSupported && {
           leftIcon: <CurrentIconBadge />,
           title: "Customize App Icon",
           href: "/settings/icon",
