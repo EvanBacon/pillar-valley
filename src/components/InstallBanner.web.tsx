@@ -8,7 +8,11 @@ import React from "react";
 //   manifest?.extra?.router?.headOrigin ?? manifest?.extra?.router?.origin;
 
 export const InstallBanner = React.forwardRef(function InstallBanner(
-  { id }: { id: string },
+  {
+    id,
+    appClipBundleId,
+    appClipDisplay = "card",
+  }: { id: string; appClipBundleId?: string; appClipDisplay?: string },
   ref: React.Ref<HTMLMetaElement>
 ) {
   // if (typeof window === "undefined") {
@@ -40,11 +44,19 @@ export const InstallBanner = React.forwardRef(function InstallBanner(
     }
   }
 
+  const content = [`app-id=${id}`];
+  if (appClipBundleId) {
+    content.push(`app-clip-bundle-id=${appClipBundleId}`);
+    if (appClipDisplay) {
+      content.push(`app-clip-display=${appClipDisplay}`);
+    }
+  }
+
   return (
     <meta
       ref={ref}
       name="apple-itunes-app"
-      content={`app-id=${id}`}
+      content={content.join(", ")}
       // content={`app-id=${id}, app-argument=${url}`}
     />
   );

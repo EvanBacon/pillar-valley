@@ -13,7 +13,10 @@ export default function Root({ children }: { children: React.ReactNode }) {
           name="viewport"
           content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1.00001,viewport-fit=cover"
         />
-        <InstallBanner id="1336398804" />
+        <InstallBanner
+          id="1336398804"
+          appClipBundleId="com.evanbacon.pillarvalley.clip"
+        />
         <ScrollViewStyleReset />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-title" content="Pillar Valley" />

@@ -69,6 +69,15 @@ export default function Layout() {
     <>
       <Head>
         <meta property="og:title" content="Pillar Valley" />
+
+        {/* Required for app clips: */}
+        {/* https://developer.apple.com/documentation/appclip/supporting-invocations-from-your-website-and-the-messages-app */}
+        {/* For image size: https://developer.apple.com/library/archive/technotes/tn2444/_index.html */}
+        <meta
+          property="og:image"
+          content="https://pillarvalley.expo.app/og.png"
+        />
+
         <meta property="expo:handoff" content="true" />
 
         <link
