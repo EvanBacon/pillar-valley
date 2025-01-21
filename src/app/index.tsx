@@ -13,7 +13,8 @@ import TouchableView from "@/components/TouchableView";
 import Settings from "@/constants/Settings";
 import useAppState from "@/hooks/useAppState";
 
-const InputGameView = Settings.isSimulator ? SkipGameViewInSimulator : GameView;
+const InputGameView = GameView;
+// const InputGameView = Settings.isSimulator ? SkipGameViewInSimulator : GameView;
 
 function GameView({
   onLoad,
