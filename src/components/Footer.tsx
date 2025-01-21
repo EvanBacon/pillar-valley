@@ -1,7 +1,7 @@
 import * as Haptics from "@/lib/expo-haptics";
 import { router, useNavigation } from "expo-router";
 import React from "react";
-import { Platform, StyleSheet, View } from "react-native";
+import { Button, Platform, StyleSheet, View } from "react-native";
 import * as Animatable from "react-native-animatable";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -15,6 +15,8 @@ import GameStates from "../Game/GameStates";
 import { rewardAdUnitId } from "../constants/Ads";
 import Settings from "../constants/Settings";
 import { useGameScreenshot, useGameState } from "../zustand/models";
+import TargetLinksModule from "local:target-links/src/TargetLinksModule";
+import Icon from "./Button/Icon";
 
 const delay = 100;
 const initialDelay = 100;
@@ -45,6 +47,17 @@ function Footer() {
   };
   const views = [];
 
+  if (TargetLinksModule.isAppClip) {
+    views.push(
+      <Icon
+        fallback="appclip"
+        name="appclip"
+        onPress={() => {
+          TargetLinksModule.openAppClipDisplay();
+        }}
+      />
+    );
+  }
   if (process.env.EXPO_OS !== "web") {
     views.push(<SoundButton />);
   }

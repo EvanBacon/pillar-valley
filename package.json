@@ -16,7 +16,8 @@
     "start": "expo start --dev-client",
     "android": "expo run:android",
     "ios": "expo run:ios",
-    "postinstall": "npx patch-package"
+    "postinstall": "npx patch-package",
+    "app-clip-code": "AppClipCodeGenerator generate --url https://pillarvalley.expo.app --foreground 000000 --background EE7733 --output ~/documents/github/personal/pillar-valley/app-clip.svg"
   },
   "jest": {
     "preset": "jest-expo"

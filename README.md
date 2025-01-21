@@ -22,6 +22,8 @@
 
 [![Available in the Google Play Store](https://img.shields.io/badge/Google%20Play-4285F4.svg?style=flat-square&logo=Google-Play&labelColor=4285F4&logoColor=fff)](https://play.google.com/store/apps/details?id=com.evanbacon.pillarvalley)
 
+- [App Clip URL](https://appclip.apple.com/id?p=com.evanbacon.pillarvalley.clip)
+
 ### Stack 🥞
 
 - [Expo](http://expo.io)
