@@ -1,15 +1,12 @@
 import { isDevice } from "expo-device";
+import * as Application from "expo-application";
 
 const speed = 200;
 const debug = __DEV__;
 const Settings = {
-  facebookLoginProps: {
-    permissions: [
-      "public_profile",
-      "email",
-      // 'user_friends'
-    ],
-  },
+  isAppClip:
+    process.env.EXPO_OS === "ios" &&
+    Application.applicationId?.endsWith(".clip"),
   isPromo: false,
   circleEnabled: true,
   isSimulator: !isDevice,
