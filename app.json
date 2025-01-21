@@ -66,8 +66,7 @@
       "associatedDomains": [
         "applinks:pillarvalley.expo.app",
         "webcredentials:pillarvalley.expo.app",
-        "activitycontinuation:pillarvalley.expo.app",
-        "appclips:pillarvalley.expo.app"
+        "activitycontinuation:pillarvalley.expo.app"
       ]
     },
     "newArchEnabled": true,
