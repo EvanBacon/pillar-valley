@@ -1,8 +1,12 @@
+diff --git a/node_modules/expo-linking/.DS_Store b/node_modules/expo-linking/.DS_Store
+new file mode 100644
+index 0000000..f25c8eb
+Binary files /dev/null and b/node_modules/expo-linking/.DS_Store differ
 diff --git a/node_modules/expo-linking/ios/LinkingAppDelegateSubscriber.swift b/node_modules/expo-linking/ios/LinkingAppDelegateSubscriber.swift
-index a275c71..9276d84 100644
+index a275c71..a0b1691 100644
 --- a/node_modules/expo-linking/ios/LinkingAppDelegateSubscriber.swift
 +++ b/node_modules/expo-linking/ios/LinkingAppDelegateSubscriber.swift
-@@ -1,9 +1,31 @@
+@@ -1,9 +1,30 @@
  import ExpoModulesCore
  
  public class LinkingAppDelegateSubscriber: ExpoAppDelegateSubscriber {
@@ -22,10 +26,9 @@ index a275c71..9276d84 100644
 +  public func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([any UIUserActivityRestoring]?) -> Void) -> Bool {
 +    if userActivity.activityType == NSUserActivityTypeBrowsingWeb, let url = userActivity.webpageURL {
 +      
-+      if ExpoLinkingRegistry.shared.initialURL == nil {
-+        if LinkingAppDelegateSubscriber.isAppClip {
-+          ExpoLinkingRegistry.shared.initialURL = url
-+        }
++      // App Clips don't appear to invoke application:open:options: so we'll use this first request to assume the initial URL.
++      if ExpoLinkingRegistry.shared.initialURL == nil && LinkingAppDelegateSubscriber.isAppClip {
++        ExpoLinkingRegistry.shared.initialURL = url
 +      }
 +      
 +      NotificationCenter.default.post(name: onURLReceivedNotification, object: self, userInfo: ["url": url])
@@ -34,3 +37,15 @@ index a275c71..9276d84 100644
 +    return false
 +  }
  }
+diff --git a/node_modules/expo-linking/src/Linking.ts b/node_modules/expo-linking/src/Linking.ts
+index 3cc9677..f21624e 100644
+--- a/node_modules/expo-linking/src/Linking.ts
++++ b/node_modules/expo-linking/src/Linking.ts
+@@ -86,6 +86,7 @@ export async function getInitialURL(): Promise<string | null> {
+  * @return The URL string that launched your app, or `null`.
+  */
+ export function getLinkingURL(): string | null {
++  console.log('ExpoLinking.getLinkingURL')
+   return ExpoLinking.getLinkingURL();
+ }
+ 
