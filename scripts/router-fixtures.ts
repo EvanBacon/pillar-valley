@@ -64,7 +64,9 @@ export function getRouterFixtureFromProject(projectRoot: string) {
   const routePaths = getRoutePaths(appDir)
     .filter((routePath) => {
       return (
-        !routePath.match(/^\.\/\+html/) && !routePath.match(/\+api\.[jt]sx?$/)
+        !routePath.match(/^\.\/\+native-intent/) &&
+        !routePath.match(/^\.\/\+html/) &&
+        !routePath.match(/\+api\.[jt]sx?$/)
       );
     })
     .sort();

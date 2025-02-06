@@ -2,33 +2,15 @@ const { execSync } = require("child_process");
 
 export const KNOWN_SIZES = [
   {
-    width: 1290,
-    height: 2796,
-    name: "6.7 inches",
+    width: 1320,
+    height: 2868,
+    name: "6.9 inches",
     idiom: "iphone",
   },
   {
-    width: 1284,
-    height: 2778,
-    name: "6.5 inches",
-    idiom: "iphone",
-  },
-  {
-    width: 1242,
-    height: 2208,
-    name: "5.5 inches",
-    idiom: "iphone",
-  },
-  //   {
-  //     device:
-  //       "",
-  //     resolution: { width: 2064, height: 2752 },
-  //     displaySize: "13 inches",
-  //   },
-  {
-    width: 2048,
-    height: 2732,
-    name: "12.9 inches",
+    width: 2064,
+    height: 2752,
+    name: "13 inches",
     idiom: "ipad",
   },
 ];
