@@ -1,7 +1,7 @@
 {
   "configVersion": 0,
   "apple": {
-    "version": "12.0.3",
+    "version": "12.0.4",
     "copyright": "2025 Evan Bacon",
     "release": {
       "automaticRelease": true
@@ -31,7 +31,15 @@
         "title": "Pillar Valley",
         "subtitle": "The Finest of Gaming",
         "privacyPolicyUrl": "https://pillarvalley.expo.app/privacy",
-        "privacyChoicesUrl": "https://pillarvalley.expo.app/privacy"
+        "privacyChoicesUrl": "https://pillarvalley.expo.app/privacy",
+        "screenshots": {
+          "APP_IPAD_PRO_3GEN_129": [
+            "store/apple/screenshot/en-US/APP_IPAD_PRO_3GEN_129/01.png"
+          ],
+          "APP_IPHONE_67": [
+            "store/apple/screenshot/en-US/APP_IPHONE_67/01.png"
+          ]
+        }
       }
     },
     "categories": [
@@ -60,7 +68,16 @@
       "unrestrictedWebAccess": false,
       "violenceCartoonOrFantasy": "NONE",
       "violenceRealistic": "NONE",
-      "violenceRealisticProlongedGraphicOrSadistic": "NONE"
+      "violenceRealisticProlongedGraphicOrSadistic": "NONE",
+      "advertising": false,
+      "ageAssurance": false,
+      "ageRatingOverrideV2": "NONE",
+      "developerAgeRatingInfoUrl": null,
+      "gunsOrOtherWeapons": "NONE",
+      "healthOrWellnessTopics": false,
+      "messagingAndChat": false,
+      "parentalControls": false,
+      "userGeneratedContent": false
     },
     "review": {
       "firstName": "Evan",
@@ -69,6 +86,18 @@
       "phone": "2243030301",
       "demoRequired": false,
       "notes": "Reduced the min version for app clips"
+    },
+    "appClip": {
+      "defaultExperience": {
+        "action": "PLAY",
+        "releaseWithAppStoreVersion": true,
+        "info": {
+          "en-US": {
+            "subtitle": "Instantly native with Expo",
+            "headerImage": "store/apple/app-clip/en-US/asc-app-clip.png"
+          }
+        }
+      }
     }
   }
 }
