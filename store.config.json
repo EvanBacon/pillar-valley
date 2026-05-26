@@ -42,12 +42,6 @@
             "store/apple/screenshot/en-US/APP_IPHONE_67/01.png",
             "store/apple/screenshot/en-US/APP_IPHONE_67/02.png"
           ]
-        },
-        "previews": {
-          "IPHONE_67": {
-            "path": "store/apple/preview/en-US/IPHONE_67/01.mp4",
-            "previewFrameTimeCode": "00:00:05:01"
-          }
         }
       }
     },
@@ -99,6 +93,13 @@
       "defaultExperience": {
         "action": "PLAY",
         "releaseWithAppStoreVersion": true,
+        "reviewDetail": {
+          "invocationUrls": [
+            "https://pillarvalley.expo.app/",
+            null,
+            null
+          ]
+        },
         "info": {
           "en-US": {
             "subtitle": "Instantly native with Expo",
